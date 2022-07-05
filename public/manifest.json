@@ -1,0 +1,13 @@
+{
+  "background_color": "",
+  "description": "",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Packman",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "Packman",
+  "start_url": "/",
+  "theme_color": "",
+  "icons": []
+}

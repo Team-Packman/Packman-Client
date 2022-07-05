@@ -9,5 +9,4 @@ module.exports = withPWA({
     dest: 'public',
     runtimeCaching,
   },
-  plugin: '@next/next/recommended',
 });
