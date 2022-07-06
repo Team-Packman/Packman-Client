@@ -3540,6 +3540,11 @@ react-query@^3.39.1:
     broadcast-channel "^3.4.1"
     match-sorter "^6.0.2"
 
+react-reset@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/react-reset/-/react-reset-0.0.0.tgz#f5c029b23e05c4230c80f909de8077dcf864794e"
+  integrity sha512-ux3APgCCWMExn/KwA/VZy1vse9g8xbqpoJt6EDHysweQjZJPi8xYjWJ8z0nRH4JvM0aKwTZ6boUz5I/OkRywxg==
+
 react@18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
