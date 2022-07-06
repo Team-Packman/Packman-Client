@@ -34,6 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# eslint
+.eslintcache
+
 # PWA files
 **/public/sw.js
 **/public/workbox-*.js
