@@ -4,21 +4,17 @@ type SetFn<T> = (value: T | ((prev: T) => T)) => void;
 type QueryKey = string | readonly unknown[];
 function useGlobalState<T>(key: QueryKey, initialData: T | (() => T)): [T, SetFn<T>];
 
-function useGlobalState<T = undefined>(key: QueryKey, initialData?: T): [T | undefined, SetFn<T>];
+function useGlobalState<T = undefined>(key: QueryKey, initialData?: T): [T, SetFn<T>];
 
-function useGlobalState<T>(key: QueryKey, initialData: T): [T | undefined, SetFn<T>] {
+function useGlobalState<T>(key: QueryKey, initialData: T): [T, SetFn<T>] {
   const queryClient = useQueryClient();
 
   const setGlobalState: SetFn<T> = (value) => {
     if (typeof value === 'function' && value instanceof Function) {
-      const prevValue: T | undefined = queryClient.getQueryData(key);
+      const prevValue: T = queryClient.getQueryData(key)!;
 
-      if (prevValue) {
-        const newValue = value(prevValue);
-        queryClient.setQueryData(key, newValue);
-      } else {
-        throw new Error('prev value is undefined');
-      }
+      const newValue = value(prevValue);
+      queryClient.setQueryData(key, newValue);
     } else {
       queryClient.setQueryData(key, value);
     }
@@ -28,7 +24,7 @@ function useGlobalState<T>(key: QueryKey, initialData: T): [T | undefined, SetFn
     initialData,
     staleTime: Infinity,
     cacheTime: Infinity,
-  }).data;
+  }).data!;
 
   return [globalState, setGlobalState];
 }

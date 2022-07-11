@@ -36,6 +36,6 @@
     "@next/next/no-html-link-for-pages": "error",
     "@next/next/no-img-element": "error",
     "no-unused-vars": "warn",
-    "no-console": "error"
+    "no-console": "warn"
   }
 }

@@ -1,1 +1,3 @@
-hooks/**/*.tsx
+utils/**/*
+mocks/**/*
+service/**/*

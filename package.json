@@ -18,8 +18,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "^3.39.1",
-    "react-reset": "^0.0.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "styled-reset": "^4.4.2"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.2.0",
@@ -35,6 +35,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": ">=6",
     "lint-staged": ">=10",
+    "msw": "^0.43.1",
     "prettier": "^2.7.1",
     "typescript": "4.7.4"
   },
@@ -43,5 +44,8 @@
       "eslint --cache --fix",
       "prettier --write"
     ]
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
