@@ -30,6 +30,9 @@ export const GlobalStyle = createGlobalStyle`
         font-style: inherit;
         font-weight: inherit;
     }
+      .swipeable-list-item__trailing-actions--return {
+    width: 10rem !important;
+  }
 `;
 
 function createTransitionQuery() {
