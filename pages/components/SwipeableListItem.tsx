@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import iCheck from '../public/assets/svg/iCheck.svg';
-import iRightArrow from '../public/assets/svg/iRightArrow.svg';
+import iCheck from '../../public/assets/svg/iCheck.svg';
+import iRightArrow from '../../public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 
