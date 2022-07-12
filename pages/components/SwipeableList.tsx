@@ -5,7 +5,13 @@ import Image from 'next/image';
 import iTrash from '../../public/assets/svg/iTrash.svg';
 import { packmanColors } from '../../styles/color';
 
-export default function SwipeableList() {
+interface SwipeableListProps {
+  openModal: () => void;
+}
+
+export default function SwipeableList(props: SwipeableListProps) {
+  const { openModal } = props;
+
   let packingList = [
     {
       id: '62bbb80d9d5dc1aa4c3d2839',
@@ -111,7 +117,8 @@ export default function SwipeableList() {
           ) : (
             <div
               onClick={() => {
-                // console.log('삭제');
+                document.body.style.overflow = 'hidden';
+                openModal();
               }}
             >
               삭제

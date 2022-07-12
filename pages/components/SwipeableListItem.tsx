@@ -147,7 +147,6 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   border-radius: 1.5rem;
   background-color: #fff;
   transition: 0.4s ease-in-out;
-  z-index: 1;
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -205,6 +204,5 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   transition: 0.4s ease-in-out;
   font-size: 1.4rem;
   font-weight: 500;
-  z-index: 0;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
 `;
