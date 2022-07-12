@@ -3,7 +3,6 @@ import iCheck from '../public/assets/svg/iCheck.svg';
 import iRightArrow from '../public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../styles/color';
-import { useEffect } from 'react';
 
 interface ItemProps {
   idx: number;
@@ -12,6 +11,7 @@ interface ItemProps {
   isDeleting: boolean;
   deleteList: string[];
   checkDeleteList: (id: string) => void;
+  onClickDeleteButton: (idx: number) => void;
 }
 
 const packingList = [
@@ -22,19 +22,19 @@ const packingList = [
     packTotalNum: 20,
   },
   {
-    id: '62bbb80d9d5dc1aa4c3d2839',
+    id: '62bbb80d9d5dc1aa4c3d2831',
     departureDate: '2021.03.01',
     title: '미국 할리우드 여행',
     packTotalNum: 20,
   },
   {
-    id: '62bbb80d9d5dc1aa4c3d2839',
+    id: '62bbb80d9d5dc1aa4c3d2832',
     departureDate: '2021.08.15',
     title: '크리스마스 캐나다 여행',
     packTotalNum: 20,
   },
   {
-    id: '62bbb80d9d5dc1aa4c3d2839',
+    id: '62bbb80d9d5dc1aa4c3d2833',
     departureDate: '2021.08.15',
     title: '생일 일본 여행',
     packTotalNum: 15,
@@ -42,7 +42,15 @@ const packingList = [
 ];
 
 export default function SwipeablelistItem(props: ItemProps) {
-  const { idx, handleIsDragged, isDragged, isDeleting, deleteList, checkDeleteList } = props;
+  const {
+    idx,
+    handleIsDragged,
+    isDragged,
+    isDeleting,
+    deleteList,
+    checkDeleteList,
+    onClickDeleteButton,
+  } = props;
   const { id, departureDate, title, packTotalNum } = packingList[idx];
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -56,10 +64,7 @@ export default function SwipeablelistItem(props: ItemProps) {
       let tmpArr = Array(packingList?.length).fill(false);
 
       if (startX > endX) {
-        for (let i = 0; i < tmpArr.length; i++) {
-          if (i === idx) tmpArr[i] = true;
-          else tmpArr[i] = false;
-        }
+        tmpArr = tmpArr.map((x, index) => (idx === index ? true : false));
       } else if (startX < endX) {
         tmpArr = Array(packingList?.length).fill(false);
       }
@@ -91,7 +96,17 @@ export default function SwipeablelistItem(props: ItemProps) {
         </StyledItemInfo>
         <Image src={iRightArrow} alt="열기" width={10} height={20} />
       </StyledItemWrapper>
-      {!isDeleting && <StyledDeleteButton isDragged={isDragged}>삭제</StyledDeleteButton>}
+      {!isDeleting && (
+        <StyledDeleteButton
+          isDragged={isDragged}
+          onClick={() => {
+            console.log('아이템 삭제');
+            onClickDeleteButton(idx);
+          }}
+        >
+          삭제
+        </StyledDeleteButton>
+      )}
     </StyledRoot>
   );
 }
@@ -108,7 +123,8 @@ const StyledRoot = styled.div`
 const StyledSelectDelete = styled.div`
   display: flex;
   justify-content: center;
-  width: 7.8rem;
+  margin-left: 2.9rem;
+  min-width: 7.8rem;
   height: 2.4rem;
 `;
 
@@ -125,6 +141,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 33.5rem;
   width: 33.5rem;
   height: inherit;
   padding: 2.1rem 1.8rem 2.1rem 2.5rem;
@@ -142,6 +159,8 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
     switch (isDeleting) {
       case false:
         return isDragged ? 'translateX(-7rem)' : 'translateX(0)';
+      // case true:
+      //   return 'translateX(2.5rem)';
     }
   }};
 `;

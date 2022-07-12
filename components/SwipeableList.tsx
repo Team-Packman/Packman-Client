@@ -5,37 +5,34 @@ import Image from 'next/image';
 import iTrash from '../public/assets/svg/iTrash.svg';
 import { packmanColors } from '../styles/color';
 
-const packingList = [
-  {
-    id: '62bbb80d9d5dc1aa4c3d2839',
-    departureDate: '2021.08.15',
-    title: '혼자 밀라노 여행',
-    packTotalNum: 20,
-  },
-  {
-    id: '62bbb80d9d5dc1aa4c3d2839',
-
-    departureDate: '2021.03.01',
-    title: '미국 할리우드 여행',
-    packTotalNum: 20,
-  },
-  {
-    id: '62bbb80d9d5dc1aa4c3d2839',
-
-    departureDate: '2021.08.15',
-    title: '크리스마스 캐나다 여행',
-    packTotalNum: 20,
-  },
-  {
-    id: '62bbb80d9d5dc1aa4c3d2839',
-
-    departureDate: '2021.08.15',
-    title: '생일 일본 여행',
-    packTotalNum: 15,
-  },
-];
-
 export default function SwipeableList() {
+  let packingList = [
+    {
+      id: '62bbb80d9d5dc1aa4c3d2839',
+      departureDate: '2021.08.15',
+      title: '혼자 밀라노 여행',
+      packTotalNum: 20,
+    },
+    {
+      id: '62bbb80d9d5dc1aa4c3d2831',
+      departureDate: '2021.03.01',
+      title: '미국 할리우드 여행',
+      packTotalNum: 20,
+    },
+    {
+      id: '62bbb80d9d5dc1aa4c3d2832',
+      departureDate: '2021.08.15',
+      title: '크리스마스 캐나다 여행',
+      packTotalNum: 20,
+    },
+    {
+      id: '62bbb80d9d5dc1aa4c3d2833',
+      departureDate: '2021.08.15',
+      title: '생일 일본 여행',
+      packTotalNum: 15,
+    },
+  ];
+
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
 
@@ -52,9 +49,11 @@ export default function SwipeableList() {
     setIsDragged(tmpArr);
   };
 
-  useEffect(() => {
-    console.log(isDeleting);
-  }, [isDeleting]);
+  const onClickDeleteButton = (idx: number) => {
+    setIsDragged((prev) => prev.filter((_, i) => i !== idx));
+    packingList = packingList.filter((_, i) => i !== idx);
+    console.log(packingList);
+  };
 
   return (
     <StyledRoot>
@@ -72,6 +71,7 @@ export default function SwipeableList() {
 
         <StyledCaptionButtonWrapper
           onClick={() => {
+            setIsDragged(Array(packingList?.length).fill(false));
             setIsDeleting((prev) => !prev);
             if (!isDeleting) {
               setDeleteList([]);
@@ -82,7 +82,7 @@ export default function SwipeableList() {
         </StyledCaptionButtonWrapper>
       </StyledCaptionWrapper>
       <StyledSwipeableListWrapper>
-        {packingList?.map((pack, idx) => (
+        {packingList?.map((_, idx) => (
           <SwipeablelistItem
             idx={idx}
             key={idx}
@@ -91,6 +91,7 @@ export default function SwipeableList() {
             isDeleting={isDeleting}
             deleteList={deleteList}
             checkDeleteList={(id: string) => checkDeleteList(id)}
+            onClickDeleteButton={() => onClickDeleteButton(idx)}
           />
         ))}
       </StyledSwipeableListWrapper>
@@ -152,9 +153,8 @@ const StyledCaptionWrapper = styled.div`
   & > p {
     display: flex;
     justify-content: start;
-    padding: 1.8rem 0 0 2rem;
+    padding: 1.8rem 0 0 2.4rem;
     color: ${packmanColors.lightGray};
-
     font-size: 1.2rem;
     margin: 0;
   }

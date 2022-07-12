@@ -1,19 +1,13 @@
-import SwipeablePackingList from '../components/SwipeablePackingList';
 import SwipeableList from '../components/SwipeableList';
 import styled from 'styled-components';
 // import useAPI from '../utils/hooks/useAPI';
 function PackingList() {
-  //   const { isLoading, data, error } = useQuery('packingList', async () => {
-  //     const { data } = await axios.get('api/pack');
-  //     return data;
-  //   });
   return (
     <StyledRoot>
       <StyledFolderInfo>
         <h1>해외여행</h1>
         <button>상세보기</button>
       </StyledFolderInfo>
-      {/* <SwipeablePackingList /> */}
       <SwipeableList />
     </StyledRoot>
   );
@@ -39,8 +33,8 @@ const StyledFolderInfo = styled.div`
   display: flex;
   justify-content: start;
   align-items: flex-end;
-  padding-bottom: 1.5rem;
-  width: 100%;
+  padding: 0 2rem 1.5rem 2rem;
+  width: 37.5rem;
   height: 6.7rem;
   gap: 1rem;
   & > h1 {
