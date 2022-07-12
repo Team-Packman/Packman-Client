@@ -2,14 +2,27 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { APIProvider } from '../utils/context/apiContext';
-import { connectMSW } from '../mocks';
-
-connectMSW();
+import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
+import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
+
+  useEffect(() => {
+    const localStoragePersistor = createWebStoragePersistor({ storage: window?.localStorage });
+
+    persistQueryClient({
+      queryClient,
+      persistor: localStoragePersistor,
+      dehydrateOptions: {
+        shouldDehydrateQuery: ({ queryKey }) => {
+          return queryKey === 'user' ? true : false;
+        },
+      },
+    });
+  }, []);
 
   return (
     <>
