@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SwipeablelistItem from './SwipeableListItem';
 import Image from 'next/image';
@@ -51,6 +51,10 @@ export default function SwipeableList() {
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
   };
+
+  useEffect(() => {
+    console.log(isDeleting);
+  }, [isDeleting]);
 
   return (
     <StyledRoot>

@@ -3,6 +3,7 @@ import iCheck from '../public/assets/svg/iCheck.svg';
 import iRightArrow from '../public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../styles/color';
+import { useEffect } from 'react';
 
 interface ItemProps {
   idx: number;
@@ -82,7 +83,7 @@ export default function SwipeablelistItem(props: ItemProps) {
           />
         </StyledSelectDelete>
       )}
-      <StyledItemWrapper onTouchStart={onTouchStart} isDragged={isDragged}>
+      <StyledItemWrapper onTouchStart={onTouchStart} isDragged={isDragged} isDeleting={isDeleting}>
         <StyledItemInfo>
           <p>{departureDate}</p>
           <p>{title}</p>
@@ -119,8 +120,7 @@ const StyledCheckImage = styled(Image)<{ isChecked: boolean }>`
   background-color: ${({ isChecked }) => (isChecked ? 'green' : '#fff')};
 `;
 
-const StyledItemWrapper = styled.article<{ isDragged: boolean }>`
-  transform: ${({ isDragged }) => (isDragged ? 'translateX(-7rem)' : 'translateX(0)')};
+const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
   position: relative;
   display: flex;
   justify-content: center;
@@ -137,6 +137,13 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean }>`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  transform: ${({ isDragged, isDeleting }) => {
+    switch (isDeleting) {
+      case false:
+        return isDragged ? 'translateX(-7rem)' : 'translateX(0)';
+    }
+  }};
 `;
 
 const StyledItemInfo = styled.div`
@@ -168,19 +175,17 @@ const StyledItemInfo = styled.div`
 
 const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   position: absolute;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* width: 7.3rem; */
-  height: 11.4rem;
   width: ${({ isDragged }) => (isDragged ? '7.3rem' : '0px')};
+  height: 11.4rem;
   height: inherit;
   background-color: #ff0000;
   color: ${packmanColors.white};
   border-radius: 15px;
   transition: 0.4s ease-in-out;
   z-index: 0;
-  right: 0;
-  /* right: ${({ isDragged }) => (!isDragged ? '-52px' : '0px')}; */
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
 `;
