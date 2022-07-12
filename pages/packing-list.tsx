@@ -27,15 +27,14 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 2rem;
 `;
 const StyledFolderInfo = styled.div`
   display: flex;
   justify-content: start;
   align-items: flex-end;
   padding: 0 2rem 1.5rem 2rem;
-  width: 37.5rem;
-  height: 6.7rem;
+  width: 100%;
+  height: 100%;
   gap: 1rem;
   & > h1 {
     font-size: 2rem;

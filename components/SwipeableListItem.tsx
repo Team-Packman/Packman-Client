@@ -112,6 +112,7 @@ export default function SwipeablelistItem(props: ItemProps) {
 }
 
 const StyledRoot = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -137,12 +138,10 @@ const StyledCheckImage = styled(Image)<{ isChecked: boolean }>`
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 33.5rem;
-  width: 33.5rem;
   height: inherit;
   padding: 2.1rem 1.8rem 2.1rem 2.5rem;
   border-radius: 1.5rem;
@@ -158,9 +157,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   transform: ${({ isDragged, isDeleting }) => {
     switch (isDeleting) {
       case false:
-        return isDragged ? 'translateX(-7rem)' : 'translateX(0)';
-      // case true:
-      //   return 'translateX(2.5rem)';
+        return isDragged ? 'translateX(-8.15rem)' : 'translateX(0)';
     }
   }};
 `;

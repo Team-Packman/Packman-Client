@@ -129,7 +129,7 @@ const StyledRoot = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 37.5rem;
+  width: 100%;
   /* height: 66.9rem; */
   gap: 1rem;
   background-color: #ececec;
@@ -139,7 +139,7 @@ const StyledRoot = styled.div`
 const StyledCaptionWrapper = styled.div`
   position: relative;
   display: flex;
-  width: 37.5rem;
+  width: 100%;
   height: 8.4rem;
   font-size: 1.2rem;
 
@@ -166,8 +166,6 @@ const StyledCaptionButtonWrapper = styled.div`
   bottom: 0.9rem;
   & > p {
     color: ${packmanColors.lightGray};
-
-    margin: 0;
   }
 `;
 const StyledSwipeableListWrapper = styled.div`
