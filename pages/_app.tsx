@@ -5,6 +5,8 @@ import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useState } from 'react';
 import { APIProvider } from '../utils/context/apiContext';
 import { connectMSW } from '../mocks';
+import { GlobalStyle } from '../styles/globalStyle';
+import Layout from './components/layout';
 
 connectMSW();
 
@@ -19,7 +21,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={'/'}>
-            <Component {...pageProps} />
+            <GlobalStyle />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </APIProvider>
         </Hydrate>
       </QueryClientProvider>
