@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import iCheck from '../public/assets/svg/iCheck.svg';
 import iRightArrow from '../public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
-import { packmanColors } from '../styles/color';
+import { packmanColors } from '../../styles/color';
 
 interface ItemProps {
   idx: number;
@@ -100,7 +100,7 @@ export default function SwipeablelistItem(props: ItemProps) {
         <StyledDeleteButton
           isDragged={isDragged}
           onClick={() => {
-            console.log('아이템 삭제');
+            // console.log('아이템 삭제');
             onClickDeleteButton(idx);
           }}
         >
@@ -174,6 +174,7 @@ const StyledItemInfo = styled.div`
     background-color: #fff;
     color: ${packmanColors.mint};
     font-size: 1.2rem;
+    font-weight: 400;
     border: 0.1rem solid ${packmanColors.mint};
     border-radius: 1rem;
     padding: 0 1rem;
@@ -182,9 +183,10 @@ const StyledItemInfo = styled.div`
   & > p:first-child {
     font-size: 1.2rem;
     color: ${packmanColors.lightGray};
+    font-weight: 300;
   }
   & > p:nth-child(2) {
-    font-weight: bold;
+    font-weight: 500;
     font-size: 1.6rem;
   }
 `;
@@ -195,13 +197,14 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${({ isDragged }) => (isDragged ? '7.3rem' : '0px')};
+  width: ${({ isDragged }) => (isDragged ? '7.3rem' : '0rem')};
   height: 11.4rem;
-  height: inherit;
   background-color: #ff0000;
   color: ${packmanColors.white};
-  border-radius: 15px;
+  border-radius: 1.5rem;
   transition: 0.4s ease-in-out;
+  font-size: 1.4rem;
+  font-weight: 500;
   z-index: 0;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
 `;

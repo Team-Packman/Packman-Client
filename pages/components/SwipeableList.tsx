@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import SwipeablelistItem from './SwipeableListItem';
 import Image from 'next/image';
 import iTrash from '../public/assets/svg/iTrash.svg';
-import { packmanColors } from '../styles/color';
+import { packmanColors } from '../../styles/color';
 
 export default function SwipeableList() {
   let packingList = [
@@ -52,7 +52,6 @@ export default function SwipeableList() {
   const onClickDeleteButton = (idx: number) => {
     setIsDragged((prev) => prev.filter((_, i) => i !== idx));
     packingList = packingList.filter((_, i) => i !== idx);
-    console.log(packingList);
   };
 
   return (
@@ -112,7 +111,7 @@ export default function SwipeableList() {
           ) : (
             <div
               onClick={() => {
-                console.log('삭제');
+                // console.log('삭제');
               }}
             >
               삭제
@@ -142,6 +141,7 @@ const StyledCaptionWrapper = styled.div`
   width: 100%;
   height: 8.4rem;
   font-size: 1.2rem;
+  font-weight: 300;
 
   & > span {
     position: absolute;

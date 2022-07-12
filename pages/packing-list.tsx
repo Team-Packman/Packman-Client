@@ -1,24 +1,20 @@
-import SwipeableList from '../components/SwipeableList';
+import SwipeableList from './components/SwipeableList';
 import styled from 'styled-components';
+import Image from 'next/image';
+import iShowMore from '../public/assets/svg/iShowMore.svg';
 // import useAPI from '../utils/hooks/useAPI';
+
 function PackingList() {
   return (
     <StyledRoot>
       <StyledFolderInfo>
         <h1>해외여행</h1>
-        <button>상세보기</button>
+        <Image src={iShowMore} alt="상세보기" width={10} height={10} />
       </StyledFolderInfo>
       <SwipeableList />
     </StyledRoot>
   );
 }
-
-/*interface Pack {
-  id: number;
-  date: string;
-  title: string;
-  bag: number;
-} */
 
 export default PackingList;
 
@@ -29,14 +25,17 @@ const StyledRoot = styled.div`
   justify-content: center;
 `;
 const StyledFolderInfo = styled.div`
+  position: relative;
   display: flex;
   justify-content: start;
-  align-items: flex-end;
-  padding: 0 2rem 1.5rem 2rem;
+  align-items: center;
+  padding-left: 2.4rem;
   width: 100%;
-  height: 100%;
-  gap: 1rem;
+  height: 5.4rem;
+  gap: 1.4rem;
+
   & > h1 {
     font-size: 2rem;
+    font-weight: 600;
   }
 `;
