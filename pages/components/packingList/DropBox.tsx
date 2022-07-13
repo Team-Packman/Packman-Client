@@ -33,7 +33,6 @@ const StyledBackground = styled.div`
 `;
 
 const StyledRoot = styled.div`
-  text-align: center;
   position: absolute;
   top: 4.5rem;
   left: 2.997rem;
@@ -42,16 +41,6 @@ const StyledRoot = styled.div`
   border-radius: 0.8rem;
   filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.1));
   z-index: 100;
-  animation: 0.3s ease-in-out show;
-
-  @keyframes show {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
 `;
 const StyledItem = styled.div`
   display: flex;
