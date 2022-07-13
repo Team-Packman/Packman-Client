@@ -1,4 +1,4 @@
-import { GroupMembersOutput } from './../../../service/together/index';
+import { GroupMembersOutput } from '../../../../service/together/index';
 import { AxiosInstance } from 'axios';
 
 export const fetchGroupMember = async (

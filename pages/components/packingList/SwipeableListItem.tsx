@@ -1,8 +1,16 @@
 import styled from 'styled-components';
-import iCheck from '../../public/assets/svg/iCheck.svg';
-import iRightArrow from '../../public/assets/svg/iRightArrow.svg';
+import iCheck from '../../../public/assets/svg/iCheck.svg';
+import iRightArrow from '../../../public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
-import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
+
+interface PackingList {
+  id: string;
+  departureDate: string;
+  title: string;
+  packTotalNum: number;
+  packRemainNum: number;
+}
 
 interface ItemProps {
   idx: number;
@@ -12,38 +20,8 @@ interface ItemProps {
   deleteList: string[];
   checkDeleteList: (id: string) => void;
   onClickDeleteButton: (idx: number) => void;
+  packingList: PackingList[];
 }
-
-const packingList = [
-  {
-    id: '62bbb80d9d5dc1aa4c3d2839',
-    departureDate: '2021.08.15',
-    title: '혼자 밀라노 여행',
-    packTotalNum: 20,
-    packRemainNum: 3,
-  },
-  {
-    id: '62bbb80d9d5dc1aa4c3d2831',
-    departureDate: '2021.03.01',
-    title: '일본 여행',
-    packTotalNum: 20,
-    packRemainNum: 3,
-  },
-  {
-    id: '62bbb80d9d5dc1aa4c3d2832',
-    departureDate: '2021.08.15',
-    title: '혼자 밀라노 여행',
-    packTotalNum: 20,
-    packRemainNum: 3,
-  },
-  {
-    id: '62bbb80d9d5dc1aa4c3d2833',
-    departureDate: '2021.08.15',
-    title: '생일 일본 여행',
-    packTotalNum: 15,
-    packRemainNum: 3,
-  },
-];
 
 export default function SwipeablelistItem(props: ItemProps) {
   const {
@@ -54,7 +32,9 @@ export default function SwipeablelistItem(props: ItemProps) {
     deleteList,
     checkDeleteList,
     onClickDeleteButton,
+    packingList,
   } = props;
+
   const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
   const onTouchStart = (e: React.TouchEvent) => {

@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import iClose from '../../public/assets/svg/iClose.svg';
+import iClose from '../../../public/assets/svg/iClose.svg';
 import Image from 'next/image';
-import { packmanColors } from '../../styles/color';
-// import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
 
 interface ModalProps {
   content: string;

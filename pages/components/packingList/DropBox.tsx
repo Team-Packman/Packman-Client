@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
 
 interface DropBoxProps {
   folderList: { id: string; title: string }[];

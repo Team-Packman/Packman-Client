@@ -1,11 +1,12 @@
-import SwipeableList from './components/SwipeableList';
+import SwipeableList from './components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../public/assets/svg/iShowMore.svg';
-import Modal from './components/Modal';
+import Modal from './components/common/Modal';
 import { useState } from 'react';
-import BottomModal from './components/BottomModal';
-import DropBox from './components/DropBox';
+import BottomModal from './components/common/BottomModal';
+import DropBox from './components/packingList/DropBox';
+import { AsyncBoundary } from '../utils/AsyncBoundary';
 
 function PackingList() {
   const modalData = {
@@ -24,47 +25,49 @@ function PackingList() {
   const [toggle, setToggle] = useState(false);
 
   return (
-    <StyledRoot>
-      {showBottomModal && (
-        <BottomModal
-          closeModal={() => {
-            document.body.style.overflow = 'unset';
-            setShowBottomModal(false);
+    <AsyncBoundary>
+      <StyledRoot>
+        {showBottomModal && (
+          <BottomModal
+            closeModal={() => {
+              document.body.style.overflow = 'unset';
+              setShowBottomModal(false);
+            }}
+          />
+        )}
+        {showModal && (
+          <Modal
+            content={modalData.content}
+            leftButtonContent={modalData.leftButtonContent}
+            rightButtonContent={modalData.rightButtonContent}
+            closeModal={() => {
+              document.body.style.overflow = 'unset';
+              setShowModal(false);
+            }}
+          />
+        )}
+        <StyledFolderInfo>
+          {toggle && <DropBox folderList={folderList} closeDropBox={() => setToggle(false)} />}
+          <h1>해외여행</h1>
+          <StyledToggleImage
+            src={iShowMore}
+            alt="상세보기"
+            width={24}
+            height={24}
+            toggle={toggle}
+            onClick={() => {
+              setToggle(true);
+            }}
+          />
+        </StyledFolderInfo>
+        <SwipeableList
+          openModal={() => {
+            document.body.style.overflow = 'hidden';
+            setShowModal(true);
           }}
         />
-      )}
-      {showModal && (
-        <Modal
-          content={modalData.content}
-          leftButtonContent={modalData.leftButtonContent}
-          rightButtonContent={modalData.rightButtonContent}
-          closeModal={() => {
-            document.body.style.overflow = 'unset';
-            setShowModal(false);
-          }}
-        />
-      )}
-      <StyledFolderInfo>
-        {toggle && <DropBox folderList={folderList} closeDropBox={() => setToggle(false)} />}
-        <h1>해외여행</h1>
-        <StyledToggleImage
-          src={iShowMore}
-          alt="상세보기"
-          width={24}
-          height={24}
-          toggle={toggle}
-          onClick={() => {
-            setToggle(true);
-          }}
-        />
-      </StyledFolderInfo>
-      <SwipeableList
-        openModal={() => {
-          document.body.style.overflow = 'hidden';
-          setShowModal(true);
-        }}
-      />
-    </StyledRoot>
+      </StyledRoot>
+    </AsyncBoundary>
   );
 }
 

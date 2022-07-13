@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { packmanColors } from '../../styles/color';
-import iTrash from '../../public/assets/svg/iTrash.svg';
-import iEdit from '../../public/assets/svg/iEdit.svg';
-import iSwipeBar from '../../public/assets/svg/iSwipeBar.svg';
+import { packmanColors } from '../../../styles/color';
+import iTrash from '../../../public/assets/svg/iTrash.svg';
+import iEdit from '../../../public/assets/svg/iEdit.svg';
+import iSwipeBar from '../../../public/assets/svg/iSwipeBar.svg';
 import Image from 'next/image';
 import { useState } from 'react';
 
