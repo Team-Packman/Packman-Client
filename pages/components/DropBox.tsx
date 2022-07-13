@@ -8,6 +8,7 @@ interface DropBoxProps {
 
 function DropBox(props: DropBoxProps) {
   const { folderList, closeDropBox } = props;
+
   return (
     <>
       <StyledBackground onClick={closeDropBox} />
@@ -29,7 +30,6 @@ const StyledBackground = styled.div`
   height: 100%;
   background-color: none;
   z-index: 10;
-  /* overflow: hidden; */
 `;
 
 const StyledRoot = styled.div`

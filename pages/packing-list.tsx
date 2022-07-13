@@ -45,9 +45,7 @@ function PackingList() {
         />
       )}
       <StyledFolderInfo>
-        {toggle && (
-          <DropBox folderList={folderList} closeDropBox={() => setToggle((prev) => !prev)} />
-        )}
+        {toggle && <DropBox folderList={folderList} closeDropBox={() => setToggle(false)} />}
         <h1>해외여행</h1>
         <StyledToggleImage
           src={iShowMore}

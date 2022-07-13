@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SwipeablelistItem from './SwipeableListItem';
 import Image from 'next/image';
@@ -46,6 +46,11 @@ export default function SwipeableList(props: SwipeableListProps) {
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
+  const [isDragged, setIsDragged] = useState<boolean[]>(Array(packingList?.length).fill(false));
+
+  useEffect(() => {
+    console.log(isDragged);
+  }, [isDragged]);
 
   const checkDeleteList = (id: string) => {
     if (deleteList.includes(id)) {
@@ -54,7 +59,6 @@ export default function SwipeableList(props: SwipeableListProps) {
       setDeleteList([...deleteList, id]);
     }
   };
-  const [isDragged, setIsDragged] = useState<boolean[]>(Array(packingList?.length).fill(false));
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -71,9 +75,9 @@ export default function SwipeableList(props: SwipeableListProps) {
   return (
     <StyledRoot>
       <StyledCaptionWrapper>
-        <p>
+        <StyledCaptionText>
           <span>{packingList?.length}</span>개의 패킹 리스트
-        </p>
+        </StyledCaptionText>
         {isDeleting && (
           <span
             onClick={() => {
@@ -186,6 +190,14 @@ const StyledCaptionWrapper = styled.div`
     color: ${packmanColors.lightGray};
     font-size: 1.2rem;
     margin: 0;
+  }
+`;
+const StyledCaptionText = styled.p`
+  font-size: 1.4rem;
+  color: ${packmanColors.lightGray};
+  & > span {
+    font-weight: 600;
+    color: ${packmanColors.pink};
   }
 `;
 const StyledCaptionButtonWrapper = styled.div`
