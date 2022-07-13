@@ -1,4 +1,4 @@
-import { GroupMembersOutput } from './../../../service/together/index';
+import { GroupMembersOutput, TogetherPackingListOutput } from './../../../service/together/index';
 import { AxiosInstance } from 'axios';
 
 export const fetchGroupMember = async (
@@ -6,5 +6,13 @@ export const fetchGroupMember = async (
   groupId: string,
 ): Promise<GroupMembersOutput> => {
   const { data } = await request(`/together/member/${groupId}`);
+  return data;
+};
+
+export const fetchTogetherPackingList = async (
+  request: AxiosInstance,
+  folderId: string,
+): Promise<TogetherPackingListOutput> => {
+  const { data } = await request(`/packingList/together/${folderId}`);
   return data;
 };

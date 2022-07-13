@@ -4,6 +4,8 @@ import SwipeablelistItem from './SwipeableListItem';
 import Image from 'next/image';
 import iTrash from '../../public/assets/svg/iTrash.svg';
 import { packmanColors } from '../../styles/color';
+import { useQuery } from 'react-query';
+import useAPI from '../../utils/hooks/useAPI';
 
 interface SwipeableListProps {
   openModal: () => void;
@@ -11,6 +13,9 @@ interface SwipeableListProps {
 
 export default function SwipeableList(props: SwipeableListProps) {
   const { openModal } = props;
+
+  // const getTogetherPackingList = useAPI((api) => api.together.getTogetherPackingList);
+  // const { isLoading, data, error } = useQuery('packingList', () => getTogetherPackingList('1'));
 
   let packingList = [
     {
@@ -60,10 +65,15 @@ export default function SwipeableList(props: SwipeableListProps) {
     packingList = packingList.filter((_, i) => i !== idx);
   };
 
+  // if (isLoading) return <div>Loading...</div>;
+  // else if (error instanceof Error) return <div>Error : {error.message}</div>;
+
   return (
     <StyledRoot>
       <StyledCaptionWrapper>
-        <p>{packingList.length}개의 패킹 리스트</p>
+        <p>
+          <span>{packingList?.length}</span>개의 패킹 리스트
+        </p>
         {isDeleting && (
           <span
             onClick={() => {
@@ -101,18 +111,30 @@ export default function SwipeableList(props: SwipeableListProps) {
         ))}
       </StyledSwipeableListWrapper>
       {isDeleting && (
-        <StyledDeleteButton isCheckedAtLeastOne={deleteList.length > 0}>
+        <StyledDeleteButton>
           {!deleteList.length ? (
             <div
               onClick={() => {
                 const tempArr: string[] = [];
                 if (packingList) {
+                  // togetherPackingList = data.togetherPackingList;
+                  // togetherPackingList.map(() => { });
                   packingList.forEach(({ id }) => tempArr.push(id));
+                  console.log(tempArr);
                 }
                 setDeleteList(tempArr);
               }}
             >
               전체 선택
+            </div>
+          ) : deleteList.length === packingList.length ? (
+            <div
+              onClick={() => {
+                document.body.style.overflow = 'hidden';
+                openModal();
+              }}
+            >
+              전체 삭제
             </div>
           ) : (
             <div
@@ -121,7 +143,7 @@ export default function SwipeableList(props: SwipeableListProps) {
                 openModal();
               }}
             >
-              삭제
+              선택 삭제
             </div>
           )}
         </StyledDeleteButton>
@@ -137,8 +159,8 @@ const StyledRoot = styled.div`
   align-items: center;
   width: 100%;
   /* height: 66.9rem; */
-  gap: 1rem;
-  background-color: #ececec;
+  gap: 0.8rem;
+  background-color: #fff;
   overflow: hidden;
 `;
 
@@ -155,7 +177,7 @@ const StyledCaptionWrapper = styled.div`
     font-size: 1.4rem;
     left: 2.6rem;
     bottom: 1rem;
-    color: ${packmanColors.lightGray};
+    color: ${packmanColors.darkGray};
   }
   & > p {
     display: flex;
@@ -180,14 +202,16 @@ const StyledSwipeableListWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  overflow: hidden;
+  margin-bottom: 9.7rem;
 `;
-const StyledDeleteButton = styled.button<{ isCheckedAtLeastOne: boolean }>`
+const StyledDeleteButton = styled.button`
+  position: fixed;
+  bottom: 1.507rem;
   width: 100%;
   height: 4.7rem;
   font-size: 1.2rem;
-  background-color: ${({ isCheckedAtLeastOne }) => (isCheckedAtLeastOne ? '#fff' : '#30CCD8')};
-  color: ${({ isCheckedAtLeastOne }) => (isCheckedAtLeastOne ? '#30CCD8' : '#fff')};
-  border: ${({ isCheckedAtLeastOne }) => (isCheckedAtLeastOne ? '1px solid #30CCD8' : 'none')};
+  background-color: ${packmanColors.pink};
+  color: #fff;
+  border: none;
   border-radius: 0.5rem;
 `;

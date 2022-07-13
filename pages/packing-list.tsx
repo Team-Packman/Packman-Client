@@ -28,7 +28,7 @@ function PackingList() {
       )}
       <StyledFolderInfo>
         <h1>해외여행</h1>
-        <Image src={iShowMore} alt="상세보기" width={10} height={10} />
+        <Image src={iShowMore} alt="상세보기" width={24} height={24} />
       </StyledFolderInfo>
       <SwipeableList
         openModal={() => {
@@ -56,7 +56,7 @@ const StyledFolderInfo = styled.div`
   padding-left: 2.4rem;
   width: 100%;
   height: 5.4rem;
-  gap: 1.4rem;
+  gap: 0.4rem;
 
   & > h1 {
     font-size: 2rem;

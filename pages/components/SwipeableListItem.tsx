@@ -20,24 +20,28 @@ const packingList = [
     departureDate: '2021.08.15',
     title: '혼자 밀라노 여행',
     packTotalNum: 20,
+    packRemainNum: 3,
   },
   {
     id: '62bbb80d9d5dc1aa4c3d2831',
     departureDate: '2021.03.01',
-    title: '미국 할리우드 여행',
+    title: '일본 여행',
     packTotalNum: 20,
+    packRemainNum: 3,
   },
   {
     id: '62bbb80d9d5dc1aa4c3d2832',
     departureDate: '2021.08.15',
-    title: '크리스마스 캐나다 여행',
+    title: '혼자 밀라노 여행',
     packTotalNum: 20,
+    packRemainNum: 3,
   },
   {
     id: '62bbb80d9d5dc1aa4c3d2833',
     departureDate: '2021.08.15',
     title: '생일 일본 여행',
     packTotalNum: 15,
+    packRemainNum: 3,
   },
 ];
 
@@ -51,7 +55,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     checkDeleteList,
     onClickDeleteButton,
   } = props;
-  const { id, departureDate, title, packTotalNum } = packingList[idx];
+  const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -92,9 +96,12 @@ export default function SwipeablelistItem(props: ItemProps) {
         <StyledItemInfo>
           <p>{departureDate}</p>
           <p>{title}</p>
-          <span>{packTotalNum}개의 짐</span>
+          <span>총 {packTotalNum}개의 짐</span>
         </StyledItemInfo>
-        <Image src={iRightArrow} alt="열기" width={10} height={20} />
+        <StyledPackRemainText>
+          아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
+        </StyledPackRemainText>
+        <Image src={iRightArrow} alt="열기" width={24} height={24} />
       </StyledItemWrapper>
       {!isDeleting && (
         <StyledDeleteButton
@@ -116,16 +123,15 @@ const StyledRoot = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 33.5rem;
+  min-width: 33.6rem;
   height: 11.4rem;
-  overflow: hidden;
 `;
 
 const StyledSelectDelete = styled.div`
   display: flex;
   justify-content: center;
   margin-left: 2.9rem;
-  min-width: 7.8rem;
+  min-width: 8.4rem;
   height: 2.4rem;
 `;
 
@@ -139,13 +145,13 @@ const StyledCheckImage = styled(Image)<{ isChecked: boolean }>`
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  min-width: 33.5rem;
+  min-width: 33.6rem;
   height: inherit;
-  padding: 2.1rem 1.8rem 2.1rem 2.5rem;
+  padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
-  background-color: #fff;
+  background-color: ${packmanColors.blueGray};
   transition: 0.4s ease-in-out;
 
   -webkit-user-select: none;
@@ -156,7 +162,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   transform: ${({ isDragged, isDeleting }) => {
     switch (isDeleting) {
       case false:
-        return isDragged ? 'translateX(-8.15rem)' : 'translateX(0)';
+        return isDragged ? 'translateX(-6.4rem)' : 'translateX(0)';
     }
   }};
 `;
@@ -164,29 +170,38 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
 const StyledItemInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 0.6rem;
-  width: 100%;
 
-  & > span {
-    width: fit-content;
-    height: 2rem;
-    background-color: #fff;
-    color: ${packmanColors.mint};
-    font-size: 1.2rem;
-    font-weight: 400;
-    border: 0.1rem solid ${packmanColors.mint};
-    border-radius: 1rem;
-    padding: 0 1rem;
-    text-align: center;
-  }
   & > p:first-child {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: ${packmanColors.lightGray};
     font-weight: 300;
   }
   & > p:nth-child(2) {
     font-weight: 500;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
+  }
+  & > span {
+    width: 8.3rem;
+    height: 2.4rem;
+    background-color: #fff;
+    color: ${packmanColors.black};
+    font-size: 1.3rem;
+    font-weight: 400;
+    border: 0.1rem solid ${packmanColors.pink};
+    border-radius: 1.2rem;
+    text-align: center;
+  }
+`;
+const StyledPackRemainText = styled.p`
+  position: absolute;
+  right: 3.557rem;
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: ${packmanColors.black};
+  & > span {
+    color: ${packmanColors.pink};
   }
 `;
 
@@ -196,11 +211,10 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${({ isDragged }) => (isDragged ? '7.3rem' : '0rem')};
+  width: ${({ isDragged }) => (isDragged ? '5.6rem' : '0rem')};
   height: 11.4rem;
   background-color: #ff0000;
   color: ${packmanColors.white};
-  border-radius: 1.5rem;
   transition: 0.4s ease-in-out;
   font-size: 1.4rem;
   font-weight: 500;
