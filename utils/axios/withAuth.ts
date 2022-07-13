@@ -6,7 +6,7 @@ function withAuth(axios: AxiosInstance) {
   const requestIntercept = axios.interceptors.request.use(
     (config: AxiosRequestConfig) => {
       if (config.headers && !config.headers['Authorization']) {
-        config.headers['Authorization'] = `Bearer ${accessToken}`;
+        config.headers['X-Authorization-Token'] = `${accessToken}`;
         return config;
       }
 
