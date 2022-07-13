@@ -14,8 +14,8 @@ interface SwipeableListProps {
 export default function SwipeableList(props: SwipeableListProps) {
   const { openModal } = props;
 
-  // const getTogetherPackingList = useAPI((api) => api.together.getTogetherPackingList);
-  // const { isLoading, data, error } = useQuery('packingList', () => getTogetherPackingList('1'));
+  const getTogetherPackingList = useAPI((api) => api.together.getTogetherPackingList);
+  const { isLoading, data, error } = useQuery('packingList', () => getTogetherPackingList('1'));
 
   let packingList = [
     {
