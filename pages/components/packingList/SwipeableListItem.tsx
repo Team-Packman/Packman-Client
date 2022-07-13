@@ -55,6 +55,7 @@ export default function SwipeablelistItem(props: ItemProps) {
       handleIsDragged(tmpArr);
 
       document.removeEventListener('touchmove', Move);
+      document.removeEventListener('touchend', End);
     }
     document.addEventListener('touchmove', Move);
     document.addEventListener('touchend', End);
@@ -67,7 +68,7 @@ export default function SwipeablelistItem(props: ItemProps) {
           <StyledCheckImage
             src={iCheck}
             alt="체크"
-            isChecked={deleteList.includes(id)}
+            ischecked={deleteList.includes(id)}
             onClick={() => checkDeleteList(id)}
           />
         </StyledSelectDelete>
@@ -115,12 +116,12 @@ const StyledSelectDelete = styled.div`
   height: 2.4rem;
 `;
 
-const StyledCheckImage = styled(Image)<{ isChecked: boolean }>`
+const StyledCheckImage = styled(Image)<{ ischecked: boolean }>`
   width: 2.4rem;
   height: 2.4rem;
   border: 0.1rem solid #000;
   border-radius: 50%;
-  background-color: ${({ isChecked }) => (isChecked ? 'green' : '#fff')};
+  background-color: ${({ ischecked }) => (ischecked ? 'green' : '#fff')};
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`

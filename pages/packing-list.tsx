@@ -7,6 +7,16 @@ import { useState } from 'react';
 import BottomModal from './components/common/BottomModal';
 import DropBox from './components/packingList/DropBox';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
+import useAPI from '../utils/hooks/useAPI';
+import { useQuery } from 'react-query';
+
+interface PackingList {
+  id: string;
+  departureDate: string;
+  title: string;
+  packTotalNum: number;
+  packRemainNum: number;
+}
 
 function PackingList() {
   const modalData = {
@@ -14,60 +24,59 @@ function PackingList() {
     leftButtonContent: '아니오',
     rightButtonContent: '예',
   };
-  const folderList = [
-    { id: '62bbb80d9d5dc1aa4c3d2839', title: '국내 여행' },
-    { id: '62bbb80d9d5dc1aa4c3d2839', title: '해외 여행' },
-    { id: '62bbb80d9d5dc1aa4c3d2839', title: '본가갈때챙겨' },
-    { id: '62bbb80d9d5dc1aa4c3d2839', title: '폴더이름!!' },
-  ];
   const [showModal, setShowModal] = useState(false);
   const [showBottomModal, setShowBottomModal] = useState(false);
   const [toggle, setToggle] = useState(false);
 
+  const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
+  const { data } = useQuery('packingList', () => getTogetherPackingList(), {});
+
+  if (!data) return;
+
+  const { alonePackingList, folder, currentFolder } = data.data;
+
   return (
-    <AsyncBoundary>
-      <StyledRoot>
-        {showBottomModal && (
-          <BottomModal
-            closeModal={() => {
-              document.body.style.overflow = 'unset';
-              setShowBottomModal(false);
-            }}
-          />
-        )}
-        {showModal && (
-          <Modal
-            content={modalData.content}
-            leftButtonContent={modalData.leftButtonContent}
-            rightButtonContent={modalData.rightButtonContent}
-            closeModal={() => {
-              document.body.style.overflow = 'unset';
-              setShowModal(false);
-            }}
-          />
-        )}
-        <StyledFolderInfo>
-          {toggle && <DropBox folderList={folderList} closeDropBox={() => setToggle(false)} />}
-          <h1>해외여행</h1>
-          <StyledToggleImage
-            src={iShowMore}
-            alt="상세보기"
-            width={24}
-            height={24}
-            toggle={toggle}
-            onClick={() => {
-              setToggle(true);
-            }}
-          />
-        </StyledFolderInfo>
-        <SwipeableList
-          openModal={() => {
-            document.body.style.overflow = 'hidden';
-            setShowModal(true);
+    <StyledRoot>
+      {showBottomModal && (
+        <BottomModal
+          closeModal={() => {
+            document.body.style.overflow = 'unset';
+            setShowBottomModal(false);
           }}
         />
-      </StyledRoot>
-    </AsyncBoundary>
+      )}
+      {showModal && (
+        <Modal
+          content={modalData.content}
+          leftButtonContent={modalData.leftButtonContent}
+          rightButtonContent={modalData.rightButtonContent}
+          closeModal={() => {
+            document.body.style.overflow = 'unset';
+            setShowModal(false);
+          }}
+        />
+      )}
+      <StyledFolderInfo>
+        {toggle && <DropBox folderList={folder} closeDropBox={() => setToggle(false)} />}
+        <h1>{currentFolder.title}</h1>
+        <StyledToggleImage
+          src={iShowMore}
+          alt="상세보기"
+          width={24}
+          height={24}
+          onClick={() => {
+            setToggle(true);
+          }}
+        />
+      </StyledFolderInfo>
+      <SwipeableList
+        alonePackingList={alonePackingList}
+        openModal={() => {
+          document.body.style.overflow = 'hidden';
+          setShowModal(true);
+        }}
+      />
+    </StyledRoot>
   );
 }
 
@@ -94,7 +103,6 @@ const StyledFolderInfo = styled.div`
     font-weight: 600;
   }
 `;
-const StyledToggleImage = styled(Image)<{ toggle: boolean }>`
+const StyledToggleImage = styled(Image)`
   transition: 0.4s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
