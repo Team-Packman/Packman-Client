@@ -18,21 +18,21 @@ function FolderBox(props: MyType) {
 
 export default FolderBox;
 
-const StyledRoot = styled.section`
+export const StyledRoot = styled.section`
   width: 16.4rem;
   height: 16.4rem;
-  background-color: ${packmanColors.tempGray};
+  background-color: ${packmanColors.pmBlueGrey};
   border-radius: 1rem;
 `;
 
-const StyledInfo = styled.div``;
+export const StyledInfo = styled.div``;
 
-const StyledTitle = styled.p`
+export const StyledTitle = styled.p`
   font-size: 1.4rem;
   font-weight: 600;
 `;
 
-const StyledFolderInfo = styled.p`
+export const StyledFolderInfo = styled.p`
   font-size: 1.2rem;
-  color: ${packmanColors.pmDeepGray};
+  color: ${packmanColors.pmDeepGrey};
 `;

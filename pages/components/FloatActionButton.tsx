@@ -1,9 +1,8 @@
-import React, { ReactNode, useCallback, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { ReactNode, useState } from 'react';
+
 import { packmanColors } from '../../styles/color';
-import AddIcon from '@material-ui/icons/Add';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
-import { Backdrop } from '@material-ui/core';
+import { Backdrop, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -58,7 +57,7 @@ function FloatActionButton() {
 
   const [open, setOpen] = useState<boolean>(false);
   const [icon, setIcon] = useState<ReactNode>(
-    <AddIcon style={{ fill: `${packmanColors.white}` }} />,
+    <SpeedDialIcon style={{ fill: `${packmanColors.white}` }} />,
   );
 
   const actions = [
@@ -71,12 +70,12 @@ function FloatActionButton() {
 
   const handleOpen = () => {
     setOpen(true);
-    setIcon(<AddIcon style={{ fill: `${packmanColors.white}` }} />);
+    setIcon(<SpeedDialIcon style={{ fill: `${packmanColors.white}` }} />);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setIcon(<AddIcon style={{ fill: `${packmanColors.white}` }} />);
+    setIcon(<SpeedDialIcon style={{ fill: `${packmanColors.white}` }} />);
   };
 
   return (

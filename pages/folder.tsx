@@ -104,7 +104,7 @@ function Folder() {
 
 export default Folder;
 
-const StyledRoot = styled.article`
+export const StyledRoot = styled.article`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,29 +115,29 @@ const StyledRoot = styled.article`
 `;
 
 // 최근 생성 리스트
-const StyledRecentBanner = styled.article<{ isRecentListExist: boolean }>`
+export const StyledRecentBanner = styled.article<{ isRecentListExist: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   border: ${({ isRecentListExist }) =>
-    !isRecentListExist ? '0' : `1px solid ${packmanColors.someGray}`};
+    !isRecentListExist ? '0' : `1px solid ${packmanColors.pmGrey}`};
   border-radius: 1rem;
   margin: 1.4rem 0 2.9rem 0;
   padding: 2rem 2.8rem;
 `;
 
-const StyledLabel = styled.div`
+export const StyledLabel = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const StyledTitle = styled.p`
+export const StyledTitle = styled.p`
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 0.9rem;
 `;
 
-const StyledPackTotalNum = styled.p`
+export const StyledPackTotalNum = styled.p`
   width: fit-content;
   padding: 0.1rem 1rem;
   color: ${packmanColors.pmBlack};
@@ -146,20 +146,20 @@ const StyledPackTotalNum = styled.p`
   border: 1px solid ${packmanColors.pmPink};
 `;
 
-const StyledDday = styled.div`
+export const StyledDday = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
 `;
 
-const StyledRemainDay = styled.p`
+export const StyledRemainDay = styled.p`
   font-size: 2.8rem;
   font-family: 'Pretendard';
   font-weight: 800;
   color: ${packmanColors.pmGreen};
 `;
 
-const StyledLeftMessage = styled.p`
+export const StyledLeftMessage = styled.p`
   font-size: 1.2rem;
   color: ${packmanColors.pmBlack};
 

@@ -8,6 +8,8 @@ import { GlobalStyle } from '../styles/globalStyle';
 
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
+import Layout from './components/Layout';
+import { CssBaseline } from '@mui/material';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -28,6 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <CssBaseline />
       <Head>
         <title>Packman</title>
       </Head>
@@ -35,7 +38,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={'/'}>
             <GlobalStyle />
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </APIProvider>
         </Hydrate>
       </QueryClientProvider>

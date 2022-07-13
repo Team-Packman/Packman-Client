@@ -36,7 +36,7 @@ function SwiperContainer(props: SwiperProps) {
   const [slides, setSlides] = useState(Array.from({ length: 2 }).map((_, idx) => ''));
 
   // 최근 수정 리스트 존재 체크
-  const [isEmpty, setIsEmpty] = useState<boolean>(true);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const pagination = {
     clickable: true,
@@ -88,7 +88,7 @@ export const StyledSwiper = styled(Swiper)`
     top: 0;
     height: 4rem;
     width: 100%;
-    border: 1px solid ${packmanColors.gray};
+    border: 1px solid ${packmanColors.pmDeepGrey};
     border-radius: 0.6rem;
     background: ${packmanColors.white};
   }
@@ -100,7 +100,7 @@ export const StyledSwiper = styled(Swiper)`
     width: 100%;
     height: 100%;
     border-radius: 0.6rem;
-    color: ${packmanColors.pmDeepGray};
+    color: ${packmanColors.pmDeepGrey};
     font-size: 16px;
     background: ${packmanColors.white};
   }
@@ -147,7 +147,7 @@ export const StyledInitialWrapper = styled.div`
 
 export const StyledLabel = styled.p`
   font-size: 1.4rem;
-  color: ${packmanColors.pmDeepGray};
+  color: ${packmanColors.pmDeepGrey};
   margin-bottom: 1rem;
 `;
 

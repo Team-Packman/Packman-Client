@@ -1,3 +1,4 @@
+import { ServerStyleSheets } from '@mui/styles';
 import Document, {
   Html,
   Head,
@@ -6,16 +7,16 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
+// import { ServerStyleSheet } from 'styled-components';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
-    const sheet = new ServerStyleSheet();
+    const materialSheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
+          enhanceApp: (App) => (props) => materialSheets.collect(<App {...props} />),
         });
 
       const initialProps = await Document.getInitialProps(ctx);
@@ -24,12 +25,12 @@ class MyDocument extends Document {
         styles: (
           <>
             {initialProps.styles}
-            {sheet.getStyleElement()}
+            {materialSheets.getStyleElement()}
           </>
         ),
       };
     } finally {
-      sheet.seal();
+      //   materialSheets.seal();
     }
   }
 

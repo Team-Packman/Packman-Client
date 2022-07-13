@@ -22,7 +22,7 @@ function FolderList(props: MyArrayType) {
 
 export default FolderList;
 
-const StyledRoot = styled.section`
+export const StyledRoot = styled.section`
   width: 100%;
   --auto-grid-min-size: 16rem;
 
