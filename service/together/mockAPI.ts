@@ -1,14 +1,16 @@
 import { AxiosInstance } from 'axios';
 import { GroupMembersOutput } from './index';
 import withAuth from '../../utils/axios/withAuth';
-import { fetchGroupMember } from '../../utils/axios/together/mock';
+import { fetchGroupMember } from '../../utils/axios/packingList/together/mock';
 
 export interface TogetherAPI {
-  getGroupMembers: (groupId: string) => Promise<GroupMembersOutput>;
+  together: { getGroupMembers: (groupId: string) => Promise<GroupMembersOutput> };
 }
 
 export const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
   return {
-    getGroupMembers: (groupId: string) => fetchGroupMember(withAuth(request), groupId),
+    together: {
+      getGroupMembers: (groupId: string) => fetchGroupMember(withAuth(request), groupId),
+    },
   };
 };
