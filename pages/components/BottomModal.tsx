@@ -18,7 +18,8 @@ function BottomModal(props: BottomModalProps) {
   const [isClickDelete, setIsClickDelete] = useState(false);
 
   return (
-    <StyledRoot onClick={closeModal}>
+    <>
+      <StyledRoot onClick={closeModal} />
       <StyledModalInfo>
         <Image src={iSwipeBar} alt="스와이프바" />
         <h1>{isClickDelete ? '정말 삭제하시겠어요?' : modalData.folderName}</h1>
@@ -33,7 +34,7 @@ function BottomModal(props: BottomModalProps) {
           </button>
         </StyledButtonWrapper>
       </StyledModalInfo>
-    </StyledRoot>
+    </>
   );
 }
 

@@ -14,7 +14,8 @@ export default function Modal(props: ModalProps) {
   const { content, leftButtonContent, rightButtonContent, closeModal } = props;
 
   return (
-    <StyledRoot onClick={closeModal}>
+    <>
+      <StyledRoot onClick={closeModal} />
       <StyledModalWrapper>
         <StyledImageWrapper>
           <Image src={iClose} alt="닫기" onClick={closeModal} />
@@ -27,7 +28,7 @@ export default function Modal(props: ModalProps) {
           </StyledButtonWrapper>
         </StyledModalInfo>
       </StyledModalWrapper>
-    </StyledRoot>
+    </>
   );
 }
 const StyledRoot = styled.div`
