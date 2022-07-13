@@ -1,14 +1,12 @@
-import { TogetherAPI, createTogetherAPI } from './together/createAPI';
+import { PackingListAPI, createPackingListAPI } from './packingList/index';
 import { AxiosInstance } from 'axios';
 import { AXIOS_KEY } from '../utils/axios/axios';
-
-type SERVICE_KEY = keyof APIService;
-type API = APIService[SERVICE_KEY];
-type API_KEY = keyof API;
-export type METHOD = API[API_KEY];
-
+import { createFolderAPI, FolderAPI } from './folder/mockAPI';
+import { createUserAPI, UserAPI } from './user/mockAPI';
 export interface APIService {
-  together: TogetherAPI;
+  folder: FolderAPI;
+  packingList: PackingListAPI;
+  user: UserAPI;
 }
 type Config = {
   [key in AXIOS_KEY]: AxiosInstance;
@@ -16,8 +14,12 @@ type Config = {
 
 export function createAPIService(config: Config): APIService {
   const { axiosWithAuth } = config;
-  const together = createTogetherAPI(axiosWithAuth);
+  const folder = createFolderAPI(axiosWithAuth);
+  const packingList = createPackingListAPI(axiosWithAuth);
+  const user = createUserAPI(axiosWithAuth);
   return {
-    together,
+    folder,
+    packingList,
+    user,
   };
 }
