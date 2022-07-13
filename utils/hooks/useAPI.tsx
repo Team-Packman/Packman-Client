@@ -1,8 +1,10 @@
 import { useContext } from 'react';
-import { APIService, METHOD } from '../../service';
+import { APIService } from '../../service';
 import { APIContext } from '../context/apiContext';
 
-function useAPI(callback: (api: APIService) => METHOD) {
+function useAPI<Req extends unknown[], Res>(
+  callback: (api: APIService) => (...args: Req) => Promise<Res>,
+) {
   const api = useContext(APIContext);
 
   return callback(api);
