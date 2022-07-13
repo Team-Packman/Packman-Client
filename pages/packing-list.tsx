@@ -6,7 +6,6 @@ import Modal from './components/common/Modal';
 import { useState } from 'react';
 import BottomModal from './components/common/BottomModal';
 import DropBox from './components/packingList/DropBox';
-import { AsyncBoundary } from '../utils/AsyncBoundary';
 import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 
