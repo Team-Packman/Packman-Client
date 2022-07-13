@@ -6,6 +6,7 @@ import Modal from './components/common/Modal';
 import { useState } from 'react';
 import BottomModal from './components/common/BottomModal';
 import DropBox from './components/packingList/DropBox';
+import { AsyncBoundary } from '../utils/AsyncBoundary';
 import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 
@@ -66,6 +67,7 @@ function PackingList() {
           onClick={() => {
             setToggle(true);
           }}
+          toggle={toggle}
         />
       </StyledFolderInfo>
       <SwipeableList
@@ -102,6 +104,7 @@ const StyledFolderInfo = styled.div`
     font-weight: 600;
   }
 `;
-const StyledToggleImage = styled(Image)`
-  transition: 0.4s ease-in-out;
+const StyledToggleImage = styled(Image)<{ toggle: boolean }>`
+  transition: 0.2s ease-in-out;
+  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
