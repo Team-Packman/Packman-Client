@@ -72,7 +72,7 @@ const StyledModalInfo = styled.div`
   flex-direction: column;
   gap: 2.95rem;
   & > p {
-    font-weight: 300;
+    font-weight: 400;
     font-size: 1.6rem;
     color: #282828;
   }
@@ -87,14 +87,18 @@ const ButtonStyle = styled.button`
   width: 13.1rem;
   height: 4.1rem;
   border-radius: 0.3rem;
-  background: ${packmanColors.mint};
+  background-color: ${packmanColors.pink};
   color: ${packmanColors.white};
-  border-radius: 3px;
+  border-radius: 0.8rem;
   font-weight: 400;
   font-size: 1.4rem;
   border: none;
 `;
 
-const StyledLeftButton = styled(ButtonStyle)``;
+const StyledLeftButton = styled(ButtonStyle)`
+  background-color: ${packmanColors.white};
+  color: ${packmanColors.lightGray};
+  border: 1px solid ${packmanColors.lightGray};
+`;
 
 const StyledRightButton = styled(ButtonStyle)``;
