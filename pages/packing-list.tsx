@@ -4,7 +4,7 @@ import Image from 'next/image';
 import iShowMore from '../public/assets/svg/iShowMore.svg';
 import Modal from './components/Modal';
 import { useState } from 'react';
-// import useAPI from '../utils/hooks/useAPI';
+import BottomModal from './components/BottomModal';
 
 function PackingList() {
   const modalData = {
@@ -13,8 +13,18 @@ function PackingList() {
     rightButtonContent: '예',
   };
   const [showModal, setShowModal] = useState(false);
+  const [showBottomModal, setShowBottomModal] = useState(false);
+
   return (
     <StyledRoot>
+      {showBottomModal && (
+        <BottomModal
+          closeModal={() => {
+            document.body.style.overflow = 'unset';
+            setShowBottomModal(false);
+          }}
+        />
+      )}
       {showModal && (
         <Modal
           content={modalData.content}
