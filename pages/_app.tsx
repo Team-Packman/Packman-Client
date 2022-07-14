@@ -7,6 +7,7 @@ import { APIProvider } from '../utils/context/apiContext';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 import { GlobalStyle } from '../styles/globalStyle';
+import Layout from './components/layout';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -34,7 +35,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={'/'}>
             <GlobalStyle />
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </APIProvider>
         </Hydrate>
       </QueryClientProvider>
