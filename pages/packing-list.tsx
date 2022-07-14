@@ -31,7 +31,7 @@ function PackingList() {
   const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
   const { data } = useQuery('packingList', () => getTogetherPackingList(), {});
 
-  if (!data) return;
+  if (!data) return null;
 
   const { alonePackingList, folder, currentFolder } = data.data;
 
