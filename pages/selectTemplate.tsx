@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
 import template from '../public/assets/svg/template.svg';
-import Template from './components/Template';
+import Template from './components/selectTemplate/Template';
 import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
