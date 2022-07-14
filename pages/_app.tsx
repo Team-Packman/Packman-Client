@@ -5,7 +5,6 @@ import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useState } from 'react';
 import { APIProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
-
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 import Layout from './components/Layout';
@@ -34,6 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Packman</title>
       </Head>
+      <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={'/'}>
