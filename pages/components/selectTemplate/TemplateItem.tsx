@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
 
 interface Template {
   id: string;
