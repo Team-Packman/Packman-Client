@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import TemplateItem from './TemplateItem';
+import TemplateList from './TemplateList';
 
 interface Template {
   id: string;
@@ -21,21 +21,14 @@ function Template(props: TemplateProps) {
       <StyledTemplateWrapper>
         <h1>{isAloned ? '혼자 패킹 추천' : '함께 패킹 추천'} 템플릿</h1>
         <p>팩맨에서 추천하는 템플릿을 사용해 리스트를 손쉽게 작성해보세요</p>
-        <StyledTemplate>
-          {basicTemplate.map((template) => (
-            <TemplateItem key={template.id} template={template} />
-          ))}
-        </StyledTemplate>
+
+        <TemplateList templateList={basicTemplate} />
       </StyledTemplateWrapper>
 
       <StyledTemplateWrapper>
         <h1>나만의 템플릿</h1>
         <p>팩맨에서 추천하는 템플릿을 사용해 리스트를 손쉽게 작성해보세요</p>
-        <StyledTemplate>
-          {myTemplate.map((template) => (
-            <TemplateItem key={template.id} template={template} />
-          ))}
-        </StyledTemplate>
+        <TemplateList templateList={myTemplate} />
       </StyledTemplateWrapper>
     </StyledRoot>
   );
@@ -64,9 +57,4 @@ const StyledTemplateWrapper = styled.div`
     font-size: 1.2rem;
     color: ${packmanColors.deepGray};
   }
-`;
-const StyledTemplate = styled.div`
-  display: flex;
-  padding: 1rem;
-  gap: 1rem;
 `;
