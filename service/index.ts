@@ -4,6 +4,7 @@ import { AxiosInstance } from 'axios';
 import { AXIOS_KEY } from '../utils/axios/axios';
 import { createFolderAPI, FolderAPI } from './folder/mockAPI';
 import { createUserAPI, UserAPI } from './user/mockAPI';
+import { createEctAPI, EctAPI } from './ect/mockAPI';
 export interface APIService {
   folder: FolderAPI;
   packingList: PackingListAPI;

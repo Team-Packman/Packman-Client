@@ -4,9 +4,10 @@ import Head from 'next/head';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useState } from 'react';
 import { APIProvider } from '../utils/context/apiContext';
+import { GlobalStyle } from '../styles/globalStyle';
+import Layout from './components/layout';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
-import { GlobalStyle } from '../styles/globalStyle';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -34,7 +35,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={'/'}>
-            <Component {...pageProps} />
+            <GlobalStyle />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </APIProvider>
         </Hydrate>
       </QueryClientProvider>
