@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { GroupMembersOutput } from './index';
+import { GroupMembersOutput, TogetherPackingListOutput } from './index';
 import withAuth from '../../utils/axios/withAuth';
 import { fetchGroupMember } from '../../utils/axios/packingList/together';
 
