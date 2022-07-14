@@ -1,4 +1,5 @@
 import {
+  fetchFolders,
   fetchAddFolders,
   fetchDeleteFolder,
   fetchEditFolderName,
@@ -15,7 +16,6 @@ import {
 } from './index';
 import { AxiosInstance } from 'axios';
 import withAuth from '../../utils/axios/withAuth';
-import { fetchFolders } from '../../utils/axios/folder/mock';
 
 export interface FolderAPI {
   getFolders: () => Promise<GetFoldersOutput>;
