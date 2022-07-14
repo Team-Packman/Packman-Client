@@ -8,6 +8,7 @@ export const packmanColors = Object.freeze({
   darkGray: '#535353',
   pink: '#FF307B',
   black: '#121212',
+  deepGray: '#808080',
 });
 
 export type PackmanColorName = keyof typeof packmanColors;
