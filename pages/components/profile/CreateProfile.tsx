@@ -16,7 +16,13 @@ function CreateProfile() {
           placeholder="김팩맨"
           value={nickname}
           maxLength={4}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => {
+            if (nickname.length > 4) {
+              setNickname((prev) => prev.substring(0, 4));
+            } else {
+              setNickname(e.target.value);
+            }
+          }}
         />
         <p>닉네임을 입력해주세요 (4자 이내)</p>
       </StyledInputWrapper>
@@ -27,7 +33,9 @@ function CreateProfile() {
             <Image key={idx} src={tempBox} alt="임시네모" width={80} height={80} />
           ))}
       </StyledSelectProfileWrapper>
-      <StyledButton type="button">패킹하러 가기</StyledButton>
+      <StyledButton type="button" isActivate={nickname.length > 0 && nickname.length < 5}>
+        패킹하러 가기
+      </StyledButton>
     </StyledRoot>
   );
 }
@@ -75,7 +83,7 @@ const StyledSelectProfileWrapper = styled.div`
   gap: 0.8rem;
   margin: 3.2rem 0 5.57rem 0;
 `;
-const StyledButton = styled.button`
+const StyledButton = styled.button<{ isActivate: boolean }>`
   width: 33.6rem;
   height: 4.1rem;
   border: none;
@@ -84,5 +92,5 @@ const StyledButton = styled.button`
   font-weight: 600;
   font-size: 1.4rem;
   color: ${packmanColors.white};
-  background-color: ${packmanColors.gray};
+  background-color: ${({ isActivate }) => (isActivate ? packmanColors.pink : packmanColors.gray)};
 `;
