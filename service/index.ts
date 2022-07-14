@@ -1,3 +1,4 @@
+import { EctAPI, createEctAPI } from './ect/mockAPI';
 import { PackingListAPI, createPackingListAPI } from './packingList/index';
 import { AxiosInstance } from 'axios';
 import { AXIOS_KEY } from '../utils/axios/axios';
@@ -7,6 +8,7 @@ export interface APIService {
   folder: FolderAPI;
   packingList: PackingListAPI;
   user: UserAPI;
+  ect: EctAPI;
 }
 type Config = {
   [key in AXIOS_KEY]: AxiosInstance;
@@ -17,9 +19,11 @@ export function createAPIService(config: Config): APIService {
   const folder = createFolderAPI(axiosWithAuth);
   const packingList = createPackingListAPI(axiosWithAuth);
   const user = createUserAPI(axiosWithAuth);
+  const ect = createEctAPI(axiosWithAuth);
   return {
     folder,
     packingList,
     user,
+    ect,
   };
 }
