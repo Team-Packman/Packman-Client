@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
-import { GroupMembersOutput } from './index';
+import { GroupMembersOutput, TogetherPackingListOutput } from './index';
 import withAuth from '../../utils/axios/withAuth';
-import { fetchGroupMember } from '../../utils/axios/together';
+import { fetchGroupMember } from '../../utils/axios/packingList/together';
 
 export interface TogetherAPI {
   getGroupMembers: (groupId: string) => Promise<GroupMembersOutput>;
