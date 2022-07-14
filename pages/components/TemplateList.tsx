@@ -1,28 +1,14 @@
-import TemplateItem from './TemplateItem';
 import styled from 'styled-components';
-
-interface Template {
-  id: string;
-  title: string;
-}
+import { ReactNode } from 'react';
 
 interface TemplateListProps {
-  templateList: Template[];
+  templateList: ReactNode;
 }
 
 function TemplateList(props: TemplateListProps) {
   const { templateList } = props;
 
-  return (
-    <StyledRoot>
-      {!templateList.length && (
-        <TemplateItem template={{ id: '', title: '아직 저장된 템플릿이 없어요' }} />
-      )}
-      {templateList.map((template) => (
-        <TemplateItem key={template.id} template={template} />
-      ))}
-    </StyledRoot>
-  );
+  return <StyledRoot>{templateList}</StyledRoot>;
 }
 
 export default TemplateList;

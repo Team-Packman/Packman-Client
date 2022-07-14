@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import TemplateList from './TemplateList';
+import TemplateItem from '../components/TemplateItem';
 
 interface Template {
   id: string;
@@ -15,20 +17,56 @@ interface TemplateProps {
 
 function Template(props: TemplateProps) {
   const { isAloned, basicTemplate, myTemplate } = props;
+  const [isSelected, setIsSelected] = useState('');
 
+  const onClickTemplateItem = (id: string) => {
+    setIsSelected(id);
+  };
   return (
     <StyledRoot>
       <StyledTemplateWrapper>
         <h1>{isAloned ? '혼자 패킹 추천' : '함께 패킹 추천'} 템플릿</h1>
         <p>팩맨에서 추천하는 템플릿을 사용해 리스트를 손쉽게 작성해보세요</p>
 
-        <TemplateList templateList={basicTemplate} />
+        <TemplateList
+          templateList={
+            <>
+              {basicTemplate.map((template) => (
+                <TemplateItem
+                  key={template.id}
+                  template={template}
+                  isSelected={isSelected}
+                  onClick={() => onClickTemplateItem(template.id)}
+                />
+              ))}
+            </>
+          }
+        />
       </StyledTemplateWrapper>
 
       <StyledTemplateWrapper>
         <h1>나만의 템플릿</h1>
-        <p>팩맨에서 추천하는 템플릿을 사용해 리스트를 손쉽게 작성해보세요</p>
-        <TemplateList templateList={myTemplate} />
+        <p>내가 저장한 템플릿을 활용해 리스트를 손쉽게 작성해보세요</p>
+        <TemplateList
+          templateList={
+            <>
+              {!myTemplate.length && (
+                <TemplateItem
+                  isSelected="null"
+                  template={{ id: '', title: '아직 저장된 템플릿이 없어요' }}
+                />
+              )}
+              {myTemplate.map((template) => (
+                <TemplateItem
+                  key={template.id}
+                  template={template}
+                  isSelected={isSelected}
+                  onClick={() => onClickTemplateItem(template.id)}
+                />
+              ))}
+            </>
+          }
+        />
       </StyledTemplateWrapper>
     </StyledRoot>
   );
