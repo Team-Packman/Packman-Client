@@ -1,19 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import { MyArrayType } from '../folder';
 import FolderBox from './FolderBox';
 
-// Mock API 나오면 아래 형식으로 변경
-// export interface SearchProjectProps {
-//     projectMetadata: ProjectMeta;
-//   }
+interface Folder {
+  id: string;
+  title: string;
+  listNum: number;
+}
+interface FolderListProps {
+  list: Folder[];
+}
 
-function FolderList(props: MyArrayType) {
-  const { data } = props;
-
+function FolderList({ list }: FolderListProps) {
   return (
     <StyledRoot>
-      {data?.map((v) => (
+      {list?.map((v) => (
         <FolderBox key={v.id} {...v} />
       ))}
     </StyledRoot>
