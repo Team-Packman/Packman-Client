@@ -53,6 +53,7 @@ const StyledWhenToGo = styled.div`
 
 const StyledDate = styled.input`
   border: 0;
+  color: ${packmanColors.pmBlack};
   ::-webkit-calendar-picker-indicator {
     color: rgba(0, 0, 0, 0);
     opacity: 1;
