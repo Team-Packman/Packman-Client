@@ -29,6 +29,9 @@ export default TemplateList;
 
 const StyledRoot = styled.div`
   display: flex;
-  padding: 1rem;
+  flex-wrap: wrap;
+  height: 9.921rem;
   gap: 1rem;
+  padding: 1rem 0;
+  overflow: scroll;
 `;

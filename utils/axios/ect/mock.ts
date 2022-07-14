@@ -22,11 +22,51 @@ export const fetchTemplateList = async (request: AxiosInstance): Promise<GetTemp
               id: '62bbb80d9d5dc1aa4c3d28392',
               title: '교환학생',
             },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28391',
+              title: '앱잼 합숙앱잼 합숙앱잼',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28392',
+              title: '교환학생',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28391',
+              title: '앱잼 합숙',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28392',
+              title: '교환학생',
+            },
           ],
           myTemplate: [
             {
               id: '62bbb80d9d5dc1aa4c3d28393',
-              title: '앱잼 합숙',
+              title: '앱잼 합숙앱잼 합숙앱잼',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28394',
+              title: '엠티',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28393',
+              title: '자가격리',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28394',
+              title: '엠티',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28393',
+              title: '자가격리',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28394',
+              title: '엠티',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28393',
+              title: '자가격리',
             },
             {
               id: '62bbb80d9d5dc1aa4c3d28394',
