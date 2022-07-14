@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import TemplateList from './TemplateList';
@@ -13,15 +13,22 @@ interface TemplateProps {
   isAloned: boolean;
   basicTemplate: Template[];
   myTemplate: Template[];
+  activate: () => void;
 }
 
 function Template(props: TemplateProps) {
-  const { isAloned, basicTemplate, myTemplate } = props;
+  const { isAloned, basicTemplate, myTemplate, activate } = props;
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
     setIsSelected(id);
   };
+  useEffect(() => {
+    if (isSelected !== '') {
+      activate();
+    }
+  }, [isSelected]);
+
   return (
     <StyledRoot>
       <StyledTemplateWrapper>

@@ -7,11 +7,15 @@ import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import Header from '../components/common/Header';
 import { packmanColors } from '../styles/color';
+import { useState } from 'react';
+import useGlobalState from '../utils/hooks/useGlobalState';
 
 function CreateList() {
+  const [activateButton, setActivateButton] = useState(false);
   const getTemplateList = useAPI((api) => api.ect.getTemplateList);
   const { data } = useQuery('templateList', () => getTemplateList());
   const router = useRouter();
+  const [isTemplate, setIsTemplate] = useGlobalState('isTemplate', false);
 
   // useEffect(() => {
   //   if (router.isReady) {
@@ -31,11 +35,31 @@ function CreateList() {
         <picture>
           <Image src={template} alt="템플릿이미지" />
         </picture>
-        <Template isAloned={true} basicTemplate={basicTemplate} myTemplate={myTemplate} />
+        <Template
+          isAloned={true}
+          basicTemplate={basicTemplate}
+          myTemplate={myTemplate}
+          activate={() => setActivateButton(true)}
+        />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
-        <StyleButton isTemplate={false}>건너뛰기</StyleButton>
-        <StyleButton isTemplate={true}>확인</StyleButton>
+        <StyleButton
+          isTemplate={false}
+          isActivated={true}
+          onClick={() => {
+            setIsTemplate(false);
+            router.push('/test');
+          }}
+        >
+          건너뛰기
+        </StyleButton>
+        <StyleButton
+          isTemplate={true}
+          isActivated={activateButton}
+          onClick={() => setIsTemplate(true)}
+        >
+          확인
+        </StyleButton>
       </StyledButtonWrapper>
     </StyledRoot>
   );
@@ -65,7 +89,7 @@ const StyledButtonWrapper = styled.div`
   display: flex;
   gap: 1.1rem;
 `;
-const StyleButton = styled.button<{ isTemplate: boolean }>`
+const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>`
   width: 16.3rem;
   height: 4rem;
   border-radius: 0.8rem;
@@ -84,4 +108,10 @@ const StyleButton = styled.button<{ isTemplate: boolean }>`
           background-color: ${packmanColors.white};
           color: ${packmanColors.black};
         `}
+  ${({ isActivated }) =>
+    !isActivated &&
+    css`
+      color: ${packmanColors.white};
+      background-color: ${packmanColors.gray};
+    `}
 `;
