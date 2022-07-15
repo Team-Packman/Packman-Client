@@ -7,6 +7,7 @@ import iToggleOn from '../../../public/assets/svg/iToggleOn.svg';
 import { useState } from 'react';
 import Modal from '../common/Modal';
 import useAPI from '../../../utils/hooks/useAPI';
+import Footer from '../../components/common/Footer';
 
 interface ProfileData {
   id: string;
@@ -30,62 +31,67 @@ function SettingProfile(props: SettingProfileProps) {
 
   return (
     <StyledRoot>
-      <p>로그아웃</p>
-      <p onClick={onClickEditText}>수정</p>
+      <StyledSettingWrapper>
+        <p>로그아웃</p>
+        <p onClick={onClickEditText}>수정</p>
 
-      <StyledProfile>
-        <Image alt="프로필 이미지" src={tempBox} />
-        <div>
-          <h1>{nickname}</h1>
-          <p>{email}</p>
-        </div>
-      </StyledProfile>
-      <div style={{ borderBottom: `1px solid ${packmanColors.gray}`, width: '100%' }}></div>
+        <StyledProfile>
+          <Image alt="프로필 이미지" src={tempBox} />
+          <div>
+            <h1>{nickname}</h1>
+            <p>{email}</p>
+          </div>
+        </StyledProfile>
+        <div style={{ borderBottom: `1px solid ${packmanColors.gray}`, width: '100%' }}></div>
 
-      <StyledEtc gap={0.72} paddingTop={2.95} borderBottom={true}>
-        <h1>설정</h1>
-        <StyledToggleWrapper>
-          <p>알림설정</p>
-          <StyledToggleButton
-            alt="토글버튼"
-            src={toggle ? iToggleOn : iToggleOff}
-            width={40}
-            height={40}
-            layout="fixed"
-            onClick={() => setToggle((prev) => !prev)}
+        <StyledEtc gap={0.72} paddingTop={2.95} borderBottom={true}>
+          <h1>설정</h1>
+          <StyledToggleWrapper>
+            <p>알림설정</p>
+            <StyledToggleButton
+              alt="토글버튼"
+              src={toggle ? iToggleOn : iToggleOff}
+              width={40}
+              height={40}
+              layout="fixed"
+              onClick={() => setToggle((prev) => !prev)}
+            />
+          </StyledToggleWrapper>
+        </StyledEtc>
+        <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
+          <h1>고객센터</h1>
+          <StyledEtcWrapper>
+            <p>문의하기</p>
+            <p>서비스 피드백</p>
+          </StyledEtcWrapper>
+        </StyledEtc>
+        <StyledEtc gap={1.2} paddingTop={3.1} borderBottom={false}>
+          <h1>About 팩맨</h1>
+          <StyledEtcWrapper>
+            <p>함께하는 사람들</p>
+            <p>약관 및 정책</p>
+          </StyledEtcWrapper>
+        </StyledEtc>
+
+        {showModal && (
+          <Modal
+            content={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
+            leftButtonContent={!isWithdrawn ? '탈퇴하기' : null}
+            rightButtonContent={!isWithdrawn ? '취소하기' : null}
+            closeModal={() => setShowModal(false)}
+            leftButtonFn={async () => {
+              await deleteUserInfo();
+              setIsWithdrawn(true);
+            }}
+            rightButtonFn={() => setShowModal(false)}
+            isWithDrawn={isWithdrawn}
           />
-        </StyledToggleWrapper>
-      </StyledEtc>
-      <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
-        <h1>고객센터</h1>
-        <StyledEtcWrapper>
-          <p>문의하기</p>
-          <p>서비스 피드백</p>
-        </StyledEtcWrapper>
-      </StyledEtc>
-      <StyledEtc gap={1.2} paddingTop={3.1} borderBottom={false}>
-        <h1>About 팩맨</h1>
-        <StyledEtcWrapper>
-          <p>함께하는 사람들</p>
-          <p>약관 및 정책</p>
-        </StyledEtcWrapper>
-      </StyledEtc>
-
+        )}
+      </StyledSettingWrapper>
+      <StyledFooter>
+        <Footer />
+      </StyledFooter>
       <p onClick={() => setShowModal(true)}>탈퇴하기</p>
-      {showModal && (
-        <Modal
-          content={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
-          leftButtonContent={!isWithdrawn ? '탈퇴하기' : null}
-          rightButtonContent={!isWithdrawn ? '취소하기' : null}
-          closeModal={() => setShowModal(false)}
-          leftButtonFn={async () => {
-            await deleteUserInfo();
-            setIsWithdrawn(true);
-          }}
-          rightButtonFn={() => setShowModal(false)}
-          isWithDrawn={isWithdrawn}
-        />
-      )}
     </StyledRoot>
   );
 }
@@ -93,6 +99,21 @@ function SettingProfile(props: SettingProfileProps) {
 export default SettingProfile;
 
 const StyledRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  & > p {
+    /* position: absolute;
+    bottom: 0; */
+    color: ${packmanColors.gray};
+    font-weight: 300;
+    font-size: 1.2rem;
+  }
+`;
+
+const StyledSettingWrapper = styled.main`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -115,13 +136,6 @@ const StyledRoot = styled.div`
     right: 1.5rem;
     color: ${packmanColors.deepGray};
     font-weight: 600;
-    font-size: 1.2rem;
-  }
-  & > p:last-child {
-    position: absolute;
-    bottom: 0;
-    color: ${packmanColors.gray};
-    font-weight: 300;
     font-size: 1.2rem;
   }
 `;
@@ -188,4 +202,7 @@ const StyledEtcWrapper = styled.div`
     font-size: 1.6rem;
     font-weight: 400;
   }
+`;
+const StyledFooter = styled.div`
+  margin: 6.1rem 0 5rem 0;
 `;
