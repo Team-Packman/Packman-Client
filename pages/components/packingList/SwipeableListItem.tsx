@@ -79,14 +79,16 @@ export default function SwipeablelistItem(props: ItemProps) {
         <StyledItemInfo>
           <p>{departureDate}</p>
           <p>{title}</p>
-          <span>총 {packTotalNum}개의 짐</span>
+          <StyledPackInfo>
+            <span>총 {packTotalNum}개의 짐</span>
+            <StyledPackRemainText>
+              아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
+            </StyledPackRemainText>
+          </StyledPackInfo>
         </StyledItemInfo>
-        <StyledPackingInfo>
-          <StyledPackRemainText>
-            아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
-          </StyledPackRemainText>
-          <Image src={iRightArrow} alt="열기" width={24} height={24} />
-        </StyledPackingInfo>
+        {/* <StyledPackingInfo> */}
+        <Image src={iRightArrow} alt="열기" width={24} height={24} />
+        {/* </StyledPackingInfo> */}
       </StyledItemWrapper>
       {!isDeleting && (
         <StyledDeleteButton
@@ -156,6 +158,7 @@ const StyledItemInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
   gap: 0.6rem;
 
   & > p:first-child {
@@ -166,11 +169,14 @@ const StyledItemInfo = styled.div`
   & > p:nth-child(2) {
     font-weight: 600;
     font-size: 1.8rem;
-    width: 11.6rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
+`;
+const StyledPackInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 28.1rem;
+
   & > span {
     width: 8.3rem;
     height: 2.4rem;
@@ -182,19 +188,10 @@ const StyledItemInfo = styled.div`
     text-align: center;
   }
 `;
-const StyledPackingInfo = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  display: flex;
-  gap: 0.757rem;
-`;
 const StyledPackRemainText = styled.p`
   font-weight: 400;
   font-size: 1.2rem;
-  width: 13.4rem;
-  /* word-break: keep-all; */
+
   color: ${packmanColors.black};
   & > span {
     color: ${packmanColors.pink};

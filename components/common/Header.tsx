@@ -21,7 +21,6 @@ function Header(props: HeaderProps) {
   const { back, title, icon } = props;
   return (
     <StyledRoot>
-      {/* <StyledBlock /> */}
       <StyledContent>
         {back && (
           <StyledBack>
@@ -65,12 +64,6 @@ const StyledRoot = styled.header`
   width: 100vw;
   display: flex;
   flex-direction: column;
-`;
-
-const StyledBlock = styled.div`
-  width: 100%;
-  height: 4.4rem;
-  background-color: ${packmanColors.white};
 `;
 
 const StyledContent = styled.div`
