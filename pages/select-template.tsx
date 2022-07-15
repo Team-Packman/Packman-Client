@@ -56,7 +56,10 @@ function CreateList() {
         <StyleButton
           isTemplate={true}
           isActivated={activateButton}
-          onClick={() => setIsTemplate(true)}
+          onClick={() => {
+            setIsTemplate(true);
+            router.push('/preview');
+          }}
         >
           확인
         </StyleButton>
