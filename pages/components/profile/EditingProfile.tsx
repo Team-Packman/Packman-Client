@@ -3,19 +3,26 @@ import styled from 'styled-components';
 
 interface CreateProfileProps {
   comment: React.ReactNode;
+  oldNickname: string;
+  finishEditing: () => void;
 }
 
-function CreateProfile(props: CreateProfileProps) {
-  const { comment } = props;
+function EditingProfile(props: CreateProfileProps) {
+  const { comment, oldNickname, finishEditing } = props;
+
   return (
     <>
       <StyledCommentWrapper>{comment}</StyledCommentWrapper>
-      <SelectProfileSection />
+      <SelectProfileSection
+        isEditing={true}
+        oldNickname={oldNickname}
+        finishEditing={finishEditing}
+      />
     </>
   );
 }
 
-export default CreateProfile;
+export default EditingProfile;
 
 const StyledCommentWrapper = styled.h1`
   width: 100%;
