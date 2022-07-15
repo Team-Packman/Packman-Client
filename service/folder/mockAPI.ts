@@ -21,7 +21,7 @@ export interface FolderAPI {
   getFolders: () => Promise<GetFoldersOutput>;
   addFolder: (info: AddFolderInput) => Promise<AddFolderOutput>;
   editFolderName: (info: EditFolderNameInput) => Promise<EditFolderNameOutput>;
-  deleteFolder: () => Promise<DeleteFolderOutput>;
+  deleteFolder: (id: string) => Promise<DeleteFolderOutput>;
   getRecentPackingList: () => Promise<GetRecentPackingListOutput>;
 }
 
@@ -30,7 +30,7 @@ export const createFolderAPI = (request: AxiosInstance): FolderAPI => {
     getFolders: () => fetchFolders(withAuth(request)),
     addFolder: (info: AddFolderInput) => fetchAddFolders(withAuth(request), info),
     editFolderName: (info: EditFolderNameInput) => fetchEditFolderName(withAuth(request), info),
-    deleteFolder: () => fetchDeleteFolder(withAuth(request)),
+    deleteFolder: (id: string) => fetchDeleteFolder(withAuth(request)),
     getRecentPackingList: () => fetchRecentPackingList(withAuth(request)),
   };
 };

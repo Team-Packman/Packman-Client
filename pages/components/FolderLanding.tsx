@@ -1,30 +1,99 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components';
+import { GetFoldersOutput } from '../../service/folder';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
+import BottomModal from './common/BottomModal';
 import FloatActionButton from './FloatActionButton';
 import FolderList from './FolderList';
 import SwiperContainer from './Swiper';
 
+export interface ModalDataProps {
+  id: string;
+  title: string;
+}
+
 function FolderLanding() {
+  const [folderData, setfolderData] = useState<Pick<GetFoldersOutput, 'data'>>();
+  // TODO : 최근 수정 리스트 존재 여부(존재하지 않는 경우 204로 오는지 확인후, 처리방법 생각해보기)
+  const [isRecentListExist, setIsRecentListExist] = useState<boolean>(false);
+  const [showBottomModal, setShowBottomModal] = useState(false);
+  const [modalData, setModalData] = useState<ModalDataProps>({ id: '', title: '' });
+  const [editableFolderId, setEditableFolderId] = useState<string>('');
+  const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ id: '', title: '' });
+
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
+  const editFolderName = useAPI((api) => api.folder.editFolderName);
+  const deleteFolder = useAPI((api) => api.folder.deleteFolder);
 
-  const { data: folderData } = useQuery('folderList', () => getFolders(), {
+  const { data } = useQuery('folderList', () => getFolders(), {
     suspense: true,
+    onSuccess: (data) => {
+      setfolderData(data);
+    },
   });
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
     suspense: true,
+    onSuccess: () => {
+      setIsRecentListExist(true);
+    },
   });
 
-  // 최근 수정 리스트 존재 체크 : mock 데이터 받아올 때, 존재하면 이거 setting
-  const [isRecentListExist, setIsRecentListExist] = useState<boolean>(true);
+  const { mutate: editFolderMutate } = useMutation(
+    (editedFolderData: ModalDataProps) => {
+      return editFolderName(editedFolderData);
+    },
+    {
+      onSuccess: (data) => {
+        setfolderData(data);
+      },
+    },
+  );
+
+  const { mutate: deletFolderMutate } = useMutation(
+    (id: string) => {
+      return deleteFolder(id);
+    },
+    {
+      onSuccess: (data) => {
+        setfolderData(data);
+      },
+    },
+  );
 
   if (!folderData) {
     return null;
   }
+
+  const handleBottomModalOpen = (id: string, title: string) => {
+    setShowBottomModal(true);
+    setEditableFolderId('');
+    setModalData({ id, title });
+  };
+
+  const handleModalEditButtonClick = (id: string) => {
+    setEditableFolderId(id);
+    setShowBottomModal(false);
+  };
+
+  const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedFolerData({ id: modalData.id, title: e.target.value });
+  };
+
+  const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setEditableFolderId('');
+      editFolderMutate(editedFolderData);
+    }
+  };
+
+  const handleModalDeleteButtonClick = (id: string) => {
+    setShowBottomModal(false);
+    deletFolderMutate(id);
+  };
 
   return (
     <StyledRoot>
@@ -48,13 +117,38 @@ function FolderLanding() {
       </StyledRecentBanner>
       <SwiperContainer>
         {folderData.data.togetherFolders.length && (
-          <FolderList key="1" list={folderData?.data.togetherFolders} />
+          <FolderList
+            key="1"
+            list={folderData?.data.togetherFolders}
+            editableFolderId={editableFolderId}
+            onClick={handleBottomModalOpen}
+            onChange={handleFolderNameChange}
+            onKeyPress={handleEnterKeyPress}
+          />
         )}
         {folderData.data.aloneFolders.length && (
-          <FolderList key="2" list={folderData?.data.aloneFolders} />
+          <FolderList
+            key="2"
+            list={folderData?.data.aloneFolders}
+            onClick={handleBottomModalOpen}
+            onChange={handleFolderNameChange}
+            editableFolderId={editableFolderId}
+            onKeyPress={handleEnterKeyPress}
+          />
         )}
       </SwiperContainer>
-      {isRecentListExist && <FloatActionButton />}
+      {isRecentListExist && !showBottomModal && <FloatActionButton />}
+      {showBottomModal && (
+        <BottomModal
+          closeModal={() => {
+            document.body.style.overflow = 'unset';
+            setShowBottomModal(false);
+          }}
+          modalData={modalData}
+          handleModalEditButtonClick={handleModalEditButtonClick}
+          handleModalDeleteButtonClick={handleModalDeleteButtonClick}
+        />
+      )}
     </StyledRoot>
   );
 }

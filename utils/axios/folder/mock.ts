@@ -24,19 +24,19 @@ export const fetchFolders = async (request: AxiosInstance): Promise<GetFoldersOu
               listNum: 3,
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d2839',
+              id: '62bbb80d9d5dc1aa4c3d2838',
               title: '본가갈 때 챙겨',
               listNum: 5,
             },
           ],
           togetherFolders: [
             {
-              id: '62bbb80d9d5dc1aa4c3d2839',
+              id: '62bbb80d9d5dc1aa4c3d2837',
               title: '해외여행',
               listNum: 3,
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d2839',
+              id: '62bbb80d9d5dc1aa4c3d2836',
               title: '엠티, 수련회',
               listNum: 1,
             },
@@ -65,19 +65,19 @@ export const fetchAddFolders = async (
               listNum: 3,
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d2839',
+              id: '62bbb80d9d5dc1aa4c3d2838',
               title: '본가갈 때 챙겨',
               listNum: 5,
             },
           ],
           togetherFolders: [
             {
-              id: '62bbb80d9d5dc1aa4c3d2839',
+              id: '62bbb80d9d5dc1aa4c3d2837',
               title: '해외여행',
               listNum: 3,
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d2839',
+              id: '62bbb80d9d5dc1aa4c3d2836',
               title: '엠티, 수련회',
               listNum: 1,
             },
@@ -182,7 +182,7 @@ export const fetchRecentPackingList = async (
           remainDay: 5,
           packTotalNum: 20,
           packRemainNum: 3,
-          isAloned: true,
+          url: '/packingList/alone/1',
         },
       });
     }, 500),
