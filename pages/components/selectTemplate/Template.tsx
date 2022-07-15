@@ -13,7 +13,7 @@ interface TemplateProps {
   isAloned: boolean;
   basicTemplate: Template[];
   myTemplate: Template[];
-  activate: () => void;
+  activate: (isSelected: string) => void;
 }
 
 function Template(props: TemplateProps) {
@@ -21,12 +21,14 @@ function Template(props: TemplateProps) {
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
-    setIsSelected(id);
+    if (isSelected.includes(id)) {
+      setIsSelected('');
+    } else {
+      setIsSelected(id);
+    }
   };
   useEffect(() => {
-    if (isSelected !== '') {
-      activate();
-    }
+    activate(isSelected);
   }, [isSelected]);
 
   return (

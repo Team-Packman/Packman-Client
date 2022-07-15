@@ -39,7 +39,13 @@ function CreateList() {
           isAloned={true}
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
-          activate={() => setActivateButton(true)}
+          activate={(isSelected: string) => {
+            if (isSelected === '') {
+              setActivateButton(false);
+            } else {
+              setActivateButton(true);
+            }
+          }}
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
