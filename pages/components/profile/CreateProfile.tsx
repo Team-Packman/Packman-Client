@@ -24,7 +24,7 @@ function CreateProfile() {
             }
           }}
         />
-        <p>닉네임을 입력해주세요 (4자 이내)</p>
+        <StyledText nickname={nickname !== ''}>닉네임을 입력해주세요 (4자 이내)</StyledText>
       </StyledInputWrapper>
       <StyledSelectProfileWrapper>
         {Array(6)
@@ -52,12 +52,13 @@ const StyledInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  & > p {
-    padding-top: 0.77rem;
-    color: ${packmanColors.deepGray};
-    font-weight: 400;
-    font-size: 1.3rem;
-  }
+`;
+const StyledText = styled.p<{ nickname: boolean }>`
+  opacity: ${({ nickname }) => nickname && '0'};
+  padding-top: 0.77rem;
+  color: ${packmanColors.deepGray};
+  font-weight: 400;
+  font-size: 1.3rem;
 `;
 const StyleInput = styled.input`
   width: 12rem;
