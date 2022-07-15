@@ -145,8 +145,8 @@ function FolderLanding() {
             setShowBottomModal(false);
           }}
           modalData={modalData}
-          handleModalEditButtonClick={handleModalEditButtonClick}
-          handleModalDeleteButtonClick={handleModalDeleteButtonClick}
+          onEdit={handleModalEditButtonClick}
+          onDelete={handleModalDeleteButtonClick}
         />
       )}
     </StyledRoot>
