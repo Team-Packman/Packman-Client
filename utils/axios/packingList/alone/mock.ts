@@ -16,7 +16,7 @@ export const fetchPackingListWithFolders = async (
           },
           folder: [
             {
-              id: '62bbb80d9d5dc1aa4c3d28312',
+              id: '62bbb80d9d5dc1aa4c3d2831',
               title: '해외여행',
             },
             {

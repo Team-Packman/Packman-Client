@@ -4,7 +4,7 @@ import Image from 'next/image';
 import iShowMore from '../public/assets/svg/iShowMore.svg';
 import Modal from './components/common/Modal';
 import { useState } from 'react';
-import BottomModal from './components/common/BottomModal';
+import Header from '../components/common/Header';
 import DropBox from './components/packingList/DropBox';
 import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
@@ -24,7 +24,6 @@ function PackingList() {
     rightButtonContent: '예',
   };
   const [showModal, setShowModal] = useState(false);
-  const [showBottomModal, setShowBottomModal] = useState(false);
   const [toggle, setToggle] = useState(false);
 
   const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
@@ -36,6 +35,7 @@ function PackingList() {
 
   return (
     <StyledRoot>
+      <Header back title="패킹 리스트" icon="profile" />
       {showModal && (
         <Modal
           content={modalData.content}
@@ -48,7 +48,13 @@ function PackingList() {
         />
       )}
       <StyledFolderInfo>
-        {toggle && <DropBox folderList={folder} closeDropBox={() => setToggle(false)} />}
+        {toggle && (
+          <DropBox
+            folderList={folder}
+            closeDropBox={() => setToggle(false)}
+            currentId={currentFolder.id}
+          />
+        )}
         <h1>{currentFolder.title}</h1>
         <StyledToggleImage
           src={iShowMore}
@@ -89,6 +95,7 @@ const StyledFolderInfo = styled.div`
   width: 100%;
   height: 5.4rem;
   gap: 0.4rem;
+  margin-top: 0.842rem;
 
   & > h1 {
     font-size: 2rem;

@@ -77,7 +77,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                   finishEditing();
                 }
               }
-            : () => router.push('/packing-list')
+            : () => router.push('/folder')
         }
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
