@@ -113,8 +113,8 @@ const ButtonStyle = styled.button`
 
 const StyledLeftButton = styled(ButtonStyle)`
   background-color: ${packmanColors.white};
-  color: ${packmanColors.lightGray};
-  border: 1px solid ${packmanColors.lightGray};
+  color: ${packmanColors.pmLightGrey};
+  border: 1px solid ${packmanColors.pmLightGrey};
 `;
 
 const StyledRightButton = styled(ButtonStyle)``;
