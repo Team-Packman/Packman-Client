@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         },
       },
     });
-  }, []);
+  }, [queryClient]);
 
   return (
     <>
@@ -38,9 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={'/'}>
             <GlobalStyle />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <Component {...pageProps} />
           </APIProvider>
         </Hydrate>
       </QueryClientProvider>

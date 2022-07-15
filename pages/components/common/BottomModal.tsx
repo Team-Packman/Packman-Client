@@ -8,14 +8,15 @@ import { useEffect, useState } from 'react';
 import { ModalDataProps } from '../FolderLanding';
 
 interface BottomModalProps {
-  closeModal: () => void;
+  content?: string;
   modalData: ModalDataProps;
-  handleModalEditButtonClick(id: string): void;
-  handleModalDeleteButtonClick(id: string): void;
+  closeModal: () => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 function BottomModal(props: BottomModalProps) {
-  const { closeModal, modalData, handleModalEditButtonClick, handleModalDeleteButtonClick } = props;
+  const { closeModal, modalData, onEdit, onDelete } = props;
 
   const [isClickDelete, setIsClickDelete] = useState(false);
 
@@ -49,13 +50,13 @@ function BottomModal(props: BottomModalProps) {
               <button onClick={() => setIsClickDelete(false)}>
                 <p>아니요</p>
               </button>
-              <button onClick={() => handleModalDeleteButtonClick(modalData?.id)}>
+              <button onClick={() => onDelete(modalData?.id)}>
                 <p>네</p>
               </button>
             </>
           ) : (
             <>
-              <button onClick={() => handleModalEditButtonClick(modalData?.id)}>
+              <button onClick={() => onEdit(modalData?.id)}>
                 <Image src={iEdit} alt="수정" />
                 수정하기
               </button>
