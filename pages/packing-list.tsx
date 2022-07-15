@@ -45,6 +45,7 @@ function PackingList() {
             document.body.style.overflow = 'unset';
             setShowModal(false);
           }}
+          leftButtonFn={() => setShowModal(false)}
         />
       )}
       <StyledFolderInfo>

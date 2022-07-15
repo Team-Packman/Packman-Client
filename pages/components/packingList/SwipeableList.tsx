@@ -46,9 +46,11 @@ export default function SwipeableList(props: SwipeableListProps) {
   return (
     <StyledRoot>
       <StyledCaptionWrapper>
-        <StyledCaptionText>
-          <span>{alonePackingList?.length}</span>개의 패킹 리스트
-        </StyledCaptionText>
+        {!isDeleting && (
+          <StyledCaptionText>
+            <span>{alonePackingList?.length}</span>개의 패킹 리스트
+          </StyledCaptionText>
+        )}
         {isDeleting && (
           <span
             onClick={() => {
@@ -93,6 +95,7 @@ export default function SwipeableList(props: SwipeableListProps) {
             checkDeleteList={(id: string) => checkDeleteList(id)}
             onClickDeleteButton={() => onClickDeleteButton(idx)}
             packingList={alonePackingList}
+            openModal={openModal}
           />
         ))}
       </StyledSwipeableListWrapper>
@@ -162,18 +165,14 @@ const StyledCaptionWrapper = styled.div`
     bottom: 1rem;
     color: ${packmanColors.darkGray};
   }
-  & > p {
-    display: flex;
-    justify-content: start;
-    padding: 1.8rem 0 0 2.4rem;
-    color: ${packmanColors.lightGray};
-    font-size: 1.2rem;
-    margin: 0;
-  }
 `;
 const StyledCaptionText = styled.p`
+  display: flex;
+  justify-content: start;
+  padding: 1.8rem 0 0 2.4rem;
+  margin: 0;
   font-size: 1.4rem;
-  color: ${packmanColors.lightGray};
+  color: ${packmanColors.deepGray};
   & > span {
     font-weight: 600;
     color: ${packmanColors.pink};
@@ -185,7 +184,7 @@ const StyledCaptionButtonWrapper = styled.div`
   right: 2rem;
   bottom: 0.9rem;
   & > p {
-    color: ${packmanColors.lightGray};
+    color: ${packmanColors.deepGray};
   }
 `;
 const StyledSwipeableListWrapper = styled.div`

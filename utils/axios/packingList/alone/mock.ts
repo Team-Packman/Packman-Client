@@ -29,7 +29,7 @@ export const fetchPackingListWithFolders = async (
             {
               id: '62bbb80d9d5dc1aa4c3d28318',
               departureDate: '2021.08.15',
-              title: '혼자 밀라노 여행',
+              title: '혼자 밀라노 여행을가자',
               packTotalNum: 25,
               packRemainNum: 20,
             },
