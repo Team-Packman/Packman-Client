@@ -5,12 +5,25 @@ import { packmanColors } from '../../../styles/color';
 
 interface ModalProps {
   content: string;
-  leftButtonContent: string;
-  rightButtonContent?: string;
+  leftButtonContent?: string | null;
+  rightButtonContent?: string | null;
   closeModal: () => void;
+  leftButtonFn?: () => void;
+  rightButtonFn?: () => void;
+  isWithDrawn?: boolean;
 }
 export default function Modal(props: ModalProps) {
-  const { content, leftButtonContent, rightButtonContent, closeModal } = props;
+  const {
+    content,
+    leftButtonContent,
+    rightButtonContent,
+    closeModal,
+    leftButtonFn,
+    rightButtonFn,
+    isWithDrawn,
+  } = props;
+
+  console.log(isWithDrawn);
 
   return (
     <>
@@ -21,17 +34,20 @@ export default function Modal(props: ModalProps) {
         </StyledImageWrapper>
         <StyledModalInfo>
           <p>{content}</p>
-          <StyledButtonWrapper>
-            <StyledLeftButton onClick={closeModal}>{leftButtonContent}</StyledLeftButton>
-            {rightButtonContent && <StyledRightButton>{rightButtonContent}</StyledRightButton>}
-          </StyledButtonWrapper>
+          {!isWithDrawn && (
+            <StyledButtonWrapper>
+              <StyledLeftButton onClick={leftButtonFn}>{leftButtonContent}</StyledLeftButton>
+              {rightButtonContent && (
+                <StyledRightButton onClick={rightButtonFn}>{rightButtonContent}</StyledRightButton>
+              )}
+            </StyledButtonWrapper>
+          )}
         </StyledModalInfo>
       </StyledModalWrapper>
     </>
   );
 }
 const StyledRoot = styled.div`
-  /* display: block; */
   position: fixed;
   top: 0;
   width: 100%;
@@ -97,8 +113,8 @@ const ButtonStyle = styled.button`
 
 const StyledLeftButton = styled(ButtonStyle)`
   background-color: ${packmanColors.white};
-  color: ${packmanColors.lightGray};
-  border: 1px solid ${packmanColors.lightGray};
+  color: ${packmanColors.pmLightGrey};
+  border: 1px solid ${packmanColors.pmLightGrey};
 `;
 
 const StyledRightButton = styled(ButtonStyle)``;

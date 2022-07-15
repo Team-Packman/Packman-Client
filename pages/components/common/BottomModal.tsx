@@ -7,14 +7,15 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 interface BottomModalProps {
+  content: string;
   closeModal: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 function BottomModal(props: BottomModalProps) {
-  const { closeModal } = props;
-  const modalData = {
-    folderName: '국내여행',
-  };
+  const { content, closeModal, onEdit, onDelete } = props;
+
   const [isClickDelete, setIsClickDelete] = useState(false);
 
   return (
@@ -22,13 +23,13 @@ function BottomModal(props: BottomModalProps) {
       <StyledRoot onClick={closeModal} />
       <StyledModalInfo>
         <Image src={iSwipeBar} alt="스와이프바" />
-        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : modalData.folderName}</h1>
+        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : content}</h1>
         <StyledButtonWrapper>
-          <button>
+          <button onClick={isClickDelete ? closeModal : onEdit}>
             {!isClickDelete && <Image src={iEdit} alt="수정" />}
             {isClickDelete ? <p onClick={() => setIsClickDelete(false)}>아니요</p> : '수정하기'}
           </button>
-          <button onClick={() => setIsClickDelete(true)}>
+          <button onClick={isClickDelete ? onDelete : () => setIsClickDelete(true)}>
             {!isClickDelete && <Image src={iTrash} alt="삭제" />}
             {isClickDelete ? <p onClick={() => setIsClickDelete(false)}>네</p> : '삭제하기'}
           </button>

@@ -21,7 +21,7 @@ function Header(props: HeaderProps) {
   const { back, title, icon } = props;
   return (
     <StyledRoot>
-      <StyledBlock />
+      {/* <StyledBlock /> */}
       <StyledContent>
         {back && (
           <StyledBack>

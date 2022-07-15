@@ -5,7 +5,6 @@ import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useState } from 'react';
 import { APIProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
-import Layout from './components/layout';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 
@@ -36,9 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={'/'}>
             <GlobalStyle />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <Component {...pageProps} />
           </APIProvider>
         </Hydrate>
       </QueryClientProvider>
