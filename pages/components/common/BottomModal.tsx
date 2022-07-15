@@ -4,35 +4,68 @@ import iTrash from '../../../public/assets/svg/iTrash.svg';
 import iEdit from '../../../public/assets/svg/iEdit.svg';
 import iSwipeBar from '../../../public/assets/svg/iSwipeBar.svg';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ModalDataProps } from '../FolderLanding';
 
 interface BottomModalProps {
-  content: string;
+  content?: string;
+  modalData: ModalDataProps;
   closeModal: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 function BottomModal(props: BottomModalProps) {
-  const { content, closeModal, onEdit, onDelete } = props;
+  const { closeModal, modalData, onEdit, onDelete } = props;
 
   const [isClickDelete, setIsClickDelete] = useState(false);
 
+  /* 
+    Prevent scroll when modal is open
+    https://stackoverflow.com/questions/54989513/react-prevent-scroll-when-modal-is-open
+  */
+  useEffect(() => {
+    const setDisableOverflow = () => {
+      document.body.style.overflow = 'hidden';
+    };
+    const resetDisableOverflow = () => {
+      document.body.style.overflow = 'unset';
+    };
+
+    setDisableOverflow();
+
+    return () => {
+      resetDisableOverflow();
+    };
+  }, []);
   return (
     <>
       <StyledRoot onClick={closeModal} />
       <StyledModalInfo>
         <Image src={iSwipeBar} alt="스와이프바" />
-        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : content}</h1>
+        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : modalData?.title}</h1>
         <StyledButtonWrapper>
-          <button onClick={isClickDelete ? closeModal : onEdit}>
-            {!isClickDelete && <Image src={iEdit} alt="수정" />}
-            {isClickDelete ? <p onClick={() => setIsClickDelete(false)}>아니요</p> : '수정하기'}
-          </button>
-          <button onClick={isClickDelete ? onDelete : () => setIsClickDelete(true)}>
-            {!isClickDelete && <Image src={iTrash} alt="삭제" />}
-            {isClickDelete ? <p onClick={() => setIsClickDelete(false)}>네</p> : '삭제하기'}
-          </button>
+          {isClickDelete ? (
+            <>
+              <button onClick={() => setIsClickDelete(false)}>
+                <p>아니요</p>
+              </button>
+              <button onClick={() => onDelete(modalData?.id)}>
+                <p>네</p>
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => onEdit(modalData?.id)}>
+                <Image src={iEdit} alt="수정" />
+                수정하기
+              </button>
+              <button onClick={() => setIsClickDelete(true)}>
+                <Image src={iTrash} alt="삭제" />
+                삭제하기
+              </button>
+            </>
+          )}
         </StyledButtonWrapper>
       </StyledModalInfo>
     </>
@@ -45,7 +78,7 @@ const StyledRoot = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.47);
   z-index: 10;
   overflow-y: hidden;
@@ -86,6 +119,6 @@ const StyledButtonWrapper = styled.div`
     border-radius: 0.8rem;
     font-weight: 600;
     font-size: 1.4rem;
-    background: ${packmanColors.blueGray};
+    background: ${packmanColors.pmBlueGrey};
   }
 `;

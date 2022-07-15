@@ -98,6 +98,6 @@ export interface GetRecentPackingListOutput {
     remainDay: number; // 최근 수정한 패킹리스트 남은 날짜
     packTotalNum: number; // 최근 수정한 패킹리스트의 총 짐의 수
     packRemainNum: number; // 최근 수정한 패킹리스트의 체크안된 짐의 수
-    isAloned: boolean; // 혼자/함께 패킹리스트 여부
+    url: string;
   };
 }
