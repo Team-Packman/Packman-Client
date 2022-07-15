@@ -6,9 +6,17 @@ import { packmanColors } from '../styles/color';
 import iToggleOff from '../public/assets/svg/iToggleOff.svg';
 import iToggleOn from '../public/assets/svg/iToggleOn.svg';
 import { useState } from 'react';
+import useAPI from '../utils/hooks/useAPI';
+import { useQuery } from 'react-query';
 
 function EditProfile() {
   const [toggle, setToggle] = useState(false);
+  const getUserInfo = useAPI((api) => api.user.getUserInfo);
+  const { data } = useQuery('user', () => getUserInfo());
+
+  if (!data) return null;
+
+  const { id, nickname, email, profileImageId } = data.data;
 
   return (
     <StyledRoot>
@@ -20,8 +28,8 @@ function EditProfile() {
         <StyledProfile>
           <Image alt="프로필 이미지" src={tempBox} />
           <div>
-            <h1>팩맨이</h1>
-            <p>packing-e@gmail.com</p>
+            <h1>{nickname}</h1>
+            <p>{email}</p>
           </div>
         </StyledProfile>
         <div style={{ borderBottom: `1px solid ${packmanColors.gray}`, width: '100%' }}></div>
