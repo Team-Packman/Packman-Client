@@ -1,14 +1,15 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components';
-import { GetFoldersOutput } from '../../service/folder';
-import { packmanColors } from '../../styles/color';
-import useAPI from '../../utils/hooks/useAPI';
-import BottomModal from './common/BottomModal';
+import { GetFoldersOutput } from '../../../service/folder';
+import { packmanColors } from '../../../styles/color';
+import useAPI from '../../../utils/hooks/useAPI';
+import BottomModal from '../common/BottomModal';
 import FloatActionButton from './FloatActionButton';
 import FolderList from './FolderList';
-import SwiperContainer from './Swiper';
+import SwiperContainer from '../Swiper';
+import Header from '../../../components/common/Header';
 
 export interface ModalDataProps {
   id: string;
@@ -104,64 +105,67 @@ function FolderLanding() {
   };
 
   return (
-    <StyledRoot>
-      <StyledRecentBanner isRecentListExist={isRecentListExist} onClick={handleRecentBannerClick}>
-        {isRecentListExist && (
-          <>
-            <StyledLabel>
-              <StyledTitle>{recentPackingData?.data.title}</StyledTitle>
-              <StyledPackTotalNum>
-                총{recentPackingData?.data.packTotalNum}개의 짐
-              </StyledPackTotalNum>
-            </StyledLabel>
-            <StyledDday>
-              <StyledRemainDay>{`D-${recentPackingData?.data.remainDay}`}</StyledRemainDay>
-              <StyledLeftMessage>
-                아직 <span>{recentPackingData?.data.packRemainNum}</span>개의 짐이 남았어요!
-              </StyledLeftMessage>
-            </StyledDday>
-          </>
-        )}
-      </StyledRecentBanner>
-      <SwiperContainer>
-        {folderData.data.togetherFolders.length && (
-          <FolderList
-            key="1"
-            categoryName="together"
-            list={folderData?.data.togetherFolders}
-            editableFolderId={editableFolderId}
-            onClick={handleBottomModalOpen}
-            onChange={handleFolderNameChange}
-            onKeyPress={handleEnterKeyPress}
-            onFolderClick={handleFolderClick}
+    <>
+      <StyledRoot>
+        <Header title="logo" icon="profile" />
+        <StyledRecentBanner isRecentListExist={isRecentListExist} onClick={handleRecentBannerClick}>
+          {isRecentListExist && (
+            <>
+              <StyledLabel>
+                <StyledTitle>{recentPackingData?.data.title}</StyledTitle>
+                <StyledPackTotalNum>
+                  총{recentPackingData?.data.packTotalNum}개의 짐
+                </StyledPackTotalNum>
+              </StyledLabel>
+              <StyledDday>
+                <StyledRemainDay>{`D-${recentPackingData?.data.remainDay}`}</StyledRemainDay>
+                <StyledLeftMessage>
+                  아직 <span>{recentPackingData?.data.packRemainNum}</span>개의 짐이 남았어요!
+                </StyledLeftMessage>
+              </StyledDday>
+            </>
+          )}
+        </StyledRecentBanner>
+        <SwiperContainer isRecentListExist={isRecentListExist}>
+          {folderData.data.togetherFolders.length && (
+            <FolderList
+              key="1"
+              categoryName="together"
+              list={folderData?.data.togetherFolders}
+              editableFolderId={editableFolderId}
+              onClick={handleBottomModalOpen}
+              onChange={handleFolderNameChange}
+              onKeyPress={handleEnterKeyPress}
+              onFolderClick={handleFolderClick}
+            />
+          )}
+          {folderData.data.aloneFolders.length && (
+            <FolderList
+              key="2"
+              categoryName="alone"
+              list={folderData?.data.aloneFolders}
+              editableFolderId={editableFolderId}
+              onClick={handleBottomModalOpen}
+              onChange={handleFolderNameChange}
+              onKeyPress={handleEnterKeyPress}
+              onFolderClick={handleFolderClick}
+            />
+          )}
+        </SwiperContainer>
+        {isRecentListExist && !showBottomModal && <FloatActionButton />}
+        {showBottomModal && (
+          <BottomModal
+            closeModal={() => {
+              document.body.style.overflow = 'unset';
+              setShowBottomModal(false);
+            }}
+            modalData={modalData}
+            onEdit={handleModalEditButtonClick}
+            onDelete={handleModalDeleteButtonClick}
           />
         )}
-        {folderData.data.aloneFolders.length && (
-          <FolderList
-            key="2"
-            categoryName="alone"
-            list={folderData?.data.aloneFolders}
-            editableFolderId={editableFolderId}
-            onClick={handleBottomModalOpen}
-            onChange={handleFolderNameChange}
-            onKeyPress={handleEnterKeyPress}
-            onFolderClick={handleFolderClick}
-          />
-        )}
-      </SwiperContainer>
-      {isRecentListExist && !showBottomModal && <FloatActionButton />}
-      {showBottomModal && (
-        <BottomModal
-          closeModal={() => {
-            document.body.style.overflow = 'unset';
-            setShowBottomModal(false);
-          }}
-          modalData={modalData}
-          onEdit={handleModalEditButtonClick}
-          onDelete={handleModalDeleteButtonClick}
-        />
-      )}
-    </StyledRoot>
+      </StyledRoot>
+    </>
   );
 }
 

@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
 import { FolderListProps, FolderProps } from './FolderList';
-import Kebab from '../assets/kebab.svg';
+import Kebab from '../../assets/kebab.svg';
 
 type FolderBoxProps = FolderProps & Omit<FolderListProps, 'list'>;
 

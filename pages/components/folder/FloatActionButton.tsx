@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 
-import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
 import { Backdrop, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
