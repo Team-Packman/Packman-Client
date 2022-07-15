@@ -182,7 +182,7 @@ export const fetchRecentPackingList = async (
           remainDay: 5,
           packTotalNum: 20,
           packRemainNum: 3,
-          url: '/packingList/alone/1',
+          url: '/packingList/alone/62bbb80d9d5dc1aa4c3d2839',
         },
       });
     }, 500),

@@ -9,10 +9,12 @@ export interface FolderProps {
 }
 export interface FolderListProps {
   list: FolderProps[];
+  categoryName: string;
   editableFolderId: string;
   onClick(id: string, title: string): void;
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
   onKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void;
+  onFolderClick(id: string, categoryName: string): void;
 }
 
 function FolderList(props: FolderListProps) {

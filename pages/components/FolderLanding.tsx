@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components';
@@ -15,9 +16,11 @@ export interface ModalDataProps {
 }
 
 function FolderLanding() {
+  const router = useRouter();
+
   const [folderData, setfolderData] = useState<Pick<GetFoldersOutput, 'data'>>();
   // TODO : 최근 수정 리스트 존재 여부(존재하지 않는 경우 204로 오는지 확인후, 처리방법 생각해보기)
-  const [isRecentListExist, setIsRecentListExist] = useState<boolean>(false);
+  const [isRecentListExist, setIsRecentListExist] = useState<boolean>(true);
   const [showBottomModal, setShowBottomModal] = useState(false);
   const [modalData, setModalData] = useState<ModalDataProps>({ id: '', title: '' });
   const [editableFolderId, setEditableFolderId] = useState<string>('');
@@ -37,9 +40,6 @@ function FolderLanding() {
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
     suspense: true,
-    onSuccess: () => {
-      setIsRecentListExist(true);
-    },
   });
 
   const { mutate: editFolderMutate } = useMutation(
@@ -64,7 +64,7 @@ function FolderLanding() {
     },
   );
 
-  if (!folderData) {
+  if (!folderData || !recentPackingData) {
     return null;
   }
 
@@ -95,9 +95,17 @@ function FolderLanding() {
     deletFolderMutate(id);
   };
 
+  const handleRecentBannerClick = () => {
+    router.push(`/${recentPackingData?.data.url}`);
+  };
+
+  const handleFolderClick = (id: string, categoryName: string) => {
+    router.push(`/packingList/${categoryName}/${id}`);
+  };
+
   return (
     <StyledRoot>
-      <StyledRecentBanner isRecentListExist={isRecentListExist}>
+      <StyledRecentBanner isRecentListExist={isRecentListExist} onClick={handleRecentBannerClick}>
         {isRecentListExist && (
           <>
             <StyledLabel>
@@ -119,21 +127,25 @@ function FolderLanding() {
         {folderData.data.togetherFolders.length && (
           <FolderList
             key="1"
+            categoryName="together"
             list={folderData?.data.togetherFolders}
             editableFolderId={editableFolderId}
             onClick={handleBottomModalOpen}
             onChange={handleFolderNameChange}
             onKeyPress={handleEnterKeyPress}
+            onFolderClick={handleFolderClick}
           />
         )}
         {folderData.data.aloneFolders.length && (
           <FolderList
             key="2"
+            categoryName="alone"
             list={folderData?.data.aloneFolders}
+            editableFolderId={editableFolderId}
             onClick={handleBottomModalOpen}
             onChange={handleFolderNameChange}
-            editableFolderId={editableFolderId}
             onKeyPress={handleEnterKeyPress}
+            onFolderClick={handleFolderClick}
           />
         )}
       </SwiperContainer>

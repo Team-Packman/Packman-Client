@@ -13,9 +13,11 @@ function FolderBox(props: FolderBoxProps) {
     title,
     listNum,
     editableFolderId,
+    categoryName,
     onClick: handleBottomModalOpen,
     onChange: handleFolderNameChange,
     onKeyPress: handleEnterKeyPress,
+    onFolderClick: handleFolderClick,
   } = props;
 
   const inputElement = useRef<HTMLInputElement>(null);
@@ -26,7 +28,7 @@ function FolderBox(props: FolderBoxProps) {
     }
   }, [editableFolderId, id]);
   return (
-    <StyledRoot key={id}>
+    <StyledRoot key={id} onClick={() => handleFolderClick(id, categoryName)}>
       <StyledInfo>
         <StyledKebab>
           <span onClick={() => handleBottomModalOpen(id, title)}>
