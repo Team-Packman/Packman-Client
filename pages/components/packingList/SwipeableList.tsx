@@ -54,6 +54,7 @@ export default function SwipeableList(props: SwipeableListProps) {
       onClick={() => {
         handleIsDragged(Array(alonePackingList?.length).fill(false));
       }}
+      isEmpty={!alonePackingList.length}
     >
       {showModal && (
         <Modal
@@ -76,110 +77,127 @@ export default function SwipeableList(props: SwipeableListProps) {
         />
       )}
 
-      <StyledCaptionWrapper>
-        {!isDeleting && (
-          <StyledCaptionText>
-            <span>{alonePackingList?.length}</span>개의 패킹 리스트
-          </StyledCaptionText>
-        )}
-        {isDeleting && (
-          <span
-            onClick={() => {
-              deleteList.length > 0 && setDeleteList([]);
-            }}
-          >
-            선택해제
-          </span>
-        )}
+      {!alonePackingList.length ? (
+        <StyledEmpty>‘+’ 버튼을 눌러 패킹 리스트를 추가해주세요</StyledEmpty>
+      ) : (
+        <>
+          <StyledCaptionWrapper>
+            {!isDeleting && (
+              <StyledCaptionText>
+                <span>{alonePackingList?.length}</span>개의 패킹 리스트
+              </StyledCaptionText>
+            )}
+            {isDeleting && (
+              <span
+                onClick={() => {
+                  deleteList.length > 0 && setDeleteList([]);
+                }}
+              >
+                선택해제
+              </span>
+            )}
 
-        <StyledCaptionButtonWrapper
-          onClick={() => {
-            setIsDragged(Array(alonePackingList?.length).fill(false));
-            setIsDeleting((prev) => !prev);
-            if (!isDeleting) {
-              setDeleteList([]);
-            }
-          }}
-        >
-          {isDeleting ? (
-            <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>취소</p>
-          ) : (
-            <Image
-              src={iTrash}
-              alt="삭제"
-              width={24}
-              height={24}
-              onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}
-            />
-          )}
-        </StyledCaptionButtonWrapper>
-      </StyledCaptionWrapper>
-      <StyledSwipeableListWrapper>
-        {alonePackingList?.map((item, idx) => (
-          <SwipeablelistItem
-            key={item.id}
-            idx={idx}
-            isDragged={isDragged[idx]}
-            handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-            isDeleting={isDeleting}
-            deleteList={deleteList}
-            checkDeleteList={(id: string) => checkDeleteList(id)}
-            onClickDeleteButton={() => {
-              setSelectedIndex(idx);
-              openModal();
-            }}
-            packingList={alonePackingList}
-          />
-        ))}
-      </StyledSwipeableListWrapper>
-      {isDeleting && (
-        <StyledDeleteButton>
-          {!deleteList.length ? (
-            <div
+            <StyledCaptionButtonWrapper
               onClick={() => {
-                const tempArr: string[] = [];
-                if (alonePackingList) {
-                  alonePackingList.forEach(({ id }) => tempArr.push(id));
+                setIsDragged(Array(alonePackingList?.length).fill(false));
+                setIsDeleting((prev) => !prev);
+                if (!isDeleting) {
+                  setDeleteList([]);
                 }
-                setDeleteList(tempArr);
               }}
             >
-              전체 선택
-            </div>
-          ) : deleteList.length === alonePackingList?.length ? (
-            <div
-              onClick={() => {
-                document.body.style.overflow = 'hidden';
-                openModal();
-              }}
-            >
-              전체 삭제
-            </div>
-          ) : (
-            <div
-              onClick={() => {
-                document.body.style.overflow = 'hidden';
-                openModal();
-              }}
-            >
-              선택 삭제
-            </div>
+              {isDeleting ? (
+                <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>
+                  취소
+                </p>
+              ) : (
+                <Image
+                  src={iTrash}
+                  alt="삭제"
+                  width={24}
+                  height={24}
+                  onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}
+                />
+              )}
+            </StyledCaptionButtonWrapper>
+          </StyledCaptionWrapper>
+          <StyledSwipeableListWrapper>
+            {alonePackingList?.map((item, idx) => (
+              <SwipeablelistItem
+                key={item.id}
+                idx={idx}
+                isDragged={isDragged[idx]}
+                handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                isDeleting={isDeleting}
+                deleteList={deleteList}
+                checkDeleteList={(id: string) => checkDeleteList(id)}
+                onClickDeleteButton={() => {
+                  setSelectedIndex(idx);
+                  openModal();
+                }}
+                packingList={alonePackingList}
+              />
+            ))}
+          </StyledSwipeableListWrapper>
+          {isDeleting && (
+            <StyledDeleteButton>
+              {!deleteList.length ? (
+                <div
+                  onClick={() => {
+                    const tempArr: string[] = [];
+                    if (alonePackingList) {
+                      alonePackingList.forEach(({ id }) => tempArr.push(id));
+                    }
+                    setDeleteList(tempArr);
+                  }}
+                >
+                  전체 선택
+                </div>
+              ) : deleteList.length === alonePackingList?.length ? (
+                <div
+                  onClick={() => {
+                    document.body.style.overflow = 'hidden';
+                    openModal();
+                  }}
+                >
+                  전체 삭제
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    document.body.style.overflow = 'hidden';
+                    openModal();
+                  }}
+                >
+                  선택 삭제
+                </div>
+              )}
+            </StyledDeleteButton>
           )}
-        </StyledDeleteButton>
+        </>
       )}
     </StyledRoot>
   );
 }
 
-const StyledRoot = styled.div`
+const StyledRoot = styled.div<{ isEmpty: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: ${({ isEmpty }) => isEmpty && '61.7rem'};
   gap: 0.8rem;
   background-color: #fff;
   overflow: hidden;
+`;
+const StyledEmpty = styled.p`
+  width: 19.6rem;
+  text-align: center;
+  color: ${packmanColors.gray};
+  font-weight: 500;
+  font-size: 1.8rem;
+  word-break: keep-all;
 `;
 
 const StyledCaptionWrapper = styled.div`
