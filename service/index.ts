@@ -1,4 +1,3 @@
-import { EctAPI, createEctAPI } from './ect/mockAPI';
 import { PackingListAPI, createPackingListAPI } from './packingList/index';
 import { AxiosInstance } from 'axios';
 import { AXIOS_KEY } from '../utils/axios/axios';

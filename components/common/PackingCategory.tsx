@@ -7,21 +7,26 @@ import Kebab from '/public/assets/svg/kebab_ic.svg';
 
 interface PackingCategoryProps {
   id: string;
+  listId: string;
   name: string;
-  updateCategory: (value: string, id: string) => void;
+  updateCategory: (value: string, id: string, listId: string) => void;
+  modalHandler?: () => void;
+  isEditing: boolean;
   example?: boolean;
 }
 
 function PackingCategory(props: PackingCategoryProps) {
-  const { example, name, id, updateCategory } = props;
-  const [isEditing, setIsEditing] = useState(false);
+  const { example, name, id, listId, updateCategory, modalHandler, isEditing } = props;
   const [isEntered, setIsEntered] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(name);
   const ref = useRef<HTMLInputElement | null>(null);
 
   const saveResult = () => {
-    updateCategory(value, id);
-    setIsEditing(false);
+    if (value === '') {
+      setValue(name);
+      return;
+    }
+    updateCategory(value, id, listId);
   };
 
   useEffect(() => {
@@ -31,20 +36,23 @@ function PackingCategory(props: PackingCategoryProps) {
   }, [isEditing]);
 
   return (
-    <StyledRoot disabled={example} onClick={() => setIsEditing(true)}>
+    <StyledRoot disabled={example} onClick={modalHandler}>
       {isEditing ? (
         <StyledInput
           ref={ref}
           value={value}
+          placeholder="카테고리"
           onChange={({ target: { value } }) => setValue(value)}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
         />
       ) : (
         <StyledCategory>{name}</StyledCategory>
       )}
-      <StyledKebab>
-        <Image src={Kebab} alt="kebeb" layout="fill" />
-      </StyledKebab>
+      {!isEditing && (
+        <StyledKebab>
+          <Image src={Kebab} alt="kebeb" layout="fill" />
+        </StyledKebab>
+      )}
     </StyledRoot>
   );
 }

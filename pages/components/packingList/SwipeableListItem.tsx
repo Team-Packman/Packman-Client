@@ -92,7 +92,7 @@ export default function SwipeablelistItem(props: ItemProps) {
             onClickDeleteButton(idx);
           }}
         >
-          삭제
+          <div>삭제</div>
         </StyledDeleteButton>
       )}
     </StyledRoot>
@@ -200,4 +200,8 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   font-size: 1.4rem;
   font-weight: 500;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
+
+  & > div {
+    flex-shrink: 0;
+  }
 `;

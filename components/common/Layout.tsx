@@ -8,18 +8,21 @@ type Icon = 'profile' | 'member';
 interface LayoutProps {
   children?: ReactNode;
   back?: boolean;
+  padding?: boolean;
   title?: string;
   icon?: Icon;
   option?: ReactNode;
 }
 
 function Layout(props: LayoutProps) {
-  const { children, back, title, icon, option } = props;
+  const { children, back, title, icon, option, padding } = props;
   return (
     <StyledRoot>
       <Header back={back} title={title} icon={icon} />
       {option}
-      <StyledMain>{children}</StyledMain>
+      <StyledMain hasOption={option !== undefined} padding={padding ? true : false}>
+        {children}
+      </StyledMain>
     </StyledRoot>
   );
 }
@@ -27,17 +30,20 @@ function Layout(props: LayoutProps) {
 export default Layout;
 
 const StyledRoot = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${packmanColors.white};
 `;
 
-const StyledMain = styled.main`
+const StyledMain = styled.main<{
+  hasOption: boolean;
+  padding: boolean;
+}>`
   position: relative;
-  padding: 0 2rem;
+  padding: ${({ padding }) => (padding ? `0 2rem` : `0`)};
   padding-bottom: 1.6rem;
-  flex-grow: 1;
   background-color: ${packmanColors.white};
+  height: ${({ hasOption }) => (hasOption ? `calc(100vh)` : `calc(100vh - 5.2rem)`)};
 `;

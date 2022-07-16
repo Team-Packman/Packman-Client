@@ -5,19 +5,24 @@ import { packmanColors } from '../../styles/color';
 import PlucIC from '/public/assets/svg/plus_ic.svg';
 interface PackagesWithCategoryProps {
   children?: ReactNode;
-  category: ReactNode;
-  packages: ReactNode;
+  creating?: ReactNode;
+  packages?: ReactNode;
+  isCreating?: boolean;
+  createHandler?: () => void;
 }
 
 function PackagesWithCategory(props: PackagesWithCategoryProps) {
-  const { category, packages } = props;
+  const { children, packages, isCreating, creating, createHandler } = props;
 
   return (
     <StyledRoot>
-      {category}
-      <ul>{packages}</ul>
+      {children}
+      <ul>
+        {packages}
+        {isCreating && creating}
+      </ul>
 
-      <StyledAddButton>
+      <StyledAddButton onClick={createHandler}>
         <Image src={PlucIC} alt="pluc_ic" layout="fill" />
       </StyledAddButton>
     </StyledRoot>
@@ -26,7 +31,7 @@ function PackagesWithCategory(props: PackagesWithCategoryProps) {
 
 export default PackagesWithCategory;
 
-const StyledRoot = styled.li`
+const StyledRoot = styled.ul`
   & > ul {
     margin-top: 0.8rem;
   }

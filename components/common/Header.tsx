@@ -7,6 +7,7 @@ import ProfileIC from '/public/assets/svg/profile_ic.svg';
 import MemberIC from '/public/assets/svg/member_ic.svg';
 import Logo from '/public/assets/svg/logo.svg';
 import Link from 'next/link';
+import useGlobalState from '../../utils/hooks/useGlobalState';
 
 type Icon = 'profile' | 'member';
 
@@ -19,9 +20,11 @@ interface HeaderProps {
 
 function Header(props: HeaderProps) {
   const { back, title, icon } = props;
+  const [scroll] = useGlobalState<boolean>('scroll');
+
   return (
     <StyledRoot>
-      <StyledContent>
+      <StyledContent scroll={scroll}>
         {back && (
           <StyledBack>
             <Image src={BackIC} layout="fill" alt="back_icon" />
@@ -66,16 +69,19 @@ const StyledRoot = styled.header`
   flex-direction: column;
 `;
 
-const StyledBlock = styled.div`
-  width: 100%;
-  height: 4.4rem;
-  background-color: ${packmanColors.white};
-`;
-
-const StyledContent = styled.div`
+const StyledContent = styled.div<{
+  scroll: boolean;
+}>`
   width: 100%;
   height: 5.2rem;
+  transition: height 0.3s ease, opacity 0.3s ease;
   display: flex;
+  ${({ scroll }) =>
+    scroll &&
+    css`
+      height: 0;
+      opacity: 0;
+    `};
   align-items: center;
   justify-content: center;
   position: relative;

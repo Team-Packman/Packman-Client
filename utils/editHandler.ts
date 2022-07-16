@@ -1,8 +1,8 @@
-import { KeyboardEvent } from 'react';
+import { FocusEvent, KeyboardEvent } from 'react';
 
 export const editHandler = (state: boolean, setter: (state: boolean) => void, fn: () => void) => {
   return {
-    onBlur: () => {
+    onBlur: (e: FocusEvent<HTMLInputElement>) => {
       if (!state) {
         fn();
       }

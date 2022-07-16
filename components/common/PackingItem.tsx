@@ -7,22 +7,50 @@ import Kebab from '/public/assets/svg/kebab_ic.svg';
 interface PackingItemProps {
   name: string;
   id: string;
+  categoryId: string;
+  isEditing: boolean;
   isChecked: boolean;
-  updateItem: (value: string, id: string) => void;
+  updateItem: (value: string, id: string, categoryId: string, isChecked?: boolean) => void;
   assginee?: ReactNode;
   example?: boolean;
+  modalHandler?: () => void;
 }
 
 function PackingItem(props: PackingItemProps) {
-  const { name, id, example, assginee, updateItem, isChecked } = props;
-  const [isEditing, setIsEditing] = useState(false);
+  const {
+    name,
+    id,
+    example,
+    assginee,
+    updateItem,
+    modalHandler,
+    isChecked: check,
+    isEditing,
+    categoryId,
+  } = props;
   const [isEntered, setIsEntered] = useState(false);
-  const [value, setValue] = useState('');
+  const [isChecked, setIsChecked] = useState(check);
+  const [value, setValue] = useState(name);
   const ref = useRef<HTMLInputElement | null>(null);
 
+  const handleValue = (value: string) => {
+    if (value.length < 13) {
+      setValue(value);
+    }
+  };
   const saveResult = () => {
-    updateItem(value, id);
-    setIsEditing(false);
+    updateItem(value, id, categoryId, isChecked);
+  };
+
+  const checkHandler = () => {
+    console.log({
+      name: value,
+      categoryId,
+      isChecked: !isChecked,
+    });
+    if (!isEditing) {
+      setIsChecked((prev) => !prev);
+    }
   };
 
   useEffect(() => {
@@ -33,24 +61,27 @@ function PackingItem(props: PackingItemProps) {
   return (
     <StyledRoot>
       <label>
-        <StyledCheckBox type="checkbox" checked={isChecked} />
+        <StyledCheckBox type="checkbox" checked={isChecked} onChange={checkHandler} />
         {isEditing ? (
           <StyledInput
             ref={ref}
+            value={value}
             placeholder="짐을 입력해주세요"
-            onChange={({ target: { value } }) => setValue(value)}
+            onChange={({ target: { value } }) => handleValue(value)}
             {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
           />
         ) : (
-          <StyledContent disabled={example} onClick={() => setIsEditing(true)}>
-            {name}
-          </StyledContent>
+          <StyledContent>{name}</StyledContent>
         )}
-        {assginee && assginee}
-        <StyledKebab>
-          <Image src={Kebab} alt="kebab" layout="fill" />
-        </StyledKebab>
       </label>
+      <StyledOptionWrapper>
+        {assginee && assginee}
+        {!isEditing && (
+          <StyledKebab onClick={modalHandler}>
+            <Image src={Kebab} alt="kebab" layout="fill" />
+          </StyledKebab>
+        )}
+      </StyledOptionWrapper>
     </StyledRoot>
   );
 }
@@ -58,10 +89,14 @@ function PackingItem(props: PackingItemProps) {
 export default PackingItem;
 
 const StyledRoot = styled.li`
+  display: flex;
   list-style: none;
+  justify-content: space-between;
   & > label {
     display: flex;
+    height: 3.2rem;
     align-items: center;
+    flex-grow: 1;
   }
 `;
 
@@ -70,18 +105,21 @@ const StyledCheckBox = styled.input`
   height: 1.8rem;
 `;
 
-const StyledContent = styled.button`
-  width: 100%;
+const StyledContent = styled.div`
+  max-width: 22rem;
   font-size: 1.5rem;
   font-weight: 400;
   background-color: transparent;
   border: none;
   text-align: left;
   padding-left: 1.1rem;
+  outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 const StyledInput = styled.input`
   width: 100%;
-  height: 3.2rem;
   border: none;
   outline: none;
   font-size: 1.5rem;
@@ -89,6 +127,13 @@ const StyledInput = styled.input`
   padding: 0;
   padding-left: 1.1rem;
   letter-spacing: 0.04em;
+  border-bottom: 1px soild black;
+`;
+
+const StyledOptionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 `;
 
 const StyledKebab = styled.div`
