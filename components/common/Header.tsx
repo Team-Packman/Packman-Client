@@ -75,7 +75,7 @@ const StyledContent = styled.div`
   position: relative;
   background-color: ${packmanColors.white};
   font-size: 1.8rem;
-  color: ${packmanColors.darkGray};
+  color: ${packmanColors.pmDarkGrey};
 
   & > picture {
     position: absolute;

@@ -134,7 +134,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   height: inherit;
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
-  background-color: ${packmanColors.blueGray};
+  background-color: ${packmanColors.pmBlueGrey};
   transition: 0.4s ease-in-out;
 
   -webkit-user-select: none;
@@ -159,7 +159,7 @@ const StyledItemInfo = styled.div`
 
   & > p:first-child {
     font-size: 1.4rem;
-    color: ${packmanColors.deepGray};
+    color: ${packmanColors.pmDeepGrey};
     font-weight: 400;
   }
   & > p:nth-child(2) {
@@ -176,10 +176,10 @@ const StyledPackInfo = styled.div`
   & > span {
     width: 8.3rem;
     height: 2.4rem;
-    color: ${packmanColors.black};
+    color: ${packmanColors.pmBlack};
     font-size: 1.3rem;
     font-weight: 400;
-    border: 0.1rem solid ${packmanColors.pink};
+    border: 0.1rem solid ${packmanColors.pmPink};
     border-radius: 1.2rem;
     text-align: center;
   }
@@ -188,9 +188,9 @@ const StyledPackRemainText = styled.p`
   font-weight: 400;
   font-size: 1.2rem;
 
-  color: ${packmanColors.black};
+  color: ${packmanColors.pmBlack};
   & > span {
-    color: ${packmanColors.pink};
+    color: ${packmanColors.pmPink};
   }
 `;
 

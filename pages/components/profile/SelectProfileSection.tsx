@@ -102,7 +102,7 @@ const StyledInputWrapper = styled.div`
 const StyledText = styled.p<{ nickname: boolean }>`
   opacity: ${({ nickname }) => nickname && '0'};
   padding-top: 0.77rem;
-  color: ${packmanColors.deepGray};
+  color: ${packmanColors.pmDeepGrey};
   font-weight: 400;
   font-size: 1.3rem;
 `;
@@ -111,9 +111,9 @@ const StyleInput = styled.input`
   text-align: center;
   font-weight: 600;
   font-size: 1.6rem;
-  color: ${packmanColors.black};
+  color: ${packmanColors.pmBlack};
   border: none;
-  border-bottom: 1px solid ${packmanColors.deepGray};
+  border-bottom: 1px solid ${packmanColors.pmDeepGrey};
   margin-top: 1.6rem;
 
   &:focus {
@@ -139,5 +139,6 @@ const StyledButton = styled.button<{ isActivate: boolean }>`
   font-weight: 600;
   font-size: 1.4rem;
   color: ${packmanColors.white};
-  background-color: ${({ isActivate }) => (isActivate ? packmanColors.pink : packmanColors.gray)};
+  background-color: ${({ isActivate }) =>
+    isActivate ? packmanColors.pmPink : packmanColors.pmGrey};
 `;

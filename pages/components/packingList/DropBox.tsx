@@ -6,10 +6,11 @@ interface DropBoxProps {
   folderList: { id: string; title: string }[];
   closeDropBox: () => void;
   currentId: string;
+  categoryName: string;
 }
 
 function DropBox(props: DropBoxProps) {
-  const { folderList, closeDropBox, currentId } = props;
+  const { folderList, closeDropBox, currentId, categoryName } = props;
   const router = useRouter();
 
   return (
@@ -21,7 +22,7 @@ function DropBox(props: DropBoxProps) {
             key={id}
             currentId={id === currentId}
             onClick={() => {
-              router.push({ pathname: '/packing-list/[folderId]', query: { folderId: id } });
+              router.push(`/packing-list/${categoryName}/${id}`);
             }}
           >
             {title}
@@ -61,6 +62,6 @@ const StyledItem = styled.div<{ currentId: boolean }>`
   height: 4.8rem;
   font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
   font-size: 1.5rem;
-  color: ${packmanColors.darkGray};
-  border-bottom: 1px solid ${packmanColors.gray};
+  color: ${packmanColors.pmDarkGrey};
+  border-bottom: 1px solid ${packmanColors.pmGrey};
 `;
