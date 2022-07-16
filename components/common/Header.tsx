@@ -70,7 +70,7 @@ const StyledRoot = styled.header`
 const StyledBlock = styled.div`
   width: 100%;
   height: 4.4rem;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
 `;
 
 const StyledContent = styled.div`
@@ -80,7 +80,7 @@ const StyledContent = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   font-size: 1.8rem;
   color: ${packmanColors.pmDeepGrey};
 
