@@ -1,5 +1,5 @@
-import { ReactNode, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { ReactNode, useEffect, useState } from 'react';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import 'swiper/css';
 import styled from 'styled-components';
 import SwiperCore, { Virtual, Navigation, Pagination } from 'swiper';
@@ -15,11 +15,12 @@ SwiperCore.use([Virtual, Navigation, Pagination]);
 interface SwiperProps {
   key?: string;
   isRecentListExist: boolean;
+  getSwiperIndex(index: number): void;
   children: ReactNode[];
 }
 
 function SwiperContainer(props: SwiperProps) {
-  const { children, isRecentListExist } = props;
+  const { children, isRecentListExist, getSwiperIndex } = props;
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(); /* eslint-disable no-unused-vars */
   const [bullet] = useState<string[]>(['함께 패킹', '혼자 패킹']);
@@ -40,6 +41,12 @@ function SwiperContainer(props: SwiperProps) {
       return '<div class="' + className + '" key="' + index + '">' + bullet[index] + '</div>';
     },
   };
+
+  useEffect(() => {
+    if (swiperRef) {
+      getSwiperIndex(swiperRef?.snapIndex);
+    }
+  }, [swiperRef, getSwiperIndex]);
 
   return (
     <StyledRoot isRecentListExist={isRecentListExist}>
@@ -88,7 +95,7 @@ export const StyledSwiper = styled(Swiper)`
     width: 100%;
     border: 1px solid ${packmanColors.pmDeepGrey};
     border-radius: 0.6rem;
-    background: ${packmanColors.white};
+    background: ${packmanColors.pmWhite};
   }
 
   .swiper-pagination-bullet {
@@ -100,7 +107,7 @@ export const StyledSwiper = styled(Swiper)`
     border-radius: 0.6rem;
     color: ${packmanColors.pmDeepGrey};
     font-size: 16px;
-    background: ${packmanColors.white};
+    background: ${packmanColors.pmWhite};
   }
   .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
   .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
@@ -108,7 +115,7 @@ export const StyledSwiper = styled(Swiper)`
   }
 
   .swiper-pagination-bullet-active {
-    color: ${packmanColors.white};
+    color: ${packmanColors.pmWhite};
     background: ${packmanColors.pmBlack};
   }
   .swiper-slide {
@@ -153,7 +160,7 @@ export const StyledStratButton = styled.button`
   width: 100%;
   padding: 1.2rem 2.9rem;
   font-size: 1.4rem;
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
   background: ${packmanColors.pmPink};
   border: none;
   border-radius: 8px;

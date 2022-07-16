@@ -1,111 +1,122 @@
-import React, { ReactNode, useState } from 'react';
-
-import { packmanColors } from '../../../styles/color';
-import { Backdrop, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import styled from 'styled-components';
+import Image from 'next/image';
+import { useState } from 'react';
+import FAB from '../../assets/fab.svg';
+import FABOPEN from '../../assets/fab_rotate.svg';
+import { Backdrop } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { packmanColors } from '../../../styles/color';
 
+interface FloatModalProps {
+  onClick(index: number): void;
+}
 const useStyles = makeStyles(() => ({
-  root: {
-    position: 'fixed',
-    bottom: '3rem',
-    right: '2rem',
-    height: '100%',
-    flexGrow: 1,
-    zIndex: 1050,
-    fontFamily: 'Pretendard',
-
-    '& .MuiFab-root': {
-      boxShadow: 'none',
-      '& .MuiSpeedDial-actions': {
-        '& .MuiSpeedDialAction-staticTooltip': {
-          '& > button:first-child': {
-            background: 'red',
-          },
-        },
-      },
-    },
-    '& .MuiSpeedDial-root': {
-      alignItems: 'end',
-    },
-    '& .MuiSpeedDialAction-tooltipPlacementLeft .MuiSpeedDialAction-staticTooltipLabel': {
-      display: 'none',
-    },
-    '& #FAB-action-2': {
-      marginBottom: '0.8rem',
-    },
-  },
   backdrop: {
     zIndex: 1,
     color: 'rgba(0, 0, 0, 0.47)',
   },
-  speedDial: {
-    position: 'fixed',
-    bottom: '3rem',
-    right: '1rem',
-  },
-  tooltip: {
-    width: '16rem',
-    borderRadius: '0.8rem',
-    color: `${packmanColors.pmBlack}`,
-    fontSize: '1.5rem',
-    margin: '0.1rem',
-    boxShadow: '0',
-  },
 }));
-function FloatActionButton() {
+
+// ref : https://www.upbeatcode.com/react/implement-floating-action-button-in-react/
+const FloatActionButton = ({ onClick: handleFloatClick }: FloatModalProps) => {
   const classes = useStyles();
-
   const [open, setOpen] = useState<boolean>(false);
-  const [icon, setIcon] = useState<ReactNode>(
-    <SpeedDialIcon style={{ fill: `${packmanColors.white}` }} />,
-  );
-
-  const actions = [
-    { name: '👐🏻 함께 리스트 추가' },
-    { name: '☝🏻 혼자 리스트 추가' },
-    {
-      name: `📂 \u00a0\u00a0\u00a0\u00a0\u00a0폴더 추가 \u00a0 \u00a0`,
-    },
-  ];
 
   const handleOpen = () => {
-    setOpen(true);
-    setIcon(<SpeedDialIcon style={{ fill: `${packmanColors.white}` }} />);
+    setOpen(!open);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setIcon(<SpeedDialIcon style={{ fill: `${packmanColors.white}` }} />);
+  const handleActionClick = (index: number) => {
+    handleFloatClick(index);
+    handleOpen();
   };
+  const actions = [
+    { icon: '👐🏻', name: '함께 리스트 추가' },
+    { icon: '☝🏻', name: '혼자 리스트 추가' },
+    { icon: '📂', name: '폴더 추가 ' },
+  ];
 
   return (
-    <div className={classes.root}>
-      <Backdrop open={open} className={classes.backdrop} />
-      <SpeedDial
-        ariaLabel="FAB"
-        className={classes.speedDial}
-        icon={icon}
-        onOpen={handleOpen}
-        onClose={handleClose}
-        open={open}
-        FabProps={{
-          color: 'secondary',
-          size: 'medium',
-        }}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
+    <>
+      <Backdrop open={open} className={classes.backdrop} onClick={handleOpen} />
+      <StyledFABContainer>
+        <li onClick={handleOpen}>
+          {open ? (
+            <Image src={FABOPEN} width={63} height={63} alt="FAB" />
+          ) : (
+            <Image src={FAB} width={63} height={63} alt="FAB" />
+          )}
+        </li>
+        {actions.map((action, index) => (
+          <StyledList
+            style={{ transitionDelay: `${index * 25}ms` }}
+            className="fab-action"
             key={action.name}
-            icon={<div>{action.name}</div>}
-            tooltipTitle=""
-            tooltipOpen
-            onClick={handleClose}
-            className={classes.tooltip}
-          />
+            open={open}
+            index={index}
+            onClick={() => handleActionClick(index)}
+          >
+            <span className="tooltip">{action.icon}</span>
+            <span className="tooltip">{action.name}</span>
+          </StyledList>
         ))}
-      </SpeedDial>
-    </div>
+      </StyledFABContainer>
+    </>
   );
-}
+};
 
 export default FloatActionButton;
+
+export const StyledFABContainer = styled.ul`
+  display: flex;
+  // Display actions from bottom to top
+  flex-direction: column-reverse;
+  align-items: end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 1050;
+
+  // Display button to the bottom right
+  position: fixed;
+  right: 2em;
+  bottom: 2em;
+
+  // Set max height to only trigger mouse enter
+  // when user hover over first button
+  max-height: 52px;
+
+  li:last-child {
+    margin-bottom: 0.8rem;
+    border-radius: 0.8rem;
+  }
+
+  li:nth-child(2) {
+    border-radius: 0 0 0.8rem 0.8rem;
+  }
+
+  li:nth-child(3) {
+    border-radius: 0.8rem 0.8rem 0 0;
+  }
+`;
+
+export const StyledList = styled.li<{ open: boolean; index: number }>`
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1.5rem;
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+  background: ${packmanColors.pmWhite};
+  width: 16rem;
+
+  transform: ${({ open }) =>
+    open ? 'transform: translateY(0) scale(1)' : 'translateY(50px) scale(0)'};
+  transition: transform 300ms, opacity 300ms;
+  opacity: ${({ open }) => (open ? '1' : '0')};
+
+  span:last-child {
+    /* '폴더 추가' 중앙 정렬을 위한 코드 */
+    padding-left: ${({ index }) => (index === 2 ? '3.2rem' : '1rem')};
+  }
+`;
