@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { packmanColors } from '../../../styles/color';
 
@@ -9,13 +10,20 @@ interface DropBoxProps {
 
 function DropBox(props: DropBoxProps) {
   const { folderList, closeDropBox, currentId } = props;
+  const router = useRouter();
 
   return (
     <>
       <StyledBackground onClick={closeDropBox} />
       <StyledRoot>
         {folderList.map(({ id, title }) => (
-          <StyledItem key={id} currentId={id === currentId}>
+          <StyledItem
+            key={id}
+            currentId={id === currentId}
+            onClick={() => {
+              router.push({ pathname: '/packing-list/[folderId]', query: { folderId: id } });
+            }}
+          >
             {title}
           </StyledItem>
         ))}

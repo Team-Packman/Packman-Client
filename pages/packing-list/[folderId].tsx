@@ -1,11 +1,11 @@
-import SwipeableList from './components/packingList/SwipeableList';
+import SwipeableList from '../components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
-import iShowMore from '../public/assets/svg/iShowMore.svg';
+import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import { useState } from 'react';
-import Header from '../components/common/Header';
-import DropBox from './components/packingList/DropBox';
-import useAPI from '../utils/hooks/useAPI';
+import Header from '../../components/common/Header';
+import DropBox from '../components/packingList/DropBox';
+import useAPI from '../../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 
 interface PackingList {

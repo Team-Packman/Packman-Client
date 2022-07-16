@@ -53,7 +53,6 @@ export default function SwipeableList(props: SwipeableListProps) {
     <StyledRoot
       onClick={() => {
         handleIsDragged(Array(alonePackingList?.length).fill(false));
-        // setShowModal(false);
       }}
     >
       {showModal && (
@@ -70,7 +69,6 @@ export default function SwipeableList(props: SwipeableListProps) {
             setShowModal(false);
           }}
           rightButtonFn={() => {
-            //삭제
             //togetherPackingListId params로 보내서 삭제
             onClickDeleteButton(selectedIndex);
             setShowModal(false);
