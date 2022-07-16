@@ -97,11 +97,11 @@ const StyledTemplateWrapper = styled.div`
   & > h1 {
     font-weight: 600;
     font-size: 1.6rem;
-    color: ${packmanColors.black};
+    color: ${packmanColors.pmBlack};
   }
   & > p {
     font-weight: 400;
     font-size: 1.2rem;
-    color: ${packmanColors.deepGray};
+    color: ${packmanColors.pmDeepGrey};
   }
 `;

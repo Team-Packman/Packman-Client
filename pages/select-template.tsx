@@ -109,18 +109,18 @@ const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>
     isTemplate
       ? css`
           border: none;
-          background-color: ${packmanColors.pink};
+          background-color: ${packmanColors.pmPink};
           color: ${packmanColors.white};
         `
       : css`
-          border: 1px solid ${packmanColors.black};
+          border: 1px solid ${packmanColors.pmBlack};
           background-color: ${packmanColors.white};
-          color: ${packmanColors.black};
+          color: ${packmanColors.pmBlack};
         `}
   ${({ isActivated }) =>
     !isActivated &&
     css`
       color: ${packmanColors.white};
-      background-color: ${packmanColors.gray};
+      background-color: ${packmanColors.pmGrey};
     `}
 `;
