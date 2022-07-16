@@ -42,7 +42,6 @@ export default function SwipeableList(props: SwipeableListProps) {
 
   const onClickDeleteButton = (idx: number) => {
     setIsDragged((prev) => prev.filter((_, i) => i !== idx));
-    setShowModal(false);
   };
 
   const openModal = () => {
@@ -51,7 +50,12 @@ export default function SwipeableList(props: SwipeableListProps) {
   };
 
   return (
-    <StyledRoot>
+    <StyledRoot
+      onClick={() => {
+        handleIsDragged(Array(alonePackingList?.length).fill(false));
+        // setShowModal(false);
+      }}
+    >
       {showModal && (
         <Modal
           content="정말 삭제하시겠어요?"
@@ -61,11 +65,15 @@ export default function SwipeableList(props: SwipeableListProps) {
             document.body.style.overflow = 'unset';
             setShowModal(false);
           }}
-          leftButtonFn={() => setShowModal(false)}
+          leftButtonFn={() => {
+            handleIsDragged(Array(alonePackingList?.length).fill(false));
+            setShowModal(false);
+          }}
           rightButtonFn={() => {
             //삭제
             //togetherPackingListId params로 보내서 삭제
             onClickDeleteButton(selectedIndex);
+            setShowModal(false);
           }}
         />
       )}

@@ -84,10 +84,9 @@ export default function SwipeablelistItem(props: ItemProps) {
             </StyledPackRemainText>
           </StyledPackInfo>
         </StyledItemInfo>
-        {/* <StyledPackingInfo> */}
         <Image src={iRightArrow} alt="열기" width={24} height={24} />
-        {/* </StyledPackingInfo> */}
       </StyledItemWrapper>
+
       {!isDeleting && (
         <StyledDeleteButton
           isDragged={isDragged}
