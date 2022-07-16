@@ -22,7 +22,6 @@ interface ItemProps {
   checkDeleteList: (id: string) => void;
   onClickDeleteButton: (idx: number) => void;
   packingList: PackingList[];
-  openModal: () => void;
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
@@ -35,7 +34,6 @@ export default function SwipeablelistItem(props: ItemProps) {
     checkDeleteList,
     onClickDeleteButton,
     packingList,
-    openModal,
   } = props;
 
   const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
@@ -96,7 +94,6 @@ export default function SwipeablelistItem(props: ItemProps) {
           onClick={() => {
             // 아이템 삭제
             onClickDeleteButton(idx);
-            openModal();
           }}
         >
           삭제

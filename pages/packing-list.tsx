@@ -2,7 +2,6 @@ import SwipeableList from './components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../public/assets/svg/iShowMore.svg';
-import Modal from './components/common/Modal';
 import { useState } from 'react';
 import Header from '../components/common/Header';
 import DropBox from './components/packingList/DropBox';
@@ -18,14 +17,7 @@ interface PackingList {
 }
 
 function PackingList() {
-  const modalData = {
-    content: '정말 삭제하시겠어요?',
-    leftButtonContent: '아니오',
-    rightButtonContent: '예',
-  };
-  const [showModal, setShowModal] = useState(false);
   const [toggle, setToggle] = useState(false);
-
   const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
   const { data } = useQuery('packingList', () => getTogetherPackingList(), {});
 
@@ -36,18 +28,7 @@ function PackingList() {
   return (
     <StyledRoot>
       <Header back title="패킹 리스트" icon="profile" />
-      {showModal && (
-        <Modal
-          content={modalData.content}
-          leftButtonContent={modalData.leftButtonContent}
-          rightButtonContent={modalData.rightButtonContent}
-          closeModal={() => {
-            document.body.style.overflow = 'unset';
-            setShowModal(false);
-          }}
-          leftButtonFn={() => setShowModal(false)}
-        />
-      )}
+
       <StyledFolderInfo>
         {toggle && (
           <DropBox
@@ -68,13 +49,7 @@ function PackingList() {
           toggle={toggle}
         />
       </StyledFolderInfo>
-      <SwipeableList
-        alonePackingList={alonePackingList}
-        openModal={() => {
-          document.body.style.overflow = 'hidden';
-          setShowModal(true);
-        }}
-      />
+      <SwipeableList alonePackingList={alonePackingList} />
     </StyledRoot>
   );
 }
