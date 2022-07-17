@@ -69,7 +69,7 @@ function PackingList() {
   };
 
   return (
-    <StyledRoot>
+    <StyledRoot onTouchMove={() => setToggle(false)}>
       <Header back title="패킹 리스트" icon="profile" />
       {showModal && (
         <Modal
@@ -227,7 +227,7 @@ const StyledCaptionText = styled.p`
   padding: 1.8rem 0 0 2.4rem;
   margin: 0;
   font-size: 1.4rem;
-  color: ${packmanColors.pmDarkGrey};
+  color: ${packmanColors.pmDeepGrey};
   & > span {
     font-weight: 600;
     color: ${packmanColors.pmPink};
