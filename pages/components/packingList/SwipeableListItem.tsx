@@ -175,6 +175,9 @@ const StyledPackInfo = styled.div`
   width: 28.1rem;
 
   & > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 8.3rem;
     height: 2.4rem;
     color: ${packmanColors.pmBlack};

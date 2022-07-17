@@ -29,7 +29,7 @@ function PackingList() {
   const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
   const { data } = useQuery('packing-list', () => getTogetherPackingList(), {});
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data?.data.alonePackingList?.length).fill(false),
+    Array(data && data?.data.alonePackingList?.length).fill(false),
   );
 
   const router = useRouter();
@@ -84,10 +84,10 @@ function PackingList() {
           rightButtonFn={() => {
             //togetherPackingListId params로 보내서 삭제
             setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-            queryClient.setQueryData(
-              'packing-list',
-              packingList.filter((_, i) => i !== selectedIndex),
-            );
+            // queryClient.setQueryData(
+            //   'packing-list',
+            //   packingList.filter((_, i) => i !== selectedIndex),
+            // );
             console.log(queryClient.getQueryData('packing-list'));
             closeModal();
           }}
