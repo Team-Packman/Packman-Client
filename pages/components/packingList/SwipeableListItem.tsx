@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import iCheck from '../../../public/assets/svg/iCheck.svg';
 import iCheckPink from '../../../public/assets/svg/iCheckPink.svg';
 import iRightArrow from '../../../public/assets/svg/iRightArrow.svg';
+import iDelete from '../../../public/assets/svg/iDelete.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../../styles/color';
 
@@ -95,7 +96,7 @@ export default function SwipeablelistItem(props: ItemProps) {
             onClickDeleteButton(idx);
           }}
         >
-          삭제
+          <Image src={iDelete} alt="삭제" />
         </StyledDeleteButton>
       )}
     </StyledRoot>
@@ -203,9 +204,6 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   width: ${({ isDragged }) => (isDragged ? '5.6rem' : '0rem')};
   height: 11.4rem;
   background-color: #ff0000;
-  color: ${packmanColors.white};
   transition: 0.4s ease-in-out;
-  font-size: 1.4rem;
-  font-weight: 500;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
 `;

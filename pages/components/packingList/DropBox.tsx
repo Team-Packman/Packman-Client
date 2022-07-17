@@ -46,9 +46,8 @@ const StyledBackground = styled.div`
 
 const StyledRoot = styled.div`
   position: absolute;
-  top: 4.5rem;
-  left: 2.997rem;
   width: 16rem;
+  top: 4.2rem;
   background-color: ${packmanColors.white};
   border-radius: 0.8rem;
   filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.1));

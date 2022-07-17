@@ -44,7 +44,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     <StyledRoot>
       <Image src={tempBox} alt="임시네모" width={120} height={120} />
       <StyledInputWrapper>
-        <StyleInput
+        <StyledInput
           type="text"
           placeholder="김팩맨"
           value={nickname}
@@ -106,7 +106,7 @@ const StyledText = styled.p<{ nickname: boolean }>`
   font-weight: 400;
   font-size: 1.3rem;
 `;
-const StyleInput = styled.input`
+const StyledInput = styled.input`
   width: 12rem;
   text-align: center;
   font-weight: 600;
