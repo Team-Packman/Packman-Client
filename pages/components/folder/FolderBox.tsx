@@ -89,6 +89,7 @@ function FolderBox(props: FolderBoxProps & T) {
             disabled={isNew ? !isNew : editableFolderId !== id}
             autoFocus
             isNew={isNew}
+            maxLength={8}
           />
           <StyledFolderInfo>{listNum}개의 리스트</StyledFolderInfo>
         </StyledText>
