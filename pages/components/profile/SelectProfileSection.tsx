@@ -68,6 +68,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       </StyledSelectProfileWrapper>
       <StyledButton
         type="button"
+        disabled={!setIsActivate()}
         isActivate={setIsActivate()}
         onClick={
           isEditing
@@ -114,6 +115,7 @@ const StyledInput = styled.input`
   color: ${packmanColors.pmBlack};
   border: none;
   border-bottom: 1px solid ${packmanColors.pmDeepGrey};
+  border-radius: 0;
   margin-top: 1.6rem;
 
   &:focus {

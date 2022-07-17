@@ -2,7 +2,7 @@ import SwipeableList from '../components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../../components/common/Header';
 import DropBox from '../components/packingList/DropBox';
 import useAPI from '../../utils/hooks/useAPI';
@@ -27,7 +27,7 @@ function PackingList() {
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
-  const { data } = useQuery('packingList', () => getTogetherPackingList(), {});
+  const { data } = useQuery('packing-list', () => getTogetherPackingList(), {});
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(data?.data.alonePackingList?.length).fill(false),
   );
@@ -45,7 +45,6 @@ function PackingList() {
 
   const { alonePackingList, folder, currentFolder } = data.data;
   const packingList = alonePackingList;
-  queryClient.setQueryData('packing-list', packingList);
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -85,9 +84,11 @@ function PackingList() {
           rightButtonFn={() => {
             //togetherPackingListId params로 보내서 삭제
             setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-            // const data: PackingList[] = queryClient.getQueryData('packing-list') as PackingList[];
-            // queryClient.setQueryData('packing-list', data.slice(1));
-            // console.log(queryClient.getQueryData('packing-list'));
+            queryClient.setQueryData(
+              'packing-list',
+              packingList.filter((_, i) => i !== selectedIndex),
+            );
+            console.log(queryClient.getQueryData('packing-list'));
             closeModal();
           }}
         />

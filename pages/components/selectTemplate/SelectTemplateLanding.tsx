@@ -61,6 +61,7 @@ function SelectTemplateLanding() {
         </StyleButton>
         <StyleButton
           isTemplate={true}
+          disabled={!activateButton}
           isActivated={activateButton}
           onClick={() => {
             setIsTemplate(true);
