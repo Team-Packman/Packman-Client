@@ -114,7 +114,7 @@ const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>
         `
       : css`
           border: 1px solid ${packmanColors.pmBlack};
-          background-color: ${packmanColors.white};
+          background-color: ${packmanColors.pmWhite};
           color: ${packmanColors.pmBlack};
         `}
   ${({ isActivated }) =>

@@ -102,7 +102,7 @@ const ButtonStyle = styled.button`
   height: 4.1rem;
   border-radius: 0.3rem;
   background-color: ${packmanColors.pmPink};
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
   border-radius: 0.8rem;
   font-weight: 400;
   font-size: 1.4rem;
@@ -110,7 +110,7 @@ const ButtonStyle = styled.button`
 `;
 
 const StyledLeftButton = styled(ButtonStyle)`
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   color: ${packmanColors.pmDeepGrey};
   border: 1px solid ${packmanColors.pmDeepGrey};
 `;

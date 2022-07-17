@@ -1,38 +1,43 @@
 import React from 'react';
 import styled from 'styled-components';
 import FolderBox from './FolderBox';
-
 export interface FolderProps {
-  id: string;
-  title: string;
-  listNum: number;
+  id?: string;
+  title?: string;
+  listNum?: number;
 }
 export interface FolderListProps {
   list: FolderProps[];
-  categoryName: string;
-  editableFolderId: string;
+  categoryName?: string;
+  editableFolderId?: string;
+  isEditing: boolean;
   onClick(id: string, title: string): void;
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
   onKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void;
   onFolderClick(id: string, categoryName: string): void;
+  handleAddFolderChange(e: React.ChangeEvent<HTMLInputElement>): void;
+  handleAddFolderKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void;
+  handleCancleAddFolder(): void;
 }
 
 function FolderList(props: FolderListProps) {
-  const { list } = props;
+  const { list, isEditing } = props;
+
   return (
-    <StyledRoot>
+    <StyledListRoot>
+      {isEditing && <FolderBox key={0} isNew={isEditing} {...props} />}
       {list?.map((v) => (
-        <FolderBox key={v.id} {...v} {...props} />
+        <FolderBox key={v.id} isNew={false} {...v} {...props} />
       ))}
-    </StyledRoot>
+    </StyledListRoot>
   );
 }
 
 export default FolderList;
 
-export const StyledRoot = styled.section`
+export const StyledListRoot = styled.section`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   --auto-grid-min-size: 16rem;
 
   display: grid;

@@ -44,13 +44,13 @@ const StyledRoot = styled.div<{ isListEmpty: boolean; isSelected: boolean }>`
     isSelected
       ? css`
           border: 1px solid ${packmanColors.pmPink};
-          background-color: ${packmanColors.white};
+          background-color: ${packmanColors.pmWhite};
           color: ${packmanColors.pmPink};
         `
       : css`
           border: none;
           background-color: ${packmanColors.pmBlueGrey};
-          color: ${packmanColors.pmDarkGrey};
+          color: ${packmanColors.pmDeepGrey};
         `};
   color: ${({ isListEmpty }) => isListEmpty && packmanColors.pmGrey};
 `;

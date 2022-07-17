@@ -5,7 +5,7 @@ import iEdit from '../../../public/assets/svg/iEdit.svg';
 import iSwipeBar from '../../../public/assets/svg/iSwipeBar.svg';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ModalDataProps } from '../FolderLanding';
+import { ModalDataProps } from '../../components/folder/FolderLanding';
 
 interface BottomModalProps {
   content?: string;

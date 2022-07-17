@@ -73,9 +73,9 @@ const StyledContent = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   font-size: 1.8rem;
-  color: ${packmanColors.pmDarkGrey};
+  color: ${packmanColors.pmDeepGrey};
 
   & > picture {
     position: absolute;
