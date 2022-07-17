@@ -37,7 +37,7 @@ const StyledRoot = styled.div`
   top: 4.5rem;
   left: 2.997rem;
   width: 16rem;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   border-radius: 0.8rem;
   filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.1));
   z-index: 100;
@@ -50,6 +50,6 @@ const StyledItem = styled.div`
   height: 4.8rem;
   font-weight: 400;
   font-size: 1.5rem;
-  color: ${packmanColors.darkGray};
-  border-bottom: 1px solid ${packmanColors.gray};
+  color: ${packmanColors.pmDeepGrey};
+  border-bottom: 1px solid ${packmanColors.pmGrey};
 `;

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
 import template from '../public/assets/svg/template.svg';
-import Template from './components/Template';
+import Template from './components/selectTemplate/Template';
 import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
@@ -100,18 +100,18 @@ const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>
     isTemplate
       ? css`
           border: none;
-          background-color: ${packmanColors.pink};
-          color: ${packmanColors.white};
+          background-color: ${packmanColors.pmPink};
+          color: ${packmanColors.pmWhite};
         `
       : css`
-          border: 1px solid ${packmanColors.black};
-          background-color: ${packmanColors.white};
-          color: ${packmanColors.black};
+          border: 1px solid ${packmanColors.pmBlack};
+          background-color: ${packmanColors.pmWhite};
+          color: ${packmanColors.pmBlack};
         `}
   ${({ isActivated }) =>
     !isActivated &&
     css`
-      color: ${packmanColors.white};
-      background-color: ${packmanColors.gray};
+      color: ${packmanColors.pmWhite};
+      background-color: ${packmanColors.pmGrey};
     `}
 `;

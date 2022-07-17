@@ -69,9 +69,7 @@ const StyledRoot = styled.header`
   flex-direction: column;
 `;
 
-const StyledContent = styled.div<{
-  scroll: boolean;
-}>`
+const StyledContent = styled.div`
   width: 100%;
   height: 5.2rem;
   transition: height 0.3s ease, opacity 0.3s ease;
@@ -85,9 +83,9 @@ const StyledContent = styled.div<{
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   font-size: 1.8rem;
-  color: ${packmanColors.darkGray};
+  color: ${packmanColors.pmDeepGrey};
 
   & > picture {
     position: absolute;

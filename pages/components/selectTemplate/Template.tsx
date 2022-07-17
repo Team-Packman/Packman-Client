@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
 import TemplateList from './TemplateList';
-import TemplateItem from '../components/TemplateItem';
+import TemplateItem from './TemplateItem';
 
 interface Template {
   id: string;
