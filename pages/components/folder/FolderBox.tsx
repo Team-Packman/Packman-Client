@@ -1,50 +1,94 @@
 import Image from 'next/image';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { packmanColors } from '../../styles/color';
+import { packmanColors } from '../../../styles/color';
 import { FolderListProps, FolderProps } from './FolderList';
-import Kebab from '../assets/kebab.svg';
+import Kebab from '../../assets/kebab.svg';
+import Close from '../../assets/close.svg';
 
 type FolderBoxProps = FolderProps & Omit<FolderListProps, 'list'>;
-
-function FolderBox(props: FolderBoxProps) {
+interface T {
+  isNew: boolean;
+}
+function FolderBox(props: FolderBoxProps & T) {
   const {
-    id,
-    title,
-    listNum,
-    editableFolderId,
-    categoryName,
+    id = '',
+    title = '',
+    listNum = 0,
+    editableFolderId = '',
+    categoryName = '',
+    isNew = false,
     onClick: handleBottomModalOpen,
     onChange: handleFolderNameChange,
     onKeyPress: handleEnterKeyPress,
     onFolderClick: handleFolderClick,
+    handleAddFolderChange,
+    handleAddFolderKeyPress,
+    handleCancleAddFolder,
   } = props;
 
   const inputElement = useRef<HTMLInputElement>(null);
+
+  const onClickIcon = (id: string, title: string) => {
+    if (!isNew) {
+      handleBottomModalOpen(id, title);
+    } else {
+      handleCancleAddFolder();
+    }
+  };
+
+  const onClickFolder = (id: string, categoryName: string) => {
+    if (!isNew) {
+      handleFolderClick(id, categoryName);
+    }
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isNew) {
+      handleFolderNameChange(e);
+    } else {
+      handleAddFolderChange(e);
+    }
+  };
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isNew) {
+      handleEnterKeyPress(e);
+    } else {
+      handleAddFolderKeyPress(e);
+    }
+  };
 
   useEffect(() => {
     if (editableFolderId === id) {
       inputElement.current?.focus();
     }
   }, [editableFolderId, id]);
+
   return (
-    <StyledRoot key={id} onClick={() => handleFolderClick(id, categoryName)}>
+    <StyledRoot key={id}>
       <StyledInfo>
         <StyledKebab>
-          <span onClick={() => handleBottomModalOpen(id, title)}>
-            <Image src={Kebab} alt="kebab icon" width={3} height={14} />
+          <span onClick={() => onClickIcon(id, title)}>
+            {isNew ? (
+              <Image src={Close} alt="Close icon" width={14} height={14} />
+            ) : (
+              <Image src={Kebab} alt="kebab icon" width={3} height={14} />
+            )}
           </span>
         </StyledKebab>
-        <StyledText>
+        <StyledText onClick={() => onClickFolder(id, categoryName)}>
           <StyledTitle
             type="text"
             name="title"
             ref={inputElement}
-            defaultValue={title}
-            onChange={(e) => handleFolderNameChange(e)}
-            onKeyPress={handleEnterKeyPress}
-            disabled={editableFolderId !== id}
+            defaultValue={isNew ? '' : title}
+            placeholder={isNew ? '폴더 이름 입력' : ''}
+            onChange={(e) => onChange(e)}
+            onKeyPress={(e) => onKeyPress(e)}
+            disabled={isNew ? !isNew : editableFolderId !== id}
             autoFocus
+            isNew={isNew}
           />
           <StyledFolderInfo>{listNum}개의 리스트</StyledFolderInfo>
         </StyledText>
@@ -61,6 +105,7 @@ export const StyledRoot = styled.section`
   border-radius: 1rem;
   border-color: #fff;
   position: relative;
+  z-index: 1;
 
   &:before {
     position: absolute;
@@ -86,21 +131,26 @@ export const StyledKebab = styled.div`
   display: flex;
   justify-content: end;
   padding: 0.9rem 1.6rem 0 0;
+  z-index: 10;
+  cursor: pointer;
 `;
 
 export const StyledText = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   padding: 0 0 0.9rem 1.6rem;
+  height: 100%;
 `;
 
-export const StyledTitle = styled.input`
+export const StyledTitle = styled.input<{ isNew: boolean }>`
   font-size: 1.4rem;
   font-weight: 600;
   background: ${packmanColors.pmBlueGrey};
   border: 1px solid ${packmanColors.pmDeepGrey};
   border-radius: 0.4rem;
   margin: 0 0.8rem 0 0;
+  color: ${({ isNew }) => (isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`)};
 
   &:disabled {
     border: 0;
