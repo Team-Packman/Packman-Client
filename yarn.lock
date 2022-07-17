@@ -2178,8 +2178,6 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-<<<<<<< HEAD
-=======
 dom-helpers@^5.0.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-5.2.1.tgz#d9400536b2bf8225ad98fe052e029451ac40e902"
@@ -2188,7 +2186,6 @@ dom-helpers@^5.0.1:
     "@babel/runtime" "^7.8.7"
     csstype "^3.0.2"
 
->>>>>>> main
 dom7@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/dom7/-/dom7-4.0.4.tgz#8b68c5d8e5e2ed0fddb1cb93e433bc9060c8f3fb"
@@ -3938,6 +3935,11 @@ react-query@^3.39.1:
     broadcast-channel "^3.4.1"
     match-sorter "^6.0.2"
 
+react-swipeable-list@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/react-swipeable-list/-/react-swipeable-list-1.5.1.tgz#170efdfca7c757fdd8db0b8278fb1710aba87571"
+  integrity sha512-iBqFkVaNgRJtTW7hMXkQktgnyqEJYpiuFNgZqeGE8aSCnbQPFNpXjHwshfuf2Jb0lMuvweMf9kUrj8lhhsno1g==
+
 react-transition-group@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.2.tgz#8b59a56f09ced7b55cbd53c36768b922890d5470"
@@ -3947,10 +3949,6 @@ react-transition-group@^4.4.2:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
-react-swipeable-list@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/react-swipeable-list/-/react-swipeable-list-1.5.1.tgz#170efdfca7c757fdd8db0b8278fb1710aba87571"
-  integrity sha512-iBqFkVaNgRJtTW7hMXkQktgnyqEJYpiuFNgZqeGE8aSCnbQPFNpXjHwshfuf2Jb0lMuvweMf9kUrj8lhhsno1g==
 
 react@18.2.0:
   version "18.2.0"

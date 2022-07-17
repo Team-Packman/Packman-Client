@@ -6,48 +6,53 @@ import Kebab from '/public/assets/svg/kebab_ic.svg';
 
 interface PackingItemProps {
   name: string;
-  id: string;
+  listId: string;
   categoryId: string;
+  packId: string;
   isEditing: boolean;
   isChecked: boolean;
-  updateItem: (value: string, id: string, categoryId: string, isChecked?: boolean) => void;
   assginee?: ReactNode;
   example?: boolean;
   modalHandler?: () => void;
+  updateItem: (payload: {
+    name: string;
+    listId: string;
+    packId: string;
+    categoryId: string;
+    isChecked: boolean;
+  }) => void;
 }
 
 function PackingItem(props: PackingItemProps) {
   const {
-    name,
-    id,
     example,
+    name: itemName,
+    listId,
+    categoryId,
+    packId,
     assginee,
     updateItem,
     modalHandler,
     isChecked: check,
     isEditing,
-    categoryId,
   } = props;
   const [isEntered, setIsEntered] = useState(false);
   const [isChecked, setIsChecked] = useState(check);
-  const [value, setValue] = useState(name);
+  const [name, setName] = useState(itemName);
   const ref = useRef<HTMLInputElement | null>(null);
 
-  const handleValue = (value: string) => {
-    if (value.length < 13) {
-      setValue(value);
+  const handleValue = (name: string) => {
+    if (name.length < 13) {
+      setName(name);
     }
   };
+
   const saveResult = () => {
-    updateItem(value, id, categoryId, isChecked);
+    updateItem({ name, listId, categoryId, packId, isChecked });
   };
 
   const checkHandler = () => {
-    console.log({
-      name: value,
-      categoryId,
-      isChecked: !isChecked,
-    });
+    updateItem({ name, listId, categoryId, packId, isChecked });
     if (!isEditing) {
       setIsChecked((prev) => !prev);
     }
@@ -65,7 +70,7 @@ function PackingItem(props: PackingItemProps) {
         {isEditing ? (
           <StyledInput
             ref={ref}
-            value={value}
+            value={name}
             placeholder="짐을 입력해주세요"
             onChange={({ target: { value } }) => handleValue(value)}
             {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
@@ -76,11 +81,9 @@ function PackingItem(props: PackingItemProps) {
       </label>
       <StyledOptionWrapper>
         {assginee && assginee}
-        {!isEditing && (
-          <StyledKebab onClick={modalHandler}>
-            <Image src={Kebab} alt="kebab" layout="fill" />
-          </StyledKebab>
-        )}
+        <StyledKebab onClick={modalHandler}>
+          {!isEditing && <Image src={Kebab} alt="kebab" layout="fill" />}
+        </StyledKebab>
       </StyledOptionWrapper>
     </StyledRoot>
   );

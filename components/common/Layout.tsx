@@ -35,6 +35,7 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${packmanColors.white};
+  overflow: hidden;
 `;
 
 const StyledMain = styled.main<{
@@ -45,5 +46,6 @@ const StyledMain = styled.main<{
   padding: ${({ padding }) => (padding ? `0 2rem` : `0`)};
   padding-bottom: 1.6rem;
   background-color: ${packmanColors.white};
-  height: ${({ hasOption }) => (hasOption ? `calc(100vh)` : `calc(100vh - 5.2rem)`)};
+  height: ${({ hasOption }) =>
+    hasOption ? `calc(var(--vh, 1vh) * 100)` : `calc(var(--vh, 1vh) * 100 - 5.2rem)`};
 `;

@@ -110,6 +110,7 @@ const StyledTitle = styled.div`
 const StyledRandomButton = styled.button`
   width: 100%;
   height: 4rem;
+  color: ${packmanColors.black};
   background-color: ${packmanColors.white};
   border: 1px solid ${packmanColors.black};
   border-radius: 0.8rem;

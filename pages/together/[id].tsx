@@ -1,5 +1,5 @@
 import React from 'react';
-import PreviewLanding from '../../components/preview/PreviewLanding';
+import PreviewLanding from '../../components/together/PreviewLanding';
 import { AsyncBoundary } from '../../utils/AsyncBoundary';
 function Preview() {
   return (

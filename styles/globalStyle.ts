@@ -3,19 +3,24 @@ import reset from 'styled-reset';
 
 export const GlobalStyle = createGlobalStyle`
     ${reset}
-    
+
+    :root {
+        --vh: 100%;
+    }
+
     html,
     body {
         width: 100%;
-        height: 100%;
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
         padding: 0;
         margin: 0;
         line-height: 1.6;
         font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
             Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
         font-size: 62.5%;
+        position:fixed;
         overflow: hidden;
-
     }
 
     * {

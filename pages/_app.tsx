@@ -7,8 +7,8 @@ import { APIProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
-import Layout from './components/Layout';
 import { CssBaseline } from '@mui/material';
+import { setScreenSize } from '../utils/setScreenSize';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -26,6 +26,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       },
     });
   }, [queryClient]);
+
+  useEffect(() => {
+    setScreenSize();
+    window.addEventListener('resize', () => setScreenSize());
+    return () => window.removeEventListener('resize', setScreenSize);
+  });
 
   return (
     <>

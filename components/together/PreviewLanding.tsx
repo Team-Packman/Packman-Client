@@ -17,6 +17,16 @@ import useGlobalState from '../../utils/hooks/useGlobalState';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
 import PackerModal from './PackerModal';
+import BottomModal from '../../pages/components/common/BottomModal';
+import FunctionSection from '../common/FunctionSection';
+
+interface UpdateItemPayload {
+  name: string;
+  listId: string;
+  categoryId: string;
+  packId: string;
+  isChecked: boolean;
+}
 
 function PreviewLanding() {
   const client = useQueryClient();
@@ -106,22 +116,23 @@ function PreviewLanding() {
   };
   //id는 필요 x > categoryId 필요
   //add
-  const updateItem = (value: string, id: string, categoryId: string, isChecked?: boolean) => {
+  const updateItem = ({ name, listId, packId, categoryId, isChecked }: UpdateItemPayload) => {
     const prev: GetTogetherPackingListDeatilOutput | undefined =
       client.getQueryData('getPackingListDeatil');
 
     if (currentEditing) {
       console.log('update!!', {
-        name: value,
-        categoryId,
+        name,
+        listId,
         isChecked,
+        id: packId,
       });
 
-      if (value !== '') {
+      if (name !== '') {
         const category = prev?.data.togetherPackingList.category.map((e) => {
           e.pack.map((e) => {
-            if (e.id === id) {
-              e.name = value;
+            if (e.id === packId) {
+              e.name = name;
             }
             return e;
           });
@@ -134,8 +145,9 @@ function PreviewLanding() {
         client.setQueryData('getPackingListDeatil', newData);
       }
     } else if (currentCreating) {
-      console.log('add!!', {
-        name: value,
+      console.log('add!! pack', {
+        name,
+        listId,
         categoryId,
       });
 
@@ -144,19 +156,24 @@ function PreviewLanding() {
         category: prev?.data.togetherPackingList.category.map((e) => {
           if (e.id === categoryId) {
             e.pack.push({
-              id,
-              name: value,
+              id: 'created ID',
+              name,
               isChecked: false,
-              packer: {
-                id: '31232',
-                name: 'test',
-              },
+              packer: null,
             });
           }
         }),
       };
 
       client.setQueryData('getPackingListDeatil', newData);
+    } else if (!currentFocus) {
+      //Needs optimistic update
+      console.log('check!!', {
+        name,
+        listId,
+        isChecked: !isChecked,
+        id: packId,
+      });
     }
 
     setCurrentEditing('');
@@ -202,32 +219,30 @@ function PreviewLanding() {
             modeHandler={modeHandler}
             categoryHandler={creatingCategoryHandler}
           />
-          {packingRole.map((info, i) => {
+          {packingRole.map((list, i) => {
             return (
-              <SwiperSlide key={info.id} virtualIndex={i}>
+              <SwiperSlide key={list.id} virtualIndex={i}>
                 <StyledBody onScroll={ScrollEvent}>
-                  {info.category.map(({ id: categoryId, name, pack }) => (
+                  {list.category.map(({ id: categoryId, name, pack }) => (
                     <PackagesWithCategory
                       key={categoryId}
                       packages={
                         <>
-                          {pack.map(({ id, name, isChecked, packer }) => (
+                          {pack.map(({ id: packId, name, isChecked, packer }) => (
                             <PackingItem
-                              key={id}
-                              id={id}
+                              key={packId}
+                              listId={list.id}
                               categoryId={categoryId}
+                              packId={packId}
                               name={name}
                               isChecked={isChecked}
-                              modalHandler={() => bottomModalOpenHandler(id)}
-                              isEditing={currentEditing === id}
+                              modalHandler={() => bottomModalOpenHandler(packId)}
+                              isEditing={currentEditing === packId}
                               updateItem={updateItem}
                               assginee={
                                 <Packer
                                   packer={packer}
-                                  {...(packer && {
-                                    modalHandler: () => packerModalOpenHandler(id),
-                                  })}
-                                  // modalHandler={packer && (() => packerModalOpenHandler(packer.id))}
+                                  modalHandler={() => packerModalOpenHandler(packId)}
                                 />
                               }
                             />
@@ -238,8 +253,9 @@ function PreviewLanding() {
                       createHandler={() => creatingHandler(categoryId)}
                       creating={
                         <PackingItem
-                          id={'creating'}
+                          listId={list.id}
                           categoryId={categoryId}
+                          packId={'creating'}
                           name={''}
                           isChecked={false}
                           isEditing={true}
@@ -251,7 +267,7 @@ function PreviewLanding() {
                         //수정용
                         id={categoryId}
                         //생성용
-                        listId={info.id}
+                        listId={list.id}
                         name={name}
                         updateCategory={updateCategory}
                         modalHandler={() => bottomModalOpenHandler(categoryId)}
@@ -259,11 +275,11 @@ function PreviewLanding() {
                       />
                     </PackagesWithCategory>
                   ))}
-                  {currentCreatingCategory === info.id && (
+                  {currentCreatingCategory === list.id && (
                     <PackagesWithCategory>
                       <PackingCategory
                         id={'creating'}
-                        listId={info.id}
+                        listId={list.id}
                         name={''}
                         updateCategory={updateCategory}
                         isEditing={true}
@@ -275,6 +291,7 @@ function PreviewLanding() {
             );
           })}
         </Swiper>
+        <FunctionSection />
       </StyledPreviewLanding>
       {bottomModalOpen && (
         <StyledBg onClick={bottomModalCloseHandler}>
@@ -300,6 +317,7 @@ export default PreviewLanding;
 const StyledPreviewLanding = styled.div`
   height: 100%;
   background-color: ${packmanColors.white};
+  overflow: hidden;
 `;
 
 const StyledBody = styled.div`
@@ -310,7 +328,7 @@ const StyledBody = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: scroll;
-  padding-bottom: 15rem;
+  margin-bottom: 24.4rem;
   padding: 0 2rem;
 `;
 const StyledBg = styled.div`

@@ -157,7 +157,7 @@ export const fetchPackingListDetail = async (
               },
               {
                 id: 'cate312d1rtd13',
-                name: '의류랑 약',
+                name: '마지막',
                 pack: [
                   {
                     id: 'pack3331324u3242',
