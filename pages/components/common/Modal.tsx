@@ -23,8 +23,6 @@ export default function Modal(props: ModalProps) {
     isWithDrawn,
   } = props;
 
-  console.log(isWithDrawn);
-
   return (
     <>
       <StyledRoot onClick={closeModal} />
@@ -113,8 +111,8 @@ const ButtonStyle = styled.button`
 
 const StyledLeftButton = styled(ButtonStyle)`
   background-color: ${packmanColors.pmWhite};
-  color: ${packmanColors.pmBlueGrey};
-  border: 1px solid ${packmanColors.pmBlueGrey};
+  color: ${packmanColors.pmDeepGrey};
+  border: 1px solid ${packmanColors.pmDeepGrey};
 `;
 
 const StyledRightButton = styled(ButtonStyle)``;

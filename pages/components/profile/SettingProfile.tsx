@@ -42,7 +42,7 @@ function SettingProfile(props: SettingProfileProps) {
             <p>{email}</p>
           </div>
         </StyledProfile>
-        <div style={{ borderBottom: `1px solid ${packmanColors.gray}`, width: '100%' }}></div>
+        <div style={{ borderBottom: `1px solid ${packmanColors.pmGrey}`, width: '100%' }}></div>
 
         <StyledEtc gap={0.72} paddingTop={2.95} borderBottom={true}>
           <h1>설정</h1>
@@ -107,7 +107,7 @@ const StyledRoot = styled.div`
   & > p {
     /* position: absolute;
     bottom: 0; */
-    color: ${packmanColors.gray};
+    color: ${packmanColors.pmGrey};
     font-weight: 300;
     font-size: 1.2rem;
   }
@@ -126,7 +126,7 @@ const StyledSettingWrapper = styled.main`
     position: absolute;
     top: -3.5rem;
     right: 0.5rem;
-    color: ${packmanColors.darkGray};
+    color: ${packmanColors.pmDarkGrey};
     font-weight: 600;
     font-size: 1.4rem;
   }
@@ -134,7 +134,7 @@ const StyledSettingWrapper = styled.main`
     position: absolute;
     top: 0.5rem;
     right: 1.5rem;
-    color: ${packmanColors.deepGray};
+    color: ${packmanColors.pmDeepGrey};
     font-weight: 600;
     font-size: 1.2rem;
   }
@@ -143,7 +143,7 @@ const StyledProfile = styled.div`
   display: flex;
   padding: 1.6rem;
   gap: 2.4rem;
-  background-color: ${packmanColors.blueGray};
+  background-color: ${packmanColors.pmBlueGrey};
   width: 100%;
   border-radius: 0.8rem;
   margin-bottom: 0.8rem;
@@ -153,7 +153,7 @@ const StyledProfile = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 2.6rem;
-    color: ${packmanColors.black};
+    color: ${packmanColors.pmBlack};
     & > h1 {
       font-weight: 600;
       font-size: 1.8rem;
@@ -183,12 +183,12 @@ const StyledEtc = styled.div<{ gap: number; paddingTop: number; borderBottom: bo
   flex-direction: column;
   width: 100%;
   padding: ${({ paddingTop }) => paddingTop}rem 0.75rem 1.9rem 1.6rem;
-  border-bottom: ${({ borderBottom }) => borderBottom && `1px solid ${packmanColors.gray}`};
+  border-bottom: ${({ borderBottom }) => borderBottom && `1px solid ${packmanColors.pmGrey}`};
 
   gap: ${({ gap }) => `${gap}rem`};
 
   & > h1 {
-    color: ${packmanColors.black};
+    color: ${packmanColors.pmBlack};
     font-weight: 600;
     font-size: 1.8rem;
   }

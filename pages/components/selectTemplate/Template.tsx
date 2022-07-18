@@ -13,7 +13,7 @@ interface TemplateProps {
   isAloned: boolean;
   basicTemplate: Template[];
   myTemplate: Template[];
-  activate: () => void;
+  activate: (isSelected: string) => void;
 }
 
 function Template(props: TemplateProps) {
@@ -21,12 +21,14 @@ function Template(props: TemplateProps) {
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
-    setIsSelected(id);
+    if (isSelected.includes(id)) {
+      setIsSelected('');
+    } else {
+      setIsSelected(id);
+    }
   };
   useEffect(() => {
-    if (isSelected !== '') {
-      activate();
-    }
+    activate(isSelected);
   }, [isSelected]);
 
   return (
@@ -85,6 +87,12 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  height: 33rem;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 const StyledTemplateWrapper = styled.div`
   display: flex;
@@ -95,11 +103,11 @@ const StyledTemplateWrapper = styled.div`
   & > h1 {
     font-weight: 600;
     font-size: 1.6rem;
-    color: ${packmanColors.black};
+    color: ${packmanColors.pmBlack};
   }
   & > p {
     font-weight: 400;
     font-size: 1.2rem;
-    color: ${packmanColors.deepGray};
+    color: ${packmanColors.pmDeepGrey};
   }
 `;
