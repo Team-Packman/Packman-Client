@@ -1,4 +1,4 @@
-export const setCarret = (ref: HTMLSpanElement | null) => {
+export const setCaret = (ref: HTMLSpanElement | null) => {
   if (ref) {
     const newRange = document.createRange();
     if (ref.childNodes.length > 0) {
@@ -6,8 +6,10 @@ export const setCarret = (ref: HTMLSpanElement | null) => {
       newRange.setEnd(ref.childNodes[0], ref.innerText.length);
 
       const selection = document.getSelection();
-      selection?.removeAllRanges();
-      selection?.addRange(newRange);
+      if (selection) {
+        selection?.removeAllRanges();
+        selection?.addRange(newRange);
+      }
     }
   }
 };

@@ -3,14 +3,19 @@ import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { editHandler } from '../../utils/editHandler';
-import { setCarret } from '../../utils/setCarret';
+import { setCaret } from '../../utils/setCaret';
 import Kebab from '/public/assets/svg/kebab_ic.svg';
 
+export interface UpdateCategoryPayload {
+  listId: string;
+  categoryId: string;
+  name: string;
+}
 interface PackingCategoryProps {
-  id: string;
+  categoryId: string;
   listId: string;
   name: string;
-  updateCategory: (value: string, id: string, listId: string) => void;
+  updateCategory: (payload: UpdateCategoryPayload) => void;
   modalHandler?: () => void;
   isEditing: boolean;
   example?: boolean;
@@ -19,29 +24,42 @@ interface PackingCategoryProps {
 const MAX_LENGTH = 12;
 
 function PackingCategory(props: PackingCategoryProps) {
-  const { example, name, id, listId, updateCategory, modalHandler, isEditing } = props;
+  const {
+    example,
+    name: nameProps,
+    categoryId,
+    listId,
+    updateCategory,
+    modalHandler,
+    isEditing,
+  } = props;
   const [isEntered, setIsEntered] = useState(false);
-  const [value, setValue] = useState(name);
+  const [name, setName] = useState(nameProps);
   const ref = useRef<HTMLSpanElement | null>(null);
 
   const saveResult = () => {
-    updateCategory(value, id, listId);
+    const payload = {
+      name: name === '' ? nameProps : name,
+      categoryId,
+      listId,
+    };
+    updateCategory(payload);
   };
 
   useEffect(() => {
     if (isEditing && ref.current) {
       ref.current.focus();
-      setCarret(ref.current);
+      setCaret(ref.current);
     }
   }, [isEditing]);
 
   const handleChange = ({ currentTarget: { innerText } }: FormEvent<HTMLSpanElement>) => {
     if (innerText.length <= MAX_LENGTH) {
-      setValue(innerText);
+      setName(innerText);
     } else {
       if (ref.current) {
-        ref.current.innerText = value;
-        setCarret(ref.current);
+        ref.current.innerText = name;
+        setCaret(ref.current);
       }
     }
   };
@@ -56,7 +74,7 @@ function PackingCategory(props: PackingCategoryProps) {
           onInput={handleChange}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
         >
-          {name}
+          {nameProps}
         </StyledCategory>
       ) : (
         <StyledCategory>{name}</StyledCategory>

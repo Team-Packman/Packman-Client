@@ -32,8 +32,10 @@ function CheckListHeader(props: CheckListHeaderProps) {
   const saveTitle = () => {
     const payload = {
       listId,
-      title,
+      title: title === '' ? titleProps : title,
     };
+
+    title === '' && setTitle(titleProps); // for demo
     updateRemainingInfo(payload, 'title');
     setIsEditing(false);
   };

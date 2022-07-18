@@ -4,6 +4,13 @@ import styled from 'styled-components';
 import { editHandler } from '../../utils/editHandler';
 import Kebab from '/public/assets/svg/kebab_ic.svg';
 
+export interface UpdateItemPayload {
+  name: string;
+  listId: string;
+  categoryId: string;
+  packId: string;
+  isChecked: boolean;
+}
 interface PackingItemProps {
   name: string;
   listId: string;
@@ -14,19 +21,15 @@ interface PackingItemProps {
   assginee?: ReactNode;
   example?: boolean;
   modalHandler?: () => void;
-  updateItem: (payload: {
-    name: string;
-    listId: string;
-    packId: string;
-    categoryId: string;
-    isChecked: boolean;
-  }) => void;
+  updateItem: (payload: UpdateItemPayload) => void;
 }
+
+const MAX_LENGTH = 12;
 
 function PackingItem(props: PackingItemProps) {
   const {
     example,
-    name: itemName,
+    name: nameProps,
     listId,
     categoryId,
     packId,
@@ -38,17 +41,25 @@ function PackingItem(props: PackingItemProps) {
   } = props;
   const [isEntered, setIsEntered] = useState(false);
   const [isChecked, setIsChecked] = useState(check);
-  const [name, setName] = useState(itemName);
+  const [name, setName] = useState(nameProps);
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleValue = (name: string) => {
-    if (name.length < 13) {
+    if (name.length <= MAX_LENGTH) {
       setName(name);
     }
   };
 
   const saveResult = () => {
-    updateItem({ name, listId, categoryId, packId, isChecked });
+    const payload = {
+      name: name === '' ? nameProps : name,
+      listId,
+      categoryId,
+      packId,
+      isChecked,
+    };
+    name === '' && setName(nameProps); // for demo
+    updateItem(payload);
   };
 
   const checkHandler = () => {

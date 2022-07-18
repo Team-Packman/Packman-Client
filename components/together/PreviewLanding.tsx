@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
 import { useQuery, useQueryClient } from 'react-query';
 import PackagesWithCategory from '../common/PackagesWithCategory';
-import PackingCategory from '../common/PackingCategory';
+import PackingCategory, { UpdateCategoryPayload } from '../common/PackingCategory';
 import CheckListHeader from './CheckListHeader';
 import { Pagination, Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/bundle';
 import CheckListSubHeader from './CheckListSubHeader';
 import { GetTogetherPackingListDeatilOutput } from '../../service/packingList/together';
-import PackingItem from '../common/PackingItem';
+import PackingItem, { UpdateItemPayload } from '../common/PackingItem';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
@@ -20,14 +20,6 @@ import PackerModal from './PackerModal';
 import BottomModal from '../../pages/components/common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
-
-interface UpdateItemPayload {
-  name: string;
-  listId: string;
-  categoryId: string;
-  packId: string;
-  isChecked: boolean;
-}
 
 interface RemainingInfoPayload {
   listId: string;
@@ -97,10 +89,11 @@ function PreviewLanding() {
     setCurrentFocus('');
     setPackerModalOpen(false);
   };
-  const updateCategory = (name: string, id: string, listId: string) => {
+  const updateCategory = (payload: UpdateCategoryPayload) => {
+    const { name, categoryId, listId } = payload;
     if (currentEditing) {
       console.log('update category', {
-        id,
+        id: categoryId,
         name,
       });
     } else if (currentCreatingCategory) {
@@ -116,7 +109,7 @@ function PreviewLanding() {
     const prev: GetTogetherPackingListDeatilOutput | undefined =
       client.getQueryData('getPackingListDeatil');
     const category = prev?.data.togetherPackingList.category.map((e) => {
-      if (e.id === id) {
+      if (e.id === categoryId) {
         e.name = name;
       }
       return e;
@@ -318,7 +311,7 @@ function PreviewLanding() {
                     >
                       <PackingCategory
                         //수정용
-                        id={categoryId}
+                        categoryId={categoryId}
                         //생성용
                         listId={list.id}
                         name={name}
@@ -331,7 +324,7 @@ function PreviewLanding() {
                   {currentCreatingCategory === list.id && (
                     <PackagesWithCategory>
                       <PackingCategory
-                        id={'creating'}
+                        categoryId={'creating'}
                         listId={list.id}
                         name={''}
                         updateCategory={updateCategory}
