@@ -11,6 +11,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../components/common/Modal';
 import { packmanColors } from '../../styles/color';
+import FloatActionButton from '../components/folder/FloatActionButton';
 
 interface PackingList {
   id: string;
@@ -105,6 +106,15 @@ function PackingList() {
     }
     closeModal();
   };
+
+  const handleFloatClick = (index: number) => {
+    if (index === 0) {
+      router.push('/pakingList/together');
+    } else if (index === 1) {
+      router.push('/packingList/alone');
+    }
+  };
+
   return (
     <StyledRoot onTouchMove={() => setToggle(false)}>
       <Header back title="패킹 리스트" icon="profile" />
@@ -208,6 +218,7 @@ function PackingList() {
           </>
         )}
       </StyledMain>
+      <FloatActionButton onClick={handleFloatClick} pageName="packingList" />
     </StyledRoot>
   );
 }

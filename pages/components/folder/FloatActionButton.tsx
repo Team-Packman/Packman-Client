@@ -6,9 +6,11 @@ import FABOPEN from '../../assets/fab_rotate.svg';
 import { Backdrop } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { packmanColors } from '../../../styles/color';
+import { isNonNullChain } from 'typescript';
 
 interface FloatModalProps {
   onClick(index: number): void;
+  pageName: string;
 }
 const useStyles = makeStyles(() => ({
   backdrop: {
@@ -18,7 +20,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 // ref : https://www.upbeatcode.com/react/implement-floating-action-button-in-react/
-const FloatActionButton = ({ onClick: handleFloatClick }: FloatModalProps) => {
+const FloatActionButton = (props: FloatModalProps) => {
+  const { onClick: handleFloatClick, pageName } = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -36,10 +39,15 @@ const FloatActionButton = ({ onClick: handleFloatClick }: FloatModalProps) => {
     { icon: '📂', name: '폴더 추가 ' },
   ];
 
+  const actionsForPackingList = [
+    { icon: '👐🏻', name: '함께 리스트 추가' },
+    { icon: '☝🏻', name: '혼자 리스트 추가' },
+  ];
+
   return (
     <>
       <Backdrop open={open} className={classes.backdrop} onClick={handleOpen} />
-      <StyledFABContainer>
+      <StyledFABContainer pageName={pageName}>
         <li onClick={handleOpen}>
           {open ? (
             <Image src={FABOPEN} width={63} height={63} alt="FAB" />
@@ -47,19 +55,33 @@ const FloatActionButton = ({ onClick: handleFloatClick }: FloatModalProps) => {
             <Image src={FAB} width={63} height={63} alt="FAB" />
           )}
         </li>
-        {actions.map((action, index) => (
-          <StyledList
-            style={{ transitionDelay: `${index * 25}ms` }}
-            className="fab-action"
-            key={action.name}
-            open={open}
-            index={index}
-            onClick={() => handleActionClick(index)}
-          >
-            <span className="tooltip">{action.icon}</span>
-            <span className="tooltip">{action.name}</span>
-          </StyledList>
-        ))}
+        {pageName === 'folder'
+          ? actions.map((action, index) => (
+              <StyledList
+                style={{ transitionDelay: `${index * 25}ms` }}
+                className="fab-action"
+                key={action.name}
+                open={open}
+                index={index}
+                onClick={() => handleActionClick(index)}
+              >
+                <span className="tooltip">{action.icon}</span>
+                <span className="tooltip">{action.name}</span>
+              </StyledList>
+            ))
+          : actionsForPackingList.map((action, index) => (
+              <StyledList
+                style={{ transitionDelay: `${index * 25}ms` }}
+                className="fab-action"
+                key={action.name}
+                open={open}
+                index={index}
+                onClick={() => handleActionClick(index)}
+              >
+                <span className="tooltip">{action.icon}</span>
+                <span className="tooltip">{action.name}</span>
+              </StyledList>
+            ))}
       </StyledFABContainer>
     </>
   );
@@ -67,7 +89,7 @@ const FloatActionButton = ({ onClick: handleFloatClick }: FloatModalProps) => {
 
 export default FloatActionButton;
 
-export const StyledFABContainer = styled.ul`
+export const StyledFABContainer = styled.ul<{ pageName: string }>`
   display: flex;
   // Display actions from bottom to top
   flex-direction: column-reverse;
@@ -87,7 +109,7 @@ export const StyledFABContainer = styled.ul`
   max-height: 52px;
 
   li:last-child {
-    margin-bottom: 0.8rem;
+    margin-bottom: ${({ pageName }) => pageName === 'folder' && '0.8rem'};
     border-radius: 0.8rem;
   }
 

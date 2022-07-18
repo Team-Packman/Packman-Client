@@ -205,7 +205,9 @@ function FolderLanding() {
             />
           )}
         </SwiperContainer>
-        {isRecentListExist && !showBottomModal && <FloatActionButton onClick={handleFloatClick} />}
+        {isRecentListExist && !showBottomModal && (
+          <FloatActionButton onClick={handleFloatClick} pageName="folder" />
+        )}
         {showBottomModal && (
           <BottomModal
             closeModal={() => {
