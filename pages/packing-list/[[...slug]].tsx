@@ -1,14 +1,14 @@
+import { useState } from 'react';
 import SwipeableList from '../components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
-import { useState } from 'react';
+import iTrash from '../../public/assets/svg/iTrash.svg';
 import Header from '../../components/common/Header';
 import DropBox from '../components/packingList/DropBox';
 import useAPI from '../../utils/hooks/useAPI';
 import { useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import iTrash from '../../public/assets/svg/iTrash.svg';
 import Modal from '../components/common/Modal';
 import { packmanColors } from '../../styles/color';
 
@@ -25,7 +25,7 @@ function PackingList() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
   const { data } = useQuery('packing-list', () => getTogetherPackingList(), {});
   const [isDragged, setIsDragged] = useState<boolean[]>(
@@ -72,48 +72,54 @@ function PackingList() {
     setShowModal(false);
   };
 
+  const onClickLeftModalButton = () => {
+    handleIsDragged(Array(packingList?.length).fill(false));
+    closeModal();
+  };
+
+  const onClickRightModalButton = () => {
+    setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
+    if (isDeleting) {
+      queryClient.setQueryData('packing-list', (oldData: any) => {
+        return {
+          ...oldData,
+          data: {
+            alonePackingList: packingList.filter(({ id }) => !deleteList.includes(id)),
+            currentFolder,
+            folder,
+          },
+        };
+      });
+      setDeleteList([]);
+    } else {
+      queryClient.setQueryData('packing-list', (oldData: any) => {
+        return {
+          ...oldData,
+          data: {
+            alonePackingList: packingList.filter((_, i) => i !== selectedIndex),
+            currentFolder,
+            folder,
+          },
+        };
+      });
+    }
+    closeModal();
+  };
   return (
     <StyledRoot onTouchMove={() => setToggle(false)}>
       <Header back title="패킹 리스트" icon="profile" />
       {showModal && (
         <Modal
-          content="정말 삭제하시겠어요?"
-          leftButtonContent="아니오"
-          rightButtonContent="예"
+          title="정말 삭제하시겠어요?"
           closeModal={closeModal}
-          leftButtonFn={() => {
-            handleIsDragged(Array(packingList?.length).fill(false));
-            closeModal();
-          }}
-          rightButtonFn={() => {
-            //togetherPackingListId params로 보내서 삭제
-            setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-            if (isDeleting) {
-              queryClient.setQueryData('packing-list', (oldData: any) => {
-                return {
-                  ...oldData,
-                  data: {
-                    alonePackingList: packingList.filter(({ id }) => !deleteList.includes(id)),
-                    currentFolder,
-                    folder,
-                  },
-                };
-              });
-              setDeleteList([]);
-            } else {
-              queryClient.setQueryData('packing-list', (oldData: any) => {
-                return {
-                  ...oldData,
-                  data: {
-                    alonePackingList: packingList.filter((_, i) => i !== selectedIndex),
-                    currentFolder,
-                    folder,
-                  },
-                };
-              });
-            }
-            closeModal();
-          }}
+          button={
+            <StyledModalButtonWrapper>
+              <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                아니요
+              </StyledModalButton>
+              <StyledModalButton onClick={onClickRightModalButton}>예</StyledModalButton>
+            </StyledModalButtonWrapper>
+          }
         />
       )}
 
@@ -292,4 +298,20 @@ const StyledCaptionButtonWrapper = styled.div`
   & > p {
     color: ${packmanColors.pmDeepGrey};
   }
+`;
+const StyledModalButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+`;
+const StyledModalButton = styled.button<{ left?: boolean }>`
+  width: 13.5rem;
+  height: 3.4rem;
+  border: ${({ left }) => (left ? `1px solid ${packmanColors.pmDeepGrey}` : 'none')};
+  color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
+  background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
+  border-radius: 0.8rem;
+  font-weight: 600;
+  font-size: 1.5rem;
 `;
