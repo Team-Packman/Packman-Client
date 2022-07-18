@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import styled from 'styled-components';
 import SwiperCore, { Virtual, Navigation, Pagination } from 'swiper';
@@ -80,6 +80,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   flex-direction: column;
   align-items: center;
   width: calc(100% - 4rem);
+  height: 100vh;
 `;
 
 export const StyledSwiper = styled(Swiper)`

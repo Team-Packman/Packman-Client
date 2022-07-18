@@ -7,7 +7,6 @@ import { APIProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
-import Layout from './components/Layout';
 import { CssBaseline } from '@mui/material';
 
 function MyApp({ Component, pageProps }: AppProps) {

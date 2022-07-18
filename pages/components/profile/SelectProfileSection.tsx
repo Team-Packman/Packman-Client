@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import tempBox from '../../../public/assets/svg/tempBox.svg';
+import { UpdateUserProfileInput } from '../../../service/user';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 
@@ -16,16 +18,12 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const { isEditing, oldNickname, finishEditing } = props;
   const [nickname, setNickname] = useState('');
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   //프로필 수정
   const updateUserProfile = useAPI(
-    (api) => () =>
-      api.user.updateUserProfile({
-        nickname,
-        profileImageId: '3',
-      }),
+    (api) => (info: UpdateUserProfileInput) => api.user.updateUserProfile(info),
   );
-  //   const { data } = useQuery('user', () => updateUserProfile());
 
   const setIsActivate = () => {
     if (isEditing) {
@@ -44,7 +42,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     <StyledRoot>
       <Image src={tempBox} alt="임시네모" width={120} height={120} />
       <StyledInputWrapper>
-        <StyleInput
+        <StyledInput
           type="text"
           placeholder="김팩맨"
           value={nickname}
@@ -62,22 +60,26 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       <StyledSelectProfileWrapper>
         {Array(6)
           .fill(1)
-          .map((idx) => (
+          .map((_, idx) => (
             <Image key={idx} src={tempBox} alt="임시네모" width={80} height={80} />
           ))}
       </StyledSelectProfileWrapper>
       <StyledButton
         type="button"
+        disabled={!setIsActivate()}
         isActivate={setIsActivate()}
         onClick={
           isEditing
-            ? () => {
+            ? async () => {
                 if (finishEditing) {
-                  updateUserProfile;
+                  const data = await updateUserProfile({
+                    nickname,
+                    profileImageId: '3',
+                  });
                   finishEditing();
                 }
               }
-            : () => router.push('/packing-list')
+            : () => router.push('/folder')
         }
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
@@ -106,7 +108,7 @@ const StyledText = styled.p<{ nickname: boolean }>`
   font-weight: 400;
   font-size: 1.3rem;
 `;
-const StyleInput = styled.input`
+const StyledInput = styled.input`
   width: 12rem;
   text-align: center;
   font-weight: 600;
@@ -114,6 +116,7 @@ const StyleInput = styled.input`
   color: ${packmanColors.pmBlack};
   border: none;
   border-bottom: 1px solid ${packmanColors.pmDeepGrey};
+  border-radius: 0;
   margin-top: 1.6rem;
 
   &:focus {

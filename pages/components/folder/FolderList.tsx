@@ -25,10 +25,12 @@ function FolderList(props: FolderListProps) {
 
   return (
     <StyledListRoot>
-      {isEditing && <FolderBox key={0} isNew={isEditing} {...props} />}
-      {list?.map((v) => (
-        <FolderBox key={v.id} isNew={false} {...v} {...props} />
-      ))}
+      <StyledWrapper>
+        {isEditing && <FolderBox key={0} isNew={isEditing} {...props} />}
+        {list?.map((v) => (
+          <FolderBox key={v.id} isNew={false} {...v} {...props} />
+        ))}
+      </StyledWrapper>
     </StyledListRoot>
   );
 }
@@ -38,9 +40,12 @@ export default FolderList;
 export const StyledListRoot = styled.section`
   width: 100%;
   height: 100%;
-  --auto-grid-min-size: 16rem;
+`;
 
+export const StyledWrapper = styled.div`
+  --auto-grid-min-size: 16rem;
   display: grid;
+  align-items: start;
   grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
   grid-gap: 1rem;
   justify-items: stretch;
