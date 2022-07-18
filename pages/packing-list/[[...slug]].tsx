@@ -221,6 +221,7 @@ const StyledMain = styled.div<{ isEmpty: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
   height: ${({ isEmpty }) => isEmpty && '61.8rem'};
 `;
 const StyledEmpty = styled.div`
@@ -251,7 +252,7 @@ const StyledCaptionWrapper = styled.div`
 const StyledCaptionText = styled.p`
   display: flex;
   justify-content: start;
-  padding: 1.8rem 0 0 0.4rem;
+  padding: 1.8rem 0 0 2.4rem;
   margin: 0;
   font-size: 1.4rem;
   color: ${packmanColors.pmDeepGrey};
