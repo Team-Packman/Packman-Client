@@ -97,7 +97,7 @@ export const StyledFABContainer = styled.ul<{ pageName: string }>`
   list-style: none;
   margin: 0;
   padding: 0;
-  z-index: 1050;
+  z-index: 105;
 
   // Display button to the bottom right
   position: fixed;
