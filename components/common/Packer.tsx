@@ -69,7 +69,7 @@ const StyledRoot = styled.button<{
   }
 
   & > span {
-    width: 5.1rem;
+    width: 5.3rem;
     font-size: 1.4rem;
     letter-spacing: 0.04em;
     flex-shrink: 0;

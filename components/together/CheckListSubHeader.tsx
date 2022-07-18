@@ -80,15 +80,6 @@ const StyledButtonWrapper = styled.div`
   justify-content: space-between;
   margin-right: 2rem;
   z-index: 1;
-
-  & > button:first-child {
-    width: 4rem;
-    flex-shrink: 0;
-  }
-  & > button:last-child {
-    width: 7.8rem;
-    flex-shrink: 0;
-  }
 `;
 const StyledButton = styled.button`
   height: 2.4rem;
@@ -99,6 +90,7 @@ const StyledButton = styled.button`
   font-size: 1.4rem;
   color: ${packmanColors.darkGray};
   padding: 0;
+  flex-shrink: 0;
 `;
 
 const StyledLine = styled.div`
