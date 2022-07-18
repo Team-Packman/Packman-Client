@@ -13,14 +13,6 @@ import Modal from '../components/common/Modal';
 import { packmanColors } from '../../styles/color';
 import FloatActionButton from '../components/folder/FloatActionButton';
 
-interface PackingList {
-  id: string;
-  departureDate: string;
-  title: string;
-  packTotalNum: number;
-  packRemainNum: number;
-}
-
 function PackingListLanding() {
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -218,7 +210,7 @@ function PackingListLanding() {
           </>
         )}
       </StyledMain>
-      <FloatActionButton onClick={handleFloatClick} pageName="packingList" />
+      {!isDeleting && <FloatActionButton onClick={handleFloatClick} pageName="packingList" />}
     </StyledRoot>
   );
 }
