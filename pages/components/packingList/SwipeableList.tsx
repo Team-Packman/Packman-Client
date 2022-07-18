@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import SwipeablelistItem from './SwipeableListItem';
 import { packmanColors } from '../../../styles/color';
@@ -36,7 +35,7 @@ export default function SwipeableList(props: SwipeableListProps) {
   } = props;
 
   return (
-    <StyledRoot isEmpty={!packingList.length}>
+    <StyledRoot>
       <StyledSwipeableListWrapper>
         {packingList?.map((item, idx) => (
           <SwipeablelistItem
@@ -93,10 +92,10 @@ export default function SwipeableList(props: SwipeableListProps) {
   );
 }
 
-const StyledRoot = styled.div<{ isEmpty: boolean }>`
+const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: ${({ isEmpty }) => isEmpty && 'center'};
+  justify-content: center;
   align-items: center;
   width: 100%;
   gap: 0.8rem;

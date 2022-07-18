@@ -27,16 +27,23 @@ export const fetchPackingListWithFolders = async (
           listNum: 20,
           alonePackingList: [
             {
-              id: '62bbb80d9d5dc1aa4c3d28317',
+              id: '62bbb80d9d5dc1aa4c3d28311',
               departureDate: '2021.08.15',
               title: '혼자 밀라노 여행을가자',
               packTotalNum: 25,
               packRemainNum: 20,
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d28328',
+              id: '62bbb80d9d5dc1aa4c3d28322',
               departureDate: '2021.12.20',
               title: '크리스마스 여행',
+              packTotalNum: 30,
+              packRemainNum: 20,
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28323',
+              departureDate: '2022.11.06',
+              title: '대만 ㄱㄱ',
               packTotalNum: 30,
               packRemainNum: 20,
             },

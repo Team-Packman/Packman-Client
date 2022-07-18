@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import tempBox from '../../../public/assets/svg/tempBox.svg';
+import { UpdateUserProfileInput } from '../../../service/user';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 
@@ -16,16 +18,12 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const { isEditing, oldNickname, finishEditing } = props;
   const [nickname, setNickname] = useState('');
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   //프로필 수정
   const updateUserProfile = useAPI(
-    (api) => () =>
-      api.user.updateUserProfile({
-        nickname,
-        profileImageId: '3',
-      }),
+    (api) => (info: UpdateUserProfileInput) => api.user.updateUserProfile(info),
   );
-  //   const { data } = useQuery('user', () => updateUserProfile());
 
   const setIsActivate = () => {
     if (isEditing) {
@@ -62,7 +60,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       <StyledSelectProfileWrapper>
         {Array(6)
           .fill(1)
-          .map((idx) => (
+          .map((_, idx) => (
             <Image key={idx} src={tempBox} alt="임시네모" width={80} height={80} />
           ))}
       </StyledSelectProfileWrapper>
@@ -72,9 +70,12 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         isActivate={setIsActivate()}
         onClick={
           isEditing
-            ? () => {
+            ? async () => {
                 if (finishEditing) {
-                  updateUserProfile;
+                  const data = await updateUserProfile({
+                    nickname,
+                    profileImageId: '3',
+                  });
                   finishEditing();
                 }
               }
@@ -140,7 +141,7 @@ const StyledButton = styled.button<{ isActivate: boolean }>`
   padding: 1.2rem 6.4rem;
   font-weight: 600;
   font-size: 1.4rem;
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
   background-color: ${({ isActivate }) =>
     isActivate ? packmanColors.pmPink : packmanColors.pmGrey};
 `;

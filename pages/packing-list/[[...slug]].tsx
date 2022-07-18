@@ -2,7 +2,7 @@ import SwipeableList from '../components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Header from '../../components/common/Header';
 import DropBox from '../components/packingList/DropBox';
 import useAPI from '../../utils/hooks/useAPI';
@@ -29,7 +29,9 @@ function PackingList() {
   const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
   const { data } = useQuery('packing-list', () => getTogetherPackingList(), {});
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data && data?.data.alonePackingList?.length).fill(false),
+    Array(
+      data && data.data && data.data.alonePackingList && data?.data.alonePackingList?.length,
+    ).fill(false),
   );
 
   const router = useRouter();
@@ -40,11 +42,13 @@ function PackingList() {
   const categoryName = router.query.slug[0]; //together | alone
   const folderId = router.query.slug[1];
 
-  if (!data) return null;
+  if (!data || !data.data) return null;
   //api alone/together 둘다 호출하고 categoryName에 따라 packingList에 할당하자.
 
-  const { alonePackingList, folder, currentFolder } = data.data;
-  const packingList = alonePackingList;
+  // const { alonePackingList, folder, currentFolder } = data.data;
+  const packingList = data?.data?.alonePackingList;
+  const folder = data?.data?.folder;
+  const currentFolder = data?.data?.currentFolder;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -84,11 +88,30 @@ function PackingList() {
           rightButtonFn={() => {
             //togetherPackingListId params로 보내서 삭제
             setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-            // queryClient.setQueryData(
-            //   'packping-list',
-            //   packingList.filter((_, i) => i !== selectedIndex),
-            // );
-            console.log(queryClient.getQueryData('packing-list'));
+            if (isDeleting) {
+              queryClient.setQueryData('packing-list', (oldData: any) => {
+                return {
+                  ...oldData,
+                  data: {
+                    alonePackingList: packingList.filter(({ id }) => !deleteList.includes(id)),
+                    currentFolder,
+                    folder,
+                  },
+                };
+              });
+              setDeleteList([]);
+            } else {
+              queryClient.setQueryData('packing-list', (oldData: any) => {
+                return {
+                  ...oldData,
+                  data: {
+                    alonePackingList: packingList.filter((_, i) => i !== selectedIndex),
+                    currentFolder,
+                    folder,
+                  },
+                };
+              });
+            }
             closeModal();
           }}
         />
@@ -166,7 +189,7 @@ function PackingList() {
             </StyledCaptionWrapper>
 
             <SwipeableList
-              packingList={alonePackingList}
+              packingList={packingList}
               deleteList={deleteList}
               isDeleting={isDeleting}
               checkDeleteList={checkDeleteList}
@@ -227,7 +250,7 @@ const StyledMain = styled.div<{ isEmpty: boolean }>`
 const StyledEmpty = styled.div`
   display: flex;
   flex-direction: column;
-  width: 19.6rem;
+  width: 20rem;
   text-align: center;
   color: ${packmanColors.pmGrey};
   font-weight: 500;
