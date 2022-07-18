@@ -61,6 +61,7 @@ function PackingCategory(props: PackingCategoryProps) {
       ) : (
         <StyledCategory>{name}</StyledCategory>
       )}
+
       <StyledKebab>{!isEditing && <Image src={Kebab} alt="kebeb" layout="fill" />}</StyledKebab>
     </StyledRoot>
   );
@@ -73,7 +74,6 @@ const StyledRoot = styled.button`
   align-items: center;
   height: 3.2rem;
   padding: 0;
-  padding-left: 1.2rem;
   background-color: ${packmanColors.lightGray};
   border-radius: 0.8rem;
   font-size: 1.4rem;
@@ -97,4 +97,5 @@ const StyledCategory = styled.span`
   overflow: hidden;
   white-space: nowrap;
   outline: none;
+  padding-left: 1.2rem;
 `;

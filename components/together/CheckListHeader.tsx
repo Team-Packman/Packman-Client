@@ -105,6 +105,7 @@ const StyledTitle = styled.div`
   line-height: 3.1rem;
   overflow: hidden;
   white-space: nowrap;
+  color: ${packmanColors.black};
 `;
 const StyledInput = styled.input`
   display: flex;
