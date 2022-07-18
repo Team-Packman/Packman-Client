@@ -1,30 +1,28 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
-import template from '../../../public/assets/svg/template.svg';
-import Template from './Template';
-import useAPI from '../../../utils/hooks/useAPI';
+import template from '../../public/assets/svg/template.svg';
+import Template from '../components/selectTemplate/Template';
+import useAPI from '../../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import Header from '../../../components/common/Header';
-import { packmanColors } from '../../../styles/color';
+import Header from '../../components/common/Header';
+import { packmanColors } from '../../styles/color';
 import { useState } from 'react';
-import useGlobalState from '../../../utils/hooks/useGlobalState';
+import useGlobalState from '../../utils/hooks/useGlobalState';
 
 function SelectTemplateLanding() {
+  const router = useRouter();
   const [activateButton, setActivateButton] = useState(false);
   const getTemplateList = useAPI((api) => api.ect.getTemplateList);
   const { data } = useQuery('templateList', () => getTemplateList());
-  const router = useRouter();
   const [isTemplate, setIsTemplate] = useGlobalState('isTemplate', false);
 
-  // useEffect(() => {
-  //   if (router.isReady) {
-  //     setIsAloned(router.query.toString());
-  //   }
-  // }, []);
-
-  // 페이지 path에서 alone이랑 together 추출해서
   if (!data) return null;
+  if (!router.query) return null;
+
+  console.log(router.query);
+
+  const { categoryName } = router.query; //together | alone
 
   const { basicTemplate, myTemplate } = data.data;
 
@@ -110,7 +108,7 @@ const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>
       ? css`
           border: none;
           background-color: ${packmanColors.pmPink};
-          color: ${packmanColors.white};
+          color: ${packmanColors.pmWhite};
         `
       : css`
           border: 1px solid ${packmanColors.pmBlack};
@@ -120,7 +118,7 @@ const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>
   ${({ isActivated }) =>
     !isActivated &&
     css`
-      color: ${packmanColors.white};
+      color: ${packmanColors.pmWhite};
       background-color: ${packmanColors.pmGrey};
     `}
 `;

@@ -21,7 +21,7 @@ interface PackingList {
   packRemainNum: number;
 }
 
-function PackingList() {
+function PackingListLanding() {
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
@@ -109,9 +109,9 @@ function PackingList() {
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/pakingList/together');
+      router.push('/select-template/together');
     } else if (index === 1) {
-      router.push('/packingList/alone');
+      router.push('/select-template/alone');
     }
   };
 
@@ -223,7 +223,7 @@ function PackingList() {
   );
 }
 
-export default PackingList;
+export default PackingListLanding;
 
 const StyledRoot = styled.div`
   display: flex;
