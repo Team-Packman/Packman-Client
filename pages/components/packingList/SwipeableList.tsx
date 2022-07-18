@@ -37,63 +37,57 @@ export default function SwipeableList(props: SwipeableListProps) {
 
   return (
     <StyledRoot isEmpty={!packingList.length}>
-      {!packingList.length ? (
-        <StyledEmpty>‘+’ 버튼을 눌러 패킹 리스트를 추가해주세요</StyledEmpty>
-      ) : (
-        <>
-          <StyledSwipeableListWrapper>
-            {packingList?.map((item, idx) => (
-              <SwipeablelistItem
-                key={item.id}
-                idx={idx}
-                isDragged={isDragged[idx]}
-                handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-                isDeleting={isDeleting}
-                deleteList={deleteList}
-                checkDeleteList={(id: string) => checkDeleteList(id)}
-                onClickDeleteButton={() => {
-                  setSelectedIndex(idx);
-                  openModal();
-                }}
-                packingList={packingList}
-              />
-            ))}
-          </StyledSwipeableListWrapper>
+      <StyledSwipeableListWrapper>
+        {packingList?.map((item, idx) => (
+          <SwipeablelistItem
+            key={item.id}
+            idx={idx}
+            isDragged={isDragged[idx]}
+            handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+            isDeleting={isDeleting}
+            deleteList={deleteList}
+            checkDeleteList={(id: string) => checkDeleteList(id)}
+            onClickDeleteButton={() => {
+              setSelectedIndex(idx);
+              openModal();
+            }}
+            packingList={packingList}
+          />
+        ))}
+      </StyledSwipeableListWrapper>
 
-          {isDeleting && (
-            <StyledDeleteButton>
-              {!deleteList.length ? (
-                <div
-                  onClick={() => {
-                    const tempArr: string[] = [];
-                    if (packingList) {
-                      packingList.forEach(({ id }) => tempArr.push(id));
-                    }
-                    setDeleteList(tempArr);
-                  }}
-                >
-                  전체 선택
-                </div>
-              ) : deleteList.length === packingList?.length ? (
-                <div
-                  onClick={() => {
-                    openModal();
-                  }}
-                >
-                  전체 삭제
-                </div>
-              ) : (
-                <div
-                  onClick={() => {
-                    openModal();
-                  }}
-                >
-                  선택 삭제
-                </div>
-              )}
-            </StyledDeleteButton>
+      {isDeleting && (
+        <StyledDeleteButton>
+          {!deleteList.length ? (
+            <div
+              onClick={() => {
+                const tempArr: string[] = [];
+                if (packingList) {
+                  packingList.forEach(({ id }) => tempArr.push(id));
+                }
+                setDeleteList(tempArr);
+              }}
+            >
+              전체 선택
+            </div>
+          ) : deleteList.length === packingList?.length ? (
+            <div
+              onClick={() => {
+                openModal();
+              }}
+            >
+              전체 삭제
+            </div>
+          ) : (
+            <div
+              onClick={() => {
+                openModal();
+              }}
+            >
+              선택 삭제
+            </div>
           )}
-        </>
+        </StyledDeleteButton>
       )}
     </StyledRoot>
   );
@@ -108,14 +102,6 @@ const StyledRoot = styled.div<{ isEmpty: boolean }>`
   gap: 0.8rem;
   background-color: #fff;
   overflow: hidden;
-`;
-const StyledEmpty = styled.p`
-  width: 19.6rem;
-  text-align: center;
-  color: ${packmanColors.pmGrey};
-  font-weight: 500;
-  font-size: 1.8rem;
-  word-break: keep-all;
 `;
 
 const StyledSwipeableListWrapper = styled.div`

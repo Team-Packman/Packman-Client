@@ -85,7 +85,7 @@ function PackingList() {
             //togetherPackingListId params로 보내서 삭제
             setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
             // queryClient.setQueryData(
-            //   'packing-list',
+            //   'packping-list',
             //   packingList.filter((_, i) => i !== selectedIndex),
             // );
             console.log(queryClient.getQueryData('packing-list'));
@@ -118,56 +118,67 @@ function PackingList() {
         </div>
       </StyledFolderInfo>
 
-      <StyledCaptionWrapper>
-        {!isDeleting && (
-          <StyledCaptionText>
-            <span>{packingList?.length}</span>개의 패킹 리스트
-          </StyledCaptionText>
-        )}
-        {isDeleting && (
-          <span
-            onClick={() => {
-              deleteList.length > 0 && setDeleteList([]);
-            }}
-          >
-            선택해제
-          </span>
-        )}
+      <StyledMain isEmpty={!packingList.length}>
+        {!packingList.length ? (
+          <StyledEmpty>
+            <p>&apos;+&apos; 버튼을 눌러</p>
+            <p>패킹 리스트를 추가해주세요</p>
+          </StyledEmpty>
+        ) : (
+          <>
+            <StyledCaptionWrapper>
+              {!isDeleting && (
+                <StyledCaptionText>
+                  <span>{packingList?.length}</span>개의 패킹 리스트
+                </StyledCaptionText>
+              )}
+              {isDeleting && (
+                <span
+                  onClick={() => {
+                    deleteList.length > 0 && setDeleteList([]);
+                  }}
+                >
+                  선택해제
+                </span>
+              )}
 
-        <StyledCaptionButtonWrapper
-          onClick={() => {
-            setIsDragged(Array(packingList?.length).fill(false));
-            setIsDeleting((prev) => !prev);
-            if (!isDeleting) {
-              setDeleteList([]);
-            }
-          }}
-        >
-          {isDeleting ? (
-            <p onClick={() => setIsDragged(Array(packingList?.length).fill(false))}>취소</p>
-          ) : (
-            <Image
-              src={iTrash}
-              alt="삭제"
-              width={24}
-              height={24}
-              onClick={() => setIsDragged(Array(packingList?.length).fill(false))}
+              <StyledCaptionButtonWrapper
+                onClick={() => {
+                  setIsDragged(Array(packingList?.length).fill(false));
+                  setIsDeleting((prev) => !prev);
+                  if (!isDeleting) {
+                    setDeleteList([]);
+                  }
+                }}
+              >
+                {isDeleting ? (
+                  <p onClick={() => setIsDragged(Array(packingList?.length).fill(false))}>취소</p>
+                ) : (
+                  <Image
+                    src={iTrash}
+                    alt="삭제"
+                    width={24}
+                    height={24}
+                    onClick={() => setIsDragged(Array(packingList?.length).fill(false))}
+                  />
+                )}
+              </StyledCaptionButtonWrapper>
+            </StyledCaptionWrapper>
+
+            <SwipeableList
+              packingList={alonePackingList}
+              deleteList={deleteList}
+              isDeleting={isDeleting}
+              checkDeleteList={checkDeleteList}
+              handleIsDragged={handleIsDragged}
+              openModal={openModal}
+              setSelectedIndex={(id: number) => setSelectedIndex(id)}
+              setDeleteList={(arr) => setDeleteList(arr)}
+              isDragged={isDragged}
             />
-          )}
-        </StyledCaptionButtonWrapper>
-      </StyledCaptionWrapper>
-
-      <SwipeableList
-        packingList={alonePackingList}
-        deleteList={deleteList}
-        isDeleting={isDeleting}
-        checkDeleteList={checkDeleteList}
-        handleIsDragged={handleIsDragged}
-        openModal={openModal}
-        setSelectedIndex={(id: number) => setSelectedIndex(id)}
-        setDeleteList={(arr) => setDeleteList(arr)}
-        isDragged={isDragged}
-      />
+          </>
+        )}
+      </StyledMain>
     </StyledRoot>
   );
 }
@@ -205,6 +216,22 @@ const StyledToggleImage = styled(Image)<{ toggle: boolean }>`
   transition: 0.2s ease-in-out;
   transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
+const StyledMain = styled.div<{ isEmpty: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: ${({ isEmpty }) => isEmpty && '61.8rem'};
+`;
+const StyledEmpty = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 19.6rem;
+  text-align: center;
+  color: ${packmanColors.pmGrey};
+  font-weight: 500;
+  font-size: 1.8rem;
+`;
 const StyledCaptionWrapper = styled.div`
   position: relative;
   display: flex;
@@ -224,7 +251,7 @@ const StyledCaptionWrapper = styled.div`
 const StyledCaptionText = styled.p`
   display: flex;
   justify-content: start;
-  padding: 1.8rem 0 0 2.4rem;
+  padding: 1.8rem 0 0 0.4rem;
   margin: 0;
   font-size: 1.4rem;
   color: ${packmanColors.pmDeepGrey};
