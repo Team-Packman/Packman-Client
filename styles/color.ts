@@ -1,5 +1,6 @@
 export const packmanColors = Object.freeze({
   pmWhite: '#fff',
+  pmLightPink: '#FF87B2',
   pmPink: '#FF307B',
   pmBlack: '#121212',
   pmGreen: '#06C167',
@@ -12,9 +13,7 @@ export const packmanColors = Object.freeze({
   lightGray: '#EAEAEA',
   dashGray: '#D6D6D6',
   pink: '#FF307B',
-  pmPink: '#FF307B',
   black: '#121212',
-  pmBlack: '#121212',
   deepGray: '#808080',
   pmBlueGrey: '#F6F7FB',
   white: '#fff',

@@ -38,7 +38,8 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
       )}
       <StyledOptions scroll={scroll}>
         <StyledButtonWrapper>
-          <StyledButton>엿보기</StyledButton>|
+          <StyledButton>엿보기</StyledButton>
+          <StyledLine />
           <StyledButton onClick={categoryHandler}>카테고리 추가</StyledButton>
         </StyledButtonWrapper>
       </StyledOptions>
@@ -82,9 +83,11 @@ const StyledButtonWrapper = styled.div`
 
   & > button:first-child {
     width: 4rem;
+    flex-shrink: 0;
   }
   & > button:last-child {
     width: 7.8rem;
+    flex-shrink: 0;
   }
 `;
 const StyledButton = styled.button`
@@ -98,6 +101,10 @@ const StyledButton = styled.button`
   padding: 0;
 `;
 
+const StyledLine = styled.div`
+  height: 1.2rem;
+  border-left: 1px solid ${packmanColors.pmDeepGrey};
+`;
 const StyledModeBlock = styled.div`
   position: relative;
   width: 100vw;
