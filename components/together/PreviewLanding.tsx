@@ -19,6 +19,7 @@ import Packer from '../common/Packer';
 import PackerModal from './PackerModal';
 import BottomModal from '../../pages/components/common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
+import AddTemplateButton from '../common/AddTemplateButton';
 
 interface UpdateItemPayload {
   name: string;
@@ -28,9 +29,19 @@ interface UpdateItemPayload {
   isChecked: boolean;
 }
 
+interface RemainingInfoPayload {
+  listId: string;
+  title?: string;
+  departureDate?: string;
+  isSaved?: boolean;
+  isAloned?: boolean;
+}
+
+type RemainingInfoType = 'title' | 'departure' | 'save';
+
 function PreviewLanding() {
   const client = useQueryClient();
-  const [_, setScroll] = useGlobalState('scroll', false);
+  const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
@@ -57,10 +68,10 @@ function PreviewLanding() {
   });
   if (!packingListData || !membersData) return null;
 
-  const { data: info } = packingListData;
   const {
     data: { members },
   } = membersData;
+  const { data: info } = packingListData;
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
   const creatingHandler = (id: string) => setCurrentCreating(id);
@@ -86,15 +97,19 @@ function PreviewLanding() {
     setCurrentFocus('');
     setPackerModalOpen(false);
   };
-  const updateCategory = (value: string, id: string, listId: string) => {
+  const updateCategory = (name: string, id: string, listId: string) => {
     if (currentEditing) {
       console.log('update category', {
         id,
-        name: value,
+        name,
       });
     } else if (currentCreatingCategory) {
+      if (name.length === 0) {
+        createdCategoryHandler();
+        return;
+      }
       console.log('add category', {
-        name: value,
+        name,
         listId,
       });
     }
@@ -102,7 +117,7 @@ function PreviewLanding() {
       client.getQueryData('getPackingListDeatil');
     const category = prev?.data.togetherPackingList.category.map((e) => {
       if (e.id === id) {
-        e.name = value;
+        e.name = name;
       }
       return e;
     });
@@ -116,7 +131,8 @@ function PreviewLanding() {
   };
   //id는 필요 x > categoryId 필요
   //add
-  const updateItem = ({ name, listId, packId, categoryId, isChecked }: UpdateItemPayload) => {
+  const updateItem = (payload: UpdateItemPayload) => {
+    const { name, listId, packId, categoryId, isChecked } = payload;
     const prev: GetTogetherPackingListDeatilOutput | undefined =
       client.getQueryData('getPackingListDeatil');
 
@@ -126,6 +142,7 @@ function PreviewLanding() {
         listId,
         isChecked,
         id: packId,
+        categoryId,
       });
 
       if (name !== '') {
@@ -145,6 +162,10 @@ function PreviewLanding() {
         client.setQueryData('getPackingListDeatil', newData);
       }
     } else if (currentCreating) {
+      if (name.length === 0) {
+        createdHandler();
+        return;
+      }
       console.log('add!! pack', {
         name,
         listId,
@@ -173,24 +194,51 @@ function PreviewLanding() {
         listId,
         isChecked: !isChecked,
         id: packId,
+        categoryId,
       });
     }
 
     setCurrentEditing('');
     createdHandler();
   };
+  const updateRemainingInfo = (payload: RemainingInfoPayload, type: RemainingInfoType) => {
+    const { listId, title, departureDate, isSaved, isAloned = false } = payload;
+
+    switch (type) {
+      case 'title':
+        console.log({
+          listId,
+          title,
+          isAloned,
+        });
+        return;
+      case 'departure':
+        console.log({
+          listId,
+          departureDate,
+          isAloned,
+        });
+        return;
+      case 'save':
+        console.log({
+          listId,
+          isSaved,
+          isAloned,
+        });
+        return;
+      default:
+        return;
+    }
+  };
   const onEdit = () => setCurrentEditing(currentFocus);
   const onDelete = () => console.log('delete!!', currentFocus);
   const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
     if (e.currentTarget.scrollTop < 10) {
-      setScroll(false);
-    }
-    if (!isScrolling) {
-      if (e.currentTarget.scrollTop >= 10) {
-        setIsScrolling(true);
-        setScroll(true);
-      }
-      setTimeout(() => setIsScrolling(false), 300);
+      scroll && setScroll(false);
+    } else if (!isScrolling) {
+      setIsScrolling(true);
+      !scroll && setScroll(true);
+      setTimeout(() => setIsScrolling(false), 500);
     }
   };
 
@@ -200,9 +248,14 @@ function PreviewLanding() {
       title="템플릿 미리보기"
       //needs handler props
       option={
-        <CheckListHeader together activeMode={activeMode} modeHandler={modeHandler}>
-          {info.title}
-        </CheckListHeader>
+        <CheckListHeader
+          together
+          listId={info.togetherPackingList.id}
+          departureDate={info.departureDate}
+          title={info.title}
+          activeMode={activeMode}
+          updateRemainingInfo={updateRemainingInfo}
+        />
       }
     >
       <StyledPreviewLanding>
@@ -291,7 +344,13 @@ function PreviewLanding() {
             );
           })}
         </Swiper>
-        <FunctionSection />
+        <FunctionSection>
+          <AddTemplateButton
+            onClick={() =>
+              updateRemainingInfo({ listId: info.togetherPackingList.id, isSaved: true }, 'save')
+            }
+          />
+        </FunctionSection>
       </StyledPreviewLanding>
       {bottomModalOpen && (
         <StyledBg onClick={bottomModalCloseHandler}>
@@ -322,14 +381,14 @@ const StyledPreviewLanding = styled.div`
 
 const StyledBody = styled.div`
   display: flex;
-  height: calc(100% - 11rem - 15rem);
+  height: calc(100% - 11rem - 10rem);
   //마지막은 디바이스 조절 변수
-  margin-top: 1.6rem;
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: scroll;
   margin-bottom: 24.4rem;
   padding: 0 2rem;
+  padding-top: 1.6rem;
 `;
 const StyledBg = styled.div`
   position: fixed;

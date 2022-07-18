@@ -52,7 +52,7 @@ export const fetchPackingListDetail = async (
         data: {
           title: '앱잼 합숙',
           groupId: 'group111',
-          departureDate: '22.05.05',
+          departureDate: '2022-05-05',
           togetherPackingList: {
             id: 'together',
             category: [

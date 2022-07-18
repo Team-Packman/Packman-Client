@@ -1,8 +1,9 @@
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { editHandler } from '../../utils/editHandler';
+import { setCarret } from '../../utils/setCarret';
 import Kebab from '/public/assets/svg/kebab_ic.svg';
 
 interface PackingCategoryProps {
@@ -15,44 +16,52 @@ interface PackingCategoryProps {
   example?: boolean;
 }
 
+const MAX_LENGTH = 12;
+
 function PackingCategory(props: PackingCategoryProps) {
   const { example, name, id, listId, updateCategory, modalHandler, isEditing } = props;
   const [isEntered, setIsEntered] = useState(false);
   const [value, setValue] = useState(name);
-  const ref = useRef<HTMLInputElement | null>(null);
+  const ref = useRef<HTMLSpanElement | null>(null);
 
   const saveResult = () => {
-    if (value === '') {
-      setValue(name);
-      return;
-    }
     updateCategory(value, id, listId);
   };
 
   useEffect(() => {
-    if (isEditing) {
-      ref.current && ref.current.focus();
+    if (isEditing && ref.current) {
+      ref.current.focus();
+      setCarret(ref.current);
     }
   }, [isEditing]);
+
+  const handleChange = ({ currentTarget: { innerText } }: FormEvent<HTMLSpanElement>) => {
+    if (innerText.length <= MAX_LENGTH) {
+      setValue(innerText);
+    } else {
+      if (ref.current) {
+        ref.current.innerText = value;
+        setCarret(ref.current);
+      }
+    }
+  };
 
   return (
     <StyledRoot disabled={example} onClick={modalHandler}>
       {isEditing ? (
-        <StyledInput
+        <StyledCategory
+          suppressContentEditableWarning
+          contentEditable={true}
           ref={ref}
-          value={value}
-          placeholder="카테고리"
-          onChange={({ target: { value } }) => setValue(value)}
+          onInput={handleChange}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
-        />
+        >
+          {name}
+        </StyledCategory>
       ) : (
         <StyledCategory>{name}</StyledCategory>
       )}
-      {!isEditing && (
-        <StyledKebab>
-          <Image src={Kebab} alt="kebeb" layout="fill" />
-        </StyledKebab>
-      )}
+      <StyledKebab>{!isEditing && <Image src={Kebab} alt="kebeb" layout="fill" />}</StyledKebab>
     </StyledRoot>
   );
 }
@@ -82,11 +91,10 @@ const StyledKebab = styled.div`
   max-width: 18.4rem;
 `;
 
-const StyledCategory = styled.div``;
-const StyledInput = styled.input`
-  width: 2.4rem;
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid ${packmanColors.black};
+const StyledCategory = styled.span`
+  min-width: 2.5rem;
+  max-width: 16rem;
+  overflow: hidden;
+  white-space: nowrap;
   outline: none;
 `;

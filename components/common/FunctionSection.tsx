@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import AddTemplateButton from './AddTemplateButton';
-import SharePackingListButton from './SharePackingListButton';
 
-function FunctionSection() {
-  return (
-    <StyledRoot>
-      <AddTemplateButton />
-      <SharePackingListButton />
-    </StyledRoot>
-  );
+interface FunctionSectionProps {
+  children: ReactNode;
+}
+
+function FunctionSection(props: FunctionSectionProps) {
+  const { children } = props;
+  return <StyledRoot>{children}</StyledRoot>;
 }
 
 export default FunctionSection;

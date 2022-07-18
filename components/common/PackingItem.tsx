@@ -63,6 +63,7 @@ function PackingItem(props: PackingItemProps) {
       ref.current && ref.current.focus();
     }
   }, [isEditing]);
+
   return (
     <StyledRoot>
       <label>
