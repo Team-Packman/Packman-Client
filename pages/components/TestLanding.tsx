@@ -10,8 +10,6 @@ function TestLanding() {
   });
   const [payload] = useGlobalState<boolean>('payload');
 
-  console.log(payload);
-
   return <div>payload : {JSON.stringify(payload)}</div>;
 }
 

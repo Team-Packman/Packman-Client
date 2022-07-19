@@ -22,7 +22,7 @@ function SelectTemplateLanding() {
 
   if (!data) return null;
   if (!router.query) return null;
-  console.log(router.query.categoryName);
+
   const categoryName = router.query.categoryName as unknown as string; //together | alone
 
   const { basicTemplate, myTemplate } = data.data;

@@ -37,7 +37,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState(profileImage[0].id);
   const router = useRouter();
-  console.log(profileImage);
 
   //프로필 수정
   const updateUserProfile = useAPI(
@@ -110,7 +109,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
       </StyledButton>
-      <button onClick={() => router.push('/edit-profile')}>edit-profile뷰로 가기</button>
     </StyledRoot>
   );
 }

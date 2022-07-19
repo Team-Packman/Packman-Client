@@ -45,8 +45,6 @@ function SettingProfile(props: SettingProfileProps) {
     setShowModal(false);
   };
 
-  console.log(profileImage);
-
   return (
     <StyledRoot>
       <StyledSettingWrapper>
