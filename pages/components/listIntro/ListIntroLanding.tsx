@@ -1,5 +1,6 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import Header from '../../../components/common/Header';
 import { AddFolderInput } from '../../../service/folder';
@@ -10,8 +11,12 @@ import useAPI from '../../../utils/hooks/useAPI';
 interface ListIntroProps {
   isAloned: boolean;
 }
+
 function ListIntroLanding(props: ListIntroProps) {
   const { isAloned } = props;
+
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
@@ -61,7 +66,22 @@ function ListIntroLanding(props: ListIntroProps) {
 
   // 폴더 생성 버튼 클릭
   const handleAddFolder = () => {
-    addFolerMutate({ title: folderName, isAloned });
+    addFolerMutate(
+      { title: folderName, isAloned },
+      {
+        onSuccess: () => {
+          queryClient.setQueryData('folderList', (oldData: any) => {
+            return {
+              ...oldData,
+              data: {
+                aloneFolders,
+                togetherFolders,
+              },
+            };
+          });
+        },
+      },
+    );
   };
 
   const handleTagClick = (id: string, index: number) => {
@@ -69,7 +89,14 @@ function ListIntroLanding(props: ListIntroProps) {
   };
 
   const handleNextButtonClick = () => {
-    addIntroMutate({ departureDate: date, folderId: selectedTagIndex.id, title: listName });
+    addIntroMutate(
+      { departureDate: date, folderId: selectedTagIndex.id, title: listName },
+      {
+        onSuccess: () => {
+          router.push(`/packingList/${isAloned ? 'alone' : 'together'}/category`);
+        },
+      },
+    );
   };
 
   return (
@@ -82,7 +109,6 @@ function ListIntroLanding(props: ListIntroProps) {
       <StyledFolderContainer>
         <h3>폴더를 선택해주세요</h3>
         <div>
-          {/* Todo : folder 이름 입력후, 생성버튼 클릭 시 post 요청과 함께 데이터 변경하는 방법 */}
           <input
             type="text"
             onChange={handleFolderNameChange}
@@ -93,7 +119,7 @@ function ListIntroLanding(props: ListIntroProps) {
         </div>
         <StyledTagContainer>
           {isAloned
-            ? aloneFolders.map((v, index) => (
+            ? aloneFolders?.map((v, index) => (
                 <StyledTag
                   key={v.id}
                   isSelected={index === selectedTagIndex.index}
