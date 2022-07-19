@@ -32,6 +32,30 @@ export const fetchGroupMember = async (
               nickname: '유나딩딩', // 멤버 닉네임
               profileImageId: 'img3', // 멤버 프로필 사진 id
             },
+            {
+              // 그룹에 속한 멤버 배열
+              id: 'member4', //  멤버 id
+              nickname: '승기둥둥', // 멤버 닉네임
+              profileImageId: 'img4', // 멤버 프로필 사진 id
+            },
+            {
+              // 그룹에 속한 멤버 배열
+              id: 'member5', //  멤버 id
+              nickname: '경린링링', // 멤버 닉네임
+              profileImageId: 'img5', // 멤버 프로필 사진 id
+            },
+            {
+              // 그룹에 속한 멤버 배열
+              id: 'member6', //  멤버 id
+              nickname: '서희히히', // 멤버 닉네임
+              profileImageId: 'img6', // 멤버 프로필 사진 id
+            },
+            {
+              // 그룹에 속한 멤버 배열
+              id: 'member7', //  멤버 id
+              nickname: '김크크', // 멤버 닉네임
+              profileImageId: 'img7', // 멤버 프로필 사진 id
+            },
           ],
         },
       });

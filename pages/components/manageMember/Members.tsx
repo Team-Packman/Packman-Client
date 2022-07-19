@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../../styles/color';
 import Member from './Member';
@@ -15,19 +16,25 @@ interface MembersProps {
 function Members(props: MembersProps) {
   const { members } = props;
 
+  const [isEditing, setIsEditing] = useState(false);
+
+  const onClickEdit = () => {
+    setIsEditing((prev) => !prev);
+  };
+
   return (
     <StyledRoot>
       <StyledCaption>
         <h1>함께하는 멤버</h1>
-        <p>편집</p>
+        <p onClick={onClickEdit}>{isEditing ? '취소' : '편집'}</p>
       </StyledCaption>
 
       <StyledMembers>
-        {members.map((member) => (
-          <Member key={member.id} member={member} />
+        {members.map((member, idx) => (
+          <Member key={member.id} member={member} manager={idx === 0} isEditing={isEditing} />
         ))}
       </StyledMembers>
-      <button>멤버 초대하기</button>
+      {isEditing ? <button onClick={onClickEdit}>완료</button> : <button>멤버 초대하기</button>}
     </StyledRoot>
   );
 }
@@ -56,17 +63,24 @@ const StyledRoot = styled.div`
 const StyledCaption = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   margin: 4.637rem 0 1.163rem 0;
   & > h1 {
-    color: ${packmanColors.pmBlack};
     font-weight: 600;
     font-size: 2rem;
+    color: ${packmanColors.pmBlack};
   }
   & > p {
-    color: ${packmanColors.pmDarkGrey};
     font-weight: 600;
     font-size: 1.4rem;
+    color: ${packmanColors.pmDarkGrey};
   }
 `;
-const StyledMembers = styled.div``;
+const StyledMembers = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  padding: 0 1.2rem 5.2rem 1.2rem;
+  gap: 1.788rem;
+`;
