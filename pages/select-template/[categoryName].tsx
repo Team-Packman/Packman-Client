@@ -88,6 +88,7 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100%;
 `;
 const StyledTemplateWrapper = styled.div`
   display: flex;
@@ -100,9 +101,13 @@ const StyledTemplateWrapper = styled.div`
 `;
 const StyledButtonWrapper = styled.div`
   position: absolute;
-  bottom: 3.456rem;
+  bottom: 1.656rem;
   display: flex;
+  justify-content: center;
   gap: 1.1rem;
+  width: 100%;
+  background-color: #fff;
+  height: 4rem;
 `;
 const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>`
   width: 16.3rem;

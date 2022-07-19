@@ -16,39 +16,27 @@ export const fetchTemplateList = async (request: AxiosInstance): Promise<GetTemp
           basicTemplate: [
             {
               id: '62bbb80d9d5dc1aa4c3d28391',
-              title: '집들이',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28392',
-              title: '할머니댁',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28393',
-              title: '본가ㄱㄱ',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28394',
-              title: '인천',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28395',
-              title: '교환학생',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28396',
-              title: '대만여행',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28397',
-              title: '일본여행',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28398',
               title: '국내여행',
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d28399',
+              id: '62bbb80d9d5dc1aa4c3d28392',
               title: '해외여행',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28393',
+              title: '콘서트',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28394',
+              title: '토익시험',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28395',
+              title: '제주한달살이',
+            },
+            {
+              id: '62bbb80d9d5dc1aa4c3d28396',
+              title: '반려동물과 함께여행',
             },
           ],
           myTemplate: [

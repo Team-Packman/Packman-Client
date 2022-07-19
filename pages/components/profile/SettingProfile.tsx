@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import tempBox from '../../../public/assets/svg/tempBox.svg';
 import { packmanColors } from '../../../styles/color';
-import iToggleOff from '../../../public/assets/svg/iToggleOff.svg';
-import iToggleOn from '../../../public/assets/svg/iToggleOn.svg';
 import { useState } from 'react';
 import Modal from '../common/Modal';
 import useAPI from '../../../utils/hooks/useAPI';
