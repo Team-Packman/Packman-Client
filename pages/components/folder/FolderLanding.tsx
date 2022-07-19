@@ -19,8 +19,8 @@ export interface ModalDataProps {
 function FolderLanding() {
   const router = useRouter();
 
-  // TODO : 최근 수정 리스트 존재 여부(존재하지 않는 경우 204로 오는지 확인후, 처리방법 생각해보기)
   const [folderData, setFolderData] = useState<Pick<GetFoldersOutput, 'data'>>();
+  // TODO : 최근 수정 리스트 존재 여부(존재하지 않는 경우 204로 오는지 확인후, 처리방법 생각해보기)
   const [isRecentListExist, setIsRecentListExist] = useState<boolean>(true);
   const [showBottomModal, setShowBottomModal] = useState(false);
   const [modalData, setModalData] = useState<ModalDataProps>({ id: '', title: '' });
@@ -32,6 +32,7 @@ function FolderLanding() {
     title: '',
     isAloned: false,
   });
+  const [isOutDated, setIsOutDated] = useState<boolean>(false);
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
@@ -48,6 +49,10 @@ function FolderLanding() {
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
     suspense: true,
+    onSuccess: (data) => {
+      const { remainDay } = data.data;
+      setIsOutDated(remainDay < 0);
+    },
   });
 
   const { mutate: editFolderMutate } = useMutation((editedFolderData: ModalDataProps) => {
@@ -161,9 +166,19 @@ function FolderLanding() {
                 </StyledPackTotalNum>
               </StyledLabel>
               <StyledDday>
-                <StyledRemainDay>{`D-${recentPackingData?.data.remainDay}`}</StyledRemainDay>
+                <StyledRemainDay>
+                  {isOutDated ? 'Done!' : `D-${recentPackingData?.data.remainDay}`}
+                </StyledRemainDay>
                 <StyledLeftMessage>
-                  아직 <span>{recentPackingData?.data.packRemainNum}</span>개의 짐이 남았어요!
+                  {!isOutDated && recentPackingData?.data.packRemainNum !== 0 ? (
+                    <span>
+                      <em> {'패킹'}</em>이 완료되었어요!
+                    </span>
+                  ) : (
+                    <span>
+                      아직<em> {recentPackingData?.data.packRemainNum}</em> 개의 짐이 남았어요!
+                    </span>
+                  )}
                 </StyledLeftMessage>
               </StyledDday>
             </>
@@ -282,6 +297,8 @@ export const StyledLeftMessage = styled.p`
   color: ${packmanColors.pmBlack};
 
   & > span {
-    color: ${packmanColors.pmPink};
+    & > em {
+      color: ${packmanColors.pmPink};
+    }
   }
 `;
