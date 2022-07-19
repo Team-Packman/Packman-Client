@@ -1,14 +1,26 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
-import template from '../../public/assets/svg/template.svg';
 import Template from '../components/selectTemplate/Template';
 import useAPI from '../../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import Header from '../../components/common/Header';
 import { packmanColors } from '../../styles/color';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useGlobalState from '../../utils/hooks/useGlobalState';
+import korea_travel from '../../public/assets/svg/korea_travel.svg';
+import oversea_travel from '../../public/assets/svg/oversea_travel.svg';
+import jeju from '../../public/assets/svg/jeju.svg';
+import pet from '../../public/assets/svg/pet.svg';
+import concert from '../../public/assets/svg/concert.svg';
+import toeic from '../../public/assets/svg/toeic.svg';
+import random1 from '../../public/assets/svg/random1.svg';
+import random2 from '../../public/assets/svg/random2.svg';
+import random3 from '../../public/assets/svg/random3.svg';
+import random4 from '../../public/assets/svg/random4.svg';
+
+const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
+const randomImage = [random1, random2, random3, random4];
 
 function SelectTemplateLanding() {
   const router = useRouter();
@@ -19,6 +31,7 @@ function SelectTemplateLanding() {
     type: 'basic',
     categoryName: '',
   });
+  const [basicTemplateImageIndex, setBasicTemplateImageIndex] = useState('');
 
   if (!data) return null;
   if (!router.query) return null;
@@ -27,15 +40,25 @@ function SelectTemplateLanding() {
 
   const { basicTemplate, myTemplate } = data.data;
 
+  const changeTemplateImage = (templateId: string) => {
+    basicTemplate.forEach(({ id }, idx) => {
+      if (id === templateId) {
+        setBasicTemplateImageIndex(idx.toString());
+      }
+    });
+  };
+
   return (
     <StyledRoot>
       <Header back title="템플릿 선택하기" />
       <StyledTemplateWrapper>
         <picture>
-          <Image src={template} alt="템플릿이미지" />
+          {basicTemplateImageList[+basicTemplateImageIndex] && (
+            <Image src={basicTemplateImageList[+basicTemplateImageIndex]} alt="template-image" />
+          )}
         </picture>
         <Template
-          isAloned={true}
+          isAloned={categoryName === 'alone'}
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
           activate={(isSelected: string) => {
@@ -45,6 +68,7 @@ function SelectTemplateLanding() {
               setActivateButton(true);
             }
           }}
+          changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>

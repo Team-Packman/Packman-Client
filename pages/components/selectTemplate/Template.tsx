@@ -14,10 +14,11 @@ interface TemplateProps {
   basicTemplate: Template[];
   myTemplate: Template[];
   activate: (isSelected: string) => void;
+  changeTemplateImage: (templateId: string) => void;
 }
 
 function Template(props: TemplateProps) {
-  const { isAloned, basicTemplate, myTemplate, activate } = props;
+  const { isAloned, basicTemplate, myTemplate, activate, changeTemplateImage } = props;
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
@@ -40,12 +41,13 @@ function Template(props: TemplateProps) {
         <TemplateList
           templateList={
             <>
-              {basicTemplate.map((template) => (
+              {basicTemplate.map((template, idx) => (
                 <TemplateItem
                   key={template.id}
                   template={template}
                   isSelected={isSelected}
                   onClick={() => onClickTemplateItem(template.id)}
+                  changeTemplateImage={changeTemplateImage}
                 />
               ))}
             </>

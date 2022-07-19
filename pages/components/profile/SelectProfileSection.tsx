@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { UpdateUserProfileInput } from '../../../service/user';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 import profile1 from '../../../public/assets/svg/profile1.svg';

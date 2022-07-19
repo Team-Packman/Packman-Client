@@ -10,19 +10,23 @@ interface TemplateItemProps {
   template: Template;
   isSelected: string;
   onClick?: () => void;
+  changeTemplateImage?: (templateId: string) => void;
 }
 
 function TemplateItem(props: TemplateItemProps) {
-  const { template, isSelected, onClick } = props;
+  const { template, isSelected, onClick, changeTemplateImage } = props;
   const { id, title } = template;
+
+  const onClickTemplateItem = (id: string) => {
+    onClick && onClick();
+    changeTemplateImage && changeTemplateImage(id);
+  };
 
   return (
     <StyledRoot
       isSelected={isSelected === id}
       isListEmpty={id === ''}
-      onClick={() => {
-        onClick && onClick();
-      }}
+      onClick={() => onClickTemplateItem(id)}
     >
       {title}
     </StyledRoot>

@@ -64,7 +64,7 @@ function Header(props: HeaderProps) {
 export default Header;
 
 const StyledRoot = styled.header`
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;

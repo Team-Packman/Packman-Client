@@ -113,9 +113,9 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  overflow: scroll;
   & > p {
-    color: ${packmanColors.pmGrey};
+    color: ${packmanColors.pmDeepGrey};
     font-weight: 300;
     font-size: 1.2rem;
   }
