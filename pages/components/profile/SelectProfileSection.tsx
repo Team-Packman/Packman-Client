@@ -7,6 +7,21 @@ import tempBox from '../../../public/assets/svg/tempBox.svg';
 import { UpdateUserProfileInput } from '../../../service/user';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
+import profile1 from '../../../public/assets/svg/profile1.svg';
+import profile2 from '../../../public/assets/svg/profile2.svg';
+import profile3 from '../../../public/assets/svg/profile3.svg';
+import profile4 from '../../../public/assets/svg/profile4.svg';
+import profile5 from '../../../public/assets/svg/profile5.svg';
+import profile6 from '../../../public/assets/svg/profile6.svg';
+
+const profileImage = [
+  { id: 1, src: profile1 },
+  { id: 2, src: profile2 },
+  { id: 3, src: profile3 },
+  { id: 4, src: profile4 },
+  { id: 5, src: profile5 },
+  { id: 6, src: profile6 },
+];
 
 interface SelectProfileSectionProps {
   isEditing?: boolean;
@@ -17,6 +32,7 @@ interface SelectProfileSectionProps {
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const { isEditing, oldNickname, finishEditing } = props;
   const [nickname, setNickname] = useState('');
+  const [profile, setProfile] = useState(profileImage[0].src);
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -40,7 +56,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   return (
     <StyledRoot>
-      <Image src={tempBox} alt="임시네모" width={120} height={120} />
+      <Image src={profile} alt="profile-image" width={120} height={120} />
       <StyledInputWrapper>
         <StyledInput
           type="text"
@@ -57,13 +73,20 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         />
         <StyledText nickname={nickname !== ''}>닉네임을 입력해주세요 (4자 이내)</StyledText>
       </StyledInputWrapper>
+
       <StyledSelectProfileWrapper>
-        {Array(6)
-          .fill(1)
-          .map((_, idx) => (
-            <Image key={idx} src={tempBox} alt="임시네모" width={80} height={80} />
-          ))}
+        {profileImage.map(({ id, src }) => (
+          <Image
+            key={id}
+            src={src}
+            alt="profile-images"
+            width={80}
+            height={80}
+            onClick={() => setProfile(src)}
+          />
+        ))}
       </StyledSelectProfileWrapper>
+
       <StyledButton
         type="button"
         disabled={!setIsActivate()}
