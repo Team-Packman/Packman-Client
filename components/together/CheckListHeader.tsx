@@ -109,6 +109,7 @@ const StyledTitle = styled.div`
   white-space: nowrap;
   color: ${packmanColors.black};
 `;
+
 const StyledInput = styled.input`
   display: flex;
   align-items: center;
