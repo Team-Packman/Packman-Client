@@ -43,7 +43,7 @@ function Header(props: HeaderProps) {
         ) : null}
         {icon ? (
           icon === 'profile' ? (
-            <Link href={'/profile/userId'}>
+            <Link href={'/edit-profile'}>
               <StyledIcon width={2.4} height={2.4}>
                 <Image src={ProfileIC} layout="fill" alt="profile_icon" />
               </StyledIcon>

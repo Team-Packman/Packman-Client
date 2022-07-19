@@ -93,19 +93,19 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         type="button"
         disabled={!setIsActivate()}
         isActivate={setIsActivate()}
-        // onClick={
-        //   isEditing
-        //     ? async () => {
-        //         if (finishEditing) {
-        //           const data = await updateUserProfile({
-        //             nickname,
-        //             profileImageId: profile,
-        //           });
-        //           finishEditing();
-        //         }
-        //       }
-        //     : () => router.push('/folder')
-        // }
+        onClick={
+          isEditing
+            ? async () => {
+                if (finishEditing) {
+                  const data = await updateUserProfile({
+                    nickname,
+                    profileImageId: profile,
+                  });
+                  finishEditing();
+                }
+              }
+            : () => router.push('/folder')
+        }
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
       </StyledButton>
