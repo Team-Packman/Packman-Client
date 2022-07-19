@@ -12,6 +12,12 @@ import profile4 from '../../../public/assets/svg/profile4.svg';
 import profile5 from '../../../public/assets/svg/profile5.svg';
 import profile6 from '../../../public/assets/svg/profile6.svg';
 import useGlobalState from '../../../utils/hooks/useGlobalState';
+import { useMutation, useQueryClient } from 'react-query';
+
+interface UpdateUserProfileData {
+  nickname: string;
+  profileImageId: string;
+}
 
 interface ProfileImageData {
   id: string;
@@ -25,6 +31,7 @@ interface SelectProfileSectionProps {
 }
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
+  const queryClient = useQueryClient();
   const { isEditing, oldNickname, finishEditing } = props;
   const [profileImage] = useGlobalState<ProfileImageData[]>('profileImageList', [
     { id: '0', src: profile1 },
@@ -40,7 +47,17 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   //프로필 수정
   const updateUserProfile = useAPI(
-    (api) => (info: UpdateUserProfileInput) => api.user.updateUserProfile(info),
+    (api) => (info: UpdateUserProfileData) => api.user.updateUserProfile(info),
+  );
+  const { mutate: updateUserProfileMutate } = useMutation(
+    (updateUserProfileData: UpdateUserProfileData) => {
+      return updateUserProfile(updateUserProfileData);
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.setQueryData('user', data);
+      },
+    },
   );
 
   const setIsActivate = () => {
@@ -97,7 +114,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
           isEditing
             ? async () => {
                 if (finishEditing) {
-                  const data = await updateUserProfile({
+                  updateUserProfileMutate({
                     nickname,
                     profileImageId: profile,
                   });
