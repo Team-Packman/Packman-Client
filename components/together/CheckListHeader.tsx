@@ -17,7 +17,7 @@ interface CheckListHeaderProps {
   title: string;
   departureDate: string;
   together?: boolean;
-  activeMode: number;
+  activeMode?: number;
   updateRemainingInfo: (payload: RemainingInfoPayload, type: RemainingInfoType) => void;
 }
 

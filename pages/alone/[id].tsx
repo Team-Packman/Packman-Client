@@ -1,14 +1,14 @@
 import React from 'react';
-import TogetherLanding from '../../components/together/TogetherLanding';
+import AloneLanding from '../../components/alone/AloneLanding';
 import { AsyncBoundary } from '../../utils/AsyncBoundary';
-function Together() {
+function Alone() {
   return (
     <div>
       <AsyncBoundary>
-        <TogetherLanding />
+        <AloneLanding />
       </AsyncBoundary>
     </div>
   );
 }
 
-export default Together;
+export default Alone;
