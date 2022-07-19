@@ -1,6 +1,6 @@
 import React from 'react';
 import { AsyncBoundary } from '../../utils/AsyncBoundary';
-import PackingListLanding from './[[...slug]]';
+import PackingListLanding from './[...slug]';
 
 function PackingList() {
   return (
