@@ -1,20 +1,44 @@
 import React, { useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components';
 import Header from '../../../components/common/Header';
+import { AddFolderInput } from '../../../service/folder';
+import { AddPakingListIntroInput } from '../../../service/packingList/alone';
 import { packmanColors } from '../../../styles/color';
+import useAPI from '../../../utils/hooks/useAPI';
 
-function ListIntroLanding() {
+interface ListIntroProps {
+  isAloned: boolean;
+}
+function ListIntroLanding(props: ListIntroProps) {
+  const { isAloned } = props;
+
+  const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
-  const [selectedTagIndex, setSelectedTagIndex] = useState<number>(-1);
-  const [isValidListName, setIsValidName] = useState<boolean>(false);
+  const [selectedTagIndex, setSelectedTagIndex] = useState<{ id: string; index: number }>({
+    id: '',
+    index: -1,
+  });
+  const [listName, setListName] = useState<string>('');
 
-  const tempArr = [
-    { id: '1', title: '국내여행' },
-    { id: '2', title: '어학연수' },
-    { id: '3', title: '콘서트' },
-    { id: '4', title: '제주 한달 살이' },
-    { id: '5', title: '엠티' },
-  ];
+  const getFolders = useAPI((api) => api.folder.getFolders);
+  const addIntroFolder = useAPI((api) => api.packingList.alone.addIntroFolder);
+  const addFolder = useAPI((api) => api.folder.addFolder);
+
+  const { data } = useQuery('folderList', () => getFolders(), {
+    suspense: true,
+  });
+  const { mutate: addIntroMutate, isError } = useMutation(
+    'addIntroFolder',
+    (info: AddPakingListIntroInput) => addIntroFolder(info),
+  );
+  const { mutate: addFolerMutate } = useMutation('addFolderName', (info: AddFolderInput) =>
+    addFolder(info),
+  );
+
+  if (!data) return null;
+
+  const { aloneFolders, togetherFolders } = data.data;
 
   const getTodayDate = () => {
     const current = new Date();
@@ -23,17 +47,29 @@ function ListIntroLanding() {
     return date;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFolderName(e.target.value);
   };
 
-  const handleClick = () => {
-    console.log('생성 버튼 클릭', folderName);
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
   };
 
-  const handleTagClick = (index: number) => {
-    console.log('tag clicked', index);
-    setSelectedTagIndex(index);
+  const handleListNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setListName(e.target.value);
+  };
+
+  // 폴더 생성 버튼 클릭
+  const handleAddFolder = () => {
+    addFolerMutate({ title: folderName, isAloned });
+  };
+
+  const handleTagClick = (id: string, index: number) => {
+    setSelectedTagIndex({ id, index });
+  };
+
+  const handleNextButtonClick = () => {
+    addIntroMutate({ departureDate: date, folderId: selectedTagIndex.id, title: listName });
   };
 
   return (
@@ -41,43 +77,57 @@ function ListIntroLanding() {
       <Header back title="리스트 작성하기" />
       <StyledDataContainer>
         <h3>언제 출발하시나요?</h3>
-        <input type="date" defaultValue={getTodayDate()} />
+        <input type="date" onChange={handleDateChange} defaultValue={getTodayDate()} />
       </StyledDataContainer>
       <StyledFolderContainer>
         <h3>폴더를 선택해주세요</h3>
         <div>
+          {/* Todo : folder 이름 입력후, 생성버튼 클릭 시 post 요청과 함께 데이터 변경하는 방법 */}
           <input
             type="text"
-            onChange={handleChange}
+            onChange={handleFolderNameChange}
             placeholder="폴더 이름을 입력하세요"
             maxLength={10}
           />
-          <button onClick={handleClick}>생성</button>
+          <button onClick={handleAddFolder}>생성</button>
         </div>
         <StyledTagContainer>
-          {tempArr.map((v, index) => (
-            <StyledTag
-              key={v.id}
-              isSelected={index === selectedTagIndex}
-              onClick={() => handleTagClick(index)}
-            >
-              {v.title}
-            </StyledTag>
-          ))}
+          {isAloned
+            ? aloneFolders.map((v, index) => (
+                <StyledTag
+                  key={v.id}
+                  isSelected={index === selectedTagIndex.index}
+                  onClick={() => handleTagClick(v.id, index)}
+                >
+                  {v.title}
+                </StyledTag>
+              ))
+            : togetherFolders.map((v, index) => (
+                <StyledTag
+                  key={v.id}
+                  isSelected={index === selectedTagIndex.index}
+                  onClick={() => handleTagClick(v.id, index)}
+                >
+                  {v.title}
+                </StyledTag>
+              ))}
         </StyledTagContainer>
       </StyledFolderContainer>
       <StyledListNameContainer>
         <h3>리스트 이름을 작성해주세요</h3>
         <div>
-          {!isValidListName && <label>중복된 리스트 이름입니다</label>}
+          {isError && <label>중복된 리스트 이름입니다</label>}
           <input
             type="text"
-            onChange={handleChange}
             placeholder="예시) 혼자 캐나다 여행"
             maxLength={12}
+            onChange={handleListNameChange}
           />
         </div>
       </StyledListNameContainer>
+      <StyledButtonContainer>
+        <StyledNextButton onClick={handleNextButtonClick}>다음 단계</StyledNextButton>
+      </StyledButtonContainer>
     </StyledRoot>
   );
 }
@@ -208,4 +258,20 @@ export const StyledListNameContainer = styled.section`
     font-size: 1.2rem;
     color: ${packmanColors.pmPink};
   }
+`;
+
+export const StyledButtonContainer = styled.section`
+  position: fixed;
+  bottom: 3.3rem;
+  left: 2rem;
+  width: calc(100% - 4rem);
+`;
+export const StyledNextButton = styled.button`
+  width: 100%;
+  padding: 1.2rem 2.9rem;
+  font-size: 1.4rem;
+  color: ${packmanColors.pmWhite};
+  background: ${packmanColors.pmPink};
+  border: none;
+  border-radius: 8px;
 `;
