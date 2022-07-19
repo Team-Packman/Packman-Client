@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { AddFolderInput, GetFoldersOutput } from '../../../service/folder';
 import { packmanColors } from '../../../styles/color';
@@ -38,6 +38,8 @@ function FolderLanding() {
   const editFolderName = useAPI((api) => api.folder.editFolderName);
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
+
+  const client = useQueryClient();
 
   const { data: folderList } = useQuery('folderList', () => getFolders(), {
     suspense: true,
@@ -129,7 +131,7 @@ function FolderLanding() {
   };
 
   const handleFolderClick = (id: string, categoryName: string) => {
-    router.push(`/packingList/${categoryName}/${id}`);
+    router.push(`/packing-list/${categoryName}/${id}`);
   };
 
   const getSwiperIndex = (index: number) => {
@@ -139,9 +141,9 @@ function FolderLanding() {
   // Floating modal onClick handler
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/pakingList/together');
+      router.push('/packing-list/together');
     } else if (index === 1) {
-      router.push('/packingList/alone');
+      router.push('/packing-list/alone');
     } else if (index === 2) {
       setIsEditing(true);
     }
@@ -170,7 +172,7 @@ function FolderLanding() {
           )}
         </StyledRecentBanner>
         <SwiperContainer isRecentListExist={isRecentListExist} getSwiperIndex={getSwiperIndex}>
-          {folderData.data.togetherFolders.length && (
+          {folderData?.data.togetherFolders.length && (
             <FolderList
               key="1"
               categoryName="together"
@@ -186,7 +188,7 @@ function FolderLanding() {
               handleCancleAddFolder={handleCancleAddFolder}
             />
           )}
-          {folderData.data.aloneFolders.length && (
+          {folderData?.data.aloneFolders.length && (
             <FolderList
               key="2"
               categoryName="alone"
@@ -203,7 +205,9 @@ function FolderLanding() {
             />
           )}
         </SwiperContainer>
-        {isRecentListExist && !showBottomModal && <FloatActionButton onClick={handleFloatClick} />}
+        {isRecentListExist && !showBottomModal && (
+          <FloatActionButton onClick={handleFloatClick} pageName="folder" />
+        )}
         {showBottomModal && (
           <BottomModal
             closeModal={() => {

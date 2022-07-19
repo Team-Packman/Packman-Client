@@ -22,11 +22,9 @@ function EditProfile() {
           <Header />
           <EditingProfile
             comment={
-              <>
-                <h1>
-                  <b>프로필 수정</b>을 완료해주세요!
-                </h1>
-              </>
+              <h1>
+                <b>프로필 수정</b>을 완료해주세요!
+              </h1>
             }
             oldNickname={nickname}
             finishEditing={() => {

@@ -1,62 +1,42 @@
 import styled from 'styled-components';
 import iClose from '../../../public/assets/svg/iClose.svg';
 import Image from 'next/image';
-import { packmanColors } from '../../../styles/color';
 
 interface ModalProps {
-  content: string;
-  leftButtonContent?: string | null;
-  rightButtonContent?: string | null;
+  title: string;
+  image?: React.ReactNode;
+  button?: React.ReactNode;
   closeModal: () => void;
-  leftButtonFn?: () => void;
-  rightButtonFn?: () => void;
-  isWithDrawn?: boolean;
 }
 export default function Modal(props: ModalProps) {
-  const {
-    content,
-    leftButtonContent,
-    rightButtonContent,
-    closeModal,
-    leftButtonFn,
-    rightButtonFn,
-    isWithDrawn,
-  } = props;
-
-  console.log(isWithDrawn);
+  const { title, image, button, closeModal } = props;
 
   return (
     <>
-      <StyledRoot onClick={closeModal} />
-      <StyledModalWrapper>
+      <StyledBackground onClick={closeModal} />
+      <StyledRoot>
         <StyledImageWrapper>
-          <Image src={iClose} alt="닫기" onClick={closeModal} />
+          <Image src={iClose} alt="close" onClick={closeModal} />
         </StyledImageWrapper>
         <StyledModalInfo>
-          <p>{content}</p>
-          {!isWithDrawn && (
-            <StyledButtonWrapper>
-              <StyledLeftButton onClick={leftButtonFn}>{leftButtonContent}</StyledLeftButton>
-              {rightButtonContent && (
-                <StyledRightButton onClick={rightButtonFn}>{rightButtonContent}</StyledRightButton>
-              )}
-            </StyledButtonWrapper>
-          )}
+          <p>{title}</p>
+          {image}
+          {button}
         </StyledModalInfo>
-      </StyledModalWrapper>
+      </StyledRoot>
     </>
   );
 }
-const StyledRoot = styled.div`
+const StyledBackground = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.47);
-  z-index: 10;
+  z-index: 110;
   overflow: hidden;
 `;
-const StyledModalWrapper = styled.div`
+const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -70,7 +50,7 @@ const StyledModalWrapper = styled.div`
   background-color: #fff;
   border-radius: 1.34rem;
 
-  z-index: 10;
+  z-index: 115;
 
   & > span {
     position: absolute;
@@ -93,28 +73,3 @@ const StyledModalInfo = styled.div`
     color: #282828;
   }
 `;
-const StyledButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 1.9rem;
-`;
-
-const ButtonStyle = styled.button`
-  width: 13.1rem;
-  height: 4.1rem;
-  border-radius: 0.3rem;
-  background-color: ${packmanColors.pmPink};
-  color: ${packmanColors.pmWhite};
-  border-radius: 0.8rem;
-  font-weight: 400;
-  font-size: 1.4rem;
-  border: none;
-`;
-
-const StyledLeftButton = styled(ButtonStyle)`
-  background-color: ${packmanColors.pmWhite};
-  color: ${packmanColors.pmBlueGrey};
-  border: 1px solid ${packmanColors.pmBlueGrey};
-`;
-
-const StyledRightButton = styled(ButtonStyle)``;

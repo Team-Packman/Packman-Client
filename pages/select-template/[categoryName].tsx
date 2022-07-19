@@ -1,30 +1,26 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
-import template from '../public/assets/svg/template.svg';
-import Template from './components/selectTemplate/Template';
-import useAPI from '../utils/hooks/useAPI';
+import template from '../../public/assets/svg/template.svg';
+import Template from '../components/selectTemplate/Template';
+import useAPI from '../../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import Header from '../components/common/Header';
-import { packmanColors } from '../styles/color';
+import Header from '../../components/common/Header';
+import { packmanColors } from '../../styles/color';
 import { useState } from 'react';
-import useGlobalState from '../utils/hooks/useGlobalState';
+import useGlobalState from '../../utils/hooks/useGlobalState';
 
-function CreateList() {
+function SelectTemplateLanding() {
+  const router = useRouter();
   const [activateButton, setActivateButton] = useState(false);
   const getTemplateList = useAPI((api) => api.ect.getTemplateList);
   const { data } = useQuery('templateList', () => getTemplateList());
-  const router = useRouter();
   const [isTemplate, setIsTemplate] = useGlobalState('isTemplate', false);
 
-  // useEffect(() => {
-  //   if (router.isReady) {
-  //     setIsAloned(router.query.toString());
-  //   }
-  // }, []);
+  if (!data) return null;
+  if (!router.query) return null;
 
-  // 페이지 path에서 alone이랑 together 추출해서
-  if (!data) return;
+  const { categoryName } = router.query; //together | alone
 
   const { basicTemplate, myTemplate } = data.data;
 
@@ -39,7 +35,13 @@ function CreateList() {
           isAloned={true}
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
-          activate={() => setActivateButton(true)}
+          activate={(isSelected: string) => {
+            if (isSelected === '') {
+              setActivateButton(false);
+            } else {
+              setActivateButton(true);
+            }
+          }}
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
@@ -55,8 +57,12 @@ function CreateList() {
         </StyleButton>
         <StyleButton
           isTemplate={true}
+          disabled={!activateButton}
           isActivated={activateButton}
-          onClick={() => setIsTemplate(true)}
+          onClick={() => {
+            setIsTemplate(true);
+            router.push('/preview');
+          }}
         >
           확인
         </StyleButton>
@@ -65,14 +71,13 @@ function CreateList() {
   );
 }
 
-export default CreateList;
+export default SelectTemplateLanding;
 
 const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
 `;
 const StyledTemplateWrapper = styled.div`
   display: flex;
