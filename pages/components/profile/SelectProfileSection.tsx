@@ -136,6 +136,7 @@ const StyledRoot = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
   margin-top: 4.84rem;
 `;
 const StyledInputWrapper = styled.div`
@@ -173,9 +174,11 @@ const StyledSelectProfileWrapper = styled.div`
   flex-wrap: wrap;
   width: 25.6rem;
   gap: 0.8rem;
-  margin: 3.2rem 0 5.57rem 0;
+  margin: 1.5rem 0 5.57rem 0;
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
+  position: absolute;
+  bottom: 1.5rem;
   width: 33.6rem;
   height: 4.1rem;
   border: none;

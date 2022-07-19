@@ -27,5 +27,6 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
   padding: 0 2rem;
 `;
