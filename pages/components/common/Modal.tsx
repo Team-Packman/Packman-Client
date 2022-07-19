@@ -33,7 +33,7 @@ const StyledBackground = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.47);
-  z-index: 10;
+  z-index: 110;
   overflow: hidden;
 `;
 const StyledRoot = styled.div`
@@ -50,7 +50,7 @@ const StyledRoot = styled.div`
   background-color: #fff;
   border-radius: 1.34rem;
 
-  z-index: 10;
+  z-index: 115;
 
   & > span {
     position: absolute;
