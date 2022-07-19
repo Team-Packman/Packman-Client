@@ -32,7 +32,7 @@ const StyledListName = styled.input`
   line-height: 3.4rem;
   display: flex;
   align-items: center;
-  color: ${packmanColors.pmBlack};
+  color: ${packmanColors.black};
   border: 0;
   :focus {
     outline: none;
@@ -48,12 +48,12 @@ const StyledWhenToGo = styled.div`
   align-items: center;
   text-align: center;
   gap: 0.5rem;
-  color: ${packmanColors.pmBlack};
+  color: ${packmanColors.black};
 `;
 
 const StyledDate = styled.input`
   border: 0;
-  color: ${packmanColors.pmBlack};
+  color: ${packmanColors.black};
   ::-webkit-calendar-picker-indicator {
     color: rgba(0, 0, 0, 0);
     opacity: 1;
@@ -74,7 +74,7 @@ const StyledMoreFunction = styled.div`
   font-weight: 600;
   font-size: 14px;
   line-height: 17px;
-  color: ${packmanColors.pmDarkGrey};
+  color: ${packmanColors.darkGray};
   padding: 0 1rem;
   border-right: 1px solid ${packmanColors.pmGrey};
   :last-child {

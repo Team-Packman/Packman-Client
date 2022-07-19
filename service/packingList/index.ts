@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
-import { createTogetherAPI } from '../together/mockAPI';
-import { TogetherAPI } from './../together/mockAPI';
+import { createTogetherAPI } from './together/mockAPI';
+import { TogetherAPI } from './together/mockAPI';
 import { AloneAPI, createAloneAPI } from './alone/mockAPI';
 
 export type PackingListAPI = AloneAPI & TogetherAPI;

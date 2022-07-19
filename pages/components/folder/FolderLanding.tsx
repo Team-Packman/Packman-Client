@@ -131,7 +131,7 @@ function FolderLanding() {
   };
 
   const handleFolderClick = (id: string, categoryName: string) => {
-    router.push(`/packingList/${categoryName}/${id}`);
+    router.push(`/packing-list/${categoryName}/${id}`);
   };
 
   const getSwiperIndex = (index: number) => {
@@ -141,9 +141,9 @@ function FolderLanding() {
   // Floating modal onClick handler
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/pakingList/together');
+      router.push('/packing-list/together');
     } else if (index === 1) {
-      router.push('/packingList/alone');
+      router.push('/packing-list/alone');
     } else if (index === 2) {
       setIsEditing(true);
     }
@@ -205,7 +205,9 @@ function FolderLanding() {
             />
           )}
         </SwiperContainer>
-        {isRecentListExist && !showBottomModal && <FloatActionButton onClick={handleFloatClick} />}
+        {isRecentListExist && !showBottomModal && (
+          <FloatActionButton onClick={handleFloatClick} pageName="folder" />
+        )}
         {showBottomModal && (
           <BottomModal
             closeModal={() => {
