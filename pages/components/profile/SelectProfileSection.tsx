@@ -15,12 +15,12 @@ import profile5 from '../../../public/assets/svg/profile5.svg';
 import profile6 from '../../../public/assets/svg/profile6.svg';
 
 const profileImage = [
-  { id: 1, src: profile1 },
-  { id: 2, src: profile2 },
-  { id: 3, src: profile3 },
-  { id: 4, src: profile4 },
-  { id: 5, src: profile5 },
-  { id: 6, src: profile6 },
+  { id: '0', src: profile1 },
+  { id: '1', src: profile2 },
+  { id: '2', src: profile3 },
+  { id: '3', src: profile4 },
+  { id: '4', src: profile5 },
+  { id: '5', src: profile6 },
 ];
 
 interface SelectProfileSectionProps {
@@ -32,7 +32,7 @@ interface SelectProfileSectionProps {
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const { isEditing, oldNickname, finishEditing } = props;
   const [nickname, setNickname] = useState('');
-  const [profile, setProfile] = useState(profileImage[0].src);
+  const [profile, setProfile] = useState(profileImage[0].id);
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -56,7 +56,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   return (
     <StyledRoot>
-      <Image src={profile} alt="profile-image" width={120} height={120} />
+      <Image src={profileImage[+profile].src} alt="profile-image" width={120} height={120} />
       <StyledInputWrapper>
         <StyledInput
           type="text"
@@ -82,7 +82,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
             alt="profile-images"
             width={80}
             height={80}
-            onClick={() => setProfile(src)}
+            onClick={() => setProfile(id)}
           />
         ))}
       </StyledSelectProfileWrapper>
@@ -97,7 +97,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                 if (finishEditing) {
                   const data = await updateUserProfile({
                     nickname,
-                    profileImageId: '3',
+                    profileImageId: profile,
                   });
                   finishEditing();
                 }
