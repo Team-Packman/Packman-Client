@@ -15,7 +15,7 @@ function SelectTemplateLanding() {
   const [activateButton, setActivateButton] = useState(false);
   const getTemplateList = useAPI((api) => api.ect.getTemplateList);
   const { data } = useQuery('templateList', () => getTemplateList());
-  const [payload, setPayload] = useGlobalState('payload', {
+  const [_, setPayload] = useGlobalState('payload', {
     type: 'basic',
     categoryName: '',
   });

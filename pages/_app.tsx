@@ -12,6 +12,11 @@ import { setScreenSize } from '../utils/setScreenSize';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
+  const [showing, setShowing] = useState(false);
+
+  useEffect(() => {
+    setShowing(true);
+  }, []);
 
   useEffect(() => {
     const localStoragePersistor = createWebStoragePersistor({ storage: window?.localStorage });
@@ -32,6 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     window.addEventListener('resize', () => setScreenSize());
     return () => window.removeEventListener('resize', setScreenSize);
   });
+  if (!showing) {
+    return null;
+  }
 
   return (
     <>

@@ -1,9 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
-import tempBox from '../../../public/assets/svg/tempBox.svg';
 import { UpdateUserProfileInput } from '../../../service/user';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
@@ -13,15 +11,12 @@ import profile3 from '../../../public/assets/svg/profile3.svg';
 import profile4 from '../../../public/assets/svg/profile4.svg';
 import profile5 from '../../../public/assets/svg/profile5.svg';
 import profile6 from '../../../public/assets/svg/profile6.svg';
+import useGlobalState from '../../../utils/hooks/useGlobalState';
 
-const profileImage = [
-  { id: '0', src: profile1 },
-  { id: '1', src: profile2 },
-  { id: '2', src: profile3 },
-  { id: '3', src: profile4 },
-  { id: '4', src: profile5 },
-  { id: '5', src: profile6 },
-];
+interface ProfileImageData {
+  id: string;
+  src: any;
+}
 
 interface SelectProfileSectionProps {
   isEditing?: boolean;
@@ -31,10 +26,18 @@ interface SelectProfileSectionProps {
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const { isEditing, oldNickname, finishEditing } = props;
+  const [profileImage] = useGlobalState<ProfileImageData[]>('profileImageList', [
+    { id: '0', src: profile1 },
+    { id: '1', src: profile2 },
+    { id: '2', src: profile3 },
+    { id: '3', src: profile4 },
+    { id: '4', src: profile5 },
+    { id: '5', src: profile6 },
+  ]);
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState(profileImage[0].id);
   const router = useRouter();
-  const queryClient = useQueryClient();
+  console.log(profileImage);
 
   //프로필 수정
   const updateUserProfile = useAPI(
@@ -91,22 +94,23 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         type="button"
         disabled={!setIsActivate()}
         isActivate={setIsActivate()}
-        onClick={
-          isEditing
-            ? async () => {
-                if (finishEditing) {
-                  const data = await updateUserProfile({
-                    nickname,
-                    profileImageId: profile,
-                  });
-                  finishEditing();
-                }
-              }
-            : () => router.push('/folder')
-        }
+        // onClick={
+        //   isEditing
+        //     ? async () => {
+        //         if (finishEditing) {
+        //           const data = await updateUserProfile({
+        //             nickname,
+        //             profileImageId: profile,
+        //           });
+        //           finishEditing();
+        //         }
+        //       }
+        //     : () => router.push('/folder')
+        // }
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
       </StyledButton>
+      <button onClick={() => router.push('/edit-profile')}>edit-profile뷰로 가기</button>
     </StyledRoot>
   );
 }
@@ -124,7 +128,7 @@ const StyledInputWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const StyledText = styled.p<{ nickname: boolean }>`
+const StyledText = styled.div<{ nickname: boolean }>`
   opacity: ${({ nickname }) => nickname && '0'};
   padding-top: 0.77rem;
   color: ${packmanColors.pmDeepGrey};

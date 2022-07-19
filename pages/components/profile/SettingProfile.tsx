@@ -8,12 +8,18 @@ import { useState } from 'react';
 import Modal from '../common/Modal';
 import useAPI from '../../../utils/hooks/useAPI';
 import Footer from '../../components/common/Footer';
+import useGlobalState from '../../../utils/hooks/useGlobalState';
 
 interface ProfileData {
   id: string;
   nickname: string;
   email: string;
   profileImageId: string;
+}
+
+interface ProfileImageData {
+  id: string;
+  src: any;
 }
 
 interface SettingProfileProps {
@@ -28,6 +34,18 @@ function SettingProfile(props: SettingProfileProps) {
   const [showModal, setShowModal] = useState(false);
   const deleteUserInfo = useAPI((api) => api.user.deleteUserInfo);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
+  const [profileImage] = useGlobalState<ProfileImageData[]>('profileImageList');
+
+  const onClickLeftModalButton = async () => {
+    await deleteUserInfo();
+    setIsWithdrawn(true);
+  };
+
+  const onClickRightModalButton = () => {
+    setShowModal(false);
+  };
+
+  console.log(profileImage);
 
   return (
     <StyledRoot>
@@ -36,7 +54,7 @@ function SettingProfile(props: SettingProfileProps) {
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
-          <Image alt="프로필 이미지" src={tempBox} />
+          <Image src={profileImage[+profileImageId].src} alt="my-profile-image" />
           <div>
             <h1>{nickname}</h1>
             <p>{email}</p>
@@ -75,16 +93,18 @@ function SettingProfile(props: SettingProfileProps) {
 
         {showModal && (
           <Modal
-            content={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
-            leftButtonContent={!isWithdrawn ? '탈퇴하기' : null}
-            rightButtonContent={!isWithdrawn ? '취소하기' : null}
+            title={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
             closeModal={() => setShowModal(false)}
-            leftButtonFn={async () => {
-              await deleteUserInfo();
-              setIsWithdrawn(true);
-            }}
-            rightButtonFn={() => setShowModal(false)}
-            isWithDrawn={isWithdrawn}
+            button={
+              !isWithdrawn && (
+                <StyledModalButtonWrapper>
+                  <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                    탈퇴하기
+                  </StyledModalButton>
+                  <StyledModalButton onClick={onClickRightModalButton}>취소하기</StyledModalButton>
+                </StyledModalButtonWrapper>
+              )
+            }
           />
         )}
       </StyledSettingWrapper>
@@ -205,4 +225,20 @@ const StyledEtcWrapper = styled.div`
 `;
 const StyledFooter = styled.div`
   margin: 6.1rem 0 5rem 0;
+`;
+const StyledModalButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+`;
+const StyledModalButton = styled.button<{ left?: boolean }>`
+  width: 13.5rem;
+  height: 3.4rem;
+  border: ${({ left }) => (left ? `1px solid ${packmanColors.pmDeepGrey}` : 'none')};
+  color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
+  background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
+  border-radius: 0.8rem;
+  font-weight: 600;
+  font-size: 1.5rem;
 `;
