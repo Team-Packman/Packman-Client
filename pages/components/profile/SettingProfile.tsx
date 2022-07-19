@@ -1,6 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Image from 'next/image';
-import tempBox from '../../../public/assets/svg/tempBox.svg';
 import { packmanColors } from '../../../styles/color';
 import { useState } from 'react';
 import Modal from '../common/Modal';
@@ -61,15 +60,10 @@ function SettingProfile(props: SettingProfileProps) {
         <StyledEtc gap={0.72} paddingTop={2.95} borderBottom={true}>
           <h1>설정</h1>
           <StyledToggleWrapper>
-            <p>알림설정</p>
-            <StyledToggleButton
-              alt="토글버튼"
-              src={toggle ? iToggleOn : iToggleOff}
-              width={40}
-              height={40}
-              layout="fixed"
-              onClick={() => setToggle((prev) => !prev)}
-            />
+            <p>알림 설정</p>
+            <StyledToggle isToggled={toggle} onClick={() => setToggle((prev) => !prev)}>
+              <StyledToggleCircle isToggled={toggle} />
+            </StyledToggle>
           </StyledToggleWrapper>
         </StyledEtc>
         <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
@@ -121,8 +115,6 @@ const StyledRoot = styled.div`
   width: 100%;
   height: 100%;
   & > p {
-    /* position: absolute;
-    bottom: 0; */
     color: ${packmanColors.pmGrey};
     font-weight: 300;
     font-size: 1.2rem;
@@ -190,8 +182,26 @@ const StyledToggleWrapper = styled.div`
     font-weight: 400;
   }
 `;
-const StyledToggleButton = styled(Image)`
+const StyledToggle = styled.div<{ isToggled: boolean }>`
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 4rem;
+  height: 2.25rem;
+  border-radius: 1.5rem;
+  background-color: ${({ isToggled }) =>
+    isToggled ? packmanColors.pmPink : packmanColors.pmDeepGrey};
+`;
+const StyledToggleCircle = styled.div<{ isToggled: boolean }>`
+  position: absolute;
+  left: 0.225rem;
+  transform: ${({ isToggled }) => isToggled && 'translateX(1.75rem)'};
+  width: 1.8rem;
+  height: 1.8rem;
+
+  background-color: ${packmanColors.pmWhite};
+  border-radius: 50%;
+  transition: 0.4s ease-in-out;
 `;
 
 const StyledEtc = styled.div<{ gap: number; paddingTop: number; borderBottom: boolean }>`
