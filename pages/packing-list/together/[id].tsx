@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import SwipeableList from '../components/packingList/SwipeableList';
+import SwipeableList from '../../components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
-import iShowMore from '../../public/assets/svg/iShowMore.svg';
-import iTrash from '../../public/assets/svg/iTrash.svg';
-import Header from '../../components/common/Header';
-import DropBox from '../components/packingList/DropBox';
-import useAPI from '../../utils/hooks/useAPI';
+import iShowMore from '../../../public/assets/svg/iShowMore.svg';
+import iTrash from '../../../public/assets/svg/iTrash.svg';
+import Header from '../../../components/common/Header';
+import DropBox from '../../components/packingList/DropBox';
+import useAPI from '../../../utils/hooks/useAPI';
 import { useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import Modal from '../components/common/Modal';
-import { packmanColors } from '../../styles/color';
-import FloatActionButton from '../components/folder/FloatActionButton';
+import Modal from '../../components/common/Modal';
+import { packmanColors } from '../../../styles/color';
+import FloatActionButton from '../../components/folder/FloatActionButton';
 
 function PackingListLanding() {
   const [toggle, setToggle] = useState(false);
@@ -30,18 +30,14 @@ function PackingListLanding() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  if (!router.query.slug) return null;
+  if (!router.query) return null;
 
-  const categoryName = router.query.slug[0]; //together | alone
-  const folderId = router.query.slug[1];
+  const { id } = router.query;
+  const categoryName = router.route.split('/')[2];
 
   if (!data || !data.data) return null;
-  //api alone/together 둘다 호출하고 categoryName에 따라 packingList에 할당하자.
 
-  // const { alonePackingList, folder, currentFolder } = data.data;
-  const packingList = data?.data?.alonePackingList;
-  const folder = data?.data?.folder;
-  const currentFolder = data?.data?.currentFolder;
+  const { alonePackingList, folder, currentFolder } = data.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
