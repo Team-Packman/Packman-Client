@@ -31,7 +31,7 @@ interface RemainingInfoPayload {
 
 type RemainingInfoType = 'title' | 'departure' | 'save';
 
-function PreviewLanding() {
+function TogetherLanding() {
   const client = useQueryClient();
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -251,7 +251,7 @@ function PreviewLanding() {
         />
       }
     >
-      <StyledPreviewLanding>
+      <StyledTogetherLanding>
         <Swiper
           modules={[Pagination, Virtual]}
           style={{ height: '100%' }}
@@ -344,7 +344,7 @@ function PreviewLanding() {
             }
           />
         </FunctionSection>
-      </StyledPreviewLanding>
+      </StyledTogetherLanding>
       {bottomModalOpen && (
         <StyledBg onClick={bottomModalCloseHandler}>
           <StyledModal>
@@ -358,15 +358,16 @@ function PreviewLanding() {
           members={members}
           modalHandler={packerModalCloseHandler}
           packId={currentFocus}
+          listId={info.togetherPackingList.id}
         />
       )}
     </Layout>
   );
 }
 
-export default PreviewLanding;
+export default TogetherLanding;
 
-const StyledPreviewLanding = styled.div`
+const StyledTogetherLanding = styled.div`
   height: 100%;
   background-color: ${packmanColors.white};
   overflow: hidden;

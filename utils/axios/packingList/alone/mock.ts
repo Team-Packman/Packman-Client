@@ -1,4 +1,7 @@
-import { GetPackingListWithFoldersOutput } from './../../../../service/packingList/alone/index';
+import {
+  GetPackingListWithFoldersOutput,
+  GetAlonePackingListDetailOutput,
+} from './../../../../service/packingList/alone/index';
 import { AxiosInstance } from 'axios';
 export const fetchPackingListWithFolders = async (
   request: AxiosInstance,
@@ -48,6 +51,65 @@ export const fetchPackingListWithFolders = async (
               packRemainNum: 20,
             },
           ],
+        },
+      });
+    }, 500),
+  );
+};
+
+export const fetchPackingListDetail = async (
+  request: AxiosInstance,
+  pacingListId: string,
+): Promise<GetAlonePackingListDetailOutput> => {
+  return new Promise((r) =>
+    setTimeout(() => {
+      r({
+        status: 200,
+        success: true,
+        message: '혼자 패킹리스트 상세조회 성공',
+        data: {
+          _id: '62bbb80d9d5dc1aa4c3d2839',
+          title: '혼자 홍콩 한달 살이',
+          departureDate: '2022.01.24',
+          category: [
+            {
+              _id: '62bbb80d9d5dc1aa4c3d2839',
+              name: '필수',
+              pack: [
+                {
+                  _id: '62bbb80d9d5dc1aa4c3d2839',
+                  name: '여권',
+                  isChecked: true,
+                  packer: null,
+                },
+                {
+                  _id: '62bbb80d9d5dc1aa4c3d2839',
+                  name: '가방',
+                  isChecked: true,
+                  packer: null,
+                },
+              ],
+            },
+            {
+              _id: '62bbb80d9d5dc1aa4c3d2839',
+              name: '의류',
+              pack: [
+                {
+                  _id: '62bbb80d9d5dc1aa4c3d2839',
+                  name: '모자',
+                  isChecked: false,
+                  packer: null,
+                },
+                {
+                  _id: '62bbb80d9d5dc1aa4c3d2839',
+                  name: '수영복',
+                  isChecked: true,
+                  packer: null,
+                },
+              ],
+            },
+          ],
+          isSaved: false,
         },
       });
     }, 500),
