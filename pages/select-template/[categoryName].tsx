@@ -68,7 +68,7 @@ function SelectTemplateLanding() {
           isActivated={activateButton}
           onClick={() => {
             setPayload({
-              type: 'template',
+              type: categoryName,
               categoryName,
             });
             router.push('/preview');
