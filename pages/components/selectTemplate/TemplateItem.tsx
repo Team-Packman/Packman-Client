@@ -36,7 +36,7 @@ const StyledRoot = styled.div<{ isListEmpty: boolean; isSelected: boolean }>`
   justify-content: center;
   align-items: center;
   height: 3.4rem;
-  padding: 0.8rem 1.2rem;
+  padding: 0.7rem 1.1rem;
   border-radius: 0.8rem;
   font-size: 1.5rem;
 
@@ -48,7 +48,7 @@ const StyledRoot = styled.div<{ isListEmpty: boolean; isSelected: boolean }>`
           color: ${packmanColors.pmPink};
         `
       : css`
-          border: none;
+          border: 1px solid ${packmanColors.pmBlueGrey};
           background-color: ${packmanColors.pmBlueGrey};
           color: ${packmanColors.pmDeepGrey};
         `};

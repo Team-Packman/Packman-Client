@@ -7,7 +7,7 @@ import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import Header from '../../components/common/Header';
 import { packmanColors } from '../../styles/color';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 
 function SelectTemplateLanding() {
@@ -15,12 +15,15 @@ function SelectTemplateLanding() {
   const [activateButton, setActivateButton] = useState(false);
   const getTemplateList = useAPI((api) => api.ect.getTemplateList);
   const { data } = useQuery('templateList', () => getTemplateList());
-  const [isTemplate, setIsTemplate] = useGlobalState('isTemplate', false);
+  const [payload, setPayload] = useGlobalState('payload', {
+    type: 'basic',
+    categoryName: '',
+  });
 
   if (!data) return null;
   if (!router.query) return null;
-
-  const { categoryName } = router.query; //together | alone
+  console.log(router.query.categoryName);
+  const categoryName = router.query.categoryName as unknown as string; //together | alone
 
   const { basicTemplate, myTemplate } = data.data;
 
@@ -49,7 +52,11 @@ function SelectTemplateLanding() {
           isTemplate={false}
           isActivated={true}
           onClick={() => {
-            setIsTemplate(false);
+            setPayload({
+              type: 'basic',
+              categoryName,
+            });
+
             router.push('/test');
           }}
         >
@@ -60,7 +67,10 @@ function SelectTemplateLanding() {
           disabled={!activateButton}
           isActivated={activateButton}
           onClick={() => {
-            setIsTemplate(true);
+            setPayload({
+              type: 'template',
+              categoryName,
+            });
             router.push('/preview');
           }}
         >
