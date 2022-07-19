@@ -375,8 +375,8 @@ const StyledTogetherLanding = styled.div`
 
 const StyledBody = styled.div`
   display: flex;
+  //100% - subheader - device
   height: calc(100% - 11rem - 10rem);
-  //마지막은 디바이스 조절 변수
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: scroll;
