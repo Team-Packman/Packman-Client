@@ -165,7 +165,7 @@ function PackingListLanding() {
                     deleteList.length > 0 && setDeleteList([]);
                   }}
                 >
-                  선택해제
+                  선택 해제
                 </span>
               )}
 
@@ -273,10 +273,11 @@ const StyledCaptionWrapper = styled.div`
 
   & > span {
     position: absolute;
+    font-weight: 600;
     font-size: 1.4rem;
-    left: 2.6rem;
+    left: 2rem;
     bottom: 1rem;
-    color: ${packmanColors.pmDeepGrey};
+    color: ${packmanColors.pmDarkGrey};
   }
 `;
 const StyledCaptionText = styled.p`
@@ -297,7 +298,9 @@ const StyledCaptionButtonWrapper = styled.div`
   right: 2rem;
   bottom: 0.9rem;
   & > p {
-    color: ${packmanColors.pmDeepGrey};
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: ${packmanColors.pmDarkGrey};
   }
 `;
 const StyledModalButtonWrapper = styled.div`
