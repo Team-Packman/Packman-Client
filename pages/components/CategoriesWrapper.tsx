@@ -38,7 +38,7 @@ const CategoryNameWrapper = styled.div`
   align-items: center;
   padding: 0.4rem 0 0.4rem 1.2rem;
   height: 3.2rem;
-  background-color: ${packmanColors.pmLightGrey};
+  background-color: ${packmanColors.pmBlueGrey};
   border-radius: 0.8rem;
 `;
 

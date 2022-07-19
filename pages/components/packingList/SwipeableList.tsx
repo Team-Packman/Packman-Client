@@ -160,23 +160,23 @@ const StyledCaptionWrapper = styled.div`
     font-size: 1.4rem;
     left: 2.6rem;
     bottom: 1rem;
-    color: ${packmanColors.darkGray};
+    color: ${packmanColors.pmDarkGrey};
   }
   & > p {
     display: flex;
     justify-content: start;
     padding: 1.8rem 0 0 2.4rem;
-    color: ${packmanColors.lightGray};
+    color: ${packmanColors.pmBlueGrey};
     font-size: 1.2rem;
     margin: 0;
   }
 `;
 const StyledCaptionText = styled.p`
   font-size: 1.4rem;
-  color: ${packmanColors.lightGray};
+  color: ${packmanColors.pmBlueGrey};
   & > span {
     font-weight: 600;
-    color: ${packmanColors.pink};
+    color: ${packmanColors.pmPink};
   }
 `;
 const StyledCaptionButtonWrapper = styled.div`
@@ -185,7 +185,7 @@ const StyledCaptionButtonWrapper = styled.div`
   right: 2rem;
   bottom: 0.9rem;
   & > p {
-    color: ${packmanColors.lightGray};
+    color: ${packmanColors.pmBlueGrey};
   }
 `;
 const StyledSwipeableListWrapper = styled.div`
@@ -201,7 +201,7 @@ const StyledDeleteButton = styled.button`
   width: 100%;
   height: 4.7rem;
   font-size: 1.2rem;
-  background-color: ${packmanColors.pink};
+  background-color: ${packmanColors.pmPink};
   color: #fff;
   border: none;
   border-radius: 0.5rem;

@@ -132,7 +132,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   height: inherit;
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
-  background-color: ${packmanColors.blueGray};
+  background-color: ${packmanColors.pmBlueGrey};
   transition: 0.4s ease-in-out;
 
   -webkit-user-select: none;
@@ -156,7 +156,7 @@ const StyledItemInfo = styled.div`
 
   & > p:first-child {
     font-size: 1.4rem;
-    color: ${packmanColors.lightGray};
+    color: ${packmanColors.pmBlueGrey};
     font-weight: 300;
   }
   & > p:nth-child(2) {
@@ -167,10 +167,10 @@ const StyledItemInfo = styled.div`
     width: 8.3rem;
     height: 2.4rem;
     background-color: #fff;
-    color: ${packmanColors.black};
+    color: ${packmanColors.pmBlack};
     font-size: 1.3rem;
     font-weight: 400;
-    border: 0.1rem solid ${packmanColors.pink};
+    border: 0.1rem solid ${packmanColors.pmPink};
     border-radius: 1.2rem;
     text-align: center;
   }
@@ -180,9 +180,9 @@ const StyledPackRemainText = styled.p`
   right: 3.557rem;
   font-weight: 400;
   font-size: 1.3rem;
-  color: ${packmanColors.black};
+  color: ${packmanColors.pmBlack};
   & > span {
-    color: ${packmanColors.pink};
+    color: ${packmanColors.pmPink};
   }
 `;
 
@@ -195,7 +195,7 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   width: ${({ isDragged }) => (isDragged ? '5.6rem' : '0rem')};
   height: 11.4rem;
   background-color: #ff0000;
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
   font-size: 1.4rem;
   font-weight: 500;
