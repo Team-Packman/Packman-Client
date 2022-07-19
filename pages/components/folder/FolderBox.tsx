@@ -112,12 +112,12 @@ export const StyledRoot = styled.section`
     position: absolute;
     content: '';
     bottom: 0;
-    right: 0;
+    /* right: 0; */
     border-style: solid;
-    width: 0;
-    border-width: 15px;
-    border-color: ${packmanColors.pmPink} rgba(255, 255, 255, 0.9) rgba(255, 255, 255, 0.9)
-      ${packmanColors.pmPink};
+    width: 100%;
+    border-width: 0.5rem;
+    border-color: ${packmanColors.pmGrey};
+    border-radius: 0 0 0.8rem 0.8rem;
   }
 `;
 
@@ -140,7 +140,7 @@ export const StyledText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 0 0.9rem 1.6rem;
+  padding: 0 0 2rem 1.6rem;
   height: 100%;
 `;
 

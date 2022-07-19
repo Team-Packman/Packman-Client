@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import iCheck from '../../../public/assets/svg/iCheck.svg';
+import iCheckPink from '../../../public/assets/svg/iCheckPink.svg';
 import iRightArrow from '../../../public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../../styles/color';
@@ -66,9 +67,8 @@ export default function SwipeablelistItem(props: ItemProps) {
       {isDeleting && (
         <StyledSelectDelete>
           <StyledCheckImage
-            src={iCheck}
+            src={deleteList.includes(id) ? iCheckPink : iCheck}
             alt="체크"
-            ischecked={deleteList.includes(id)}
             onClick={() => checkDeleteList(id)}
           />
         </StyledSelectDelete>
@@ -77,22 +77,25 @@ export default function SwipeablelistItem(props: ItemProps) {
         <StyledItemInfo>
           <p>{departureDate}</p>
           <p>{title}</p>
-          <span>총 {packTotalNum}개의 짐</span>
+          <StyledPackInfo>
+            <span>총 {packTotalNum}개의 짐</span>
+            <StyledPackRemainText>
+              아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
+            </StyledPackRemainText>
+          </StyledPackInfo>
         </StyledItemInfo>
-        <StyledPackRemainText>
-          아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
-        </StyledPackRemainText>
         <Image src={iRightArrow} alt="열기" width={24} height={24} />
       </StyledItemWrapper>
+
       {!isDeleting && (
         <StyledDeleteButton
           isDragged={isDragged}
           onClick={() => {
-            // console.log('아이템 삭제');
+            // 아이템 삭제
             onClickDeleteButton(idx);
           }}
         >
-          삭제
+          <div>삭제</div>
         </StyledDeleteButton>
       )}
     </StyledRoot>
@@ -116,12 +119,11 @@ const StyledSelectDelete = styled.div`
   height: 2.4rem;
 `;
 
-const StyledCheckImage = styled(Image)<{ ischecked: boolean }>`
+const StyledCheckImage = styled(Image)`
   width: 2.4rem;
   height: 2.4rem;
   border: 0.1rem solid #000;
   border-radius: 50%;
-  background-color: ${({ ischecked }) => (ischecked ? 'green' : '#fff')};
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
@@ -152,6 +154,7 @@ const StyledItemInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
   gap: 0.6rem;
 
   & > p:first-child {
@@ -160,10 +163,20 @@ const StyledItemInfo = styled.div`
     font-weight: 300;
   }
   & > p:nth-child(2) {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1.8rem;
   }
+`;
+const StyledPackInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 28.1rem;
+
   & > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 8.3rem;
     height: 2.4rem;
     background-color: #fff;
@@ -176,8 +189,6 @@ const StyledItemInfo = styled.div`
   }
 `;
 const StyledPackRemainText = styled.p`
-  position: absolute;
-  right: 3.557rem;
   font-weight: 400;
   font-size: 1.3rem;
   color: ${packmanColors.pmBlack};
@@ -197,7 +208,13 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   background-color: #ff0000;
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
-  font-size: 1.4rem;
-  font-weight: 500;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
+  padding: 0 1.4rem;
+
+  & > div {
+    color: ${packmanColors.pmWhite};
+    font-size: 1.6rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
 `;
