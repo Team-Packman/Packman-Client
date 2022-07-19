@@ -20,7 +20,7 @@ import random3 from '../../public/assets/svg/random3.svg';
 import random4 from '../../public/assets/svg/random4.svg';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
-const randomImage = [random1, random2, random3, random4];
+const randomImageList = [random1, random2, random3, random4];
 
 function SelectTemplateLanding() {
   const router = useRouter();
@@ -31,7 +31,8 @@ function SelectTemplateLanding() {
     type: 'basic',
     categoryName: '',
   });
-  const [basicTemplateImageIndex, setBasicTemplateImageIndex] = useState('');
+  const [templateImageIndex, setTemplateImageIndex] = useState('');
+  const [isBasicTemplate, setIsBasicTemplate] = useState(false);
 
   if (!data) return null;
   if (!router.query) return null;
@@ -43,9 +44,13 @@ function SelectTemplateLanding() {
   const changeTemplateImage = (templateId: string) => {
     basicTemplate.forEach(({ id }, idx) => {
       if (id === templateId) {
-        setBasicTemplateImageIndex(idx.toString());
+        setTemplateImageIndex(idx.toString());
       }
     });
+  };
+
+  const changeUserOwnTemplateImage = () => {
+    setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
   };
 
   return (
@@ -53,8 +58,18 @@ function SelectTemplateLanding() {
       <Header back title="템플릿 선택하기" />
       <StyledTemplateWrapper>
         <picture>
-          {basicTemplateImageList[+basicTemplateImageIndex] && (
-            <Image src={basicTemplateImageList[+basicTemplateImageIndex]} alt="template-image" />
+          {(basicTemplateImageList[+templateImageIndex] ||
+            randomImageList[+templateImageIndex]) && (
+            <Image
+              src={
+                isBasicTemplate
+                  ? basicTemplateImageList[+templateImageIndex]
+                  : randomImageList[+templateImageIndex]
+              }
+              alt="template-image"
+              width={375}
+              height={211}
+            />
           )}
         </picture>
         <Template
@@ -69,6 +84,8 @@ function SelectTemplateLanding() {
             }
           }}
           changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
+          changeUserOwnTemplateImage={changeUserOwnTemplateImage}
+          checkIsTemplate={(isTemplate: boolean) => setIsBasicTemplate(isTemplate)}
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
@@ -120,7 +137,7 @@ const StyledTemplateWrapper = styled.div`
   align-items: center;
   padding: 0 2rem;
   & > picture {
-    margin: 5.7rem 0 3.3rem 0;
+    margin: 0rem 0 3.3rem 0;
   }
 `;
 const StyledButtonWrapper = styled.div`
