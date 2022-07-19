@@ -35,7 +35,6 @@ function CheckListHeader(props: CheckListHeaderProps) {
       title: title === '' ? titleProps : title,
     };
 
-    title === '' && setTitle(titleProps); // for demo
     updateRemainingInfo(payload, 'title');
     setIsEditing(false);
   };
