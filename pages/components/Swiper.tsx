@@ -29,11 +29,7 @@ function SwiperContainer(props: SwiperProps) {
     '짐 목록을 작성해보세요',
   ]);
   const [initialButtons] = useState<string[]>(['함께 패킹 시작하기', '혼자 패킹 시작하기']);
-  // Create array with 2 slides
   const [slides] = useState(Array.from({ length: 2 }).map((_, idx) => <div key={idx}></div>));
-
-  // 최근 수정 리스트 존재 체크
-  //   const [isRecentListExist] = useState<boolean>(false);
 
   const pagination = {
     clickable: true,
@@ -123,7 +119,7 @@ export const StyledSwiper = styled(Swiper)`
     padding-top: 4.8rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 `;
