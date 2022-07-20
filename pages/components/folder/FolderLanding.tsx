@@ -315,11 +315,12 @@ export const StyledRecentBanner = styled.article<{ isRecentListExist: boolean }>
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: ${({ isRecentListExist }) =>
-    !isRecentListExist ? '0' : `1px solid ${packmanColors.pmGrey}`};
+  border: 0;
   border-radius: 1rem;
   margin: 1.4rem 0 2.9rem 0;
   padding: 2rem 2.8rem;
+  background-color: ${packmanColors.pmBlueGrey};
+  width: calc(100% - 4rem);
 `;
 
 export const StyledLabel = styled.div`

@@ -46,7 +46,12 @@ function SwiperContainer(props: SwiperProps) {
 
   return (
     <StyledRoot isRecentListExist={isRecentListExist}>
-      <StyledSwiper onSwiper={setSwiperRef} modules={[Pagination]} pagination={pagination} virtual>
+      <StyledSwiper
+        onSwiper={setSwiperRef}
+        modules={[Pagination, Virtual]}
+        pagination={pagination}
+        virtual
+      >
         {slides.map((slideContent, index) => (
           <SwiperSlide key={slideContent.key} virtualIndex={index}>
             {children[index] ? (
@@ -77,6 +82,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   align-items: center;
   width: calc(100% - 4rem);
   height: 100vh;
+  overflow: hidden;
 `;
 
 export const StyledSwiper = styled(Swiper)`
