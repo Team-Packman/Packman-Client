@@ -1,11 +1,11 @@
 import React from 'react';
 import { AsyncBoundary } from '../../../utils/AsyncBoundary';
-import AlonePackingListLanding from '../../components/packingList/alone/[id]';
+import TogetherPackingListLanding from '../../components/packingList/together/TogetherPackingListLanding';
 
 function index() {
   return (
     <AsyncBoundary>
-      <AlonePackingListLanding />
+      <TogetherPackingListLanding />
     </AsyncBoundary>
   );
 }

@@ -1,10 +1,10 @@
 import { useQueryClient } from 'react-query';
 import styled, { css } from 'styled-components';
-import { GetTemplateListOutput } from '../../../service/ect';
+import { GetAloneTemplateListOutput } from '../../../service/ect/index';
 import { packmanColors } from '../../../styles/color';
 
 interface Template {
-  id: string;
+  _id: string;
   title: string;
 }
 interface TemplateItemProps {
@@ -25,20 +25,20 @@ function TemplateItem(props: TemplateItemProps) {
     changeUserOwnTemplateImage,
     checkIsTemplate,
   } = props;
-  const { id, title } = template;
+  const { _id, title } = template;
   const queryClient = useQueryClient();
-  const { data } = queryClient.getQueryData('templateList') as GetTemplateListOutput;
+  const { data } = queryClient.getQueryData('templateList') as GetAloneTemplateListOutput;
 
   if (!data) return null;
 
   const onClickTemplateItem = (id: string) => {
     data.basicTemplate.forEach((template) => {
-      if (id === template.id) {
+      if (id === template._id) {
         checkIsTemplate && checkIsTemplate(true);
       }
     });
     data.myTemplate.forEach((template) => {
-      if (id === template.id) {
+      if (id === template._id) {
         checkIsTemplate && checkIsTemplate(false);
       }
     });
@@ -50,9 +50,9 @@ function TemplateItem(props: TemplateItemProps) {
 
   return (
     <StyledRoot
-      isSelected={isSelected === id}
-      isListEmpty={id === ''}
-      onClick={() => onClickTemplateItem(id)}
+      isSelected={isSelected === _id}
+      isListEmpty={_id === ''}
+      onClick={() => onClickTemplateItem(_id)}
     >
       {title}
     </StyledRoot>

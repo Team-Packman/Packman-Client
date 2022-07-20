@@ -1,23 +1,35 @@
-export interface GetTemplateListOutput {
+export interface GetAloneTemplateListOutput {
   status: number;
   success: boolean;
   message: string;
   data: {
     basicTemplate: {
-      id: string;
+      _id: string;
       title: string;
     }[];
     myTemplate: {
-      id: string;
+      _id: string;
       title: string;
     }[];
   };
 }
 
-export interface GetTemplateInput {
-  templateId: string;
-  type: 'basic' | 'alone' | 'together';
+export interface GetTogetherTemplateListOut {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    basicTemplate: {
+      _id: string;
+      title: string;
+    }[];
+    myTemplate: {
+      _id: string;
+      title: string;
+    }[];
+  };
 }
+
 export interface GetTemplateOutput {
   status: number;
   success: boolean;

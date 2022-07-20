@@ -1,24 +1,16 @@
-import { fetchTemplate, fetchTemplateList, fetchHelpTemplate } from './../../utils/axios/ect/index';
-import {
-  GetTemplateListOutput,
-  GetTemplateOutput,
-  GetHelpTemplateOutput,
-  GetTemplateInput,
-} from './index';
-
 import { AxiosInstance } from 'axios';
+import { GetAloneTemplateListOutput, GetTogetherTemplateListOut } from '.';
+import { fetchAloneTemplateList, fetchTogetherTemplateList } from '../../utils/axios/ect';
 import withAuth from '../../utils/axios/withAuth';
 
 export interface EctAPI {
-  getTemplateList: () => Promise<GetTemplateListOutput>;
-  getTemplate: (payload: GetTemplateInput) => Promise<GetTemplateOutput>;
-  getHelpTemplate: () => Promise<GetHelpTemplateOutput>;
+  getAloneTemplateList: () => Promise<GetAloneTemplateListOutput>;
+  getTogetherTemplateList: () => Promise<GetTogetherTemplateListOut>;
 }
 
 export const createEctAPI = (request: AxiosInstance): EctAPI => {
   return {
-    getTemplateList: () => fetchTemplateList(withAuth(request)),
-    getTemplate: (payload: GetTemplateInput) => fetchTemplate(withAuth(request), payload),
-    getHelpTemplate: () => fetchHelpTemplate(withAuth(request)),
+    getAloneTemplateList: () => fetchAloneTemplateList(withAuth(request)),
+    getTogetherTemplateList: () => fetchTogetherTemplateList(withAuth(request)),
   };
 };
