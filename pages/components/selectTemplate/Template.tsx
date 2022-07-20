@@ -64,6 +64,8 @@ function Template(props: TemplateProps) {
                   }}
                   changeTemplateImage={changeTemplateImage}
                   checkIsTemplate={checkIsTemplate}
+                  basicTemplate={basicTemplate}
+                  myTemplate={myTemplate}
                 />
               ))}
             </>
