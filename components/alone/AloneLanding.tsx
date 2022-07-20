@@ -279,8 +279,10 @@ function AloneLanding() {
         <FunctionSection>
           <AddTemplateButton
             onClick={() => updateRemainingInfo({ listId: list._id, isSaved: true }, 'save')}
-          />
-          <SharePackingListButton />
+          >
+            나만의 템플릿으로 추가
+          </AddTemplateButton>
+          <SharePackingListButton icon>패킹 리스트 공유</SharePackingListButton>
         </FunctionSection>
       </StyledAloneLanding>
     </Layout>
@@ -291,7 +293,7 @@ export default AloneLanding;
 
 const StyledAloneLanding = styled.div`
   height: 100%;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   overflow: hidden;
 `;
 

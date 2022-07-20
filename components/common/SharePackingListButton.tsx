@@ -1,15 +1,24 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import ShareIc from '/public/assets/svg/share_ic.svg';
 import { packmanColors } from '../../styles/color';
-function SharePackingListButton() {
+
+interface SharePackingListButtonProps {
+  children?: ReactNode;
+  icon?: boolean;
+}
+
+function SharePackingListButton(props: SharePackingListButtonProps) {
+  const { children, icon } = props;
   return (
     <StyledRoot>
-      <div>
-        <Image src={ShareIc} alt="share_ic" layout="fill" />
-      </div>
-      패킹 리스트 공유
+      {icon && (
+        <div>
+          <Image src={ShareIc} alt="share_ic" layout="fill" />
+        </div>
+      )}
+      {children}
     </StyledRoot>
   );
 }
