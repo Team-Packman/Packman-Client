@@ -29,11 +29,7 @@ function SwiperContainer(props: SwiperProps) {
     '짐 목록을 작성해보세요',
   ]);
   const [initialButtons] = useState<string[]>(['함께 패킹 시작하기', '혼자 패킹 시작하기']);
-  // Create array with 2 slides
   const [slides] = useState(Array.from({ length: 2 }).map((_, idx) => <div key={idx}></div>));
-
-  // 최근 수정 리스트 존재 체크
-  //   const [isRecentListExist] = useState<boolean>(false);
 
   const pagination = {
     clickable: true,
@@ -50,7 +46,12 @@ function SwiperContainer(props: SwiperProps) {
 
   return (
     <StyledRoot isRecentListExist={isRecentListExist}>
-      <StyledSwiper onSwiper={setSwiperRef} modules={[Pagination]} pagination={pagination} virtual>
+      <StyledSwiper
+        onSwiper={setSwiperRef}
+        modules={[Pagination, Virtual]}
+        pagination={pagination}
+        virtual
+      >
         {slides.map((slideContent, index) => (
           <SwiperSlide key={slideContent.key} virtualIndex={index}>
             {children[index] ? (
@@ -81,6 +82,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   align-items: center;
   width: calc(100% - 4rem);
   height: 100vh;
+  overflow: hidden;
 `;
 
 export const StyledSwiper = styled(Swiper)`
@@ -123,7 +125,7 @@ export const StyledSwiper = styled(Swiper)`
     padding-top: 4.8rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 `;

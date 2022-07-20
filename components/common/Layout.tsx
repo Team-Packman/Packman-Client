@@ -47,5 +47,5 @@ const StyledMain = styled.main<{
   padding-bottom: 1.6rem;
   background-color: ${packmanColors.white};
   height: ${({ hasOption }) =>
-    hasOption ? `calc(var(--vh, 1vh) * 100)` : `calc(var(--vh, 1vh) * 100 - 5.2rem)`};
+    hasOption ? `calc(var(--vh, 1vh) * 100 - 5.2rem)` : `calc(var(--vh, 1vh) * 100)`};
 `;

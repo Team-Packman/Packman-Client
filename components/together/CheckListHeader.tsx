@@ -17,7 +17,7 @@ interface CheckListHeaderProps {
   title: string;
   departureDate: string;
   together?: boolean;
-  activeMode: number;
+  activeMode?: number;
   updateRemainingInfo: (payload: RemainingInfoPayload, type: RemainingInfoType) => void;
 }
 
@@ -35,7 +35,6 @@ function CheckListHeader(props: CheckListHeaderProps) {
       title: title === '' ? titleProps : title,
     };
 
-    title === '' && setTitle(titleProps); // for demo
     updateRemainingInfo(payload, 'title');
     setIsEditing(false);
   };
@@ -109,6 +108,7 @@ const StyledTitle = styled.div`
   white-space: nowrap;
   color: ${packmanColors.black};
 `;
+
 const StyledInput = styled.input`
   display: flex;
   align-items: center;

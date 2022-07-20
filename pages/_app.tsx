@@ -11,7 +11,16 @@ import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: Infinity,
+          },
+        },
+      }),
+  );
 
   useEffect(() => {
     const localStoragePersistor = createWebStoragePersistor({ storage: window?.localStorage });
@@ -32,6 +41,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     window.addEventListener('resize', () => setScreenSize());
     return () => window.removeEventListener('resize', setScreenSize);
   });
+  // if (!showing) {
+  //   return null;
+  // }
 
   return (
     <>
@@ -43,7 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps?.dehydratedState}>
-          <APIProvider baseURL={'/'}>
+          <APIProvider baseURL={'http://15.164.165.92:8000'}>
             <GlobalStyle />
             <Component {...pageProps} />
           </APIProvider>

@@ -1,14 +1,14 @@
 import React from 'react';
-import PreviewLanding from '../../components/together/PreviewLanding';
+import TogetherLanding from '../../components/together/TogetherLanding';
 import { AsyncBoundary } from '../../utils/AsyncBoundary';
-function Preview() {
+function Together() {
   return (
     <div>
       <AsyncBoundary>
-        <PreviewLanding />
+        <TogetherLanding />
       </AsyncBoundary>
     </div>
   );
 }
 
-export default Preview;
+export default Together;

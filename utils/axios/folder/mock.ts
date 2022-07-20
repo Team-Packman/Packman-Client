@@ -189,7 +189,7 @@ export const fetchRecentPackingList = async (
         data: {
           id: '62bbb80d9d5dc1aa4c3d2839',
           title: '혼자 밀라노 여행',
-          remainDay: 5,
+          remainDay: 10,
           packTotalNum: 20,
           packRemainNum: 3,
           url: '/packing-list/alone/62bbb80d9d5dc1aa4c3d2839',

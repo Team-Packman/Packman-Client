@@ -5,6 +5,7 @@ import Layout from '../components/common/Layout';
 
 const Home: NextPage = () => {
   const router = useRouter();
+
   return (
     <Layout back title="logo" icon="profile">
       hello next

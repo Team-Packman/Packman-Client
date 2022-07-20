@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
@@ -6,7 +5,7 @@ import { packmanColors } from '../../styles/color';
 import HoleIc from '/public/assets/svg/hole_ic.svg';
 import SelectedHoleIc from '/public/assets/svg/hole_selected_ic.svg';
 interface PackerProps {
-  packer: { id: string; name: string } | null;
+  packer: { _id: string; name: string } | null;
   modalHandler?: () => void;
 }
 
@@ -51,14 +50,14 @@ const StyledRoot = styled.button<{
   ${({ selected }) =>
     selected
       ? `
-    background-color: ${packmanColors.white};
+    background-color: ${packmanColors.pmWhite};
     border-color: ${packmanColors.pmLightPink};
     color: ${packmanColors.pink};
   `
       : `
     background-color: ${packmanColors.pmGrey};
     border-color: ${packmanColors.pmGrey};
-    color: ${packmanColors.white};
+    color: ${packmanColors.pmWhite};
   `}
 
   & > div {

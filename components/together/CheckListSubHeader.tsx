@@ -5,9 +5,9 @@ import { packmanColors } from '../../styles/color';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 
 interface CheckListSubHeaderProps {
-  slot: string;
-  activeMode: number;
-  modeHandler: (idx: number) => void;
+  slot?: string;
+  activeMode?: number;
+  modeHandler?: (idx: number) => void;
   together?: boolean;
   categoryHandler: () => void;
 }
@@ -18,7 +18,7 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
   const [scroll] = useGlobalState<boolean>('scroll');
 
   const handleClick = (idx: number) => {
-    modeHandler(idx);
+    modeHandler && modeHandler(idx);
     swiper.slideTo(idx);
   };
 
@@ -53,7 +53,7 @@ const StyledRoot = styled.div`
   position: relative;
   width: 100vw;
   z-index: 55;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
 `;
 
 const StyledOptions = styled.div<{
@@ -65,7 +65,7 @@ const StyledOptions = styled.div<{
   -webkit-justify-content: flex-end;
   width: 100vw;
   height: 4rem;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.05);
   z-index: 1;
 
@@ -104,12 +104,12 @@ const StyledModeBlock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   z-index: 12;
 `;
 
 const StyledModeWrapper = styled.div<{
-  index: number;
+  index: number | undefined;
 }>`
   display: flex;
   width: 33.6rem;
@@ -122,7 +122,7 @@ const StyledModeWrapper = styled.div<{
     content: '';
     position: absolute;
     transition: left 0.3s;
-    left: ${({ index }) => `calc(${index} * 50%)`};
+    left: ${({ index }) => index !== undefined && `calc(${index} * 50%)`};
     width: 50%;
     height: 100%;
     background-color: ${packmanColors.black};
@@ -139,6 +139,6 @@ const StyledMode = styled.button<{
   font-weight: 400;
   background-color: transparent;
   border: none;
-  color: ${({ selected }) => (selected ? `${packmanColors.white}` : `${packmanColors.deepGray}`)};
+  color: ${({ selected }) => (selected ? `${packmanColors.pmWhite}` : `${packmanColors.deepGray}`)};
   z-index: 3;
 `;
