@@ -110,112 +110,114 @@ function AlonePackingListLanding() {
   };
 
   return (
-    <StyledRoot onTouchMove={() => setToggle(false)}>
+    <>
       <Header back title="패킹 리스트" icon="profile" />
-      {showModal && (
-        <Modal
-          title="정말 삭제하시겠어요?"
-          closeModal={closeModal}
-          button={
-            <StyledModalButtonWrapper>
-              <StyledModalButton left={true} onClick={onClickLeftModalButton}>
-                아니요
-              </StyledModalButton>
-              <StyledModalButton onClick={onClickRightModalButton}>예</StyledModalButton>
-            </StyledModalButtonWrapper>
-          }
-        />
-      )}
-
-      <StyledFolderInfo>
-        <h1>{currentFolder.title}</h1>
-        <div>
-          <StyledToggleImage
-            src={iShowMore}
-            alt="상세보기"
-            width={24}
-            height={24}
-            onClick={() => {
-              setToggle(true);
-            }}
-            toggle={toggle}
+      <StyledRoot onTouchMove={() => setToggle(false)}>
+        {showModal && (
+          <Modal
+            title="정말 삭제하시겠어요?"
+            closeModal={closeModal}
+            button={
+              <StyledModalButtonWrapper>
+                <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                  아니요
+                </StyledModalButton>
+                <StyledModalButton onClick={onClickRightModalButton}>예</StyledModalButton>
+              </StyledModalButtonWrapper>
+            }
           />
-          {toggle && (
-            <DropBox
-              folderList={folder}
-              closeDropBox={() => setToggle(false)}
-              currentId={currentFolder._id}
-              categoryName="alone"
-            />
-          )}
-        </div>
-      </StyledFolderInfo>
+        )}
 
-      <StyledMain isEmpty={!alonePackingList.length}>
-        {!alonePackingList.length ? (
-          <StyledEmpty>
-            <p>&apos;+&apos; 버튼을 눌러</p>
-            <p>패킹 리스트를 추가해주세요</p>
-          </StyledEmpty>
-        ) : (
-          <>
-            <StyledCaptionWrapper>
-              {!isDeleting && (
-                <StyledCaptionText>
-                  <span>{alonePackingList?.length}</span>개의 패킹 리스트
-                </StyledCaptionText>
-              )}
-              {isDeleting && (
-                <span
+        <StyledFolderInfo>
+          <h1>{currentFolder.title}</h1>
+          <div>
+            <StyledToggleImage
+              src={iShowMore}
+              alt="상세보기"
+              width={24}
+              height={24}
+              onClick={() => {
+                setToggle(true);
+              }}
+              toggle={toggle}
+            />
+            {toggle && (
+              <DropBox
+                folderList={folder}
+                closeDropBox={() => setToggle(false)}
+                currentId={currentFolder._id}
+                categoryName="alone"
+              />
+            )}
+          </div>
+        </StyledFolderInfo>
+
+        <StyledMain isEmpty={!alonePackingList.length}>
+          {!alonePackingList.length ? (
+            <StyledEmpty>
+              <p>&apos;+&apos; 버튼을 눌러</p>
+              <p>패킹 리스트를 추가해주세요</p>
+            </StyledEmpty>
+          ) : (
+            <>
+              <StyledCaptionWrapper>
+                {!isDeleting && (
+                  <StyledCaptionText>
+                    <span>{alonePackingList?.length}</span>개의 패킹 리스트
+                  </StyledCaptionText>
+                )}
+                {isDeleting && (
+                  <span
+                    onClick={() => {
+                      deleteList.length > 0 && setDeleteList([]);
+                    }}
+                  >
+                    선택 해제
+                  </span>
+                )}
+
+                <StyledCaptionButtonWrapper
                   onClick={() => {
-                    deleteList.length > 0 && setDeleteList([]);
+                    setIsDragged(Array(alonePackingList?.length).fill(false));
+                    setIsDeleting((prev) => !prev);
+                    if (!isDeleting) {
+                      setDeleteList([]);
+                    }
                   }}
                 >
-                  선택 해제
-                </span>
-              )}
+                  {isDeleting ? (
+                    <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>
+                      취소
+                    </p>
+                  ) : (
+                    <Image
+                      src={iTrash}
+                      alt="삭제"
+                      width={24}
+                      height={24}
+                      onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}
+                    />
+                  )}
+                </StyledCaptionButtonWrapper>
+              </StyledCaptionWrapper>
 
-              <StyledCaptionButtonWrapper
-                onClick={() => {
-                  setIsDragged(Array(alonePackingList?.length).fill(false));
-                  setIsDeleting((prev) => !prev);
-                  if (!isDeleting) {
-                    setDeleteList([]);
-                  }
-                }}
-              >
-                {isDeleting ? (
-                  <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>
-                    취소
-                  </p>
-                ) : (
-                  <Image
-                    src={iTrash}
-                    alt="삭제"
-                    width={24}
-                    height={24}
-                    onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}
-                  />
-                )}
-              </StyledCaptionButtonWrapper>
-            </StyledCaptionWrapper>
-
-            <SwipeableList
-              packingList={alonePackingList}
-              deleteList={deleteList}
-              isDeleting={isDeleting}
-              checkDeleteList={checkDeleteList}
-              handleIsDragged={handleIsDragged}
-              openModal={openModal}
-              setSelectedIndex={(id: number) => setSelectedIndex(id)}
-              setDeleteList={(arr) => setDeleteList(arr)}
-              isDragged={isDragged}
-            />
-          </>
-        )}
-      </StyledMain>
-      {!isDeleting && <FloatActionButton onClick={handleFloatClick} pageName="packingList" />}
-    </StyledRoot>
+              <SwipeableList
+                packingList={alonePackingList}
+                deleteList={deleteList}
+                isDeleting={isDeleting}
+                checkDeleteList={checkDeleteList}
+                handleIsDragged={handleIsDragged}
+                openModal={openModal}
+                setSelectedIndex={(id: number) => setSelectedIndex(id)}
+                setDeleteList={(arr) => setDeleteList(arr)}
+                isDragged={isDragged}
+              />
+            </>
+          )}
+        </StyledMain>
+        {!isDeleting && <FloatActionButton onClick={handleFloatClick} pageName="packingList" />}
+      </StyledRoot>
+    </>
   );
 }
 
