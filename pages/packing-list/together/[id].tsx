@@ -14,6 +14,7 @@ import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../components/folder/FloatActionButton';
 
 function PackingListLanding() {
+  const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
@@ -27,12 +28,9 @@ function PackingListLanding() {
       suspense: false,
     },
   );
-  console.log(data);
-
-  const [isDragged, setIsDragged] = useState<boolean[]>(Array(4).fill(false));
-
-  const router = useRouter();
-  const queryClient = useQueryClient();
+  const [isDragged, setIsDragged] = useState<boolean[]>(
+    Array(data?.data.togetherPackingList.length).fill(false),
+  );
 
   if (!router.query) return null;
 

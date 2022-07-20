@@ -63,8 +63,8 @@ function PackingItem(props: PackingItemProps) {
   };
 
   const checkHandler = () => {
-    updateItem({ name, listId, categoryId, packId, isChecked });
     if (!isEditing) {
+      updateItem({ name, listId, categoryId, packId, isChecked: !isChecked });
       setIsChecked((prev) => !prev);
     }
   };

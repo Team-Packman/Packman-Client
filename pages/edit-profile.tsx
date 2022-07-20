@@ -13,8 +13,6 @@ function EditProfile() {
 
   if (!data) return null;
 
-  console.log(data);
-
   const { name, profileImageId } = data.data;
 
   return (

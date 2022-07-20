@@ -32,7 +32,6 @@ function Template(props: TemplateProps) {
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
-    console.log(isSelected, id);
     if (isSelected === id) {
       setIsSelected('');
     } else {
@@ -52,7 +51,7 @@ function Template(props: TemplateProps) {
         <TemplateList
           templateList={
             <>
-              {basicTemplate.map((template, idx) => (
+              {basicTemplate.map((template) => (
                 <TemplateItem
                   key={template.id}
                   template={template}
@@ -107,7 +106,7 @@ const StyledRoot = styled.div`
   overflow-y: scroll;
   scrollbar-width: none;
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
+    display: none;
   }
 `;
 const StyledTemplateWrapper = styled.div`

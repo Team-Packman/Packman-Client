@@ -7,11 +7,6 @@ interface Template {
   id: string;
   title: string;
 }
-interface QueryData {
-  basicTemplate: Template;
-  myTemplate: Template;
-}
-
 interface TemplateItemProps {
   template: Template;
   isSelected: string;
@@ -44,7 +39,6 @@ function TemplateItem(props: TemplateItemProps) {
     });
     data.myTemplate.forEach((template) => {
       if (id === template.id) {
-        console.log(template.id);
         checkIsTemplate && checkIsTemplate(false);
       }
     });

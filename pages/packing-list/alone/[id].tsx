@@ -14,28 +14,30 @@ import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../components/folder/FloatActionButton';
 
 function PackingListLanding() {
+  const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
-  const { data } = useQuery('packing-list', () => getTogetherPackingList(), {});
-  const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(
-      data && data.data && data.data.alonePackingList && data?.data.alonePackingList?.length,
-    ).fill(false),
+  const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
+  const { data } = useQuery(
+    'getAloneInventory',
+    () => getAloneInventory('62d7bac9618ed827f6e74379'),
+    {
+      suspense: false,
+    },
   );
-
-  const router = useRouter();
-  const queryClient = useQueryClient();
+  const [isDragged, setIsDragged] = useState<boolean[]>(
+    Array(data?.data.alonePackingList.length).fill(false),
+  );
 
   if (!router.query) return null;
 
   const { id } = router.query;
   const categoryName = router.route.split('/')[2];
 
-  if (!data || !data.data) return null;
+  if (!data) return null;
 
   const { alonePackingList, folder, currentFolder } = data.data;
 
@@ -68,30 +70,30 @@ function PackingListLanding() {
 
   const onClickRightModalButton = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-    if (isDeleting) {
-      queryClient.setQueryData('packing-list', (oldData: any) => {
-        return {
-          ...oldData,
-          data: {
-            alonePackingList: alonePackingList.filter(({ id }) => !deleteList.includes(id)),
-            currentFolder,
-            folder,
-          },
-        };
-      });
-      setDeleteList([]);
-    } else {
-      queryClient.setQueryData('packing-list', (oldData: any) => {
-        return {
-          ...oldData,
-          data: {
-            alonePackingList: alonePackingList.filter((_, i) => i !== selectedIndex),
-            currentFolder,
-            folder,
-          },
-        };
-      });
-    }
+    // if (isDeleting) {
+    //   queryClient.setQueryData('packing-list', (oldData: any) => {
+    //     return {
+    //       ...oldData,
+    //       data: {
+    //         alonePackingList: alonePackingList.filter(({ id }) => !deleteList.includes(id)),
+    //         currentFolder,
+    //         folder,
+    //       },
+    //     };
+    //   });
+    //   setDeleteList([]);
+    // } else {
+    //   queryClient.setQueryData('packing-list', (oldData: any) => {
+    //     return {
+    //       ...oldData,
+    //       data: {
+    //         alonePackingList: alonePackingList.filter((_, i) => i !== selectedIndex),
+    //         currentFolder,
+    //         folder,
+    //       },
+    //     };
+    //   });
+    // }
     closeModal();
   };
 
@@ -138,7 +140,7 @@ function PackingListLanding() {
             <DropBox
               folderList={folder}
               closeDropBox={() => setToggle(false)}
-              currentId={currentFolder.id}
+              currentId={currentFolder._id}
               categoryName={categoryName}
             />
           )}
