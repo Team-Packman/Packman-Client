@@ -38,7 +38,7 @@ const StyledInfo = styled.div`
     gap: 1.718rem;
     & > p {
       font-size: 1.2rem;
-      color: ${packmanColors.darkGray};
+      color: ${packmanColors.pmDarkGrey};
     }
     & > p:first-child {
       font-weight: 500;

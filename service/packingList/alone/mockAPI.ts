@@ -1,15 +1,19 @@
 import {
-  fetchPackingListDetail,
+  fetchPackingListIntro,
   fetchPackingListWithFolders,
 } from './../../../utils/axios/packingList/alone/mock';
-import { GetAlonePackingListDetailOutput, GetPackingListWithFoldersOutput } from './index';
+import {
+  AddPackingListIntroOutput,
+  AddPakingListIntroInput,
+  GetPackingListWithFoldersOutput,
+} from './index';
 import { AxiosInstance } from 'axios';
 import withAuth from '../../../utils/axios/withAuth';
 
 export interface AloneAPI {
   alone: {
     getPackingListWithFolders: () => Promise<GetPackingListWithFoldersOutput>;
-    getPackingListDeatil: (listId: string) => Promise<GetAlonePackingListDetailOutput>;
+    addIntroFolder: (info: AddPakingListIntroInput) => Promise<AddPackingListIntroOutput>;
   };
 }
 
@@ -17,7 +21,8 @@ export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
   return {
     alone: {
       getPackingListWithFolders: () => fetchPackingListWithFolders(withAuth(request)),
-      getPackingListDeatil: (listId: string) => fetchPackingListDetail(withAuth(request), listId),
+      addIntroFolder: (info: AddPakingListIntroInput) =>
+        fetchPackingListIntro(withAuth(request), info),
     },
   };
 };

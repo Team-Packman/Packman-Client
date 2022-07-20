@@ -157,8 +157,8 @@ const StyledItemInfo = styled.div`
 
   & > p:first-child {
     font-size: 1.4rem;
-    color: ${packmanColors.pmDeepGrey};
-    font-weight: 400;
+    color: ${packmanColors.pmBlueGrey};
+    font-weight: 300;
   }
   & > p:nth-child(2) {
     font-weight: 600;
@@ -177,6 +177,7 @@ const StyledPackInfo = styled.div`
     justify-content: center;
     width: 8.3rem;
     height: 2.4rem;
+    background-color: #fff;
     color: ${packmanColors.pmBlack};
     font-size: 1.3rem;
     font-weight: 400;
@@ -187,8 +188,7 @@ const StyledPackInfo = styled.div`
 `;
 const StyledPackRemainText = styled.p`
   font-weight: 400;
-  font-size: 1.2rem;
-
+  font-size: 1.3rem;
   color: ${packmanColors.pmBlack};
   & > span {
     color: ${packmanColors.pmPink};
@@ -204,12 +204,13 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   width: ${({ isDragged }) => (isDragged ? '5.6rem' : '0rem')};
   height: 11.4rem;
   background-color: #ff0000;
+  color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
   padding: 0 1.4rem;
 
   & > div {
-    color: ${packmanColors.white};
+    color: ${packmanColors.pmWhite};
     font-size: 1.6rem;
     font-weight: 600;
     flex-shrink: 0;
