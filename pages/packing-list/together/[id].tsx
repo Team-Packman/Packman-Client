@@ -21,7 +21,7 @@ function PackingListLanding() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
   const { data } = useQuery(
-    'packing-list',
+    'getTogetherInventory',
     () => getTogetherInventory('62d65e5d2abfcbd9521acc5d'),
     {
       suspense: false,

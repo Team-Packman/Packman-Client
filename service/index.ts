@@ -2,9 +2,9 @@ import { PackingListAPI, createPackingListAPI } from './packingList/index';
 import { AxiosInstance } from 'axios';
 import { AXIOS_KEY } from '../utils/axios/axios';
 import { createFolderAPI, FolderAPI } from './folder/mockAPI';
-import { createUserAPI, UserAPI } from './user/mockAPI';
 import { createEctAPI, EctAPI } from './ect/mockAPI';
 import { createInventoryAPI, InventoryAPI } from './inventory';
+import { createUserAPI, UserAPI } from './user/createAPI';
 export interface APIService {
   folder: FolderAPI;
   packingList: PackingListAPI;

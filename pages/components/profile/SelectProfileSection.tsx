@@ -5,23 +5,16 @@ import styled from 'styled-components';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
-import useGlobalState from '../../../utils/hooks/useGlobalState';
 import profile1 from '../../../public/assets/png/profile1.png';
 import profile2 from '../../../public/assets/png/profile2.png';
 import profile3 from '../../../public/assets/png/profile3.png';
 import profile4 from '../../../public/assets/png/profile4.png';
 import profile5 from '../../../public/assets/png/profile5.png';
 import profile6 from '../../../public/assets/png/profile6.png';
-import iSelected from '../../../public/assets/svg/iSelected.svg';
 
 interface UpdateUserProfileData {
-  nickname: string;
+  name: string;
   profileImageId: string;
-}
-
-interface ProfileImageData {
-  id: string;
-  src: any;
 }
 
 interface SelectProfileSectionProps {
@@ -33,14 +26,14 @@ interface SelectProfileSectionProps {
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
   const { isEditing, oldNickname, finishEditing } = props;
-  const [profileImage] = useGlobalState<ProfileImageData[]>('profileImageList', [
+  const profileImage = [
     { id: '0', src: profile1 },
     { id: '1', src: profile2 },
     { id: '2', src: profile3 },
     { id: '3', src: profile4 },
     { id: '4', src: profile5 },
     { id: '5', src: profile6 },
-  ]);
+  ];
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
   const router = useRouter();

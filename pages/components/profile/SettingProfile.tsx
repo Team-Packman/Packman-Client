@@ -1,22 +1,22 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Image from 'next/image';
 import { packmanColors } from '../../../styles/color';
 import { useState } from 'react';
 import Modal from '../common/Modal';
 import useAPI from '../../../utils/hooks/useAPI';
 import Footer from '../../components/common/Footer';
-import useGlobalState from '../../../utils/hooks/useGlobalState';
+import profile1 from '../../../public/assets/png/profile1.png';
+import profile2 from '../../../public/assets/png/profile2.png';
+import profile3 from '../../../public/assets/png/profile3.png';
+import profile4 from '../../../public/assets/png/profile4.png';
+import profile5 from '../../../public/assets/png/profile5.png';
+import profile6 from '../../../public/assets/png/profile6.png';
 
 interface ProfileData {
-  id: string;
-  nickname: string;
+  _id: string;
+  name: string;
   email: string;
   profileImageId: string;
-}
-
-interface ProfileImageData {
-  id: string;
-  src: any;
 }
 
 interface SettingProfileProps {
@@ -26,12 +26,21 @@ interface SettingProfileProps {
 
 function SettingProfile(props: SettingProfileProps) {
   const { onClickEditText, profileData } = props;
-  const { id, nickname, email, profileImageId } = profileData;
+  const { name, email, profileImageId } = profileData;
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const deleteUserInfo = useAPI((api) => api.user.deleteUserInfo);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
-  const [profileImage] = useGlobalState<ProfileImageData[]>('profileImageList');
+  const profileImage = [
+    { id: '0', src: profile1 },
+    { id: '1', src: profile2 },
+    { id: '2', src: profile3 },
+    { id: '3', src: profile4 },
+    { id: '4', src: profile5 },
+    { id: '5', src: profile6 },
+  ];
+
+  console.log(profileData);
 
   const onClickLeftModalButton = async () => {
     await deleteUserInfo();
@@ -51,7 +60,7 @@ function SettingProfile(props: SettingProfileProps) {
         <StyledProfile>
           <Image src={profileImage[+profileImageId].src} alt="my-profile-image" />
           <div>
-            <h1>{nickname}</h1>
+            <h1>{name}</h1>
             <p>{email}</p>
           </div>
         </StyledProfile>
