@@ -41,6 +41,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     window.addEventListener('resize', () => setScreenSize());
     return () => window.removeEventListener('resize', setScreenSize);
   });
+  // if (!showing) {
+  //   return null;
+  // }
 
   return (
     <>

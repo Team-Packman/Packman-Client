@@ -7,10 +7,11 @@ import Kebab from '../../assets/kebab.svg';
 import Close from '../../assets/close.svg';
 
 type FolderBoxProps = FolderProps & Omit<FolderListProps, 'list'>;
-interface T {
+interface AddNewFolderType {
   isNew: boolean;
 }
-function FolderBox(props: FolderBoxProps & T) {
+
+function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   const {
     id = '',
     title = '',
@@ -89,6 +90,7 @@ function FolderBox(props: FolderBoxProps & T) {
             disabled={isNew ? !isNew : editableFolderId !== id}
             autoFocus
             isNew={isNew}
+            maxLength={8}
           />
           <StyledFolderInfo>{listNum}개의 리스트</StyledFolderInfo>
         </StyledText>
@@ -111,7 +113,6 @@ export const StyledRoot = styled.section`
     position: absolute;
     content: '';
     bottom: 0;
-    /* right: 0; */
     border-style: solid;
     width: 100%;
     border-width: 0.5rem;
@@ -151,7 +152,9 @@ export const StyledTitle = styled.input<{ isNew: boolean }>`
   border-radius: 0.4rem;
   margin: 0 0.8rem 0 0;
   color: ${({ isNew }) => (isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`)};
-
+  -webkit-text-fill-color: ${({ isNew }) =>
+    isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`};
+  -webkit-opacity: 1;
   &:disabled {
     border: 0;
     padding: 0;

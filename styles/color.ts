@@ -16,7 +16,7 @@ export const packmanColors = Object.freeze({
   black: '#121212',
   deepGray: '#808080',
   pmBlueGrey: '#F6F7FB',
-  white: '#fff',
+  pmDashGrey: '#D6D6D6',
   pmDarkGrey: '#535353',
 });
 

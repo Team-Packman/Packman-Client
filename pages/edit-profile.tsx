@@ -9,11 +9,11 @@ import SettingProfile from './components/profile/SettingProfile';
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
-  const { data } = useQuery('user', () => getUserInfo());
+  const { data } = useQuery('getUserInfo', () => getUserInfo());
 
   if (!data) return null;
 
-  const { nickname } = data.data;
+  const { name, profileImageId } = data.data;
 
   return (
     <StyledRoot>
@@ -26,7 +26,8 @@ function EditProfile() {
                 <b>프로필 수정</b>을 완료해주세요!
               </h1>
             }
-            oldNickname={nickname}
+            oldNickname={name}
+            oldProfileImageId={profileImageId}
             finishEditing={() => {
               setIsEditing(false);
             }}
@@ -49,5 +50,6 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 2rem;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
 `;

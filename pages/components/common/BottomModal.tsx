@@ -20,10 +20,6 @@ function BottomModal(props: BottomModalProps) {
 
   const [isClickDelete, setIsClickDelete] = useState(false);
 
-  /* 
-    Prevent scroll when modal is open
-    https://stackoverflow.com/questions/54989513/react-prevent-scroll-when-modal-is-open
-  */
   useEffect(() => {
     const setDisableOverflow = () => {
       document.body.style.overflow = 'hidden';
