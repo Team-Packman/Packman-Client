@@ -1,16 +1,11 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
-import profile1 from '../../../public/assets/png/profile1.png';
-import profile2 from '../../../public/assets/png/profile2.png';
-import profile3 from '../../../public/assets/png/profile3.png';
-import profile4 from '../../../public/assets/png/profile4.png';
-import profile5 from '../../../public/assets/png/profile5.png';
-import profile6 from '../../../public/assets/png/profile6.png';
+import { ProfileList } from '../../../utils/profileImages';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -34,14 +29,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
-  const profileImage = [
-    { id: '0', src: profile1 },
-    { id: '1', src: profile2 },
-    { id: '2', src: profile3 },
-    { id: '3', src: profile4 },
-    { id: '4', src: profile5 },
-    { id: '5', src: profile6 },
-  ];
+  const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
 
@@ -216,7 +204,7 @@ const StyledSelectProfileWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
+  width: 28rem;
   gap: 0.8rem;
   margin: 1.5rem 0 5.57rem 0;
 `;

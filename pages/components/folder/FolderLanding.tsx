@@ -205,9 +205,9 @@ function FolderLanding() {
   // Floating modal onClick handler
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/packing-list/together');
+      router.push('/select-template/together');
     } else if (index === 1) {
-      router.push('/packing-list/alone');
+      router.push('/select-template/alone');
     } else if (index === 2) {
       setIsEditing(true);
     }
