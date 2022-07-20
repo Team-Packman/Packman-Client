@@ -42,7 +42,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     { id: '5', src: profile6 },
   ]);
   const [nickname, setNickname] = useState('');
-  const [profile, setProfile] = useState(profileImage[0].id);
+  const [profile, setProfile] = useState('');
   const router = useRouter();
 
   //프로필 수정
@@ -64,7 +64,11 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     if (isEditing) {
       return nickname.length > 0;
     } else {
-      return nickname.length > 0 && nickname.length < 5;
+      if (profile) {
+        return nickname.length > 0 && nickname.length < 5;
+      } else {
+        return false;
+      }
     }
   };
   useEffect(() => {
@@ -72,6 +76,19 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       setNickname(oldNickname);
     }
   }, []);
+
+  useEffect(() => {
+    setIsActivate();
+  }, [profile]);
+
+  const onClickProfileImage = (id: string) => {
+    console.log(profile, id);
+    if (profile === id) {
+      setProfile('');
+    } else {
+      setProfile(id);
+    }
+  };
 
   return (
     <StyledRoot>
@@ -97,19 +114,17 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
       <StyledSelectProfileWrapper>
         {profileImage.map(({ id, src }) => (
-          <>
-            <StyledImageWrapper isSelected={profile === id}>
-              <StyledImage
-                key={id}
-                src={src}
-                alt="profile-images"
-                width={80}
-                height={80}
-                onClick={() => setProfile(id)}
-                isSelected={profile === id}
-              />
-            </StyledImageWrapper>
-          </>
+          <StyledImageWrapper key={id} selected={profile === id}>
+            <StyledImage
+              key={id}
+              src={src}
+              alt="profile-images"
+              width={80}
+              height={80}
+              onClick={() => onClickProfileImage(id)}
+              selected={profile === id}
+            />
+          </StyledImageWrapper>
         ))}
       </StyledSelectProfileWrapper>
 
@@ -184,17 +199,17 @@ const StyledSelectProfileWrapper = styled.div`
   gap: 0.8rem;
   margin: 1.5rem 0 5.57rem 0;
 `;
-const StyledImageWrapper = styled.div<{ isSelected: boolean }>`
+const StyledImageWrapper = styled.div<{ selected: boolean }>`
   width: 8.6rem;
   height: 8.6rem;
   background: url('assets/svg/iSelected.svg') no-repeat center;
-  background-color: ${({ isSelected }) => (isSelected ? 'rgba(0,0,0,0.48)' : 'transparent')};
-  border: ${({ isSelected }) =>
-    isSelected ? `3px solid ${packmanColors.pmPink}` : '3px solid transparent'};
+  background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};
+  border: ${({ selected }) =>
+    selected ? `3px solid ${packmanColors.pmPink}` : '3px solid transparent'};
   border-radius: 0.8rem;
 `;
-const StyledImage = styled(Image)<{ isSelected: boolean }>`
-  z-index: ${({ isSelected }) => isSelected && '-1'};
+const StyledImage = styled(Image)<{ selected: boolean }>`
+  z-index: ${({ selected }) => selected && '-1'};
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
   position: absolute;
