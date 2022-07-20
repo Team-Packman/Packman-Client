@@ -16,30 +16,31 @@ function EditProfile() {
   const { name, profileImageId } = data.data;
 
   return (
-    <StyledRoot>
-      {isEditing ? (
-        <>
-          <Header />
-          <EditingProfile
-            comment={
-              <h1>
-                <b>프로필 수정</b>을 완료해주세요!
-              </h1>
-            }
-            oldNickname={name}
-            oldProfileImageId={profileImageId}
-            finishEditing={() => {
-              setIsEditing(false);
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <Header back title="MY" />
-          <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
-        </>
-      )}
-    </StyledRoot>
+    <>
+      {isEditing ? <Header /> : <Header back title="MY" />}
+      <StyledRoot>
+        {isEditing ? (
+          <>
+            <EditingProfile
+              comment={
+                <h1>
+                  <b>프로필 수정</b>을 완료해주세요!
+                </h1>
+              }
+              oldNickname={name}
+              oldProfileImageId={profileImageId}
+              finishEditing={() => {
+                setIsEditing(false);
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
+          </>
+        )}
+      </StyledRoot>
+    </>
   );
 }
 
