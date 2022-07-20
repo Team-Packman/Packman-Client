@@ -1,31 +1,31 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
-import Template from './Template';
-import useAPI from '../../../utils/hooks/useAPI';
+import Template from '../Template';
+import useAPI from '../../../../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import Header from '../../../components/common/Header';
-import { packmanColors } from '../../../styles/color';
+import Header from '../../../../components/common/Header';
+import { packmanColors } from '../../../../styles/color';
 import { useState } from 'react';
-import korea_travel from '../../../public/assets/svg/korea_travel.svg';
-import oversea_travel from '../../../public/assets/svg/oversea_travel.svg';
-import jeju from '../../../public/assets/svg/jeju.svg';
-import pet from '../../../public/assets/svg/pet.svg';
-import concert from '../../../public/assets/svg/concert.svg';
-import toeic from '../../../public/assets/svg/toeic.svg';
-import random1 from '../../../public/assets/svg/random1.svg';
-import random2 from '../../../public/assets/svg/random2.svg';
-import random3 from '../../../public/assets/svg/random3.svg';
-import random4 from '../../../public/assets/svg/random4.svg';
+import korea_travel from '../../../../public/assets/svg/korea_travel.svg';
+import oversea_travel from '../../../../public/assets/svg/oversea_travel.svg';
+import jeju from '../../../../public/assets/svg/jeju.svg';
+import pet from '../../../../public/assets/svg/pet.svg';
+import concert from '../../../../public/assets/svg/concert.svg';
+import toeic from '../../../../public/assets/svg/toeic.svg';
+import random1 from '../../../../public/assets/svg/random1.svg';
+import random2 from '../../../../public/assets/svg/random2.svg';
+import random3 from '../../../../public/assets/svg/random3.svg';
+import random4 from '../../../../public/assets/svg/random4.svg';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 const randomImageList = [random1, random2, random3, random4];
 
-function SelectTemplateLanding() {
+function TogetherSelectTemplateLanding() {
   const router = useRouter();
   const [activateButton, setActivateButton] = useState(false);
-  const getTemplateList = useAPI((api) => api.ect.getAloneTemplateList);
-  const { data } = useQuery('templateList', () => getTemplateList());
+  const getTogetherTemplateList = useAPI((api) => api.ect.getTogetherTemplateList);
+  const { data } = useQuery('templateList', () => getTogetherTemplateList());
 
   const [templateImageIndex, setTemplateImageIndex] = useState('');
   const [isBasicTemplate, setIsBasicTemplate] = useState(false);
@@ -118,7 +118,7 @@ function SelectTemplateLanding() {
   );
 }
 
-export default SelectTemplateLanding;
+export default TogetherSelectTemplateLanding;
 
 const StyledRoot = styled.div`
   display: flex;

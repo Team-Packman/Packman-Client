@@ -14,6 +14,22 @@ export interface GetAloneTemplateListOutput {
   };
 }
 
+export interface GetTogetherTemplateListOut {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    basicTemplate: {
+      _id: string;
+      title: string;
+    }[];
+    myTemplate: {
+      _id: string;
+      title: string;
+    }[];
+  };
+}
+
 export interface GetTemplateOutput {
   status: number;
   success: boolean;

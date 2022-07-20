@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { GetAloneTemplateListOutput } from '../../../service/ect/index';
+import { GetAloneTemplateListOutput, GetTogetherTemplateListOut } from '../../../service/ect/index';
 
 // export const fetchTemplateList = async (request: AxiosInstance): Promise<GetTemplateListOutput> => {
 //   return new Promise((r) =>
@@ -55,6 +55,13 @@ export const fetchAloneTemplateList = async (
   request: AxiosInstance,
 ): Promise<GetAloneTemplateListOutput> => {
   const { data } = await request(`/template/alone`);
+  return data;
+};
+
+export const fetchTogetherTemplateList = async (
+  request: AxiosInstance,
+): Promise<GetTogetherTemplateListOut> => {
+  const { data } = await request(`/template/together`);
   return data;
 };
 
