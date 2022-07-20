@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import useAPI from '../../utils/hooks/useAPI';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
@@ -11,28 +11,33 @@ import SharePackingListButton from '../common/SharePackingListButton';
 import PackagesWithCategory from '../common/PackagesWithCategory';
 import PackingCategory from '../common/PackingCategory';
 import PackingItem from '../common/PackingItem';
+import { GetTemplateOutput } from '../../service/ect';
 interface Query {
+  categoryName: 'alone' | 'together';
   type: 'basic' | 'alone' | 'together';
-  templateId: string;
+  id: string;
 }
 
 function PreviewLanding() {
   const router = useRouter();
-  const [query, setQuery] = useState<Query>({
-    type: 'basic',
-    templateId: '62d44cc78c2a5692567b53ae',
-  });
+  const client = useQueryClient();
+  const [data, setData] = useState<GetTemplateOutput | null>(null);
+
   const getTemplate = useAPI((api) => api.ect.getTemplate);
 
-  const { data } = useQuery('getTemplate', () => getTemplate(query));
-  console.log(data);
   useEffect(() => {
     if (router.isReady) {
-      setQuery(router.query as unknown as Query);
+      (async () => {
+        const query = router.query;
+        const data = await client.fetchQuery('getTemplate', () =>
+          getTemplate({ templateId: query?.id as Query['id'], type: query?.type as Query['type'] }),
+        );
+        setData(data);
+      })();
     }
   }, [router.isReady]);
 
-  if (!data) return null;
+  if (!data || !router.query) return null;
   const { data: info } = data;
   return (
     <Layout
