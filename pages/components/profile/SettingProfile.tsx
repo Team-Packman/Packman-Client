@@ -56,7 +56,12 @@ function SettingProfile(props: SettingProfileProps) {
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
-          <Image src={profileImage[+profileImageId].src} alt="my-profile-image" />
+          <Image
+            src={profileImage[+profileImageId].src}
+            alt="my-profile-image"
+            width={80}
+            height={80}
+          />
           <div>
             <h1>{name}</h1>
             <p>{email}</p>
@@ -120,7 +125,13 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  overflow: scroll;
+  height: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+
   & > p {
     color: ${packmanColors.pmDeepGrey};
     font-weight: 300;
@@ -160,6 +171,7 @@ const StyledProfile = styled.div`
   gap: 2.4rem;
   background-color: ${packmanColors.pmBlueGrey};
   width: 100%;
+  height: 11.2rem;
   border-radius: 0.8rem;
   margin-bottom: 0.8rem;
 

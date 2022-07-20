@@ -4,11 +4,12 @@ import styled from 'styled-components';
 interface CreateProfileProps {
   comment: React.ReactNode;
   oldNickname: string;
+  oldProfileImageId: string;
   finishEditing: () => void;
 }
 
 function EditingProfile(props: CreateProfileProps) {
-  const { comment, oldNickname, finishEditing } = props;
+  const { comment, oldNickname, oldProfileImageId, finishEditing } = props;
 
   return (
     <>
@@ -16,6 +17,7 @@ function EditingProfile(props: CreateProfileProps) {
       <SelectProfileSection
         isEditing={true}
         oldNickname={oldNickname}
+        oldProfileImageId={oldProfileImageId}
         finishEditing={finishEditing}
       />
     </>
