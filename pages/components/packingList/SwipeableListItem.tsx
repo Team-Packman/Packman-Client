@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { packmanColors } from '../../../styles/color';
 
 interface PackingList {
-  id: string;
+  _id: string;
   departureDate: string;
   title: string;
   packTotalNum: number;
@@ -36,7 +36,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     packingList,
   } = props;
 
-  const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -67,9 +67,9 @@ export default function SwipeablelistItem(props: ItemProps) {
       {isDeleting && (
         <StyledSelectDelete>
           <Image
-            src={deleteList.includes(id) ? iCheckPink : iCheck}
+            src={deleteList.includes(_id) ? iCheckPink : iCheck}
             alt="체크"
-            onClick={() => checkDeleteList(id)}
+            onClick={() => checkDeleteList(_id)}
             width={24}
             height={24}
           />
