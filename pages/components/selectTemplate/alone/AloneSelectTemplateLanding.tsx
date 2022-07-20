@@ -34,8 +34,6 @@ function AloneSelectTemplateLanding() {
   if (!data) return null;
   if (!router.query) return null;
 
-  const categoryName = router.query.categoryName as unknown as string; //together | alone
-
   const { basicTemplate, myTemplate } = data.data;
 
   const changeTemplateImage = (templateId: string) => {
@@ -70,7 +68,7 @@ function AloneSelectTemplateLanding() {
           )}
         </picture>
         <Template
-          isAloned={categoryName === 'alone'}
+          isAloned={true}
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
           activate={(isSelected: string) => {
@@ -94,7 +92,7 @@ function AloneSelectTemplateLanding() {
           isTemplate={false}
           isActivated={true}
           onClick={() => {
-            router.push('/test');
+            router.push(`/list-intro?id=${templateId}`);
           }}
         >
           건너뛰기
@@ -105,9 +103,9 @@ function AloneSelectTemplateLanding() {
           isActivated={activateButton}
           onClick={() => {
             if (isBasicTemplate) {
-              router.push(`/preview?type=basic&categoryName=${categoryName}`);
+              router.push(`/preview?id=${templateId}&type=basic&categoryName=alone`);
             } else {
-              router.push(`/preview?type=myTemplate&categoryName=${categoryName}`);
+              router.push(`/preview?id=${templateId}&type=myTemplate&categoryName=alone`);
             }
           }}
         >

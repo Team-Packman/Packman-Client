@@ -94,7 +94,7 @@ function TogetherSelectTemplateLanding() {
           isTemplate={false}
           isActivated={true}
           onClick={() => {
-            router.push('/test');
+            router.push(`/list-intro?id=${templateId}`);
           }}
         >
           건너뛰기
@@ -105,9 +105,9 @@ function TogetherSelectTemplateLanding() {
           isActivated={activateButton}
           onClick={() => {
             if (isBasicTemplate) {
-              router.push(`/preview?type=basic&categoryName=${categoryName}`);
+              router.push(`/preview?id=${templateId}&type=basic&categoryName=together`);
             } else {
-              router.push(`/preview?type=myTemplate&categoryName=${categoryName}`);
+              router.push(`/preview?id=${templateId}&type=myTemplate&categoryName=together`);
             }
           }}
         >
