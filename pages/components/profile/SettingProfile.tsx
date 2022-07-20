@@ -40,8 +40,6 @@ function SettingProfile(props: SettingProfileProps) {
     { id: '5', src: profile6 },
   ];
 
-  console.log(profileData);
-
   const onClickLeftModalButton = async () => {
     await deleteUserInfo();
     setIsWithdrawn(true);

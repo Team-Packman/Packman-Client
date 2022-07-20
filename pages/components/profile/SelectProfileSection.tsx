@@ -47,8 +47,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       return updateUserProfile(updateUserProfileData);
     },
     {
-      onSuccess: (data) => {
-        queryClient.setQueryData('user', data);
+      onSuccess: () => {
+        queryClient.invalidateQueries('getUserInfo');
       },
     },
   );
@@ -130,7 +130,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
             ? async () => {
                 if (finishEditing) {
                   updateUserProfileMutate({
-                    nickname,
+                    name: nickname,
                     profileImageId: profile,
                   });
                   finishEditing();
