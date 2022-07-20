@@ -1,3 +1,4 @@
+import { GetTemplateInput } from './../../../service/ect/index';
 import { AxiosInstance } from 'axios';
 import {
   GetHelpTemplateOutput,
@@ -55,56 +56,12 @@ export const fetchTemplateList = async (request: AxiosInstance): Promise<GetTemp
   );
 };
 
-export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplateOutput> => {
-  return new Promise((r) =>
-    setTimeout(() => {
-      r({
-        status: 200,
-        success: true,
-        message: '템플릿 상세조회 성공',
-        data: {
-          id: '62bbb80d9d5dc1aa4c3d28391231',
-          title: '앱잼 합숙',
-          departureDate: '2022-22-22',
-          isSaved: false,
-          category: [
-            {
-              id: '62bbb80d9d5dc1aa4c3d28131232139',
-              name: '필수',
-              pack: [
-                {
-                  id: '62bbb80d9d5dc1aa3454354c3d2839',
-                  name: '여권',
-                  isChecked: false,
-                },
-                {
-                  id: '62bbb80d9d5dc1aa354234c3d2839',
-                  name: '가방',
-                  isChecked: false,
-                },
-              ],
-            },
-            {
-              id: '62bbb80d9d5dc1aa4545435c3d2839',
-              name: '의류',
-              pack: [
-                {
-                  id: '62bbb80d9d5dc1aa4c35435565d2839',
-                  name: '모자',
-                  isChecked: false,
-                },
-                {
-                  id: '62bbb80d9d5dc1aa4c331283210d2839',
-                  name: '수영복',
-                  isChecked: false,
-                },
-              ],
-            },
-          ],
-        },
-      });
-    }, 500),
-  );
+export const fetchTemplate = async (
+  request: AxiosInstance,
+  { templateId, type }: GetTemplateInput,
+): Promise<GetTemplateOutput> => {
+  const { data } = await request(`/template/${templateId}/${type}`);
+  return data;
 };
 
 export const fetchHelpTemplate = async (request: AxiosInstance): Promise<GetHelpTemplateOutput> => {
