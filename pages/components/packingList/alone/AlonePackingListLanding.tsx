@@ -7,13 +7,20 @@ import iTrash from '../../../../public/assets/svg/iTrash.svg';
 import Header from '../../../../components/common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../../utils/hooks/useAPI';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
+import { DeleteAloneInventoryInput } from '../../../../service/inventory/alone';
+
+interface DeleteAloneInventoryData {
+  folderId: string;
+  listId: string;
+}
 
 function AlonePackingListLanding() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -28,14 +35,23 @@ function AlonePackingListLanding() {
       suspense: false,
     },
   );
+  const deleteAloneInventory = useAPI(
+    (api) => (params: DeleteAloneInventoryInput) =>
+      api.inventory.alone.deleteAloneInventory(params),
+  );
+  const { mutate: deleteAloneInventoryMutate } = useMutation(
+    (deleteTogetherInventoryData: DeleteAloneInventoryData) => {
+      return deleteAloneInventory(deleteTogetherInventoryData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getAloneInventory');
+      },
+    },
+  );
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(data?.data.alonePackingList.length).fill(false),
   );
-
-  if (!router.query) return null;
-
-  const { id } = router.query;
-  const categoryName = router.route.split('/')[2];
 
   if (!data) return null;
 
@@ -70,30 +86,18 @@ function AlonePackingListLanding() {
 
   const onClickRightModalButton = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-    // if (isDeleting) {
-    //   queryClient.setQueryData('packing-list', (oldData: any) => {
-    //     return {
-    //       ...oldData,
-    //       data: {
-    //         alonePackingList: alonePackingList.filter(({ id }) => !deleteList.includes(id)),
-    //         currentFolder,
-    //         folder,
-    //       },
-    //     };
-    //   });
-    //   setDeleteList([]);
-    // } else {
-    //   queryClient.setQueryData('packing-list', (oldData: any) => {
-    //     return {
-    //       ...oldData,
-    //       data: {
-    //         alonePackingList: alonePackingList.filter((_, i) => i !== selectedIndex),
-    //         currentFolder,
-    //         folder,
-    //       },
-    //     };
-    //   });
-    // }
+    if (isDeleting) {
+      deleteAloneInventoryMutate({
+        folderId: currentFolder._id,
+        listId: deleteList.join(','),
+      });
+      setDeleteList([]);
+    } else {
+      deleteAloneInventoryMutate({
+        folderId: currentFolder._id,
+        listId: alonePackingList[selectedIndex]._id,
+      });
+    }
     closeModal();
   };
 
@@ -141,7 +145,7 @@ function AlonePackingListLanding() {
               folderList={folder}
               closeDropBox={() => setToggle(false)}
               currentId={currentFolder._id}
-              categoryName={categoryName}
+              categoryName="alone"
             />
           )}
         </div>
