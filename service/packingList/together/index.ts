@@ -14,6 +14,66 @@ export interface UpdatePackingListTitleOutput {
   };
 }
 
+export interface UpdatePackingListDateInput {
+  _id: string; // 패킹리스트 id
+  departureDate: string; // 패킹리스트 출발 날짜
+  isAloned: boolean; // 혼자/함께 패킹 리스트 구분
+}
+
+export interface UpdatePackingListDateOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    departureDate: string; // 수정된 패킹리스트 출발 날짜
+  };
+}
+
+export interface UpdatePackingListIsSavedInput {
+  _id: string; // 패킹리스트 id
+  isSaved: boolean; // 패킹리스트 템플릿 저장 여부
+  isAloned: boolean; // 혼자/함께 패킹 리스트 구분
+}
+
+export interface UpdatePackingListIsSavedOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 혼자 패킹리스트 id
+    isSaved: boolean; // 수정된 나만의 템플릿 저장 여부
+  };
+}
+
+export interface UpdatePackingListPackerInput {
+  listId: string; // 패킹리스트 id
+  packId: string; // 짐 id
+  packerId: string; // 짐 챙길 사람 id
+}
+
+export interface UpdatePackingListPackerOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 함께 패킹리스트 id
+    category: {
+      _id: string; // 함께 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 함께 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: {
+          _id: string;
+          name: string;
+        } | null;
+      }[];
+    }[];
+  };
+}
+
 export interface GetGroupMembersOutput {
   status: number;
   success: boolean;
@@ -21,7 +81,7 @@ export interface GetGroupMembersOutput {
   data: {
     members: {
       // 그룹에 속한 멤버 배열
-      id: string; //  멤버 id
+      _id: string; //  멤버 id
       nickname: string; // 멤버 닉네임
       profileImageId: string; // 멤버 프로필 사진 id
     }[];
@@ -57,7 +117,7 @@ export interface TogetherPackingListOutput {
   };
 }
 
-export interface GetTogetherPackingListDeatilOutput {
+export interface GetTogetherPackingListDetailOutput {
   status: number;
   success: boolean;
   message: string;
@@ -100,9 +160,17 @@ export interface GetTogetherPackingListDeatilOutput {
         }[];
       }[];
     };
+    group: {
+      _id: string;
+      members: {
+        // 그룹에 속한 멤버 배열
+        _id: string; //  멤버 id
+        name: string; // 멤버 닉네임
+        profileImageId: string; // 멤버 프로필 사진 id
+      }[];
+    };
   };
 }
-
 export interface AddTogetherPackingListCategoryInput {
   name: string; // 함께 패킹리스트에서 생성한 카테고리 이름
   listId: string; // 함께 패킹리스트 id
@@ -137,6 +205,32 @@ export interface UpdateTogetherPackingListCategoryInput {
 }
 
 export interface UpdateTogetherPackingListCategoryOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 함께 패킹리스트 id
+    category: {
+      _id: string; // 함께 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 함께 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: {
+          _id: string;
+          name: string;
+        } | null;
+      }[];
+    }[];
+  };
+}
+
+export interface DeleteTogetherPackingListCategoryInput {
+  listId: string;
+  categoryId: string;
+}
+export interface DeleteTogetherPackingListCategoryOutput {
   status: string;
   success: boolean;
   message: string;
@@ -195,6 +289,34 @@ export interface UpdateTogetherPackingListItemInput {
 }
 
 export interface UpdateTogetherPackingListItemOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 함께 패킹리스트 id
+    category: {
+      _id: string; // 함께 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 함께 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: {
+          _id: string;
+          name: string;
+        } | null;
+      }[];
+    }[];
+  };
+}
+
+export interface DeleteTogetherPackingListItemInput {
+  listId: string;
+  categoryId: string;
+  packId: string;
+}
+
+export interface DeleteTogetherPackingListItemOutput {
   status: string;
   success: boolean;
   message: string;

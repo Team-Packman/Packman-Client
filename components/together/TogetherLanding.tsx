@@ -11,17 +11,20 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import CheckListSubHeader from './CheckListSubHeader';
-import { GetTogetherPackingListDeatilOutput } from '../../service/packingList/together';
 import PackingItem, { UpdateItemPayload } from '../common/PackingItem';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
-import PackerModal from './PackerModal';
+import PackerModal, { PackerInfoPayload } from './PackerModal';
 import BottomModal from '../../pages/components/common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
-import { createTogetherAPI } from '../../service/packingList/together/createAPI';
 
+interface FocusInfo {
+  type: 'category' | 'item';
+  categoryId: string;
+  packId: string;
+}
 interface RemainingInfoPayload {
   listId: string;
   title?: string;
@@ -34,6 +37,7 @@ type RemainingInfoType = 'title' | 'departure' | 'save';
 
 function TogetherLanding() {
   const client = useQueryClient();
+  const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
@@ -42,8 +46,8 @@ function TogetherLanding() {
   //category, item 끼리 서로 id 중복 X?
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
   const [currentCreating, setCurrentCreating] = useState('');
-  const [currentFocus, setCurrentFocus] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
+  const [currentFocus, setCurrentFocus] = useState(initialFocus);
 
   /////////////////// api /////////////////////
   const getPackingListDeatil = useAPI((api) => api.packingList.together.getPackingListDeatil);
@@ -54,12 +58,18 @@ function TogetherLanding() {
   );
   const updatePackingListItem = useAPI((api) => api.packingList.together.updatePackingListItem);
   const updatePackingListTitle = useAPI((api) => api.packingList.together.updatePackingListTitle);
-  const getGroupMembers = useAPI((api) => api.packingList.together.getGroupMembers);
-
+  const updatePackingListDate = useAPI((api) => api.packingList.together.updatePackingListDate);
+  const updatePackingListIsSaved = useAPI(
+    (api) => api.packingList.together.updatePackingListIsSaved,
+  );
+  const updatePackingListPacker = useAPI((api) => api.packingList.together.updatePackingListPacker);
+  const deletePackingListCategory = useAPI(
+    (api) => api.packingList.together.deletePackingListCategory,
+  );
+  const deletePackingListItem = useAPI((api) => api.packingList.together.deletePackingListItem);
   const { data: packingListData } = useQuery('getPackingListDeatil', () =>
     getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
   );
-
   const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory);
   const { mutate: addItem } = useMutation('addPackingListItem', addPackingListItem);
   const { mutate: patchCategory } = useMutation(
@@ -68,44 +78,47 @@ function TogetherLanding() {
   );
   const { mutate: patchItem } = useMutation('updatePackingListItem', updatePackingListItem);
   const { mutate: patchTitle } = useMutation('updatePackingListTitle', updatePackingListTitle);
+  const { mutate: patchDate } = useMutation('updatePackingListDate', updatePackingListDate);
+  const { mutate: patchIsSaved } = useMutation(
+    'updatePackingListIsSaved',
+    updatePackingListIsSaved,
+  );
+  const { mutate: patchPacker } = useMutation('updatePackingListPacker', updatePackingListPacker);
+  const { mutate: deleteCategory } = useMutation(
+    'deletePackingListCategory',
+    deletePackingListCategory,
+  );
+  const { mutate: deleteItem } = useMutation('deletePackingListItem', deletePackingListItem);
   ////////////////////////////////////////////
 
-  // const { data: membersData } = useQuery('getGroupMembers', () => getGroupMembers('3'), {
-  //   suspense: true,
-  //   refetchOnMount: false,
-  //   refetchOnWindowFocus: false,
-  // });
   if (!packingListData) return null;
 
-  // const {
-  //   data: { members },
-  // } = membersData;
   const { data: info } = packingListData;
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
-  const creatingHandler = (id: string) => setCurrentCreating(id);
-  const createdHandler = () => setCurrentCreating('');
+  const creatingItemHandler = (categoryId: string) => setCurrentCreating(categoryId);
+  const createdItemHandler = () => setCurrentCreating('');
   const creatingCategoryHandler = () => setCurrentCreatingCategory(packingRole[activeMode]._id);
   const createdCategoryHandler = () => setCurrentCreatingCategory('');
-  const bottomModalOpenHandler = (id: string) => {
+  const bottomModalOpenHandler = (payload: FocusInfo) => {
     if (!currentEditing) {
-      setCurrentFocus(id);
+      setCurrentFocus(payload);
       setBottomModalOpen(true);
     }
   };
   const bottomModalCloseHandler = () => {
-    setCurrentFocus('');
+    setCurrentFocus(initialFocus);
     setBottomModalOpen(false);
   };
   const packerModalOpenHandler = (packId: string) => {
-    console.log('packId :>> ', packId);
-    setCurrentFocus(packId);
+    setCurrentFocus({ ...initialFocus, type: 'item', packId });
     setPackerModalOpen(true);
   };
   const packerModalCloseHandler = () => {
-    setCurrentFocus('');
+    setCurrentFocus(initialFocus);
     setPackerModalOpen(false);
   };
+
   const updateCategory = (payload: UpdateCategoryPayload) => {
     const { name, categoryId, listId } = payload;
     if (currentEditing) {
@@ -116,8 +129,9 @@ function TogetherLanding() {
           listId,
         },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
             client.invalidateQueries('getPackingListDeatil');
+            console.log(data);
           },
         },
       );
@@ -141,8 +155,7 @@ function TogetherLanding() {
     setCurrentEditing('');
     createdCategoryHandler();
   };
-  //id는 필요 x > categoryId 필요
-  //add
+
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
 
@@ -178,16 +191,15 @@ function TogetherLanding() {
           },
         );
       } else {
-        createdHandler();
+        createdItemHandler();
       }
-    } else if (!currentFocus) {
+    } else {
       //Needs optimistic update
-      // isChecked 수정 필요
       patchItem(
         {
           name,
           listId,
-          isChecked: !isChecked,
+          isChecked,
           _id: packId,
           categoryId,
         },
@@ -198,41 +210,111 @@ function TogetherLanding() {
         },
       );
     }
-
     setCurrentEditing('');
-    createdHandler();
+    createdItemHandler();
+  };
+  const updatePacker = (payload: PackerInfoPayload) => {
+    patchPacker(payload, {
+      onSuccess: () => {
+        client.invalidateQueries('getPackingListDeatil');
+      },
+    });
   };
   const updateRemainingInfo = (payload: RemainingInfoPayload, type: RemainingInfoType) => {
     const { listId, title = '', departureDate = '', isSaved = false, isAloned = false } = payload;
 
     switch (type) {
       case 'title':
-        patchTitle({
-          _id: listId,
-          title,
-          isAloned,
-        });
+        patchTitle(
+          {
+            _id: listId,
+            title,
+            isAloned,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
         return;
       case 'departure':
-        console.log({
-          listId,
-          departureDate,
-          isAloned,
-        });
+        patchDate(
+          {
+            _id: listId,
+            departureDate,
+            isAloned,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
         return;
       case 'save':
-        console.log({
-          listId,
-          isSaved,
-          isAloned,
-        });
+        patchIsSaved(
+          {
+            _id: listId,
+            isSaved,
+            isAloned,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
         return;
       default:
         return;
     }
   };
-  const onEdit = () => setCurrentEditing(currentFocus);
-  const onDelete = () => console.log('delete!!', currentFocus);
+  const onEdit = () => {
+    switch (currentFocus.type) {
+      case 'category': {
+        setCurrentEditing(currentFocus.categoryId);
+        return;
+      }
+      case 'item': {
+        setCurrentEditing(currentFocus.packId);
+        return;
+      }
+    }
+  };
+  const onDelete = () => {
+    switch (currentFocus.type) {
+      case 'category': {
+        deleteCategory(
+          {
+            listId: packingRole[activeMode]._id,
+            categoryId: currentFocus.categoryId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
+        return;
+      }
+      case 'item': {
+        deleteItem(
+          {
+            listId: packingRole[activeMode]._id,
+            categoryId: currentFocus.categoryId,
+            packId: currentFocus.packId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
+        return;
+      }
+    }
+  };
   const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
     if (e.currentTarget.scrollTop < 10) {
       scroll && setScroll(false);
@@ -289,7 +371,14 @@ function TogetherLanding() {
                               packId={packId}
                               name={name}
                               isChecked={isChecked}
-                              modalHandler={() => bottomModalOpenHandler(packId)}
+                              modalHandler={() =>
+                                bottomModalOpenHandler({
+                                  ...initialFocus,
+                                  type: 'item',
+                                  categoryId,
+                                  packId,
+                                })
+                              }
                               isEditing={currentEditing === packId}
                               updateItem={updateItem}
                               assginee={
@@ -303,7 +392,7 @@ function TogetherLanding() {
                         </>
                       }
                       isCreating={currentCreating === categoryId}
-                      createHandler={() => creatingHandler(categoryId)}
+                      createHandler={() => creatingItemHandler(categoryId)}
                       creating={
                         <PackingItem
                           listId={list._id}
@@ -323,7 +412,9 @@ function TogetherLanding() {
                         listId={list._id}
                         name={name}
                         updateCategory={updateCategory}
-                        modalHandler={() => bottomModalOpenHandler(categoryId)}
+                        modalHandler={() =>
+                          bottomModalOpenHandler({ ...initialFocus, type: 'category', categoryId })
+                        }
                         isEditing={currentEditing === categoryId}
                       />
                     </PackagesWithCategory>
@@ -355,19 +446,24 @@ function TogetherLanding() {
       {bottomModalOpen && (
         <StyledBg onClick={bottomModalCloseHandler}>
           <StyledModal>
-            <button onClick={onEdit}>update</button>
-            <button onClick={onDelete}>delete</button>
+            <button onClick={onEdit} style={{ width: '8rem', height: '8rem' }}>
+              update
+            </button>
+            <button onClick={onDelete} style={{ width: '8rem', height: '8rem' }}>
+              delete
+            </button>
           </StyledModal>
         </StyledBg>
       )}
-      {/* {packerModalOpen && (
+      {packerModalOpen && (
         <PackerModal
-          members={members}
+          members={info.group.members}
           modalHandler={packerModalCloseHandler}
-          packId={currentFocus}
+          packId={currentFocus.packId}
           listId={info.togetherPackingList._id}
+          updatePacker={updatePacker}
         />
-      )} */}
+      )}
     </Layout>
   );
 }
@@ -376,7 +472,7 @@ export default TogetherLanding;
 
 const StyledTogetherLanding = styled.div`
   height: 100%;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   overflow: hidden;
 `;
 
@@ -402,6 +498,9 @@ const StyledBg = styled.div`
 `;
 
 const StyledModal = styled.div`
+  width: 30rem;
+  height: 10rem;
+  display: flex;
   position: absolute;
   top: 50%;
   left: 50%;
