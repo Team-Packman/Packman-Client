@@ -4,14 +4,14 @@ import withAuth from '../../../utils/axios/withAuth';
 import { fetchAloneInventory } from '../../../utils/inventory/alone';
 
 export interface AloneAPI {
-  together: {
+  alone: {
     getAloneInventory: (folderId: string) => Promise<GetAloneInventoryOutput>;
   };
 }
 
-export const createTogetherAPI = (request: AxiosInstance): AloneAPI => {
+export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
   return {
-    together: {
+    alone: {
       getAloneInventory: (folderId: string) => fetchAloneInventory(withAuth(request), folderId),
     },
   };

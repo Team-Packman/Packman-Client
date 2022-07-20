@@ -1,9 +1,9 @@
 import { AxiosInstance } from 'axios';
-import { TogetherAPI, createTogetherAPI } from './together/createAPI';
-// import { AloneAPI, createAloneAPI } from './alone/mockAPI';
+import { AloneAPI, createAloneAPI } from './alone/createAPI';
+import { createTogetherAPI, TogetherAPI } from './together/createAPI';
 
-export type InventoryAPI = TogetherAPI;
+export type InventoryAPI = TogetherAPI & AloneAPI;
 
 export const createInventoryAPI = (request: AxiosInstance): InventoryAPI => {
-  return Object.assign({}, createTogetherAPI(request));
+  return Object.assign({}, createAloneAPI(request), createTogetherAPI(request));
 };
