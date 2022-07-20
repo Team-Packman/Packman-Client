@@ -17,6 +17,6 @@ export const fetchDeleteTogetherInventory = async (
   request: AxiosInstance,
   { folderId, listId }: DeleteTogetherInventoryInput,
 ): Promise<DeleteTogetherInventoryOutput> => {
-  const { data } = await request(`folder/packingList/together/${folderId}/${listId}`);
+  const { data } = await request.delete(`/packingList/together/${folderId}/${listId}`);
   return data;
 };

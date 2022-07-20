@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 
 interface AddTemplateButtonProps {
   onClick: () => void;
+  children?: ReactNode;
 }
 
 function AddTemplateButton(props: AddTemplateButtonProps) {
-  const { onClick: clickHandler } = props;
-  return <StyledRoot onClick={clickHandler}>나만의 템플릿으로 추가</StyledRoot>;
+  const { children, onClick: clickHandler } = props;
+  return <StyledRoot onClick={clickHandler}>{children}</StyledRoot>;
 }
 
 export default AddTemplateButton;

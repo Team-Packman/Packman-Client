@@ -82,7 +82,7 @@ const StyledRoot = styled.div<{
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   width: 100%;
   height: 8.4rem;
   padding: 0 2rem;
@@ -127,7 +127,7 @@ const StyledCalender = styled.div`
   align-items: flex-end;
   height: 3.1rem;
   /* padding: 0 2rem; */
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   z-index: 2;
 
   input[type='date'] {

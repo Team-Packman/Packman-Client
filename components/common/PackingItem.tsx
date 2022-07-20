@@ -13,15 +13,15 @@ export interface UpdateItemPayload {
 }
 interface PackingItemProps {
   name: string;
-  listId: string;
-  categoryId: string;
-  packId: string;
-  isEditing: boolean;
-  isChecked: boolean;
+  listId?: string;
+  categoryId?: string;
+  packId?: string;
+  isEditing?: boolean;
+  isChecked?: boolean;
   assginee?: ReactNode;
   example?: boolean;
   modalHandler?: () => void;
-  updateItem: (payload: UpdateItemPayload) => void;
+  updateItem?: (payload: UpdateItemPayload) => void;
 }
 
 const MAX_LENGTH = 12;
@@ -30,13 +30,13 @@ function PackingItem(props: PackingItemProps) {
   const {
     example,
     name: nameProps,
-    listId,
-    categoryId,
-    packId,
+    listId = '',
+    categoryId = '',
+    packId = '',
     assginee,
     updateItem,
     modalHandler,
-    isChecked: check,
+    isChecked: check = false,
     isEditing,
   } = props;
   const [isEntered, setIsEntered] = useState(false);
@@ -59,12 +59,12 @@ function PackingItem(props: PackingItemProps) {
       isChecked,
     };
     name === '' && setName(nameProps); // for demo
-    updateItem(payload);
+    updateItem && updateItem(payload);
   };
 
   const checkHandler = () => {
     if (!isEditing) {
-      updateItem({ name, listId, categoryId, packId, isChecked: !isChecked });
+      updateItem && updateItem({ name, listId, categoryId, packId, isChecked: !isChecked });
       setIsChecked((prev) => !prev);
     }
   };
@@ -78,7 +78,12 @@ function PackingItem(props: PackingItemProps) {
   return (
     <StyledRoot>
       <label>
-        <StyledCheckBox type="checkbox" checked={isChecked} onChange={checkHandler} />
+        <StyledCheckBox
+          disabled={example}
+          type="checkbox"
+          checked={isChecked}
+          onChange={checkHandler}
+        />
         {isEditing ? (
           <StyledInput
             ref={ref}

@@ -32,7 +32,7 @@ function TogetherPackingListLanding() {
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
   const { data } = useQuery(
     'getTogetherInventory',
-    () => getTogetherInventory('62d4c4bb28e3949188322524'),
+    () => getTogetherInventory('62d72247af813b54446455a4'),
     {
       suspense: false,
     },
@@ -56,11 +56,6 @@ function TogetherPackingListLanding() {
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(data?.data.togetherPackingList.length).fill(false),
   );
-
-  if (!router.query) return null;
-
-  const { id } = router.query;
-  const categoryName = router.route.split('/')[2];
 
   if (!data) return null;
 
@@ -104,7 +99,7 @@ function TogetherPackingListLanding() {
     } else {
       deleteTogetherInventoryMutate({
         folderId: currentFolder._id,
-        listId: deleteList.join(','),
+        listId: togetherPackingList[selectedIndex]._id,
       });
     }
     closeModal();
@@ -154,7 +149,7 @@ function TogetherPackingListLanding() {
               folderList={folder}
               closeDropBox={() => setToggle(false)}
               currentId={currentFolder._id}
-              categoryName={categoryName}
+              categoryName="together"
             />
           )}
         </div>

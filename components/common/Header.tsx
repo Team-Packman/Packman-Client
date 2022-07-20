@@ -67,6 +67,7 @@ const StyledRoot = styled.header`
   width: 100%;
   display: flex;
   flex-direction: column;
+  z-index: 100;
 `;
 
 const StyledContent = styled.div<{
