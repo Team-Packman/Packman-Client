@@ -7,16 +7,16 @@ import { useRouter } from 'next/router';
 import Header from '../../../../components/common/Header';
 import { packmanColors } from '../../../../styles/color';
 import { useState } from 'react';
-import korea_travel from '../../../../public/assets/svg/korea_travel.svg';
-import oversea_travel from '../../../../public/assets/svg/oversea_travel.svg';
-import jeju from '../../../../public/assets/svg/jeju.svg';
-import pet from '../../../../public/assets/svg/pet.svg';
-import concert from '../../../../public/assets/svg/concert.svg';
-import toeic from '../../../../public/assets/svg/toeic.svg';
-import random1 from '../../../../public/assets/svg/random1.svg';
-import random2 from '../../../../public/assets/svg/random2.svg';
-import random3 from '../../../../public/assets/svg/random3.svg';
-import random4 from '../../../../public/assets/svg/random4.svg';
+import korea_travel from '../../../../public/assets/png/korea_travel.png';
+import oversea_travel from '../../../../public/assets/png/oversea_travel.png';
+import jeju from '../../../../public/assets/png/jeju.png';
+import pet from '../../../../public/assets/png/pet.png';
+import concert from '../../../../public/assets/png/concert.png';
+import toeic from '../../../../public/assets/png/toeic.png';
+import random1 from '../../../../public/assets/png/random1.png';
+import random2 from '../../../../public/assets/png/random2.png';
+import random3 from '../../../../public/assets/png/random3.png';
+import random4 from '../../../../public/assets/png/random4.png';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 const randomImageList = [random1, random2, random3, random4];
@@ -33,8 +33,6 @@ function TogetherSelectTemplateLanding() {
 
   if (!data) return null;
   if (!router.query) return null;
-
-  const categoryName = router.query.categoryName as unknown as string; //together | alone
 
   const { basicTemplate, myTemplate } = data.data;
 
@@ -70,7 +68,7 @@ function TogetherSelectTemplateLanding() {
           )}
         </picture>
         <Template
-          isAloned={categoryName === 'alone'}
+          isAloned={false}
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
           activate={(isSelected: string) => {
@@ -83,10 +81,7 @@ function TogetherSelectTemplateLanding() {
           changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
           changeUserOwnTemplateImage={changeUserOwnTemplateImage}
           checkIsTemplate={(isTemplate: boolean) => setIsBasicTemplate(isTemplate)}
-          setTemplateId={(templateId: string) => {
-            setTemplateId(templateId);
-            console.log(templateId);
-          }}
+          setTemplateId={(templateId: string) => setTemplateId(templateId)}
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>

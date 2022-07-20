@@ -80,15 +80,15 @@ function Template(props: TemplateProps) {
               {!myTemplate.length && (
                 <TemplateItem
                   isSelected="null"
-                  template={{ id: '', title: '아직 저장된 템플릿이 없어요' }}
+                  template={{ _id: '', title: '아직 저장된 템플릿이 없어요' }}
                 />
               )}
               {myTemplate.map((template) => (
                 <TemplateItem
-                  key={template.id}
+                  key={template._id}
                   template={template}
                   isSelected={isSelected}
-                  onClick={() => onClickTemplateItem(template.id)}
+                  onClick={() => onClickTemplateItem(template._id)}
                   changeUserOwnTemplateImage={changeUserOwnTemplateImage}
                   checkIsTemplate={checkIsTemplate}
                 />
