@@ -27,10 +27,7 @@ function SelectTemplateLanding() {
   const [activateButton, setActivateButton] = useState(false);
   const getTemplateList = useAPI((api) => api.ect.getTemplateList);
   const { data } = useQuery('templateList', () => getTemplateList());
-  const [_, setPayload] = useGlobalState('payload', {
-    type: 'basic',
-    categoryName: '',
-  });
+
   const [templateImageIndex, setTemplateImageIndex] = useState('');
   const [isBasicTemplate, setIsBasicTemplate] = useState(false);
 
@@ -93,11 +90,6 @@ function SelectTemplateLanding() {
           isTemplate={false}
           isActivated={true}
           onClick={() => {
-            setPayload({
-              type: 'basic',
-              categoryName,
-            });
-
             router.push('/test');
           }}
         >
@@ -108,11 +100,11 @@ function SelectTemplateLanding() {
           disabled={!activateButton}
           isActivated={activateButton}
           onClick={() => {
-            setPayload({
-              type: categoryName,
-              categoryName,
-            });
-            router.push('/preview');
+            if (isBasicTemplate) {
+              router.push(`/preview?type=basic&categoryName=${categoryName}`);
+            } else {
+              router.push(`/preview?type=myTemplate&categoryName=${categoryName}`);
+            }
           }}
         >
           확인
