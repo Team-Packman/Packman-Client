@@ -20,6 +20,9 @@ import {
   DeleteTogetherPackingListCategoryOutput,
   DeleteTogetherPackingListItemInput,
   DeleteTogetherPackingListItemOutput,
+  GetTogetherFolderOutput,
+  AddTogetherPackingListIntroInput,
+  AddTogetherPackingListIntroOutput,
 } from './../../../../service/packingList/together/index';
 import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
 import { AxiosInstance } from 'axios';
@@ -120,5 +123,20 @@ export const fetchDeletePackingListItem = async (
   const { data } = await request.delete(
     `/packingList/together/pack/${listId}/${categoryId}/${packId}`,
   );
+  return data;
+};
+
+export const fetchTogetherFolder = async (
+  request: AxiosInstance,
+): Promise<GetTogetherFolderOutput> => {
+  const { data } = await request(`/folder/together`);
+  return data;
+};
+
+export const fetchAddTogetherPackingFolder = async (
+  request: AxiosInstance,
+  payload: AddTogetherPackingListIntroInput,
+): Promise<AddTogetherPackingListIntroOutput> => {
+  const { data } = await request.post(`/packingList/together`, payload);
   return data;
 };
