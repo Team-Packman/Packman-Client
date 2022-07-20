@@ -440,7 +440,9 @@ function TogetherLanding() {
             onClick={() =>
               updateRemainingInfo({ listId: info.togetherPackingList._id, isSaved: true }, 'save')
             }
-          />
+          >
+            나만의 템플릿으로 추가
+          </AddTemplateButton>
         </FunctionSection>
       </StyledTogetherLanding>
       {bottomModalOpen && (

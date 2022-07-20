@@ -14,7 +14,7 @@ export interface GetAloneTemplateListOutput {
   };
 }
 
-export interface GetTogetherTemplateListOut {
+export interface GetTogetherTemplateListOutput {
   status: number;
   success: boolean;
   message: string;
@@ -30,6 +30,10 @@ export interface GetTogetherTemplateListOut {
   };
 }
 
+export interface GetTemplateInput {
+  type: 'basic' | 'alone' | 'together';
+  templateId: string;
+}
 export interface GetTemplateOutput {
   status: number;
   success: boolean;
