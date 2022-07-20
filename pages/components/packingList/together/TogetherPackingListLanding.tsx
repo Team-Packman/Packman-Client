@@ -91,6 +91,7 @@ function TogetherPackingListLanding() {
   const onClickRightModalButton = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
+      console.log(deleteList.join(','));
       deleteTogetherInventoryMutate({
         folderId: currentFolder._id,
         listId: deleteList.join(','),

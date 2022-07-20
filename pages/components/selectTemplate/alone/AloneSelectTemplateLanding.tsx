@@ -142,6 +142,9 @@ const StyledButtonWrapper = styled.div`
   height: 4rem;
 `;
 const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 16.3rem;
   height: 4rem;
   border-radius: 0.8rem;

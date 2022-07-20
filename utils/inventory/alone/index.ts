@@ -18,5 +18,6 @@ export const fetchDeleteAloneInventory = async (
   { folderId, listId }: DeleteAloneInventoryInput,
 ): Promise<DeleteAloneInventoryOutput> => {
   const { data } = await request.delete(`/packingList/alone/${folderId}/${listId}`);
+  console.log(listId);
   return data;
 };
