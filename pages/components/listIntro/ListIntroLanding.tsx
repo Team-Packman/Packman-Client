@@ -4,51 +4,61 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import Header from '../../../components/common/Header';
 import { AddFolderInput } from '../../../service/folder';
-import { AddPakingListIntroInput } from '../../../service/packingList/alone';
+import { AddAlonePackingListIntroInput } from '../../../service/packingList/alone';
+import { AddTogetherPackingListIntroInput } from '../../../service/packingList/together';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 
 interface ListIntroProps {
   isAloned: boolean;
+  templateId: string;
 }
 
 function ListIntroLanding(props: ListIntroProps) {
-  const { isAloned = true } = props;
+  // Todo : param으로 넘어오는 templateId 가져오기 + isAloned 값도
+  const { isAloned = false, templateId = '62d44cc78c2a5692567b53ae' } = props;
 
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
+  const [listName, setListName] = useState<string>('');
   const [selectedTagIndex, setSelectedTagIndex] = useState<{ id: string; index: number }>({
     id: '',
     index: -1,
   });
-  const [listName, setListName] = useState<string>('');
 
-  const getFolders = useAPI((api) => api.folder.getFolders);
-  const addIntroFolder = useAPI((api) => api.packingList.alone.addIntroFolder);
+  //  api call
+  const getAloneFolder = useAPI((api) => api.packingList.alone.getAloneFolder);
+  const getTogetherFolder = useAPI((api) => api.packingList.together.getTogetherFolder);
+  const addAlonePackingListFolder = useAPI(
+    (api) => api.packingList.alone.addAlonePackingListFolder,
+  );
+  const addTogetherPackingListFolder = useAPI(
+    (api) => api.packingList.together.addTogetherPakingListFolder,
+  );
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  // 연결한 api
-  const getAloneFolder = useAPI((api) => api.packingList.alone.getAloneFolder);
-
+  // react-query code
   const { data: aloneFolderData } = useQuery('aloneFolder', () => getAloneFolder());
+  const { data: togetherFolderData } = useQuery('togetherFolder', () => getTogetherFolder());
 
-  const { data } = useQuery('folderList', () => getFolders(), {
-    suspense: true,
-  });
-  const { mutate: addIntroMutate, isError } = useMutation(
-    'addIntroFolder',
-    (info: AddPakingListIntroInput) => addIntroFolder(info),
+  const { mutate: addAloneIntroMutate, isError: aloneIsError } = useMutation(
+    'addAloneIntroFolder',
+    (info: AddAlonePackingListIntroInput) => addAlonePackingListFolder(info),
   );
-  const { mutate: addFolerMutate } = useMutation('addFolderName', (info: AddFolderInput) =>
-    addFolder(info),
+  const { mutate: addTogetherIntroMutate, isError: togetherIsError } = useMutation(
+    'addTogetherIntroFolder',
+    (info: AddTogetherPackingListIntroInput) => addTogetherPackingListFolder(info),
   );
 
-  if (!data || !aloneFolderData) return null;
+  const { mutate: addFolerMutate } = useMutation((info: AddFolderInput) => addFolder(info));
 
-  const { aloneFolders, togetherFolders } = data.data;
+  if (!aloneFolderData || !togetherFolderData) return null;
+
+  const { aloneFolders } = aloneFolderData.data;
+  const { togetherFolders } = togetherFolderData.data;
 
   const getTodayDate = () => {
     const current = new Date();
@@ -57,12 +67,13 @@ function ListIntroLanding(props: ListIntroProps) {
     return date;
   };
 
-  const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFolderName(e.target.value);
-  };
-
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);
+  };
+
+  const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setFolderName(e.target.value);
   };
 
   const handleListNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,34 +85,76 @@ function ListIntroLanding(props: ListIntroProps) {
     addFolerMutate(
       { title: folderName, isAloned },
       {
-        onSuccess: () => {
-          queryClient.setQueryData('folderList', (oldData: any) => {
-            return {
-              ...oldData,
-              data: {
-                aloneFolders,
-                togetherFolders,
-              },
-            };
-          });
+        onSuccess: (data) => {
+          {
+            isAloned
+              ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
+                  return {
+                    ...oldData,
+                    data: {
+                      aloneFolders: data.data.aloneFolders,
+                    },
+                  };
+                })
+              : queryClient.setQueryData('togetherFolder', (oldData: any) => {
+                  return {
+                    ...oldData,
+                    data: {
+                      togetherFolders: data.data.togetherFolders,
+                    },
+                  };
+                });
+          }
         },
       },
     );
+    setFolderName('');
   };
 
   const handleTagClick = (id: string, index: number) => {
-    setSelectedTagIndex({ id, index });
+    // 처음 선택하는 경우
+    if (!selectedTagIndex.id) {
+      setSelectedTagIndex({ id, index });
+    } else {
+      // 이미 선택한 태그를 한번 더 클릭한 경우
+      if (id === selectedTagIndex.id) {
+        setSelectedTagIndex({ id: '', index: -1 });
+      } else {
+        setSelectedTagIndex({ id, index });
+      }
+    }
   };
 
   const handleNextButtonClick = () => {
-    addIntroMutate(
-      { departureDate: date, folderId: selectedTagIndex.id, title: listName },
-      {
-        onSuccess: () => {
-          router.push(`/packingList/${isAloned ? 'alone' : 'together'}/category`);
-        },
-      },
-    );
+    {
+      isAloned
+        ? addAloneIntroMutate(
+            {
+              departureDate: date,
+              folderId: selectedTagIndex.id,
+              title: listName,
+              templateId: templateId,
+            },
+            {
+              onSuccess: () => {
+                router.push(`/packing-list/alone/category`);
+              },
+            },
+          )
+        : addTogetherIntroMutate(
+            {
+              departureDate: date,
+              folderId: selectedTagIndex.id,
+              title: listName,
+              templateId: templateId,
+            },
+            {
+              onSuccess: () => {
+                router.push(`/packing-list/together/category`);
+              },
+            },
+          );
+    }
   };
 
   return (
@@ -116,7 +169,8 @@ function ListIntroLanding(props: ListIntroProps) {
         <div>
           <input
             type="text"
-            onChange={handleFolderNameChange}
+            onChange={(e) => handleFolderNameChange(e)}
+            value={folderName}
             placeholder="폴더 이름을 입력하세요"
             maxLength={10}
           />
@@ -147,7 +201,7 @@ function ListIntroLanding(props: ListIntroProps) {
       <StyledListNameContainer>
         <h3>리스트 이름을 작성해주세요</h3>
         <div>
-          {isError && <label>중복된 리스트 이름입니다</label>}
+          {(aloneIsError || togetherIsError) && <label>중복된 리스트 이름입니다</label>}
           <input
             type="text"
             placeholder="예시) 혼자 캐나다 여행"

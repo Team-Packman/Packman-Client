@@ -32,6 +32,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
+  const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -86,13 +87,14 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       setProfile('');
     } else {
       setProfile(id);
+      setIndex(id);
     }
   };
 
   return (
     <StyledRoot>
       <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
-        <Image src={profileImage[+profile].src} alt="profile-image" layout="fill" />
+        <Image src={profileImage[+index].src} alt="profile-image" layout="fill" />
       </div>
       <StyledInputWrapper>
         <StyledInput

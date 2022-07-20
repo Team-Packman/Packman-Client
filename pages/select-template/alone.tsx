@@ -1,11 +1,10 @@
-import React from 'react';
 import { AsyncBoundary } from '../../utils/AsyncBoundary';
-import SelectTemplateLanding from '../components/selectTemplate/[categoryName]';
+import AloneSelectTemplateLanding from '../components/selectTemplate/alone/AloneSelectTemplateLanding';
 
 function index() {
   return (
     <AsyncBoundary>
-      <SelectTemplateLanding />
+      <AloneSelectTemplateLanding />
     </AsyncBoundary>
   );
 }
