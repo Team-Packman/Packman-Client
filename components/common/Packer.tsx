@@ -50,14 +50,14 @@ const StyledRoot = styled.button<{
   ${({ selected }) =>
     selected
       ? `
-    background-color: ${packmanColors.white};
+    background-color: ${packmanColors.pmWhite};
     border-color: ${packmanColors.pmLightPink};
     color: ${packmanColors.pink};
   `
       : `
     background-color: ${packmanColors.pmGrey};
     border-color: ${packmanColors.pmGrey};
-    color: ${packmanColors.white};
+    color: ${packmanColors.pmWhite};
   `}
 
   & > div {

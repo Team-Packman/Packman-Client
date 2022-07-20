@@ -1,5 +1,5 @@
 import {
-  GetTogetherPackingListDeatilOutput,
+  GetTogetherPackingListDetailOutput,
   AddTogetherPackingListCategoryInput,
   AddTogetherPackingListCategoryOutput,
   UpdateTogetherPackingListCategoryInput,
@@ -10,6 +10,16 @@ import {
   UpdateTogetherPackingListItemOutput,
   UpdatePackingListTitleInput,
   UpdatePackingListTitleOutput,
+  UpdatePackingListDateInput,
+  UpdatePackingListDateOutput,
+  UpdatePackingListIsSavedInput,
+  UpdatePackingListIsSavedOutput,
+  UpdatePackingListPackerInput,
+  UpdatePackingListPackerOutput,
+  DeleteTogetherPackingListCategoryInput,
+  DeleteTogetherPackingListCategoryOutput,
+  DeleteTogetherPackingListItemInput,
+  DeleteTogetherPackingListItemOutput,
 } from './../../../../service/packingList/together/index';
 import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
 import { AxiosInstance } from 'axios';
@@ -19,6 +29,30 @@ export const fetchUpdatePackingListTitle = async (
   payload: UpdatePackingListTitleInput,
 ): Promise<UpdatePackingListTitleOutput> => {
   const { data } = await request.patch(`/packingList/title`, payload);
+  return data;
+};
+
+export const fetchUpdatePackingListDate = async (
+  request: AxiosInstance,
+  payload: UpdatePackingListDateInput,
+): Promise<UpdatePackingListDateOutput> => {
+  const { data } = await request.patch(`/packingList/departureDate`, payload);
+  return data;
+};
+
+export const fetchUpdatePackingListIsSaved = async (
+  request: AxiosInstance,
+  payload: UpdatePackingListIsSavedInput,
+): Promise<UpdatePackingListIsSavedOutput> => {
+  const { data } = await request.patch(`/packingList/myTemplate`, payload);
+  return data;
+};
+
+export const fetchUpdatePackingListPacker = async (
+  request: AxiosInstance,
+  payload: UpdatePackingListPackerInput,
+): Promise<UpdatePackingListPackerOutput> => {
+  const { data } = await request.patch(`/packingList/together/packer`, payload);
   return data;
 };
 
@@ -34,7 +68,7 @@ export const fetchPackingListDetail = async (
   request: AxiosInstance,
   listId: string,
   inviteCode: string = '',
-): Promise<GetTogetherPackingListDeatilOutput> => {
+): Promise<GetTogetherPackingListDetailOutput> => {
   const { data } = await request(`/packingList/together/${listId}?invitecCode=${inviteCode}`);
   return data;
 };
@@ -55,6 +89,14 @@ export const fetchUpdatePackingListCategory = async (
   return data;
 };
 
+export const fetchDeletePackingListCategory = async (
+  request: AxiosInstance,
+  { listId, categoryId }: DeleteTogetherPackingListCategoryInput,
+): Promise<DeleteTogetherPackingListCategoryOutput> => {
+  const { data } = await request.delete(`/packingList/together/category/${listId}/${categoryId}`);
+  return data;
+};
+
 export const fetchAddPackingListItem = async (
   request: AxiosInstance,
   payload: AddTogetherPackingListItemInput,
@@ -68,5 +110,15 @@ export const fetchUpdatePackingListItem = async (
   payload: UpdateTogetherPackingListItemInput,
 ): Promise<UpdateTogetherPackingListItemOutput> => {
   const { data } = await request.patch(`/packingList/together/pack`, payload);
+  return data;
+};
+
+export const fetchDeletePackingListItem = async (
+  request: AxiosInstance,
+  { listId, categoryId, packId }: DeleteTogetherPackingListItemInput,
+): Promise<DeleteTogetherPackingListItemOutput> => {
+  const { data } = await request.delete(
+    `/packingList/together/pack/${listId}/${categoryId}/${packId}`,
+  );
   return data;
 };
