@@ -1,5 +1,7 @@
 import { AxiosInstance } from 'axios';
 import {
+  AddUserProfileInput,
+  AddUserProfileOutput,
   GetUserInfoOutput,
   UpdateUserProfileInput,
   UpdateUserProfileOutput,
@@ -15,5 +17,13 @@ export const fetchUpdateUserProfile = async (
   payload: UpdateUserProfileInput,
 ): Promise<UpdateUserProfileOutput> => {
   const { data } = await request.patch(`/user/profile`, payload);
+  return data;
+};
+
+export const fetchAddUserProfile = async (
+  request: AxiosInstance,
+  payload: AddUserProfileInput,
+): Promise<AddUserProfileOutput> => {
+  const { data } = await request.post(`/user/profile`, payload);
   return data;
 };
