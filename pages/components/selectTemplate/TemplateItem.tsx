@@ -7,11 +7,6 @@ interface Template {
   id: string;
   title: string;
 }
-interface QueryData {
-  basicTemplate: Template;
-  myTemplate: Template;
-}
-
 interface TemplateItemProps {
   template: Template;
   isSelected: string;

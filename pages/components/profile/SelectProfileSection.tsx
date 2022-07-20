@@ -93,10 +93,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   }, []);
 
-  useEffect(() => {
-    setIsActivate();
-  }, [profile]);
-
   const onClickProfileImage = (id: string) => {
     if (profile === id) {
       setProfile('');
@@ -107,7 +103,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   return (
     <StyledRoot>
-      <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+      <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
         <Image src={profileImage[+profile].src} alt="profile-image" layout="fill" />
       </div>
       <StyledInputWrapper>
@@ -129,14 +125,17 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
       <StyledSelectProfileWrapper>
         {profileImage.map(({ id, src }) => (
-          <StyledImageWrapper key={id} selected={profile === id}>
+          <StyledImageWrapper
+            key={id}
+            selected={profile === id}
+            onClick={() => onClickProfileImage(id)}
+          >
             <StyledImage
               key={id}
               src={src}
               alt="profile-images"
               width={80}
               height={80}
-              onClick={() => onClickProfileImage(id)}
               selected={profile === id}
             />
           </StyledImageWrapper>
