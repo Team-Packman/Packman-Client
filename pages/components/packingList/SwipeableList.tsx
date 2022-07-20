@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import SwipeablelistItem from './SwipeableListItem';
 import { packmanColors } from '../../../styles/color';
 interface PackingList {
-  id: string;
+  _id: string;
   departureDate: string;
   title: string;
   packTotalNum: number;
@@ -39,7 +39,7 @@ export default function SwipeableList(props: SwipeableListProps) {
       <StyledSwipeableListWrapper>
         {packingList?.map((item, idx) => (
           <SwipeablelistItem
-            key={item.id}
+            key={item._id}
             idx={idx}
             isDragged={isDragged[idx]}
             handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
@@ -62,7 +62,7 @@ export default function SwipeableList(props: SwipeableListProps) {
               onClick={() => {
                 const tempArr: string[] = [];
                 if (packingList) {
-                  packingList.forEach(({ id }) => tempArr.push(id));
+                  packingList.forEach(({ _id }) => tempArr.push(_id));
                 }
                 setDeleteList(tempArr);
               }}

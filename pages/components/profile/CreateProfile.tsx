@@ -19,10 +19,11 @@ export default CreateProfile;
 
 const StyledCommentWrapper = styled.h1`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  & > h1 {
+  & > div > h1 {
     line-height: 2.9rem;
     font-weight: 300;
     font-size: 2.4rem;
@@ -31,6 +32,6 @@ const StyledCommentWrapper = styled.h1`
     word-wrap: break-word;
   }
   & b {
-    font-weight: 500;
+    font-weight: 600;
   }
 `;

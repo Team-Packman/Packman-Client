@@ -1,12 +1,21 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
-import tempBox from '../../../public/assets/svg/tempBox.svg';
-import { UpdateUserProfileInput } from '../../../service/user';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
+import { useMutation, useQueryClient } from 'react-query';
+import profile1 from '../../../public/assets/png/profile1.png';
+import profile2 from '../../../public/assets/png/profile2.png';
+import profile3 from '../../../public/assets/png/profile3.png';
+import profile4 from '../../../public/assets/png/profile4.png';
+import profile5 from '../../../public/assets/png/profile5.png';
+import profile6 from '../../../public/assets/png/profile6.png';
+
+interface UpdateUserProfileData {
+  name: string;
+  profileImageId: string;
+}
 
 interface SelectProfileSectionProps {
   isEditing?: boolean;
@@ -15,21 +24,44 @@ interface SelectProfileSectionProps {
 }
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
-  const { isEditing, oldNickname, finishEditing } = props;
-  const [nickname, setNickname] = useState('');
-  const router = useRouter();
   const queryClient = useQueryClient();
+  const { isEditing, oldNickname, finishEditing } = props;
+  const profileImage = [
+    { id: '0', src: profile1 },
+    { id: '1', src: profile2 },
+    { id: '2', src: profile3 },
+    { id: '3', src: profile4 },
+    { id: '4', src: profile5 },
+    { id: '5', src: profile6 },
+  ];
+  const [nickname, setNickname] = useState('');
+  const [profile, setProfile] = useState('');
+  const router = useRouter();
 
   //프로필 수정
   const updateUserProfile = useAPI(
-    (api) => (info: UpdateUserProfileInput) => api.user.updateUserProfile(info),
+    (api) => (info: UpdateUserProfileData) => api.user.updateUserProfile(info),
+  );
+  const { mutate: updateUserProfileMutate } = useMutation(
+    (updateUserProfileData: UpdateUserProfileData) => {
+      return updateUserProfile(updateUserProfileData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getUserInfo');
+      },
+    },
   );
 
   const setIsActivate = () => {
     if (isEditing) {
       return nickname.length > 0;
     } else {
-      return nickname.length > 0 && nickname.length < 5;
+      if (profile) {
+        return nickname.length > 0 && nickname.length < 5;
+      } else {
+        return false;
+      }
     }
   };
   useEffect(() => {
@@ -38,9 +70,24 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   }, []);
 
+  useEffect(() => {
+    setIsActivate();
+  }, [profile]);
+
+  const onClickProfileImage = (id: string) => {
+    console.log(profile, id);
+    if (profile === id) {
+      setProfile('');
+    } else {
+      setProfile(id);
+    }
+  };
+
   return (
     <StyledRoot>
-      <Image src={tempBox} alt="임시네모" width={120} height={120} />
+      <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+        <Image src={profileImage[+profile].src} alt="profile-image" layout="fill" />
+      </div>
       <StyledInputWrapper>
         <StyledInput
           type="text"
@@ -57,13 +104,23 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         />
         <StyledText nickname={nickname !== ''}>닉네임을 입력해주세요 (4자 이내)</StyledText>
       </StyledInputWrapper>
+
       <StyledSelectProfileWrapper>
-        {Array(6)
-          .fill(1)
-          .map((_, idx) => (
-            <Image key={idx} src={tempBox} alt="임시네모" width={80} height={80} />
-          ))}
+        {profileImage.map(({ id, src }) => (
+          <StyledImageWrapper key={id} selected={profile === id}>
+            <StyledImage
+              key={id}
+              src={src}
+              alt="profile-images"
+              width={80}
+              height={80}
+              onClick={() => onClickProfileImage(id)}
+              selected={profile === id}
+            />
+          </StyledImageWrapper>
+        ))}
       </StyledSelectProfileWrapper>
+
       <StyledButton
         type="button"
         disabled={!setIsActivate()}
@@ -72,9 +129,9 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
           isEditing
             ? async () => {
                 if (finishEditing) {
-                  const data = await updateUserProfile({
-                    nickname,
-                    profileImageId: '3',
+                  updateUserProfileMutate({
+                    name: nickname,
+                    profileImageId: profile,
                   });
                   finishEditing();
                 }
@@ -94,6 +151,7 @@ const StyledRoot = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
   margin-top: 4.84rem;
 `;
 const StyledInputWrapper = styled.div`
@@ -101,7 +159,7 @@ const StyledInputWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const StyledText = styled.p<{ nickname: boolean }>`
+const StyledText = styled.div<{ nickname: boolean }>`
   opacity: ${({ nickname }) => nickname && '0'};
   padding-top: 0.77rem;
   color: ${packmanColors.pmDeepGrey};
@@ -129,11 +187,26 @@ const StyledInput = styled.input`
 const StyledSelectProfileWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 25.6rem;
+  justify-content: center;
+  width: 100%;
   gap: 0.8rem;
-  margin: 3.2rem 0 5.57rem 0;
+  margin: 1.5rem 0 5.57rem 0;
+`;
+const StyledImageWrapper = styled.div<{ selected: boolean }>`
+  width: 8.6rem;
+  height: 8.6rem;
+  background: url('assets/svg/iSelected.svg') no-repeat center;
+  background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};
+  border: ${({ selected }) =>
+    selected ? `3px solid ${packmanColors.pmPink}` : '3px solid transparent'};
+  border-radius: 0.8rem;
+`;
+const StyledImage = styled(Image)<{ selected: boolean }>`
+  z-index: ${({ selected }) => selected && '-1'};
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
+  position: absolute;
+  bottom: 1.5rem;
   width: 33.6rem;
   height: 4.1rem;
   border: none;

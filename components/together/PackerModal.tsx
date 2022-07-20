@@ -10,11 +10,12 @@ interface PackerModalProps {
     profileImageId: string;
   }[];
   packId: string;
+  listId: string;
   modalHandler: () => void;
 }
 
 function PackerModal(props: PackerModalProps) {
-  const { members, modalHandler, packId } = props;
+  const { members, modalHandler, packId, listId } = props;
 
   const TICK = 30;
   const ITERATOR = Array(TICK).fill('').entries();
@@ -55,6 +56,7 @@ function PackerModal(props: PackerModalProps) {
           selected={selected !== ''}
           onClick={() => {
             console.log({
+              listId,
               packId,
               packerId: selected,
             });

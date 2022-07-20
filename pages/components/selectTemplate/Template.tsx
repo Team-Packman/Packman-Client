@@ -14,13 +14,25 @@ interface TemplateProps {
   basicTemplate: Template[];
   myTemplate: Template[];
   activate: (isSelected: string) => void;
+  changeTemplateImage: (templateId: string) => void;
+  changeUserOwnTemplateImage: () => void;
+  checkIsTemplate: (isTemplate: boolean) => void;
 }
 
 function Template(props: TemplateProps) {
-  const { isAloned, basicTemplate, myTemplate, activate } = props;
+  const {
+    isAloned,
+    basicTemplate,
+    myTemplate,
+    activate,
+    changeTemplateImage,
+    changeUserOwnTemplateImage,
+    checkIsTemplate,
+  } = props;
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
+    console.log(isSelected, id);
     if (isSelected === id) {
       setIsSelected('');
     } else {
@@ -40,12 +52,14 @@ function Template(props: TemplateProps) {
         <TemplateList
           templateList={
             <>
-              {basicTemplate.map((template) => (
+              {basicTemplate.map((template, idx) => (
                 <TemplateItem
                   key={template.id}
                   template={template}
                   isSelected={isSelected}
                   onClick={() => onClickTemplateItem(template.id)}
+                  changeTemplateImage={changeTemplateImage}
+                  checkIsTemplate={checkIsTemplate}
                 />
               ))}
             </>
@@ -71,6 +85,8 @@ function Template(props: TemplateProps) {
                   template={template}
                   isSelected={isSelected}
                   onClick={() => onClickTemplateItem(template.id)}
+                  changeUserOwnTemplateImage={changeUserOwnTemplateImage}
+                  checkIsTemplate={checkIsTemplate}
                 />
               ))}
             </>

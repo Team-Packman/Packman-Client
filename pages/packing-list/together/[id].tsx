@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import SwipeableList from '../components/packingList/SwipeableList';
+import SwipeableList from '../../components/packingList/SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
-import iShowMore from '../../public/assets/svg/iShowMore.svg';
-import iTrash from '../../public/assets/svg/iTrash.svg';
-import Header from '../../components/common/Header';
-import DropBox from '../components/packingList/DropBox';
-import useAPI from '../../utils/hooks/useAPI';
+import iShowMore from '../../../public/assets/svg/iShowMore.svg';
+import iTrash from '../../../public/assets/svg/iTrash.svg';
+import Header from '../../../components/common/Header';
+import DropBox from '../../components/packingList/DropBox';
+import useAPI from '../../../utils/hooks/useAPI';
 import { useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import Modal from '../components/common/Modal';
-import { packmanColors } from '../../styles/color';
-import FloatActionButton from '../components/folder/FloatActionButton';
+import Modal from '../../components/common/Modal';
+import { packmanColors } from '../../../styles/color';
+import FloatActionButton from '../../components/folder/FloatActionButton';
 
 function PackingListLanding() {
   const [toggle, setToggle] = useState(false);
@@ -19,29 +19,29 @@ function PackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const getTogetherPackingList = useAPI((api) => api.packingList.alone.getPackingListWithFolders);
-  const { data } = useQuery('packing-list', () => getTogetherPackingList(), {});
-  const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(
-      data && data.data && data.data.alonePackingList && data?.data.alonePackingList?.length,
-    ).fill(false),
+  const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
+  const { data } = useQuery(
+    'getTogetherInventory',
+    () => getTogetherInventory('62d65e5d2abfcbd9521acc5d'),
+    {
+      suspense: false,
+    },
   );
+  console.log(data);
+
+  const [isDragged, setIsDragged] = useState<boolean[]>(Array(4).fill(false));
 
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  if (!router.query.slug) return null;
+  if (!router.query) return null;
 
-  const categoryName = router.query.slug[0]; //together | alone
-  const folderId = router.query.slug[1];
+  const { id } = router.query;
+  const categoryName = router.route.split('/')[2];
 
-  if (!data || !data.data) return null;
-  //api alone/together 둘다 호출하고 categoryName에 따라 packingList에 할당하자.
+  if (!data) return null;
 
-  // const { alonePackingList, folder, currentFolder } = data.data;
-  const packingList = data?.data?.alonePackingList;
-  const folder = data?.data?.folder;
-  const currentFolder = data?.data?.currentFolder;
+  const { togetherPackingList, folder, currentFolder } = data.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -66,36 +66,36 @@ function PackingListLanding() {
   };
 
   const onClickLeftModalButton = () => {
-    handleIsDragged(Array(packingList?.length).fill(false));
+    handleIsDragged(Array(togetherPackingList?.length).fill(false));
     closeModal();
   };
 
   const onClickRightModalButton = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-    if (isDeleting) {
-      queryClient.setQueryData('packing-list', (oldData: any) => {
-        return {
-          ...oldData,
-          data: {
-            alonePackingList: packingList.filter(({ id }) => !deleteList.includes(id)),
-            currentFolder,
-            folder,
-          },
-        };
-      });
-      setDeleteList([]);
-    } else {
-      queryClient.setQueryData('packing-list', (oldData: any) => {
-        return {
-          ...oldData,
-          data: {
-            alonePackingList: packingList.filter((_, i) => i !== selectedIndex),
-            currentFolder,
-            folder,
-          },
-        };
-      });
-    }
+    // if (isDeleting) {
+    //   queryClient.setQueryData('packing-list', (oldData: any) => {
+    //     return {
+    //       ...oldData,
+    //       data: {
+    //         alonePackingList: togetherPackingList.filter(({ _id }) => !deleteList.includes(_id)),
+    //         currentFolder,
+    //         folder,
+    //       },
+    //     };
+    //   });
+    //   setDeleteList([]);
+    // } else {
+    //   queryClient.setQueryData('packing-list', (oldData: any) => {
+    //     return {
+    //       ...oldData,
+    //       data: {
+    //         alonePackingList: togetherPackingList.filter((_, i) => i !== selectedIndex),
+    //         currentFolder,
+    //         folder,
+    //       },
+    //     };
+    //   });
+    // }
     closeModal();
   };
 
@@ -136,21 +136,21 @@ function PackingListLanding() {
             onClick={() => {
               setToggle(true);
             }}
-            toggle={toggle}
+            isToggled={toggle}
           />
           {toggle && (
             <DropBox
               folderList={folder}
               closeDropBox={() => setToggle(false)}
-              currentId={currentFolder.id}
+              currentId={currentFolder._id}
               categoryName={categoryName}
             />
           )}
         </div>
       </StyledFolderInfo>
 
-      <StyledMain isEmpty={!packingList.length}>
-        {!packingList.length ? (
+      <StyledMain isEmpty={!togetherPackingList.length}>
+        {!togetherPackingList.length ? (
           <StyledEmpty>
             <p>&apos;+&apos; 버튼을 눌러</p>
             <p>패킹 리스트를 추가해주세요</p>
@@ -160,7 +160,7 @@ function PackingListLanding() {
             <StyledCaptionWrapper>
               {!isDeleting && (
                 <StyledCaptionText>
-                  <span>{packingList?.length}</span>개의 패킹 리스트
+                  <span>{togetherPackingList?.length}</span>개의 패킹 리스트
                 </StyledCaptionText>
               )}
               {isDeleting && (
@@ -175,7 +175,7 @@ function PackingListLanding() {
 
               <StyledCaptionButtonWrapper
                 onClick={() => {
-                  setIsDragged(Array(packingList?.length).fill(false));
+                  setIsDragged(Array(togetherPackingList?.length).fill(false));
                   setIsDeleting((prev) => !prev);
                   if (!isDeleting) {
                     setDeleteList([]);
@@ -183,21 +183,23 @@ function PackingListLanding() {
                 }}
               >
                 {isDeleting ? (
-                  <p onClick={() => setIsDragged(Array(packingList?.length).fill(false))}>취소</p>
+                  <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
+                    취소
+                  </p>
                 ) : (
                   <Image
                     src={iTrash}
                     alt="삭제"
                     width={24}
                     height={24}
-                    onClick={() => setIsDragged(Array(packingList?.length).fill(false))}
+                    onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
                   />
                 )}
               </StyledCaptionButtonWrapper>
             </StyledCaptionWrapper>
 
             <SwipeableList
-              packingList={packingList}
+              packingList={togetherPackingList}
               deleteList={deleteList}
               isDeleting={isDeleting}
               checkDeleteList={checkDeleteList}
@@ -244,9 +246,9 @@ const StyledFolderInfo = styled.div`
     align-items: center;
   }
 `;
-const StyledToggleImage = styled(Image)<{ toggle: boolean }>`
+const StyledToggleImage = styled(Image)<{ isToggled: boolean }>`
   transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${({ isToggled }) => (isToggled ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;

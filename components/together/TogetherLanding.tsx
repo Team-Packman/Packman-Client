@@ -2,7 +2,7 @@ import React, { useState, UIEvent } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import PackagesWithCategory from '../common/PackagesWithCategory';
 import PackingCategory, { UpdateCategoryPayload } from '../common/PackingCategory';
 import CheckListHeader from './CheckListHeader';
@@ -20,6 +20,7 @@ import PackerModal from './PackerModal';
 import BottomModal from '../../pages/components/common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
+import { createTogetherAPI } from '../../service/packingList/together/createAPI';
 
 interface RemainingInfoPayload {
   listId: string;
@@ -31,7 +32,7 @@ interface RemainingInfoPayload {
 
 type RemainingInfoType = 'title' | 'departure' | 'save';
 
-function PreviewLanding() {
+function TogetherLanding() {
   const client = useQueryClient();
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -43,32 +44,48 @@ function PreviewLanding() {
   const [currentCreating, setCurrentCreating] = useState('');
   const [currentFocus, setCurrentFocus] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
+
+  /////////////////// api /////////////////////
   const getPackingListDeatil = useAPI((api) => api.packingList.together.getPackingListDeatil);
+  const addPackingListCategory = useAPI((api) => api.packingList.together.addPackingListCategory);
+  const addPackingListItem = useAPI((api) => api.packingList.together.addPackingListItem);
+  const updatePackingListCategory = useAPI(
+    (api) => api.packingList.together.updatePackingListCategory,
+  );
+  const updatePackingListItem = useAPI((api) => api.packingList.together.updatePackingListItem);
+  const updatePackingListTitle = useAPI((api) => api.packingList.together.updatePackingListTitle);
   const getGroupMembers = useAPI((api) => api.packingList.together.getGroupMembers);
-  const { data: packingListData } = useQuery(
-    'getPackingListDeatil',
-    () => getPackingListDeatil('3'),
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    },
+
+  const { data: packingListData } = useQuery('getPackingListDeatil', () =>
+    getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
   );
 
-  const { data: membersData } = useQuery('getGroupMembers', () => getGroupMembers('3'), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
-  if (!packingListData || !membersData) return null;
+  const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory);
+  const { mutate: addItem } = useMutation('addPackingListItem', addPackingListItem);
+  const { mutate: patchCategory } = useMutation(
+    'updatePackingListCategory',
+    updatePackingListCategory,
+  );
+  const { mutate: patchItem } = useMutation('updatePackingListItem', updatePackingListItem);
+  const { mutate: patchTitle } = useMutation('updatePackingListTitle', updatePackingListTitle);
+  ////////////////////////////////////////////
 
-  const {
-    data: { members },
-  } = membersData;
+  // const { data: membersData } = useQuery('getGroupMembers', () => getGroupMembers('3'), {
+  //   suspense: true,
+  //   refetchOnMount: false,
+  //   refetchOnWindowFocus: false,
+  // });
+  if (!packingListData) return null;
+
+  // const {
+  //   data: { members },
+  // } = membersData;
   const { data: info } = packingListData;
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
   const creatingHandler = (id: string) => setCurrentCreating(id);
   const createdHandler = () => setCurrentCreating('');
-  const creatingCategoryHandler = () => setCurrentCreatingCategory(packingRole[activeMode].id);
+  const creatingCategoryHandler = () => setCurrentCreatingCategory(packingRole[activeMode]._id);
   const createdCategoryHandler = () => setCurrentCreatingCategory('');
   const bottomModalOpenHandler = (id: string) => {
     if (!currentEditing) {
@@ -92,33 +109,35 @@ function PreviewLanding() {
   const updateCategory = (payload: UpdateCategoryPayload) => {
     const { name, categoryId, listId } = payload;
     if (currentEditing) {
-      console.log('update category', {
-        id: categoryId,
-        name,
-      });
+      patchCategory(
+        {
+          _id: categoryId,
+          name,
+          listId,
+        },
+        {
+          onSuccess: () => {
+            client.invalidateQueries('getPackingListDeatil');
+          },
+        },
+      );
     } else if (currentCreatingCategory) {
       if (name.length === 0) {
         createdCategoryHandler();
         return;
       }
-      console.log('add category', {
-        name,
-        listId,
-      });
+      addCategory(
+        {
+          name,
+          listId,
+        },
+        {
+          onSuccess: () => {
+            client.invalidateQueries('getPackingListDeatil');
+          },
+        },
+      );
     }
-    const prev: GetTogetherPackingListDeatilOutput | undefined =
-      client.getQueryData('getPackingListDeatil');
-    const category = prev?.data.togetherPackingList.category.map((e) => {
-      if (e.id === categoryId) {
-        e.name = name;
-      }
-      return e;
-    });
-    const newData = {
-      ...prev,
-      category,
-    };
-    client.setQueryData('getPackingListDeatil', newData);
     setCurrentEditing('');
     createdCategoryHandler();
   };
@@ -126,81 +145,70 @@ function PreviewLanding() {
   //add
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
-    const prev: GetTogetherPackingListDeatilOutput | undefined =
-      client.getQueryData('getPackingListDeatil');
 
     if (currentEditing) {
-      console.log('update!!', {
-        name,
-        listId,
-        isChecked,
-        id: packId,
-        categoryId,
-      });
-
       if (name !== '') {
-        const category = prev?.data.togetherPackingList.category.map((e) => {
-          e.pack.map((e) => {
-            if (e.id === packId) {
-              e.name = name;
-            }
-            return e;
-          });
-          return e;
-        });
-        const newData = {
-          ...prev,
-          category,
-        };
-        client.setQueryData('getPackingListDeatil', newData);
+        patchItem(
+          {
+            name,
+            listId,
+            isChecked,
+            _id: packId,
+            categoryId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
       }
     } else if (currentCreating) {
-      if (name.length === 0) {
+      if (name.length !== 0) {
+        addItem(
+          {
+            name,
+            listId,
+            categoryId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
+      } else {
         createdHandler();
-        return;
       }
-      console.log('add!! pack', {
-        name,
-        listId,
-        categoryId,
-      });
-
-      const newData = {
-        ...prev,
-        category: prev?.data.togetherPackingList.category.map((e) => {
-          if (e.id === categoryId) {
-            e.pack.push({
-              id: 'created ID',
-              name,
-              isChecked: false,
-              packer: null,
-            });
-          }
-        }),
-      };
-
-      client.setQueryData('getPackingListDeatil', newData);
     } else if (!currentFocus) {
       //Needs optimistic update
-      console.log('check!!', {
-        name,
-        listId,
-        isChecked: !isChecked,
-        id: packId,
-        categoryId,
-      });
+      // isChecked 수정 필요
+      patchItem(
+        {
+          name,
+          listId,
+          isChecked: !isChecked,
+          _id: packId,
+          categoryId,
+        },
+        {
+          onSuccess: () => {
+            client.invalidateQueries('getPackingListDeatil');
+          },
+        },
+      );
     }
 
     setCurrentEditing('');
     createdHandler();
   };
   const updateRemainingInfo = (payload: RemainingInfoPayload, type: RemainingInfoType) => {
-    const { listId, title, departureDate, isSaved, isAloned = false } = payload;
+    const { listId, title = '', departureDate = '', isSaved = false, isAloned = false } = payload;
 
     switch (type) {
       case 'title':
-        console.log({
-          listId,
+        patchTitle({
+          _id: listId,
           title,
           isAloned,
         });
@@ -239,11 +247,10 @@ function PreviewLanding() {
     <Layout
       back
       title="템플릿 미리보기"
-      //needs handler props
       option={
         <CheckListHeader
           together
-          listId={info.togetherPackingList.id}
+          listId={info.togetherPackingList._id}
           departureDate={info.departureDate}
           title={info.title}
           activeMode={activeMode}
@@ -251,7 +258,7 @@ function PreviewLanding() {
         />
       }
     >
-      <StyledPreviewLanding>
+      <StyledTogetherLanding>
         <Swiper
           modules={[Pagination, Virtual]}
           style={{ height: '100%' }}
@@ -267,17 +274,17 @@ function PreviewLanding() {
           />
           {packingRole.map((list, i) => {
             return (
-              <SwiperSlide key={list.id} virtualIndex={i}>
+              <SwiperSlide key={list._id} virtualIndex={i}>
                 <StyledBody onScroll={ScrollEvent}>
-                  {list.category.map(({ id: categoryId, name, pack }) => (
+                  {list.category.map(({ _id: categoryId, name, pack }) => (
                     <PackagesWithCategory
                       key={categoryId}
                       packages={
                         <>
-                          {pack.map(({ id: packId, name, isChecked, packer }) => (
+                          {pack.map(({ _id: packId, name, isChecked, packer }) => (
                             <PackingItem
                               key={packId}
-                              listId={list.id}
+                              listId={list._id}
                               categoryId={categoryId}
                               packId={packId}
                               name={name}
@@ -299,7 +306,7 @@ function PreviewLanding() {
                       createHandler={() => creatingHandler(categoryId)}
                       creating={
                         <PackingItem
-                          listId={list.id}
+                          listId={list._id}
                           categoryId={categoryId}
                           packId={'creating'}
                           name={''}
@@ -313,7 +320,7 @@ function PreviewLanding() {
                         //수정용
                         categoryId={categoryId}
                         //생성용
-                        listId={list.id}
+                        listId={list._id}
                         name={name}
                         updateCategory={updateCategory}
                         modalHandler={() => bottomModalOpenHandler(categoryId)}
@@ -321,11 +328,11 @@ function PreviewLanding() {
                       />
                     </PackagesWithCategory>
                   ))}
-                  {currentCreatingCategory === list.id && (
+                  {currentCreatingCategory === list._id && (
                     <PackagesWithCategory>
                       <PackingCategory
                         categoryId={'creating'}
-                        listId={list.id}
+                        listId={list._id}
                         name={''}
                         updateCategory={updateCategory}
                         isEditing={true}
@@ -340,11 +347,11 @@ function PreviewLanding() {
         <FunctionSection>
           <AddTemplateButton
             onClick={() =>
-              updateRemainingInfo({ listId: info.togetherPackingList.id, isSaved: true }, 'save')
+              updateRemainingInfo({ listId: info.togetherPackingList._id, isSaved: true }, 'save')
             }
           />
         </FunctionSection>
-      </StyledPreviewLanding>
+      </StyledTogetherLanding>
       {bottomModalOpen && (
         <StyledBg onClick={bottomModalCloseHandler}>
           <StyledModal>
@@ -353,20 +360,21 @@ function PreviewLanding() {
           </StyledModal>
         </StyledBg>
       )}
-      {packerModalOpen && (
+      {/* {packerModalOpen && (
         <PackerModal
           members={members}
           modalHandler={packerModalCloseHandler}
           packId={currentFocus}
+          listId={info.togetherPackingList._id}
         />
-      )}
+      )} */}
     </Layout>
   );
 }
 
-export default PreviewLanding;
+export default TogetherLanding;
 
-const StyledPreviewLanding = styled.div`
+const StyledTogetherLanding = styled.div`
   height: 100%;
   background-color: ${packmanColors.white};
   overflow: hidden;
@@ -374,8 +382,8 @@ const StyledPreviewLanding = styled.div`
 
 const StyledBody = styled.div`
   display: flex;
+  //100% - subheader - device
   height: calc(100% - 11rem - 10rem);
-  //마지막은 디바이스 조절 변수
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: scroll;

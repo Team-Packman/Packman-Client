@@ -17,8 +17,7 @@ export const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
   return {
     together: {
       getGroupMembers: (groupId: string) => fetchGroupMember(withAuth(request), groupId),
-      getPackingListDeatil: (pacingListId: string) =>
-        fetchPackingListDetail(withAuth(request), pacingListId),
+      getPackingListDeatil: (listId: string) => fetchPackingListDetail(withAuth(request), listId),
     },
   };
 };
