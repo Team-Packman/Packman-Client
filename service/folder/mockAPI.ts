@@ -1,16 +1,16 @@
 import {
   fetchFolders,
-  fetchAddFolders,
+  fetchAddFolder,
   fetchDeleteFolder,
-  fetchEditFolderName,
+  fetchUpdateFolderName,
   fetchRecentPackingList,
-} from './../../utils/axios/folder/mock';
+} from './../../utils/axios/folder';
 import {
   GetFoldersOutput,
   AddFolderOutput,
   AddFolderInput,
-  EditFolderNameInput,
-  EditFolderNameOutput,
+  UpdateFolderNameInput,
+  UpdateFolderNameOutput,
   DeleteFolderOutput,
   GetRecentPackingListOutput,
 } from './index';
@@ -19,18 +19,19 @@ import withAuth from '../../utils/axios/withAuth';
 
 export interface FolderAPI {
   getFolders: () => Promise<GetFoldersOutput>;
-  addFolder: (info: AddFolderInput) => Promise<AddFolderOutput>;
-  editFolderName: (info: EditFolderNameInput) => Promise<EditFolderNameOutput>;
-  deleteFolder: (id: string) => Promise<DeleteFolderOutput>;
   getRecentPackingList: () => Promise<GetRecentPackingListOutput>;
+  updateFolderName: (payload: UpdateFolderNameInput) => Promise<UpdateFolderNameOutput>;
+  deleteFolder: (folderId: string) => Promise<DeleteFolderOutput>;
+  addFolder: (payload: AddFolderInput) => Promise<AddFolderOutput>;
 }
 
 export const createFolderAPI = (request: AxiosInstance): FolderAPI => {
   return {
     getFolders: () => fetchFolders(withAuth(request)),
-    addFolder: (info: AddFolderInput) => fetchAddFolders(withAuth(request), info),
-    editFolderName: (info: EditFolderNameInput) => fetchEditFolderName(withAuth(request), info),
-    deleteFolder: (id: string) => fetchDeleteFolder(withAuth(request)),
     getRecentPackingList: () => fetchRecentPackingList(withAuth(request)),
+    updateFolderName: (payload: UpdateFolderNameInput) =>
+      fetchUpdateFolderName(withAuth(request), payload),
+    deleteFolder: (folderId: string) => fetchDeleteFolder(withAuth(request), folderId),
+    addFolder: (payload: AddFolderInput) => fetchAddFolder(withAuth(request), payload),
   };
 };

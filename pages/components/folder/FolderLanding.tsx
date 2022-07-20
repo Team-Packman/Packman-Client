@@ -12,7 +12,7 @@ import Header from '../../../components/common/Header';
 import FloatActionButton from './FloatActionButton';
 
 export interface ModalDataProps {
-  id: string;
+  _id: string;
   title: string;
 }
 
@@ -21,9 +21,9 @@ function FolderLanding() {
   const queryClient = useQueryClient();
 
   const [showBottomModal, setShowBottomModal] = useState(false);
-  const [modalData, setModalData] = useState<ModalDataProps>({ id: '', title: '' });
+  const [modalData, setModalData] = useState<ModalDataProps>({ _id: '', title: '' });
   const [editableFolderId, setEditableFolderId] = useState<string>('');
-  const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ id: '', title: '' });
+  const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ _id: '', title: '' });
   const [currentSwiperIndex, setCurrentSwiperIndex] = useState<number>(0);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newFolderData, setNewFolderData] = useState<AddFolderInput>({
@@ -34,7 +34,7 @@ function FolderLanding() {
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
-  const editFolderName = useAPI((api) => api.folder.editFolderName);
+  const editFolderName = useAPI((api) => api.folder.updateFolderName);
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
@@ -80,10 +80,10 @@ function FolderLanding() {
   const { aloneFolders, togetherFolders } = folderList.data;
 
   // Bottom modal handler
-  const handleBottomModalOpen = (id: string, title: string) => {
+  const handleBottomModalOpen = (_id: string, title: string) => {
     setShowBottomModal(true);
     setEditableFolderId('');
-    setModalData({ id, title });
+    setModalData({ _id, title });
   };
 
   const handleModalEditButtonClick = (id: string) => {
@@ -99,8 +99,8 @@ function FolderLanding() {
           return {
             ...oldData,
             data: {
-              aloneFolders: aloneFolders.filter((v) => v.id !== id),
-              togetherFolders: togetherFolders.filter((v) => v.id !== id),
+              aloneFolders: aloneFolders.filter((v) => v._id !== id),
+              togetherFolders: togetherFolders.filter((v) => v._id !== id),
             },
           };
         });
@@ -110,7 +110,7 @@ function FolderLanding() {
 
   // 폴더 수정 관련 핸들러
   const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedFolerData({ id: modalData.id, title: e.target.value });
+    setEditedFolerData({ _id: modalData._id, title: e.target.value });
   };
 
   const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -123,13 +123,13 @@ function FolderLanding() {
               ...oldData,
               data: {
                 aloneFolders: aloneFolders.map((v) => {
-                  if (v.id === editedFolderData.id) {
+                  if (v._id === editedFolderData._id) {
                     return { ...v, title: editedFolderData.title };
                   }
                   return v;
                 }),
                 togetherFolders: togetherFolders.map((v) => {
-                  if (v.id === editedFolderData.id) {
+                  if (v._id === editedFolderData._id) {
                     return { ...v, title: editedFolderData.title };
                   }
                   return v;
@@ -161,7 +161,7 @@ function FolderLanding() {
                   currentSwiperIndex === 1
                     ? [
                         {
-                          id: data.data.aloneFolders[0].id,
+                          _id: data.data.aloneFolders[0]._id,
                           title: newFolderData.title,
                           listNum: 0,
                         },
@@ -171,7 +171,7 @@ function FolderLanding() {
                   currentSwiperIndex === 0
                     ? [
                         {
-                          id: data.data.togetherFolders[0].id,
+                          _id: data.data.togetherFolders[0]._id,
                           title: newFolderData.title,
                           listNum: 0,
                         },
@@ -191,7 +191,7 @@ function FolderLanding() {
 
   // router 관련 핸들러
   const handleRecentBannerClick = () => {
-    router.push(`/${recentPackingData?.data.url}`);
+    router.push(`${recentPackingData?.data.url}`);
   };
 
   const handleFolderClick = (id: string, categoryName: string) => {
