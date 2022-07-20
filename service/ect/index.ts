@@ -14,24 +14,25 @@ export interface GetTemplateListOutput {
   };
 }
 
+export interface GetTemplateInput {
+  templateId: string;
+  type: 'basic' | 'alone' | 'together';
+}
 export interface GetTemplateOutput {
-  status: string;
+  status: number;
   success: boolean;
   message: string;
   data: {
-    id: string; // 혼자 패킹리스트 id
-    title: string; // 혼자 패킹리스트 제목
-    departureDate: string; // 혼자 패킹리스트 출발 일시
+    _id: string; //템플릿 id
+    title: string; //템플릿 제목
     category: {
-      id: string; // 혼자 패킹리스트 카테고리id
-      name: string; // 혼자 패킹리스트 카테고리 이름
+      _id: string; //템플릿 카테고리id
+      name: string; //템플릿 카테고리 이름
       pack: {
-        id: string; // 해당 카테고리에 포함된 짐id
-        name: string; // 해당 카테고리에 포함된 짐 이름
-        isChecked: boolean; // 짐 챙김 여부 챙겼을 경우 true
+        _id: string; //해당 카테고리에 포함된 짐id
+        name: string; //해당 카테고리에 포함된 짐 이름
       }[];
     }[];
-    isSaved: false; // 혼자 패킹리스트 나만의 템플릿 추가 여부
   };
 }
 
