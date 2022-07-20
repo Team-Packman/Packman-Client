@@ -14,6 +14,8 @@ interface TemplateItemProps {
   changeTemplateImage?: (templateId: string) => void;
   changeUserOwnTemplateImage?: () => void;
   checkIsTemplate?: (isTemplate: boolean) => void;
+  basicTemplate?: Template[];
+  myTemplate?: Template[];
 }
 
 function TemplateItem(props: TemplateItemProps) {
@@ -24,20 +26,18 @@ function TemplateItem(props: TemplateItemProps) {
     changeTemplateImage,
     changeUserOwnTemplateImage,
     checkIsTemplate,
+    basicTemplate,
+    myTemplate,
   } = props;
   const { _id, title } = template;
-  const queryClient = useQueryClient();
-  const { data } = queryClient.getQueryData('templateList') as GetAloneTemplateListOutput;
-
-  if (!data) return null;
 
   const onClickTemplateItem = (id: string) => {
-    data.basicTemplate.forEach((template) => {
+    basicTemplate?.forEach((template) => {
       if (id === template._id) {
         checkIsTemplate && checkIsTemplate(true);
       }
     });
-    data.myTemplate.forEach((template) => {
+    myTemplate?.forEach((template) => {
       if (id === template._id) {
         checkIsTemplate && checkIsTemplate(false);
       }
