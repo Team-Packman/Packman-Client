@@ -5,18 +5,23 @@ import useGlobalState from '../utils/hooks/useGlobalState';
 import { packmanColors } from '../styles/color';
 import loginLogo from '/public/assets/svg/loginLogo.svg';
 import KakaoLogin from '/public/assets/png/kakaoLogin.png';
-import { calcMs } from '../utils/Draw';
+import useAPI from '../utils/hooks/useAPI';
+import { useMutation } from 'react-query';
+
 declare global {
-  interface window {
-    google: any;
-    Kakao: any;
+  interface Window {
+    google?: any;
+    Kakao?: any;
   }
 }
 
 function Login() {
-  const ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const [google, setGoogle] = useState();
   const [token, setToken] = useGlobalState<string>('token');
+  const fetchGoogleLogin = useAPI((api) => api.auth.fetchGoogleLogin);
+  const { mutate: googleLogin } = useMutation('fetchGoogleLogin', fetchGoogleLogin);
+  const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
+  const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
 
   useEffect(() => {
     if (window.google) {
@@ -34,10 +39,25 @@ function Login() {
 
   useEffect(() => {
     if (google) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       google.accounts.id.initialize({
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-        callback: (res: { credential: string }) => setToken(res.credential),
+        callback: (res: { credential: string }) => {
+          console.log(res.credential);
+          googleLogin(
+            { accessToken: res.credential },
+            {
+              onSuccess: (data) => {
+                console.log('success', data);
+              },
+            },
+          );
+          setToken(res.credential);
+        },
       });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       google.accounts.id.renderButton(document.getElementById('GoogleDiv'), {
         type: 'standard',
         theme: 'outline',
@@ -51,11 +71,20 @@ function Login() {
 
   function loginWithKakao() {
     window.Kakao.Auth.login({
-      success: function (authObj) {
+      success: function (authObj: unknown) {
+        kakaoLogin(
+          {
+            accessToken: (authObj as { access_token: string }).access_token,
+          },
+          {
+            onSuccess: (data) => {
+              console.log('kakao success', data);
+            },
+          },
+        );
         setToken(JSON.stringify(authObj));
-        console.log('로그인 성공');
       },
-      fail: function (err) {
+      fail: function (err: Error) {
         alert(JSON.stringify(err));
       },
     });
@@ -113,7 +142,7 @@ const Title = styled.div`
   text-align: center;
   flex-direction: row-reverse;
   padding-right: 4.3rem;
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
 `;
 
 const ButtonsContainer = styled.div`
@@ -131,6 +160,10 @@ const LoginButton = styled.div`
   width: 336px;
   height: 45px;
   position: relative;
+
+  & > div {
+    /* position: absolute !important; */
+  }
 `;
 
 const LoginDescription = styled.div`
@@ -139,5 +172,5 @@ const LoginDescription = styled.div`
   line-height: 1.2rem;
   display: flex;
   align-items: center;
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
 `;
