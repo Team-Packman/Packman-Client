@@ -7,35 +7,55 @@ import iTrash from '../../../../public/assets/svg/iTrash.svg';
 import Header from '../../../../components/common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../../utils/hooks/useAPI';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
+import { DeleteTogetherInventoryInput } from '../../../../service/inventory/together';
+
+interface DeleteTogetherInventoryData {
+  folderId: string;
+  listId: string;
+}
 
 function TogetherPackingListLanding() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  //패킹리스트 데이터 조회
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
   const { data } = useQuery(
     'getTogetherInventory',
-    () => getTogetherInventory('62d4c4bb28e3949188322524'),
+    () => getTogetherInventory('62d72247af813b54446455a4'),
     {
       suspense: false,
     },
   );
+
+  const deleteTogetherInventory = useAPI(
+    (api) => (params: DeleteTogetherInventoryInput) =>
+      api.inventory.together.deleteTogetherInventory(params),
+  );
+  const { mutate: deleteTogetherInventoryMutate } = useMutation(
+    (deleteTogetherInventoryData: DeleteTogetherInventoryData) => {
+      return deleteTogetherInventory(deleteTogetherInventoryData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getTogetherInventory');
+      },
+    },
+  );
+
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(data?.data.togetherPackingList.length).fill(false),
   );
-
-  if (!router.query) return null;
-
-  const { id } = router.query;
-  const categoryName = router.route.split('/')[2];
 
   if (!data) return null;
 
@@ -70,30 +90,18 @@ function TogetherPackingListLanding() {
 
   const onClickRightModalButton = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-    // if (isDeleting) {
-    //   queryClient.setQueryData('packing-list', (oldData: any) => {
-    //     return {
-    //       ...oldData,
-    //       data: {
-    //         alonePackingList: togetherPackingList.filter(({ _id }) => !deleteList.includes(_id)),
-    //         currentFolder,
-    //         folder,
-    //       },
-    //     };
-    //   });
-    //   setDeleteList([]);
-    // } else {
-    //   queryClient.setQueryData('packing-list', (oldData: any) => {
-    //     return {
-    //       ...oldData,
-    //       data: {
-    //         alonePackingList: togetherPackingList.filter((_, i) => i !== selectedIndex),
-    //         currentFolder,
-    //         folder,
-    //       },
-    //     };
-    //   });
-    // }
+    if (isDeleting) {
+      deleteTogetherInventoryMutate({
+        folderId: currentFolder._id,
+        listId: deleteList.join(','),
+      });
+      setDeleteList([]);
+    } else {
+      deleteTogetherInventoryMutate({
+        folderId: currentFolder._id,
+        listId: togetherPackingList[selectedIndex]._id,
+      });
+    }
     closeModal();
   };
 
@@ -141,7 +149,7 @@ function TogetherPackingListLanding() {
               folderList={folder}
               closeDropBox={() => setToggle(false)}
               currentId={currentFolder._id}
-              categoryName={categoryName}
+              categoryName="together"
             />
           )}
         </div>

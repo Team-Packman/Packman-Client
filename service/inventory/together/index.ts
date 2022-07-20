@@ -23,3 +23,22 @@ export interface GetTogetherInventoryOutput {
     }[];
   };
 }
+
+export interface DeleteTogetherInventoryInput {
+  folderId: string;
+  listId: string;
+}
+export interface DeleteTogetherInventoryOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    togetherPackingList: {
+      _id: string; // 함께 패킹리스트 id
+      departureDate: string; // 함께 패킹리스트 출발 날짜
+      title: string; // 함께 패킹리스트 제목
+      packTotalNum: number; // 함께 패킹리스트의 총 짐의 수
+      packRemainNum: number; // 함께 패킹리스트의 체크안된 짐의 수
+    }[];
+  };
+}
