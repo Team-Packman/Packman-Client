@@ -24,7 +24,7 @@ const randomImageList = [random1, random2, random3, random4];
 function SelectTemplateLanding() {
   const router = useRouter();
   const [activateButton, setActivateButton] = useState(false);
-  const getTemplateList = useAPI((api) => api.ect.getTemplateList);
+  const getTemplateList = useAPI((api) => api.ect.getAloneTemplateList);
   const { data } = useQuery('templateList', () => getTemplateList());
 
   const [templateImageIndex, setTemplateImageIndex] = useState('');
@@ -39,8 +39,8 @@ function SelectTemplateLanding() {
   const { basicTemplate, myTemplate } = data.data;
 
   const changeTemplateImage = (templateId: string) => {
-    basicTemplate.forEach(({ id }, idx) => {
-      if (id === templateId) {
+    basicTemplate.forEach(({ _id }, idx) => {
+      if (_id === templateId) {
         setTemplateImageIndex(idx.toString());
       }
     });

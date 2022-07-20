@@ -67,6 +67,8 @@ export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplate
           isSaved: false,
           id: '62bbb80d9d5dc1aa4c3d28391231',
           title: '앱잼 합숙',
+          departureDate: '2022-22-22',
+          isSaved: false,
           category: [
             {
               id: '62bbb80d9d5dc1aa4c3d28131232139',

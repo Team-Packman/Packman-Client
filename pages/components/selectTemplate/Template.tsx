@@ -5,7 +5,7 @@ import TemplateList from './TemplateList';
 import TemplateItem from './TemplateItem';
 
 interface Template {
-  id: string;
+  _id: string;
   title: string;
 }
 
@@ -55,12 +55,12 @@ function Template(props: TemplateProps) {
             <>
               {basicTemplate.map((template) => (
                 <TemplateItem
-                  key={template.id}
+                  key={template._id}
                   template={template}
                   isSelected={isSelected}
                   onClick={() => {
-                    onClickTemplateItem(template.id);
-                    setTemplateId(template.id);
+                    onClickTemplateItem(template._id);
+                    setTemplateId(template._id);
                   }}
                   changeTemplateImage={changeTemplateImage}
                   checkIsTemplate={checkIsTemplate}
