@@ -28,8 +28,6 @@ function PackingListLanding() {
       suspense: false,
     },
   );
-  console.log(data);
-
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(data?.data.togetherPackingList.length).fill(false),
   );

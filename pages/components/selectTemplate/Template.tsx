@@ -32,7 +32,6 @@ function Template(props: TemplateProps) {
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
-    console.log(isSelected, id);
     if (isSelected === id) {
       setIsSelected('');
     } else {

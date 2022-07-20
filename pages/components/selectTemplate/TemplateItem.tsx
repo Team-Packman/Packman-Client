@@ -44,7 +44,6 @@ function TemplateItem(props: TemplateItemProps) {
     });
     data.myTemplate.forEach((template) => {
       if (id === template.id) {
-        console.log(template.id);
         checkIsTemplate && checkIsTemplate(false);
       }
     });
