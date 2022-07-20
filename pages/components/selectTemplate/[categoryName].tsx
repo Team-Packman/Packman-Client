@@ -1,13 +1,12 @@
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
-import Template from '../components/selectTemplate/Template';
-import useAPI from '../../utils/hooks/useAPI';
+import Template from './Template';
+import useAPI from '../../../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import Header from '../../components/common/Header';
-import { packmanColors } from '../../styles/color';
+import Header from '../../../components/common/Header';
+import { packmanColors } from '../../../styles/color';
 import { useState } from 'react';
-import useGlobalState from '../../utils/hooks/useGlobalState';
 import korea_travel from '../../public/assets/svg/korea_travel.svg';
 import oversea_travel from '../../public/assets/svg/oversea_travel.svg';
 import jeju from '../../public/assets/svg/jeju.svg';

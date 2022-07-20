@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import SwipeableList from '../../components/packingList/SwipeableList';
+import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../../public/assets/svg/iShowMore.svg';
 import iTrash from '../../../public/assets/svg/iTrash.svg';
-import Header from '../../../components/common/Header';
-import DropBox from '../../components/packingList/DropBox';
-import useAPI from '../../../utils/hooks/useAPI';
-import { useQuery, useQueryClient } from 'react-query';
+import Header from '../../../../components/common/Header';
+import DropBox from '../DropBox';
+import useAPI from '../../../../utils/hooks/useAPI';
+import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import Modal from '../../components/common/Modal';
-import { packmanColors } from '../../../styles/color';
-import FloatActionButton from '../../components/folder/FloatActionButton';
+import Modal from '../../common/Modal';
+import { packmanColors } from '../../../../styles/color';
+import FloatActionButton from '../../folder/FloatActionButton';
 
-function PackingListLanding() {
+function TogetherPackingListLanding() {
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -215,7 +215,7 @@ function PackingListLanding() {
   );
 }
 
-export default PackingListLanding;
+export default TogetherPackingListLanding;
 
 const StyledRoot = styled.div`
   display: flex;
