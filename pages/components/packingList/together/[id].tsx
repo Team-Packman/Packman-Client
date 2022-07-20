@@ -1,35 +1,35 @@
 import { useState } from 'react';
-import SwipeableList from '../../components/packingList/SwipeableList';
+import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../../public/assets/svg/iShowMore.svg';
 import iTrash from '../../../public/assets/svg/iTrash.svg';
-import Header from '../../../components/common/Header';
-import DropBox from '../../components/packingList/DropBox';
-import useAPI from '../../../utils/hooks/useAPI';
-import { useQuery, useQueryClient } from 'react-query';
+import Header from '../../../../components/common/Header';
+import DropBox from '../DropBox';
+import useAPI from '../../../../utils/hooks/useAPI';
+import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
-import Modal from '../../components/common/Modal';
-import { packmanColors } from '../../../styles/color';
-import FloatActionButton from '../../components/folder/FloatActionButton';
+import Modal from '../../common/Modal';
+import { packmanColors } from '../../../../styles/color';
+import FloatActionButton from '../../folder/FloatActionButton';
 
-function PackingListLanding() {
+function TogetherPackingListLanding() {
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
+  const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
   const { data } = useQuery(
-    'getAloneInventory',
-    () => getAloneInventory('62d7bac9618ed827f6e74379'),
+    'getTogetherInventory',
+    () => getTogetherInventory('62d4c4bb28e3949188322524'),
     {
       suspense: false,
     },
   );
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data?.data.alonePackingList.length).fill(false),
+    Array(data?.data.togetherPackingList.length).fill(false),
   );
 
   if (!router.query) return null;
@@ -39,7 +39,7 @@ function PackingListLanding() {
 
   if (!data) return null;
 
-  const { alonePackingList, folder, currentFolder } = data.data;
+  const { togetherPackingList, folder, currentFolder } = data.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -64,7 +64,7 @@ function PackingListLanding() {
   };
 
   const onClickLeftModalButton = () => {
-    handleIsDragged(Array(alonePackingList?.length).fill(false));
+    handleIsDragged(Array(togetherPackingList?.length).fill(false));
     closeModal();
   };
 
@@ -75,7 +75,7 @@ function PackingListLanding() {
     //     return {
     //       ...oldData,
     //       data: {
-    //         alonePackingList: alonePackingList.filter(({ id }) => !deleteList.includes(id)),
+    //         alonePackingList: togetherPackingList.filter(({ _id }) => !deleteList.includes(_id)),
     //         currentFolder,
     //         folder,
     //       },
@@ -87,7 +87,7 @@ function PackingListLanding() {
     //     return {
     //       ...oldData,
     //       data: {
-    //         alonePackingList: alonePackingList.filter((_, i) => i !== selectedIndex),
+    //         alonePackingList: togetherPackingList.filter((_, i) => i !== selectedIndex),
     //         currentFolder,
     //         folder,
     //       },
@@ -134,7 +134,7 @@ function PackingListLanding() {
             onClick={() => {
               setToggle(true);
             }}
-            toggle={toggle}
+            isToggled={toggle}
           />
           {toggle && (
             <DropBox
@@ -147,8 +147,8 @@ function PackingListLanding() {
         </div>
       </StyledFolderInfo>
 
-      <StyledMain isEmpty={!alonePackingList.length}>
-        {!alonePackingList.length ? (
+      <StyledMain isEmpty={!togetherPackingList.length}>
+        {!togetherPackingList.length ? (
           <StyledEmpty>
             <p>&apos;+&apos; 버튼을 눌러</p>
             <p>패킹 리스트를 추가해주세요</p>
@@ -158,7 +158,7 @@ function PackingListLanding() {
             <StyledCaptionWrapper>
               {!isDeleting && (
                 <StyledCaptionText>
-                  <span>{alonePackingList?.length}</span>개의 패킹 리스트
+                  <span>{togetherPackingList?.length}</span>개의 패킹 리스트
                 </StyledCaptionText>
               )}
               {isDeleting && (
@@ -167,13 +167,13 @@ function PackingListLanding() {
                     deleteList.length > 0 && setDeleteList([]);
                   }}
                 >
-                  선택 해제
+                  선택해제
                 </span>
               )}
 
               <StyledCaptionButtonWrapper
                 onClick={() => {
-                  setIsDragged(Array(alonePackingList?.length).fill(false));
+                  setIsDragged(Array(togetherPackingList?.length).fill(false));
                   setIsDeleting((prev) => !prev);
                   if (!isDeleting) {
                     setDeleteList([]);
@@ -181,7 +181,7 @@ function PackingListLanding() {
                 }}
               >
                 {isDeleting ? (
-                  <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>
+                  <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
                     취소
                   </p>
                 ) : (
@@ -190,14 +190,14 @@ function PackingListLanding() {
                     alt="삭제"
                     width={24}
                     height={24}
-                    onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}
+                    onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
                   />
                 )}
               </StyledCaptionButtonWrapper>
             </StyledCaptionWrapper>
 
             <SwipeableList
-              packingList={alonePackingList}
+              packingList={togetherPackingList}
               deleteList={deleteList}
               isDeleting={isDeleting}
               checkDeleteList={checkDeleteList}
@@ -215,7 +215,7 @@ function PackingListLanding() {
   );
 }
 
-export default PackingListLanding;
+export default TogetherPackingListLanding;
 
 const StyledRoot = styled.div`
   display: flex;
@@ -244,9 +244,9 @@ const StyledFolderInfo = styled.div`
     align-items: center;
   }
 `;
-const StyledToggleImage = styled(Image)<{ toggle: boolean }>`
+const StyledToggleImage = styled(Image)<{ isToggled: boolean }>`
   transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${({ isToggled }) => (isToggled ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;
@@ -275,11 +275,10 @@ const StyledCaptionWrapper = styled.div`
 
   & > span {
     position: absolute;
-    font-weight: 600;
     font-size: 1.4rem;
-    left: 2rem;
+    left: 2.6rem;
     bottom: 1rem;
-    color: ${packmanColors.pmDarkGrey};
+    color: ${packmanColors.pmDeepGrey};
   }
 `;
 const StyledCaptionText = styled.p`
@@ -300,9 +299,7 @@ const StyledCaptionButtonWrapper = styled.div`
   right: 2rem;
   bottom: 0.9rem;
   & > p {
-    font-weight: 600;
-    font-size: 1.4rem;
-    color: ${packmanColors.pmDarkGrey};
+    color: ${packmanColors.pmDeepGrey};
   }
 `;
 const StyledModalButtonWrapper = styled.div`

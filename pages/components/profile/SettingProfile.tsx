@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { packmanColors } from '../../../styles/color';
 import { useState } from 'react';
 import Modal from '../common/Modal';
@@ -11,6 +11,7 @@ import profile3 from '../../../public/assets/png/profile3.png';
 import profile4 from '../../../public/assets/png/profile4.png';
 import profile5 from '../../../public/assets/png/profile5.png';
 import profile6 from '../../../public/assets/png/profile6.png';
+import { ProfileList } from '../../../utils/profileImages';
 
 interface ProfileData {
   _id: string;
@@ -31,14 +32,7 @@ function SettingProfile(props: SettingProfileProps) {
   const [showModal, setShowModal] = useState(false);
   const deleteUserInfo = useAPI((api) => api.user.deleteUserInfo);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
-  const profileImage = [
-    { id: '0', src: profile1 },
-    { id: '1', src: profile2 },
-    { id: '2', src: profile3 },
-    { id: '3', src: profile4 },
-    { id: '4', src: profile5 },
-    { id: '5', src: profile6 },
-  ];
+  const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
 
   const onClickLeftModalButton = async () => {
     await deleteUserInfo();
