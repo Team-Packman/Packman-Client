@@ -4,14 +4,15 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
-import profile1 from '../../../public/assets/svg/profile1.svg';
-import profile2 from '../../../public/assets/svg/profile2.svg';
-import profile3 from '../../../public/assets/svg/profile3.svg';
-import profile4 from '../../../public/assets/svg/profile4.svg';
-import profile5 from '../../../public/assets/svg/profile5.svg';
-import profile6 from '../../../public/assets/svg/profile6.svg';
-import useGlobalState from '../../../utils/hooks/useGlobalState';
 import { useMutation, useQueryClient } from 'react-query';
+import useGlobalState from '../../../utils/hooks/useGlobalState';
+import profile1 from '../../../public/assets/png/profile1.png';
+import profile2 from '../../../public/assets/png/profile2.png';
+import profile3 from '../../../public/assets/png/profile3.png';
+import profile4 from '../../../public/assets/png/profile4.png';
+import profile5 from '../../../public/assets/png/profile5.png';
+import profile6 from '../../../public/assets/png/profile6.png';
+import iSelected from '../../../public/assets/svg/iSelected.svg';
 
 interface UpdateUserProfileData {
   nickname: string;
@@ -74,7 +75,9 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   return (
     <StyledRoot>
-      <Image src={profileImage[+profile].src} alt="profile-image" width={120} height={120} />
+      <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+        <Image src={profileImage[+profile].src} alt="profile-image" layout="fill" />
+      </div>
       <StyledInputWrapper>
         <StyledInput
           type="text"
@@ -94,14 +97,19 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
       <StyledSelectProfileWrapper>
         {profileImage.map(({ id, src }) => (
-          <Image
-            key={id}
-            src={src}
-            alt="profile-images"
-            width={80}
-            height={80}
-            onClick={() => setProfile(id)}
-          />
+          <>
+            <StyledImageWrapper isSelected={profile === id}>
+              <StyledImage
+                key={id}
+                src={src}
+                alt="profile-images"
+                width={80}
+                height={80}
+                onClick={() => setProfile(id)}
+                isSelected={profile === id}
+              />
+            </StyledImageWrapper>
+          </>
         ))}
       </StyledSelectProfileWrapper>
 
@@ -171,9 +179,22 @@ const StyledInput = styled.input`
 const StyledSelectProfileWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 25.6rem;
+  justify-content: center;
+  width: 100%;
   gap: 0.8rem;
   margin: 1.5rem 0 5.57rem 0;
+`;
+const StyledImageWrapper = styled.div<{ isSelected: boolean }>`
+  width: 8.6rem;
+  height: 8.6rem;
+  background: url('assets/svg/iSelected.svg') no-repeat center;
+  background-color: ${({ isSelected }) => (isSelected ? 'rgba(0,0,0,0.48)' : 'transparent')};
+  border: ${({ isSelected }) =>
+    isSelected ? `3px solid ${packmanColors.pmPink}` : '3px solid transparent'};
+  border-radius: 0.8rem;
+`;
+const StyledImage = styled(Image)<{ isSelected: boolean }>`
+  z-index: ${({ isSelected }) => isSelected && '-1'};
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
   position: absolute;
