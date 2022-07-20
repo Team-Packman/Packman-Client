@@ -10,6 +10,8 @@ import {
   fetchUpdatePackingListPacker,
   fetchDeletePackingListCategory,
   fetchDeletePackingListItem,
+  fetchTogetherFolder,
+  fetchAddTogetherPackingFolder,
 } from './../../../utils/axios/packingList/together/index';
 import { AxiosInstance } from 'axios';
 import {
@@ -35,6 +37,9 @@ import {
   DeleteTogetherPackingListCategoryInput,
   DeleteTogetherPackingListItemInput,
   DeleteTogetherPackingListItemOutput,
+  GetTogetherFolderOutput,
+  AddTogetherPackingListIntroInput,
+  AddTogetherPackingListIntroOutput,
 } from './index';
 import withAuth from '../../../utils/axios/withAuth';
 import { fetchGroupMember } from '../../../utils/axios/packingList/together';
@@ -76,6 +81,10 @@ export interface TogetherAPI {
     deletePackingListItem: (
       payload: DeleteTogetherPackingListItemInput,
     ) => Promise<DeleteTogetherPackingListItemOutput>;
+    getTogetherFolder: () => Promise<GetTogetherFolderOutput>;
+    addTogetherPakingListFolder: (
+      payload: AddTogetherPackingListIntroInput,
+    ) => Promise<AddTogetherPackingListIntroOutput>;
   };
 }
 
@@ -105,6 +114,9 @@ export const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
         fetchUpdatePackingListItem(withAuth(request), payload),
       deletePackingListItem: (payload: DeleteTogetherPackingListItemInput) =>
         fetchDeletePackingListItem(withAuth(request), payload),
+      getTogetherFolder: () => fetchTogetherFolder(withAuth(request)),
+      addTogetherPakingListFolder: (payload: AddTogetherPackingListIntroInput) =>
+        fetchAddTogetherPackingFolder(withAuth(request), payload),
     },
   };
 };
