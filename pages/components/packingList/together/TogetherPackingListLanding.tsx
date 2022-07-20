@@ -3,7 +3,7 @@ import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../../public/assets/svg/iShowMore.svg';
-import iTrash from '../../../public/assets/svg/iTrash.svg';
+import iTrash from '../../../../public/assets/svg/iTrash.svg';
 import Header from '../../../../components/common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../../utils/hooks/useAPI';

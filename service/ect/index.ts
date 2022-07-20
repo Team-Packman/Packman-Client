@@ -15,7 +15,7 @@ export interface GetTemplateListOutput {
 }
 
 export interface GetTemplateOutput {
-  status: string;
+  status: number;
   success: boolean;
   message: string;
   data: {
