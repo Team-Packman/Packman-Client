@@ -472,7 +472,7 @@ export default TogetherLanding;
 
 const StyledTogetherLanding = styled.div`
   height: 100%;
-  background-color: ${packmanColors.white};
+  background-color: ${packmanColors.pmWhite};
   overflow: hidden;
 `;
 
