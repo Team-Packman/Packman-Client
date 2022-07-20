@@ -23,7 +23,7 @@ function PackingListLanding() {
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
   const { data } = useQuery(
     'getTogetherInventory',
-    () => getTogetherInventory('62d65e5d2abfcbd9521acc5d'),
+    () => getTogetherInventory('62d4c4bb28e3949188322524'),
     {
       suspense: false,
     },

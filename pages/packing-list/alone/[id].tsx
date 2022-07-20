@@ -7,7 +7,7 @@ import iTrash from '../../../public/assets/svg/iTrash.svg';
 import Header from '../../../components/common/Header';
 import DropBox from '../../components/packingList/DropBox';
 import useAPI from '../../../utils/hooks/useAPI';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../components/common/Modal';
 import { packmanColors } from '../../../styles/color';

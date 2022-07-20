@@ -216,7 +216,7 @@ const StyledSelectProfileWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
+  width: 28rem;
   gap: 0.8rem;
   margin: 1.5rem 0 5.57rem 0;
 `;
