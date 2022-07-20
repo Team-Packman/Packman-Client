@@ -13,7 +13,9 @@ function EditProfile() {
 
   if (!data) return null;
 
-  const { name } = data.data;
+  console.log(data);
+
+  const { name, profileImageId } = data.data;
 
   return (
     <StyledRoot>
@@ -27,6 +29,7 @@ function EditProfile() {
               </h1>
             }
             oldNickname={name}
+            oldProfileImageId={profileImageId}
             finishEditing={() => {
               setIsEditing(false);
             }}

@@ -26,13 +26,14 @@ interface UpdateUserProfileData {
 interface SelectProfileSectionProps {
   isEditing?: boolean;
   oldNickname?: string;
+  oldProfileImageId?: string;
   finishEditing?: () => void;
 }
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { isEditing, oldNickname, finishEditing } = props;
+  const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
   const profileImage = [
     { id: '0', src: profile1 },
     { id: '1', src: profile2 },
@@ -84,6 +85,9 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   };
   useEffect(() => {
+    if (oldProfileImageId) {
+      setProfile(oldProfileImageId);
+    }
     if (oldNickname) {
       setNickname(oldNickname);
     }
