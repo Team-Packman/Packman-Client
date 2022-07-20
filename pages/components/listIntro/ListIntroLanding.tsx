@@ -13,7 +13,7 @@ interface ListIntroProps {
 }
 
 function ListIntroLanding(props: ListIntroProps) {
-  const { isAloned } = props;
+  const { isAloned = true } = props;
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -30,6 +30,11 @@ function ListIntroLanding(props: ListIntroProps) {
   const addIntroFolder = useAPI((api) => api.packingList.alone.addIntroFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
+  // 연결한 api
+  const getAloneFolder = useAPI((api) => api.packingList.alone.getAloneFolder);
+
+  const { data: aloneFolderData } = useQuery('aloneFolder', () => getAloneFolder());
+
   const { data } = useQuery('folderList', () => getFolders(), {
     suspense: true,
   });
@@ -41,7 +46,7 @@ function ListIntroLanding(props: ListIntroProps) {
     addFolder(info),
   );
 
-  if (!data) return null;
+  if (!data || !aloneFolderData) return null;
 
   const { aloneFolders, togetherFolders } = data.data;
 
@@ -121,18 +126,18 @@ function ListIntroLanding(props: ListIntroProps) {
           {isAloned
             ? aloneFolders?.map((v, index) => (
                 <StyledTag
-                  key={v.id}
+                  key={v._id}
                   isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v.id, index)}
+                  onClick={() => handleTagClick(v._id, index)}
                 >
                   {v.title}
                 </StyledTag>
               ))
             : togetherFolders.map((v, index) => (
                 <StyledTag
-                  key={v.id}
+                  key={v._id}
                   isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v.id, index)}
+                  onClick={() => handleTagClick(v._id, index)}
                 >
                   {v.title}
                 </StyledTag>

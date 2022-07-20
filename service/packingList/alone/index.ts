@@ -24,6 +24,31 @@ export interface GetPackingListWithFoldersOutput {
   };
 }
 
+export interface GetTogetherFolderOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    togetherFolders: {
+      // 함께 패킹 폴더 배열
+      _id: string; // 폴더 id
+      title: string; // 폴더 이름
+    }[];
+  };
+}
+
+export interface GetAloneFolderOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    aloneFolders: {
+      // 혼자 패킹 폴더 배열
+      _id: string; // 폴더 id
+      title: string; // 폴더 이름
+    }[];
+  };
+}
 export interface AddPakingListIntroInput {
   departureDate: string; //출발 날짜
   folderId: string; // 폴더 id
