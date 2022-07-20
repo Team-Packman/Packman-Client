@@ -12,6 +12,12 @@ import profile4 from '../../../public/assets/png/profile4.png';
 import profile5 from '../../../public/assets/png/profile5.png';
 import profile6 from '../../../public/assets/png/profile6.png';
 
+interface AddUserProfileData {
+  email: string; // 회원가입한 유저의 이메일
+  name: string; // 회원가입한 유저의 닉네임
+  profileImageId: string; // 회원가입한 유저의 프로필 이미지
+}
+
 interface UpdateUserProfileData {
   name: string;
   profileImageId: string;
@@ -20,12 +26,14 @@ interface UpdateUserProfileData {
 interface SelectProfileSectionProps {
   isEditing?: boolean;
   oldNickname?: string;
+  oldProfileImageId?: string;
   finishEditing?: () => void;
 }
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
-  const { isEditing, oldNickname, finishEditing } = props;
+  const router = useRouter();
+  const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
   const profileImage = [
     { id: '0', src: profile1 },
     { id: '1', src: profile2 },
@@ -36,7 +44,19 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   ];
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
-  const router = useRouter();
+
+  //프로필 생성
+  const addUserProfile = useAPI((api) => api.user.addUserProfile);
+  const { mutate: addUserProfileMutate } = useMutation(
+    (addUserProfileData: AddUserProfileData) => {
+      return addUserProfile(addUserProfileData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getUserInfo');
+      },
+    },
+  );
 
   //프로필 수정
   const updateUserProfile = useAPI(
@@ -65,6 +85,9 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   };
   useEffect(() => {
+    if (oldProfileImageId) {
+      setProfile(oldProfileImageId);
+    }
     if (oldNickname) {
       setNickname(oldNickname);
     }
@@ -75,7 +98,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   }, [profile]);
 
   const onClickProfileImage = (id: string) => {
-    console.log(profile, id);
     if (profile === id) {
       setProfile('');
     } else {
@@ -136,7 +158,14 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                   finishEditing();
                 }
               }
-            : () => router.push('/folder')
+            : () => {
+                addUserProfileMutate({
+                  email: 'ohmygirl@gmail.com',
+                  name: '오마이걸',
+                  profileImageId: '4',
+                });
+                router.push('/folder');
+              }
         }
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
