@@ -7,16 +7,16 @@ import { useRouter } from 'next/router';
 import Header from '../../../components/common/Header';
 import { packmanColors } from '../../../styles/color';
 import { useState } from 'react';
-import korea_travel from '../../public/assets/svg/korea_travel.svg';
-import oversea_travel from '../../public/assets/svg/oversea_travel.svg';
-import jeju from '../../public/assets/svg/jeju.svg';
-import pet from '../../public/assets/svg/pet.svg';
-import concert from '../../public/assets/svg/concert.svg';
-import toeic from '../../public/assets/svg/toeic.svg';
-import random1 from '../../public/assets/svg/random1.svg';
-import random2 from '../../public/assets/svg/random2.svg';
-import random3 from '../../public/assets/svg/random3.svg';
-import random4 from '../../public/assets/svg/random4.svg';
+import korea_travel from '../../../public/assets/svg/korea_travel.svg';
+import oversea_travel from '../../../public/assets/svg/oversea_travel.svg';
+import jeju from '../../../public/assets/svg/jeju.svg';
+import pet from '../../../public/assets/svg/pet.svg';
+import concert from '../../../public/assets/svg/concert.svg';
+import toeic from '../../../public/assets/svg/toeic.svg';
+import random1 from '../../../public/assets/svg/random1.svg';
+import random2 from '../../../public/assets/svg/random2.svg';
+import random3 from '../../../public/assets/svg/random3.svg';
+import random4 from '../../../public/assets/svg/random4.svg';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 const randomImageList = [random1, random2, random3, random4];
@@ -29,6 +29,7 @@ function SelectTemplateLanding() {
 
   const [templateImageIndex, setTemplateImageIndex] = useState('');
   const [isBasicTemplate, setIsBasicTemplate] = useState(false);
+  const [templateId, setTemplateId] = useState('');
 
   if (!data) return null;
   if (!router.query) return null;
@@ -82,6 +83,10 @@ function SelectTemplateLanding() {
           changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
           changeUserOwnTemplateImage={changeUserOwnTemplateImage}
           checkIsTemplate={(isTemplate: boolean) => setIsBasicTemplate(isTemplate)}
+          setTemplateId={(templateId: string) => {
+            setTemplateId(templateId);
+            console.log(templateId);
+          }}
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>

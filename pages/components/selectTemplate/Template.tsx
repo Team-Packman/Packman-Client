@@ -17,6 +17,7 @@ interface TemplateProps {
   changeTemplateImage: (templateId: string) => void;
   changeUserOwnTemplateImage: () => void;
   checkIsTemplate: (isTemplate: boolean) => void;
+  setTemplateId: (templateId: string) => void;
 }
 
 function Template(props: TemplateProps) {
@@ -28,6 +29,7 @@ function Template(props: TemplateProps) {
     changeTemplateImage,
     changeUserOwnTemplateImage,
     checkIsTemplate,
+    setTemplateId,
   } = props;
   const [isSelected, setIsSelected] = useState('');
 
@@ -56,7 +58,10 @@ function Template(props: TemplateProps) {
                   key={template.id}
                   template={template}
                   isSelected={isSelected}
-                  onClick={() => onClickTemplateItem(template.id)}
+                  onClick={() => {
+                    onClickTemplateItem(template.id);
+                    setTemplateId(template.id);
+                  }}
                   changeTemplateImage={changeTemplateImage}
                   checkIsTemplate={checkIsTemplate}
                 />
