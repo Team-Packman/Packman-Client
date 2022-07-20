@@ -4,7 +4,7 @@ export interface GetUserInfoOutput {
   message: string;
   data: {
     _id: string; // 로그인된 유저 아이디
-    nickname: string; // 로그인된 유저 닉네임
+    name: string; // 로그인된 유저 닉네임
     email: string; // 로그인된 유저 이메일
     profileImageId: string; // 로그인된 유저의 이미지 id
   };

@@ -13,7 +13,7 @@ function EditProfile() {
 
   if (!data) return null;
 
-  const { nickname } = data.data;
+  const { name } = data.data;
 
   return (
     <StyledRoot>
@@ -26,7 +26,7 @@ function EditProfile() {
                 <b>프로필 수정</b>을 완료해주세요!
               </h1>
             }
-            oldNickname={nickname}
+            oldNickname={name}
             finishEditing={() => {
               setIsEditing(false);
             }}
@@ -49,5 +49,6 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 2rem;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
 `;
