@@ -1,17 +1,20 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import tempBox from '../../../public/assets/svg/tempBox.svg';
 import { packmanColors } from '../../../styles/color';
-import iToggleOff from '../../../public/assets/svg/iToggleOff.svg';
-import iToggleOn from '../../../public/assets/svg/iToggleOn.svg';
 import { useState } from 'react';
 import Modal from '../common/Modal';
 import useAPI from '../../../utils/hooks/useAPI';
 import Footer from '../../components/common/Footer';
+import profile1 from '../../../public/assets/png/profile1.png';
+import profile2 from '../../../public/assets/png/profile2.png';
+import profile3 from '../../../public/assets/png/profile3.png';
+import profile4 from '../../../public/assets/png/profile4.png';
+import profile5 from '../../../public/assets/png/profile5.png';
+import profile6 from '../../../public/assets/png/profile6.png';
 
 interface ProfileData {
-  id: string;
-  nickname: string;
+  _id: string;
+  name: string;
   email: string;
   profileImageId: string;
 }
@@ -23,11 +26,28 @@ interface SettingProfileProps {
 
 function SettingProfile(props: SettingProfileProps) {
   const { onClickEditText, profileData } = props;
-  const { id, nickname, email, profileImageId } = profileData;
+  const { name, email, profileImageId } = profileData;
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const deleteUserInfo = useAPI((api) => api.user.deleteUserInfo);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
+  const profileImage = [
+    { id: '0', src: profile1 },
+    { id: '1', src: profile2 },
+    { id: '2', src: profile3 },
+    { id: '3', src: profile4 },
+    { id: '4', src: profile5 },
+    { id: '5', src: profile6 },
+  ];
+
+  const onClickLeftModalButton = async () => {
+    await deleteUserInfo();
+    setIsWithdrawn(true);
+  };
+
+  const onClickRightModalButton = () => {
+    setShowModal(false);
+  };
 
   return (
     <StyledRoot>
@@ -36,9 +56,9 @@ function SettingProfile(props: SettingProfileProps) {
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
-          <Image alt="프로필 이미지" src={tempBox} />
+          <Image src={profileImage[+profileImageId].src} alt="my-profile-image" />
           <div>
-            <h1>{nickname}</h1>
+            <h1>{name}</h1>
             <p>{email}</p>
           </div>
         </StyledProfile>
@@ -47,15 +67,10 @@ function SettingProfile(props: SettingProfileProps) {
         <StyledEtc gap={0.72} paddingTop={2.95} borderBottom={true}>
           <h1>설정</h1>
           <StyledToggleWrapper>
-            <p>알림설정</p>
-            <StyledToggleButton
-              alt="토글버튼"
-              src={toggle ? iToggleOn : iToggleOff}
-              width={40}
-              height={40}
-              layout="fixed"
-              onClick={() => setToggle((prev) => !prev)}
-            />
+            <p>알림 설정</p>
+            <StyledToggle isToggled={toggle} onClick={() => setToggle((prev) => !prev)}>
+              <StyledToggleCircle isToggled={toggle} />
+            </StyledToggle>
           </StyledToggleWrapper>
         </StyledEtc>
         <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
@@ -75,16 +90,18 @@ function SettingProfile(props: SettingProfileProps) {
 
         {showModal && (
           <Modal
-            content={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
-            leftButtonContent={!isWithdrawn ? '탈퇴하기' : null}
-            rightButtonContent={!isWithdrawn ? '취소하기' : null}
+            title={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
             closeModal={() => setShowModal(false)}
-            leftButtonFn={async () => {
-              await deleteUserInfo();
-              setIsWithdrawn(true);
-            }}
-            rightButtonFn={() => setShowModal(false)}
-            isWithDrawn={isWithdrawn}
+            button={
+              !isWithdrawn && (
+                <StyledModalButtonWrapper>
+                  <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                    탈퇴하기
+                  </StyledModalButton>
+                  <StyledModalButton onClick={onClickRightModalButton}>취소하기</StyledModalButton>
+                </StyledModalButtonWrapper>
+              )
+            }
           />
         )}
       </StyledSettingWrapper>
@@ -103,11 +120,9 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  overflow: scroll;
   & > p {
-    /* position: absolute;
-    bottom: 0; */
-    color: ${packmanColors.pmGrey};
+    color: ${packmanColors.pmDeepGrey};
     font-weight: 300;
     font-size: 1.2rem;
   }
@@ -174,8 +189,26 @@ const StyledToggleWrapper = styled.div`
     font-weight: 400;
   }
 `;
-const StyledToggleButton = styled(Image)`
+const StyledToggle = styled.div<{ isToggled: boolean }>`
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 4rem;
+  height: 2.25rem;
+  border-radius: 1.5rem;
+  background-color: ${({ isToggled }) =>
+    isToggled ? packmanColors.pmPink : packmanColors.pmDeepGrey};
+`;
+const StyledToggleCircle = styled.div<{ isToggled: boolean }>`
+  position: absolute;
+  left: 0.225rem;
+  transform: ${({ isToggled }) => isToggled && 'translateX(1.75rem)'};
+  width: 1.8rem;
+  height: 1.8rem;
+
+  background-color: ${packmanColors.pmWhite};
+  border-radius: 50%;
+  transition: 0.4s ease-in-out;
 `;
 
 const StyledEtc = styled.div<{ gap: number; paddingTop: number; borderBottom: boolean }>`
@@ -205,4 +238,20 @@ const StyledEtcWrapper = styled.div`
 `;
 const StyledFooter = styled.div`
   margin: 6.1rem 0 5rem 0;
+`;
+const StyledModalButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+`;
+const StyledModalButton = styled.button<{ left?: boolean }>`
+  width: 13.5rem;
+  height: 3.4rem;
+  border: ${({ left }) => (left ? `1px solid ${packmanColors.pmDeepGrey}` : 'none')};
+  color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
+  background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
+  border-radius: 0.8rem;
+  font-weight: 600;
+  font-size: 1.5rem;
 `;

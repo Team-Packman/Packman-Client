@@ -15,49 +15,37 @@ export const fetchTemplateList = async (request: AxiosInstance): Promise<GetTemp
         data: {
           basicTemplate: [
             {
-              id: '62bbb80d9d5dc1aa4c3d28391',
-              title: '집들이',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28392',
-              title: '할머니댁',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28393',
-              title: '본가ㄱㄱ',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28394',
-              title: '인천',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28395',
-              title: '교환학생',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28396',
-              title: '대만여행',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28397',
-              title: '일본여행',
-            },
-            {
-              id: '62bbb80d9d5dc1aa4c3d28398',
+              id: '1',
               title: '국내여행',
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d28399',
+              id: '2',
               title: '해외여행',
+            },
+            {
+              id: '3',
+              title: '콘서트',
+            },
+            {
+              id: '4',
+              title: '토익시험',
+            },
+            {
+              id: '5',
+              title: '제주한달살이',
+            },
+            {
+              id: '6',
+              title: '반려동물과 함께여행',
             },
           ],
           myTemplate: [
             {
-              id: '62bbb80d9d5dc1aa4c3d2839111',
+              id: '7',
               title: '앱잼 합숙',
             },
             {
-              id: '62bbb80d9d5dc1aa4c3d2839112',
+              id: '8',
               title: '엠티',
             },
           ],

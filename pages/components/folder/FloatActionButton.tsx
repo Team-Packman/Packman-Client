@@ -126,7 +126,7 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
   display: flex;
   justify-content: flex-start;
   font-size: 1.5rem;
-  padding: 12px;
+  padding: 1.2rem 1.627rem 1.2rem 1.2rem;
   cursor: pointer;
   position: relative;
   background: ${packmanColors.pmWhite};
@@ -139,6 +139,9 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
 
   span:last-child {
     /* '폴더 추가' 중앙 정렬을 위한 코드 */
+    font-weight: 600;
+    font-size: 1.5rem;
     padding-left: ${({ index }) => (index === 2 ? '3.2rem' : '1rem')};
+    flex-shrink: 0;
   }
 `;

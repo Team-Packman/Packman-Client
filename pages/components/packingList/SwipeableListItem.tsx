@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { packmanColors } from '../../../styles/color';
 
 interface PackingList {
-  id: string;
+  _id: string;
   departureDate: string;
   title: string;
   packTotalNum: number;
@@ -36,7 +36,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     packingList,
   } = props;
 
-  const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -66,10 +66,12 @@ export default function SwipeablelistItem(props: ItemProps) {
     <StyledRoot>
       {isDeleting && (
         <StyledSelectDelete>
-          <StyledCheckImage
-            src={deleteList.includes(id) ? iCheckPink : iCheck}
+          <Image
+            src={deleteList.includes(_id) ? iCheckPink : iCheck}
             alt="체크"
-            onClick={() => checkDeleteList(id)}
+            onClick={() => checkDeleteList(_id)}
+            width={24}
+            height={24}
           />
         </StyledSelectDelete>
       )}
@@ -103,39 +105,33 @@ export default function SwipeablelistItem(props: ItemProps) {
 }
 
 const StyledRoot = styled.div`
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 33.6rem;
+  width: 33.6rem;
   height: 11.4rem;
+  gap: 2.7rem;
 `;
 
 const StyledSelectDelete = styled.div`
+  position: absolute;
+  left: 3.288rem;
   display: flex;
-  justify-content: center;
-  margin-left: 2.9rem;
-  min-width: 8.4rem;
+  width: 8.4rem;
   height: 2.4rem;
-`;
-
-const StyledCheckImage = styled(Image)`
-  width: 2.4rem;
-  height: 2.4rem;
-  border: 0.1rem solid #000;
-  border-radius: 50%;
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-width: 33.6rem;
+  width: 100%;
   height: inherit;
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
   background-color: ${packmanColors.pmBlueGrey};
-  transition: 0.4s ease-in-out;
+  transition: ${({ isDeleting }) => !isDeleting && '0.4s ease-in-out'};
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -146,6 +142,8 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
     switch (isDeleting) {
       case false:
         return isDragged ? 'translateX(-6.4rem)' : 'translateX(0)';
+      default:
+        return 'translateX(6.388rem)';
     }
   }};
 `;
