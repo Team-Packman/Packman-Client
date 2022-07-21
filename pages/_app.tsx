@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps?.dehydratedState}>
-          <APIProvider baseURL={'http://15.164.165.92:8000'}>
+          <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
             <GlobalStyle />
             <Component {...pageProps} />
           </APIProvider>
