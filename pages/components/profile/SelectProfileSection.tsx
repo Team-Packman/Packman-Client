@@ -65,7 +65,11 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   );
 
   const setIsActivate = () => {
+    console.log(profile, index);
     if (isEditing) {
+      if (!profile) {
+        return false;
+      }
       return nickname.length > 0;
     } else {
       if (profile) {
