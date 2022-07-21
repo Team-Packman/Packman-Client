@@ -38,6 +38,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
           <script src="https://accounts.google.com/gsi/client" async defer></script>
           <script src="https://developers.kakao.com/sdk/js/kakao.js " async defer></script>
         </Head>
