@@ -38,11 +38,10 @@ function PackingItem(props: PackingItemProps) {
     assginee,
     updateItem,
     modalHandler,
-    isChecked: check = false,
+    isChecked,
     isEditing,
   } = props;
   const [isEntered, setIsEntered] = useState(false);
-  const [isChecked, setIsChecked] = useState(check);
   const [name, setName] = useState(nameProps);
   const ref = useRef<HTMLInputElement | null>(null);
 
@@ -58,7 +57,7 @@ function PackingItem(props: PackingItemProps) {
       listId,
       categoryId,
       packId,
-      isChecked,
+      isChecked: isChecked ?? false,
     };
 
     name === '' && setName(nameProps);
@@ -68,7 +67,6 @@ function PackingItem(props: PackingItemProps) {
   const checkHandler = () => {
     if (!isEditing) {
       updateItem && updateItem({ name, listId, categoryId, packId, isChecked: !isChecked });
-      setIsChecked((prev) => !prev);
     }
   };
 
