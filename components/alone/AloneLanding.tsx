@@ -1,6 +1,6 @@
 import React, { UIEvent, useState } from 'react';
 import styled from 'styled-components';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Layout from '../common/Layout';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 import CheckListHeader from '../together/CheckListHeader';
@@ -35,17 +35,64 @@ function AloneLanding() {
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
 
-  const getPackingListDeatil = useAPI((api) => api.packingList.alone.getPackingListDeatil);
-  const { data } = useQuery('getAlonePackingListDeatil', () => getPackingListDeatil('3'), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
-  if (!data) return null;
-  const { data: list } = data;
+  const getAlonePackingListDetail = useAPI(
+    (api) => api.packingList.alone.getAlonePackingListDetail,
+  );
+  const { data } = useQuery(
+    'getAlonePackingListDetail',
+    () => getAlonePackingListDetail('62d44995852f3ccb522d73e5'),
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    },
+  );
+
   const creatingHandler = (id: string) => setCurrentCreating(id);
   const createdHandler = () => setCurrentCreating('');
   const creatingCategoryHandler = () => setCurrentCreatingCategory(list._id);
   const createdCategoryHandler = () => setCurrentCreatingCategory('');
+
+  const addAlonePackingListCategory = useAPI(
+    (api) => api.packingList.alone.addAlonePackingListCategory,
+  );
+  const addAlonePackingListItem = useAPI((api) => api.packingList.alone.addAlonePackingListItem);
+  const updateAlonePackingListCategory = useAPI(
+    (api) => api.packingList.alone.updateAlonePackingListCategory,
+  );
+  const updateAlonePackingListItem = useAPI(
+    (api) => api.packingList.alone.updateAlonePackingListItem,
+  );
+  const deleteAlonePackingListCategory = useAPI(
+    (api) => api.packingList.alone.deleteAlonePackingListCategory,
+  );
+  const deleteAlonePackingListItem = useAPI(
+    (api) => api.packingList.alone.deleteAlonePackingListItem,
+  );
+
+  const { mutate: addAloneCategory } = useMutation(
+    'addAlonePackingListCategory',
+    addAlonePackingListCategory,
+  );
+  const { mutate: addAloneItem } = useMutation('addAlonePackingListItem', addAlonePackingListItem);
+  const { mutate: patchAloneCategory } = useMutation(
+    'updateAlonePackingListCategory',
+    updateAlonePackingListCategory,
+  );
+  const { mutate: patchAloneItem } = useMutation(
+    'updateAlonePackingListItem',
+    updateAlonePackingListItem,
+  );
+  const { mutate: deleteAloneCategory } = useMutation(
+    'deleteAlonePackingListCategory',
+    deleteAlonePackingListCategory,
+  );
+  const { mutate: deleteAloneItem } = useMutation(
+    'deleteAlonePackingListItem',
+    deleteAlonePackingListItem,
+  );
+  if (!data) return null;
+  const { data: list } = data;
+  console.log(list);
   const updateRemainingInfo = (payload: RemainingInfoPayload, type: RemainingInfoType) => {
     const { listId, title, departureDate, isSaved, isAloned = false } = payload;
 
@@ -104,7 +151,7 @@ function AloneLanding() {
       });
     }
     const prev: GetAlonePackingListDetailOutput | undefined = client.getQueryData(
-      'getAlonePackingListDeatil',
+      'getAlonePackingListDetail',
     );
     const category = prev?.data.category.map((e) => {
       if (e._id === categoryId) {
@@ -116,42 +163,33 @@ function AloneLanding() {
       ...prev,
       category,
     };
-    client.setQueryData('getAlonePackingListDeatil', newData);
+    client.setQueryData('getAlonePackingListDetail', newData);
     setCurrentEditing('');
     createdCategoryHandler();
   };
-  //id는 필요 x > categoryId 필요
-  //add
+
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
     const prev: GetAlonePackingListDetailOutput | undefined = client.getQueryData(
-      'getAlonePackingListDeatil',
+      'getAlonePackingListDetail',
     );
 
     if (currentEditing) {
-      console.log('update!!', {
-        name,
-        listId,
-        isChecked,
-        id: packId,
-        categoryId,
-      });
+      console.log('update!!');
 
       if (name !== '') {
-        const category = prev?.data.category.map((e) => {
-          e.pack.map((e) => {
-            if (e._id === packId) {
-              e.name = name;
-            }
-            return e;
-          });
-          return e;
-        });
-        const newData = {
-          ...prev,
-          category,
-        };
-        client.setQueryData('getAlonePackingListDeatil', newData);
+        patchAloneItem(
+          {
+            _id: packId,
+            name,
+            listId,
+            isChecked,
+            categoryId,
+          },
+          {
+            onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+          },
+        );
       }
     } else if (currentCreating) {
       if (name.length === 0) {
@@ -178,7 +216,7 @@ function AloneLanding() {
         }),
       };
 
-      client.setQueryData('getAlonePackingListDeatil', newData);
+      client.setQueryData('getAlonePackingListDetail', newData);
     } else if (!currentFocus) {
       //Needs optimistic update
       console.log('check!!', {
