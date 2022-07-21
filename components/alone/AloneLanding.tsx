@@ -14,7 +14,13 @@ import PackingCategory, { UpdateCategoryPayload } from '../common/PackingCategor
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 import SharePackingListButton from '../common/SharePackingListButton';
+import PackerModal from '../together/PackerModal';
 
+interface FocusInfo {
+  type: 'category' | 'item';
+  categoryId: string;
+  packId: string;
+}
 interface RemainingInfoPayload {
   listId: string;
   title?: string;
@@ -27,9 +33,10 @@ type RemainingInfoType = 'title' | 'departure' | 'save';
 
 function AloneLanding() {
   const client = useQueryClient();
+  const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [currentFocus, setCurrentFocus] = useState('');
+  const [currentFocus, setCurrentFocus] = useState(initialFocus);
   const [currentCreating, setCurrentCreating] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
@@ -40,10 +47,9 @@ function AloneLanding() {
   );
   const { data } = useQuery(
     'getAlonePackingListDetail',
-    () => getAlonePackingListDetail('62d44995852f3ccb522d73e5'),
+    () => getAlonePackingListDetail('62d9865024ff58dcf717984d'),
     {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      refetchInterval: 3000,
     },
   );
 
@@ -61,6 +67,11 @@ function AloneLanding() {
   );
   const updateAlonePackingListItem = useAPI(
     (api) => api.packingList.alone.updateAlonePackingListItem,
+  );
+  const updatePackingListTitle = useAPI((api) => api.packingList.together.updatePackingListTitle);
+  const updatePackingListDate = useAPI((api) => api.packingList.together.updatePackingListDate);
+  const updatePackingListIsSaved = useAPI(
+    (api) => api.packingList.together.updatePackingListIsSaved,
   );
   const deleteAlonePackingListCategory = useAPI(
     (api) => api.packingList.alone.deleteAlonePackingListCategory,
@@ -82,6 +93,12 @@ function AloneLanding() {
     'updateAlonePackingListItem',
     updateAlonePackingListItem,
   );
+  const { mutate: patchTitle } = useMutation('updatePackingListTitle', updatePackingListTitle);
+  const { mutate: patchDate } = useMutation('updatePackingListDate', updatePackingListDate);
+  const { mutate: patchIsSaved } = useMutation(
+    'updatePackingListIsSaved',
+    updatePackingListIsSaved,
+  );
   const { mutate: deleteAloneCategory } = useMutation(
     'deleteAlonePackingListCategory',
     deleteAlonePackingListCategory,
@@ -92,91 +109,104 @@ function AloneLanding() {
   );
   if (!data) return null;
   const { data: list } = data;
-  console.log(list);
-  const updateRemainingInfo = (payload: RemainingInfoPayload, type: RemainingInfoType) => {
-    const { listId, title, departureDate, isSaved, isAloned = false } = payload;
-
-    switch (type) {
-      case 'title':
-        console.log({
-          listId,
-          title,
-          isAloned,
-        });
-        return;
-      case 'departure':
-        console.log({
-          listId,
-          departureDate,
-          isAloned,
-        });
-        return;
-      case 'save':
-        console.log({
-          listId,
-          isSaved,
-          isAloned,
-        });
-        return;
-      default:
-        return;
-    }
-  };
-  const bottomModalOpenHandler = (id: string) => {
+  const bottomModalOpenHandler = (payload: FocusInfo) => {
     if (!currentEditing) {
-      setCurrentFocus(id);
+      setCurrentFocus(payload);
       setBottomModalOpen(true);
     }
   };
   const bottomModalCloseHandler = () => {
-    setCurrentFocus('');
+    setCurrentFocus(initialFocus);
     setBottomModalOpen(false);
   };
 
+  const updateRemainingInfo = (payload: RemainingInfoPayload, type: RemainingInfoType) => {
+    const { listId, title = '', departureDate = '', isSaved = false, isAloned = true } = payload;
+
+    switch (type) {
+      case 'title':
+        patchTitle(
+          {
+            _id: listId,
+            title,
+            isAloned,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getAlonePackingListDetail');
+            },
+          },
+        );
+        return;
+      case 'departure':
+        patchDate(
+          {
+            _id: listId,
+            departureDate,
+            isAloned,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getAlonePackingListDetail');
+            },
+          },
+        );
+        return;
+      case 'save':
+        patchIsSaved(
+          {
+            _id: listId,
+            isSaved,
+            isAloned,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getAlonePackingListDetail');
+            },
+          },
+        );
+        return;
+    }
+  };
   const updateCategory = (payload: UpdateCategoryPayload) => {
     const { name, categoryId, listId } = payload;
     if (currentEditing) {
-      console.log('update category', {
-        id: categoryId,
-        name,
-      });
+      patchAloneCategory(
+        {
+          _id: categoryId,
+          listId,
+          name,
+        },
+        {
+          onSuccess: () => {
+            client.invalidateQueries('getAlonePackingListDetail');
+            bottomModalCloseHandler();
+          },
+        },
+      );
     } else if (currentCreatingCategory) {
-      if (name.length === 0) {
-        createdCategoryHandler();
-        return;
+      if (name.length !== 0) {
+        addAloneCategory(
+          {
+            listId,
+            name,
+          },
+          {
+            onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+          },
+        );
       }
-      console.log('add category', {
-        name,
-        listId,
-      });
     }
-    const prev: GetAlonePackingListDetailOutput | undefined = client.getQueryData(
-      'getAlonePackingListDetail',
-    );
-    const category = prev?.data.category.map((e) => {
-      if (e._id === categoryId) {
-        e.name = name;
-      }
-      return e;
-    });
-    const newData = {
-      ...prev,
-      category,
-    };
-    client.setQueryData('getAlonePackingListDetail', newData);
+
     setCurrentEditing('');
     createdCategoryHandler();
+    bottomModalCloseHandler();
   };
 
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
-    const prev: GetAlonePackingListDetailOutput | undefined = client.getQueryData(
-      'getAlonePackingListDetail',
-    );
 
     if (currentEditing) {
-      console.log('update!!');
-
       if (name !== '') {
         patchAloneItem(
           {
@@ -192,45 +222,87 @@ function AloneLanding() {
         );
       }
     } else if (currentCreating) {
-      if (name.length === 0) {
-        createdHandler();
-        return;
+      if (name.length !== 0) {
+        addAloneItem(
+          {
+            name,
+            listId,
+            categoryId,
+          },
+          {
+            onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+          },
+        );
       }
-      console.log('add!! pack', {
-        name,
-        listId,
-        categoryId,
-      });
-
-      const newData = {
-        ...prev,
-        category: prev?.data.category.map((e) => {
-          if (e._id === categoryId) {
-            e.pack.push({
-              _id: 'created ID',
-              name,
-              isChecked: false,
-              packer: null,
-            });
-          }
-        }),
-      };
-
-      client.setQueryData('getAlonePackingListDetail', newData);
-    } else if (!currentFocus) {
-      //Needs optimistic update
-      console.log('check!!', {
-        name,
-        listId,
-        isChecked: !isChecked,
-        id: packId,
-        categoryId,
-      });
+    } else {
+      patchAloneItem(
+        {
+          _id: packId,
+          name,
+          listId,
+          isChecked,
+          categoryId,
+        },
+        {
+          onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+        },
+      );
     }
 
     setCurrentEditing('');
     createdHandler();
+    bottomModalCloseHandler();
   };
+
+  const onEdit = () => {
+    switch (currentFocus.type) {
+      case 'category': {
+        setCurrentEditing(currentFocus.categoryId);
+        return;
+      }
+      case 'item': {
+        setCurrentEditing(currentFocus.packId);
+        return;
+      }
+    }
+  };
+
+  const onDelete = () => {
+    switch (currentFocus.type) {
+      case 'category': {
+        deleteAloneCategory(
+          {
+            listId: list._id,
+            categoryId: currentFocus.categoryId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getAlonePackingListDetail');
+            },
+          },
+        );
+
+        return;
+      }
+      case 'item': {
+        deleteAloneItem(
+          {
+            listId: list._id,
+            categoryId: currentFocus.categoryId,
+            packId: currentFocus.packId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getAlonePackingListDetail');
+            },
+          },
+        );
+
+        return;
+      }
+    }
+  };
+
   const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
     if (e.currentTarget.scrollTop < 10) {
       scroll && setScroll(false);
@@ -240,6 +312,7 @@ function AloneLanding() {
       setTimeout(() => setIsScrolling(false), 500);
     }
   };
+  console.log(list);
   return (
     <Layout
       back
@@ -269,7 +342,14 @@ function AloneLanding() {
                       packId={packId}
                       name={name}
                       isChecked={isChecked}
-                      modalHandler={() => bottomModalOpenHandler(packId)}
+                      modalHandler={() =>
+                        bottomModalOpenHandler({
+                          ...initialFocus,
+                          type: 'item',
+                          packId,
+                          categoryId,
+                        })
+                      }
                       isEditing={currentEditing === packId}
                       updateItem={updateItem}
                     />
@@ -291,13 +371,13 @@ function AloneLanding() {
               }
             >
               <PackingCategory
-                //수정용
                 categoryId={categoryId}
-                //생성용
                 listId={list._id}
                 name={name}
                 updateCategory={updateCategory}
-                modalHandler={() => bottomModalOpenHandler(categoryId)}
+                modalHandler={() =>
+                  bottomModalOpenHandler({ ...initialFocus, type: 'category', categoryId })
+                }
                 isEditing={currentEditing === categoryId}
               />
             </PackagesWithCategory>
@@ -323,6 +403,18 @@ function AloneLanding() {
           <SharePackingListButton icon>패킹 리스트 공유</SharePackingListButton>
         </FunctionSection>
       </StyledAloneLanding>
+      {bottomModalOpen && (
+        <StyledBg onClick={bottomModalCloseHandler}>
+          <StyledModal>
+            <button onClick={onEdit} style={{ width: '8rem', height: '8rem' }}>
+              update
+            </button>
+            <button onClick={onDelete} style={{ width: '8rem', height: '8rem' }}>
+              delete
+            </button>
+          </StyledModal>
+        </StyledBg>
+      )}
     </Layout>
   );
 }
@@ -345,4 +437,23 @@ const StyledBody = styled.div`
   margin-bottom: 24.4rem;
   padding: 0 2rem;
   padding-top: 1.6rem;
+`;
+
+const StyledBg = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+`;
+
+const StyledModal = styled.div`
+  width: 30rem;
+  height: 10rem;
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;

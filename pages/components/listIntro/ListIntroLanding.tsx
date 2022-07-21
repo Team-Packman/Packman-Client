@@ -8,19 +8,19 @@ import { AddAlonePackingListIntroInput } from '../../../service/packingList/alon
 import { AddTogetherPackingListIntroInput } from '../../../service/packingList/together';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
+import useGlobalState from '../../../utils/hooks/useGlobalState';
 
-interface ListIntroProps {
-  isAloned: boolean;
-  templateId: string;
-}
-
-function ListIntroLanding(props: ListIntroProps) {
+function ListIntroLanding() {
   // Todo : param으로 넘어오는 templateId 가져오기 + isAloned 값도
-  const { isAloned = false, templateId = '62d44cc78c2a5692567b53ae' } = props;
+  // const { isAloned = false, templateId = '62d44cc78c2a5692567b53ae' } = props;
 
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  const [{ isAloned, templateId }] = useGlobalState<{ isAloned: boolean; templateId: string }>(
+    'template',
+    { isAloned: true, templateId: 'hihi' },
+  );
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
   const [listName, setListName] = useState<string>('');

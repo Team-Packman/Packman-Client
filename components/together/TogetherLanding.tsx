@@ -85,7 +85,7 @@ function TogetherLanding() {
   );
   const { data: packingListData } = useQuery(
     'getPackingListDeatil',
-    () => getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
+    () => getPackingListDeatil('62d984fb07a7c2aa188b1989'),
     {
       // refetchInterval: 3000,
     },
@@ -136,6 +136,7 @@ function TogetherLanding() {
   if (!packingListData) return null;
 
   const { data: info } = packingListData;
+  console.log(info);
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
   const creatingItemHandler = (categoryId: string) => setCurrentCreating(categoryId);
@@ -378,8 +379,6 @@ function TogetherLanding() {
             },
           },
         );
-        return;
-      default:
         return;
     }
   };
