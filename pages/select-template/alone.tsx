@@ -1,5 +1,5 @@
 import { AsyncBoundary } from '../../utils/AsyncBoundary';
-import AloneSelectTemplateLanding from '../components/selectTemplate/alone/AloneSelectTemplateLanding';
+import AloneSelectTemplateLanding from '../../components/selectTemplate/alone/AloneSelectTemplateLanding';
 
 function index() {
   return (

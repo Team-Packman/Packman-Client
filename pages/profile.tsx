@@ -1,5 +1,5 @@
 import { AsyncBoundary } from '../utils/AsyncBoundary';
-import ProfileLanding from './components/profile/ProfileLanding';
+import ProfileLanding from '../components/profile/ProfileLanding';
 
 function Profile() {
   return (

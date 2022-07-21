@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
-import EditingProfile from './components/profile/EditingProfile';
-import SettingProfile from './components/profile/SettingProfile';
+import EditingProfile from '../components/profile/EditingProfile';
+import SettingProfile from '../components/profile/SettingProfile';
 
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);

@@ -16,7 +16,7 @@ import useGlobalState from '../../utils/hooks/useGlobalState';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
 import PackerModal, { PackerInfoPayload } from './PackerModal';
-import BottomModal from '../../pages/components/common/BottomModal';
+import BottomModal from '../common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 
