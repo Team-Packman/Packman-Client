@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { shallowEqualObjects } from 'react-query/types/core/utils';
 import styled from 'styled-components';
@@ -25,14 +26,8 @@ function DropBox(props: DropBoxProps) {
             key={_id}
             currentId={_id === currentId}
             onClick={() => {
-              const oldId = router.query.id;
-              router.replace(`/packing-list/${categoryName}/${_id}`, undefined, {
-                shallow: true,
-              });
-              const newId = _id;
-              if (oldId !== newId) {
-                window.location.reload();
-              }
+              router.push(`/packing-list/${categoryName}/${_id}`, undefined, { shallow: true });
+
               queryClient.invalidateQueries('getAloneInventory');
               queryClient.invalidateQueries('getTogetherInventory');
             }}

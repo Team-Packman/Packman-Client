@@ -42,7 +42,7 @@ function AlonePackingListLanding() {
         );
         setData(data);
       })();
-  }, [router.isReady]);
+  }, [router.isReady, router.query.id]);
 
   const deleteAloneInventory = useAPI(
     (api) => (params: DeleteAloneInventoryInput) =>
