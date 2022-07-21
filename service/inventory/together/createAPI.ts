@@ -9,6 +9,7 @@ import {
   fetchDeleteTogetherInventory,
   fetchTogetherInventory,
 } from '../../../utils/inventory/together';
+import { DeleteAloneInventoryInput } from '../alone';
 
 export interface TogetherAPI {
   together: {

@@ -15,7 +15,7 @@ interface TemplateProps {
   myTemplate: Template[];
   activate: (isSelected: string) => void;
   changeTemplateImage: (templateId: string) => void;
-  changeUserOwnTemplateImage: () => void;
+  changeUserOwnTemplateImage: (templateId: string) => void;
   checkIsTemplate: (isTemplate: boolean) => void;
   setTemplateId: (templateId: string) => void;
 }
@@ -94,7 +94,9 @@ function Template(props: TemplateProps) {
                   template={template}
                   isSelected={isSelected}
                   onClick={() => handleTemplateItem(template)}
-                  changeUserOwnTemplateImage={changeUserOwnTemplateImage}
+                  changeUserOwnTemplateImage={() => {
+                    changeUserOwnTemplateImage(template._id);
+                  }}
                   checkIsTemplate={checkIsTemplate}
                 />
               ))}

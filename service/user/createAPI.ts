@@ -20,7 +20,6 @@ export const createUserAPI = (request: AxiosInstance): UserAPI => {
     getUserInfo: () => fetchUserInfo(withAuth(request)),
     updateUserProfile: (payload: UpdateUserProfileInput) =>
       fetchUpdateUserProfile(withAuth(request), payload),
-    addUserProfile: (payload: AddUserProfileInput) =>
-      fetchAddUserProfile(withAuth(request), payload),
+    addUserProfile: (payload: AddUserProfileInput) => fetchAddUserProfile(request, payload),
   };
 };

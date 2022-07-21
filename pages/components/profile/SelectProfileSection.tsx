@@ -6,6 +6,7 @@ import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../../utils/profileImages';
+import useGlobalState from '../../../utils/hooks/useGlobalState';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -33,6 +34,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
   const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
+  const [auth] = useGlobalState('Auth');
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -63,7 +65,11 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   );
 
   const setIsActivate = () => {
+    console.log(profile, index);
     if (isEditing) {
+      if (!profile) {
+        return false;
+      }
       return nickname.length > 0;
     } else {
       if (profile) {

@@ -5,12 +5,6 @@ import { useState } from 'react';
 import Modal from '../common/Modal';
 import useAPI from '../../../utils/hooks/useAPI';
 import Footer from '../../components/common/Footer';
-import profile1 from '../../../public/assets/png/profile1.png';
-import profile2 from '../../../public/assets/png/profile2.png';
-import profile3 from '../../../public/assets/png/profile3.png';
-import profile4 from '../../../public/assets/png/profile4.png';
-import profile5 from '../../../public/assets/png/profile5.png';
-import profile6 from '../../../public/assets/png/profile6.png';
 import { ProfileList } from '../../../utils/profileImages';
 
 interface ProfileData {
@@ -30,12 +24,12 @@ function SettingProfile(props: SettingProfileProps) {
   const { name, email, profileImageId } = profileData;
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const deleteUserInfo = useAPI((api) => api.user.deleteUserInfo);
+  // const deleteUserInfo = useAPI((api) => api.user.deleteUserInfo);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
 
   const onClickLeftModalButton = async () => {
-    await deleteUserInfo();
+    // await deleteUserInfo();
     setIsWithdrawn(true);
   };
 
@@ -123,7 +117,7 @@ const StyledRoot = styled.div`
   overflow-y: scroll;
   scrollbar-width: none;
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
+    display: none;
   }
 
   & > p {
