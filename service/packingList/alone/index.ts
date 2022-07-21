@@ -64,3 +64,153 @@ export interface AddAlonePackingListIntroOutput {
     isSaved: boolean;
   };
 }
+
+export interface AddAlonePackingListCategoryInput {
+  name: string; //혼자 패킹리스트에서 생성한 카테고리 이름
+  listId: string; //혼자 패킹리스트 id
+}
+
+export interface AddAlonePackingListCategoryOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
+
+export interface UpdateAlonePackingListCategoryInput {
+  _id: string; // 혼자 패킹리스트 카테고리 id
+  name: string; // 혼자 패킹리스트 카테고리 이름
+  listId: string; // 혼자 패킹리스크 id
+}
+
+export interface UpdateAlonePackingListCategoryOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
+
+export interface DeleteAlonePackingListCategoryInput {
+  listId: string; // 혼자 패킹리스크 id
+  categoryId: string;
+}
+
+export interface DeleteAlonePackingListCategoryOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; //  패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
+
+export interface AddAlonePackingListItemInput {
+  name: string; // 혼자 패킹리스트 짐 이름
+  categoryId: string; // 혼자 패킹리스트 짐 카테고리 id
+  listId: string; // 혼자 패킹리스트 id
+}
+
+export interface AddAlonePackingListItemOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
+
+export interface UpdateAlonePackingListItemInput {
+  _id: string; // 혼자 패킹리스트 짐 idㅍ
+  name: string; // 혼자 패킹리스트 짐
+  isChecked: boolean; // 혼자 패킹리스트 짐 체크 여부
+  listId: string; // 혼자 패킹리스트 id
+  categoryId: string; // 함께 패킹리스트 카테고리 id
+}
+
+export interface UpdateAlonePackingListItemOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
+
+export interface DeleteAlonePackingListItemInput {
+  listId: string; // 혼자 패킹리스트 id
+  categoryId: string; // 함께 패킹리스트 카테고리 id
+  packId: string;
+}
+
+export interface DeleteAlonePackingListItemOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}

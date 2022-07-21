@@ -13,6 +13,7 @@ export interface UpdateItemPayload {
 }
 interface PackingItemProps {
   name: string;
+  mode?: number;
   listId?: string;
   categoryId?: string;
   packId?: string;
@@ -29,6 +30,7 @@ const MAX_LENGTH = 12;
 function PackingItem(props: PackingItemProps) {
   const {
     example,
+    mode,
     name: nameProps,
     listId = '',
     categoryId = '',
@@ -58,7 +60,8 @@ function PackingItem(props: PackingItemProps) {
       packId,
       isChecked,
     };
-    name === '' && setName(nameProps); // for demo
+
+    name === '' && setName(nameProps);
     updateItem && updateItem(payload);
   };
 
@@ -97,7 +100,7 @@ function PackingItem(props: PackingItemProps) {
         )}
       </label>
       <StyledOptionWrapper>
-        {assginee && assginee}
+        {mode === 0 && assginee && assginee}
         <StyledKebab onClick={modalHandler}>
           {!isEditing && <Image src={Kebab} alt="kebab" layout="fill" />}
         </StyledKebab>
