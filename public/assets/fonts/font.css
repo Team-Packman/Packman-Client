@@ -1,0 +1,20 @@
+@font-face {
+  font-family: Pretendard-Light;
+  src: url('./Pretendard-Light.ttf') format(“truetype”);
+}
+@font-face {
+  font-family: Pretendard-Medium;
+  src: url('./Pretendard-Medium.ttf') format(“truetype”);
+}
+@font-face {
+  font-family: Pretendard-Regular;
+  src: url('./Pretendard-Regular.ttf') format(“truetype”);
+}
+@font-face {
+  font-family: Pretendard-SemiBold;
+  src: url('./Pretendard-SemiBold.ttf') format(“truetype”);
+}
+@font-face {
+  font-family: Pretendard-ExtraBold;
+  src: url('./Pretendard-ExtraBold.ttf') format(“truetype”);
+}

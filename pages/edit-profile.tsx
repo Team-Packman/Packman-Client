@@ -12,6 +12,7 @@ function EditProfile() {
   const { data } = useQuery('getUserInfo', () => getUserInfo());
 
   if (!data) return null;
+  console.log(data);
 
   const { name, profileImageId } = data.data;
 
