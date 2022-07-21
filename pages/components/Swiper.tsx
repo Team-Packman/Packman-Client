@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import 'swiper/css';
 import styled from 'styled-components';
 import SwiperCore, { Virtual, Navigation, Pagination } from 'swiper';
@@ -38,18 +38,13 @@ function SwiperContainer(props: SwiperProps) {
     },
   };
 
-  useEffect(() => {
-    if (swiperRef) {
-      getSwiperIndex(swiperRef?.snapIndex);
-    }
-  }, [swiperRef, getSwiperIndex]);
-
   return (
     <StyledRoot isRecentListExist={isRecentListExist}>
       <StyledSwiper
         onSwiper={setSwiperRef}
-        modules={[Pagination, Virtual]}
+        modules={[Pagination]}
         pagination={pagination}
+        onSlideChange={(s) => getSwiperIndex(s.activeIndex)}
         virtual
       >
         {slides.map((slideContent, index) => (
@@ -81,8 +76,8 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   flex-direction: column;
   align-items: center;
   width: calc(100% - 4rem);
-  height: 100vh;
-  overflow: hidden;
+  /* height: 100vh;
+  overflow: hidden; */
 `;
 
 export const StyledSwiper = styled(Swiper)`
@@ -125,7 +120,8 @@ export const StyledSwiper = styled(Swiper)`
     padding-top: 4.8rem;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
+    /* justify-content: flex-start; */
     align-items: center;
   }
 `;

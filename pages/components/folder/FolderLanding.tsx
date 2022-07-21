@@ -78,6 +78,8 @@ function FolderLanding() {
   }
 
   const { aloneFolders, togetherFolders } = folderList.data;
+  console.log('aloneFolders', aloneFolders);
+  console.log('togetherFolders', togetherFolders);
 
   // Bottom modal handler
   const handleBottomModalOpen = (_id: string, title: string) => {
@@ -117,7 +119,8 @@ function FolderLanding() {
     if (e.key === 'Enter') {
       setEditableFolderId('');
       editFolderMutate(editedFolderData, {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          console.log(data);
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
@@ -152,6 +155,7 @@ function FolderLanding() {
       setIsEditing(false);
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
+          console.log(data);
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../../styles/color';
 import { FolderListProps, FolderProps } from './FolderList';
@@ -27,8 +27,10 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
     handleAddFolderKeyPress,
     handleCancleAddFolder,
   } = props;
-
+  console.log(isNew);
   const inputElement = useRef<HTMLInputElement>(null);
+
+  const [isInputDisable, setInputDisable] = useState<boolean>(true);
 
   const onClickIcon = (id: string, title: string) => {
     if (!isNew) {
