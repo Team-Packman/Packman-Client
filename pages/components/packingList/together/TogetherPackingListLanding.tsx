@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -7,12 +7,15 @@ import iTrash from '../../../../public/assets/svg/iTrash.svg';
 import Header from '../../../../components/common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../../utils/hooks/useAPI';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import { DeleteTogetherInventoryInput } from '../../../../service/inventory/together';
+import {
+  DeleteTogetherInventoryInput,
+  GetTogetherInventoryOutput,
+} from '../../../../service/inventory/together';
 
 interface DeleteTogetherInventoryData {
   folderId: string;
@@ -27,16 +30,21 @@ function TogetherPackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [data, setData] = useState<GetTogetherInventoryOutput | null>(null);
 
   //패킹리스트 데이터 조회
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  const { data } = useQuery(
-    'getTogetherInventory',
-    () => getTogetherInventory('62d72247af813b54446455a4'),
-    {
-      suspense: false,
-    },
-  );
+  useEffect(() => {
+    if (router.isReady) {
+      (async () => {
+        const query = router.query.id as string;
+        const data = await queryClient.fetchQuery('getTogetherInventory', () =>
+          getTogetherInventory(query),
+        );
+        setData(data);
+      })();
+    }
+  }, [router.isReady]);
 
   const deleteTogetherInventory = useAPI(
     (api) => (params: DeleteTogetherInventoryInput) =>

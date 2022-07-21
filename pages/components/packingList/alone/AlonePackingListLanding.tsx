@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -7,13 +7,15 @@ import iTrash from '../../../../public/assets/svg/iTrash.svg';
 import Header from '../../../../components/common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../../utils/hooks/useAPI';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import { DeleteAloneInventoryInput } from '../../../../service/inventory/alone';
-
+import {
+  DeleteAloneInventoryInput,
+  GetAloneInventoryOutput,
+} from '../../../../service/inventory/alone';
 interface DeleteAloneInventoryData {
   folderId: string;
   listId: string;
@@ -27,14 +29,21 @@ function AlonePackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [data, setData] = useState<GetAloneInventoryOutput | null>(null);
+
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-  const { data } = useQuery(
-    'getAloneInventory',
-    () => getAloneInventory('62d7bac9618ed827f6e74379'),
-    {
-      suspense: false,
-    },
-  );
+
+  useEffect(() => {
+    if (router.isReady)
+      (async () => {
+        const query = router.query.id as string;
+        const data = await queryClient.fetchQuery('getAloneInventory', () =>
+          getAloneInventory(query),
+        );
+        setData(data);
+      })();
+  }, [router.isReady]);
+
   const deleteAloneInventory = useAPI(
     (api) => (params: DeleteAloneInventoryInput) =>
       api.inventory.alone.deleteAloneInventory(params),

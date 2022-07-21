@@ -18,7 +18,7 @@ export const fetchFolders = async (request: AxiosInstance): Promise<GetFoldersOu
 export const fetchRecentPackingList = async (
   request: AxiosInstance,
 ): Promise<GetRecentPackingListOutput> => {
-  const { data } = await request(`/packList/recentCreatedList`);
+  const { data } = await request(`/folder/recentCreatedList`);
   return data;
 };
 

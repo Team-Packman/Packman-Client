@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import styled, { css } from 'styled-components';
 import Template from '../Template';
 import useAPI from '../../../../utils/hooks/useAPI';
@@ -44,8 +44,20 @@ function AloneSelectTemplateLanding() {
     });
   };
 
-  const changeUserOwnTemplateImage = () => {
-    setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
+  const shuffleArray = (array: StaticImageData[]) => {
+    return array.sort(() => Math.random() - 0.5);
+  };
+
+  const changeUserOwnTemplateImage = (templateId: string) => {
+    shuffleArray(randomImageList);
+    console.log(randomImageList[0]);
+
+    myTemplate.forEach(({ _id }, idx) => {
+      if (_id === templateId) {
+        setTemplateImageIndex(idx.toString());
+      }
+    });
+    // setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
   };
 
   return (
@@ -79,7 +91,9 @@ function AloneSelectTemplateLanding() {
             }
           }}
           changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
-          changeUserOwnTemplateImage={changeUserOwnTemplateImage}
+          changeUserOwnTemplateImage={(templateId: string) =>
+            changeUserOwnTemplateImage(templateId)
+          }
           checkIsTemplate={(isTemplate: boolean) => setIsBasicTemplate(isTemplate)}
           setTemplateId={(templateId: string) => setTemplateId(templateId)}
         />

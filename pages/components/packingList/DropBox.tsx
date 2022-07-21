@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { packmanColors } from '../../../styles/color';
 
@@ -12,6 +13,7 @@ interface DropBoxProps {
 function DropBox(props: DropBoxProps) {
   const { folderList, closeDropBox, currentId, categoryName } = props;
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return (
     <>
@@ -22,7 +24,10 @@ function DropBox(props: DropBoxProps) {
             key={_id}
             currentId={_id === currentId}
             onClick={() => {
-              router.push(`/packing-list/${categoryName}/${_id}`);
+              console.log(_id);
+              router.replace(`/packing-list/${categoryName}/${_id}`);
+              queryClient.invalidateQueries('getAloneInventory');
+              queryClient.invalidateQueries('getTogetherInventory');
             }}
           >
             {title}
