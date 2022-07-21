@@ -38,7 +38,7 @@ function FolderLanding() {
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  const { data: test } = useQuery('folderListKey', () => getFolders(), {
+  const { data: folderListData } = useQuery('folderListKey', () => getFolders(), {
     suspense: true,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -73,7 +73,7 @@ function FolderLanding() {
 
   const folderList: GetFoldersOutput | undefined = queryClient.getQueryData('folderListKey');
 
-  if (!test || !folderList) {
+  if (!folderListData || !folderList) {
     return null;
   }
 

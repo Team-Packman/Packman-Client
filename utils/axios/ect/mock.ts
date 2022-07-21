@@ -63,8 +63,12 @@ export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplate
         success: true,
         message: '템플릿 상세조회 성공',
         data: {
+          departureDate: '2022-07-20',
+          isSaved: false,
           id: '62bbb80d9d5dc1aa4c3d28391231',
           title: '앱잼 합숙',
+          departureDate: '2022-22-22',
+          isSaved: false,
           category: [
             {
               id: '62bbb80d9d5dc1aa4c3d28131232139',
@@ -73,10 +77,12 @@ export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplate
                 {
                   id: '62bbb80d9d5dc1aa3454354c3d2839',
                   name: '여권',
+                  isChecked: false,
                 },
                 {
                   id: '62bbb80d9d5dc1aa354234c3d2839',
                   name: '가방',
+                  isChecked: false,
                 },
               ],
             },
@@ -87,10 +93,12 @@ export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplate
                 {
                   id: '62bbb80d9d5dc1aa4c35435565d2839',
                   name: '모자',
+                  isChecked: false,
                 },
                 {
                   id: '62bbb80d9d5dc1aa4c331283210d2839',
                   name: '수영복',
+                  isChecked: false,
                 },
               ],
             },

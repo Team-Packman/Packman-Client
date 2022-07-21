@@ -337,3 +337,68 @@ export interface DeleteTogetherPackingListItemOutput {
     }[];
   };
 }
+
+export interface GetTogetherFolderOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    togetherFolders: {
+      // 함께 패킹 폴더 배열
+      _id: string; // 폴더 id
+      title: string; // 폴더 이름
+    }[];
+  };
+}
+
+export interface AddTogetherPackingListIntroInput {
+  departureDate: string; // 출발 날짜
+  folderId: string; // 폴더 id
+  title: string; // 함께 패킹리스트 제목
+  templateId: string; // 템플릿 id
+}
+
+export interface AddTogetherPackingListIntroOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    title: string; // 패킹리스트 제목
+    departureDate: string; // 출발 날짜
+    togetherPackingList: {
+      _id: string; // 함께 패킹리스트 id
+      groupId: string; // 그룹 id
+      category: {
+        // 카테고리
+        _id: string; // 카테고리 id
+        name: string; // 카테고리 이름
+        pack: {
+          // 짐
+          _id: string; // 짐 id
+          name: string; // 짐 이름
+          isChecked: boolean; // 짐 챙김 여부
+          packer: {
+            _id: string; // 짐 챙길사람 id
+            name: string; // 짐 챙길사람 이름
+          } | null;
+        }[];
+      }[];
+      isSaved: boolean;
+    };
+    myPackingList: {
+      _id: string; // 혼자 패킹리스트 id
+      category: {
+        // 카테고리
+        _id: string; // 카테고리 id
+        name: string; // 카테고리 이름
+        pack: {
+          // 짐
+          _id: string; // 짐 id
+          name: string; // 짐 이름
+          isChecked: boolean; // 짐 체크 여부
+          packer: null;
+        }[];
+      }[];
+    };
+  };
+}

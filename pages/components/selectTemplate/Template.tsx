@@ -5,7 +5,7 @@ import TemplateList from './TemplateList';
 import TemplateItem from './TemplateItem';
 
 interface Template {
-  id: string;
+  _id: string;
   title: string;
 }
 
@@ -15,8 +15,9 @@ interface TemplateProps {
   myTemplate: Template[];
   activate: (isSelected: string) => void;
   changeTemplateImage: (templateId: string) => void;
-  changeUserOwnTemplateImage: () => void;
+  changeUserOwnTemplateImage: (templateId: string) => void;
   checkIsTemplate: (isTemplate: boolean) => void;
+  setTemplateId: (templateId: string) => void;
 }
 
 function Template(props: TemplateProps) {
@@ -28,6 +29,7 @@ function Template(props: TemplateProps) {
     changeTemplateImage,
     changeUserOwnTemplateImage,
     checkIsTemplate,
+    setTemplateId,
   } = props;
   const [isSelected, setIsSelected] = useState('');
 
@@ -38,6 +40,12 @@ function Template(props: TemplateProps) {
       setIsSelected(id);
     }
   };
+
+  const handleTemplateItem = (template: Template) => {
+    onClickTemplateItem(template._id);
+    setTemplateId(template._id);
+  };
+
   useEffect(() => {
     activate(isSelected);
   }, [isSelected]);
@@ -53,12 +61,14 @@ function Template(props: TemplateProps) {
             <>
               {basicTemplate.map((template) => (
                 <TemplateItem
-                  key={template.id}
+                  key={template._id}
                   template={template}
                   isSelected={isSelected}
-                  onClick={() => onClickTemplateItem(template.id)}
+                  onClick={() => handleTemplateItem(template)}
                   changeTemplateImage={changeTemplateImage}
                   checkIsTemplate={checkIsTemplate}
+                  basicTemplate={basicTemplate}
+                  myTemplate={myTemplate}
                 />
               ))}
             </>
@@ -75,16 +85,18 @@ function Template(props: TemplateProps) {
               {!myTemplate.length && (
                 <TemplateItem
                   isSelected="null"
-                  template={{ id: '', title: '아직 저장된 템플릿이 없어요' }}
+                  template={{ _id: '', title: '아직 저장된 템플릿이 없어요' }}
                 />
               )}
               {myTemplate.map((template) => (
                 <TemplateItem
-                  key={template.id}
+                  key={template._id}
                   template={template}
                   isSelected={isSelected}
-                  onClick={() => onClickTemplateItem(template.id)}
-                  changeUserOwnTemplateImage={changeUserOwnTemplateImage}
+                  onClick={() => handleTemplateItem(template)}
+                  changeUserOwnTemplateImage={() => {
+                    changeUserOwnTemplateImage(template._id);
+                  }}
                   checkIsTemplate={checkIsTemplate}
                 />
               ))}

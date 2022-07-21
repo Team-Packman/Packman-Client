@@ -96,8 +96,8 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   width: 100%;
+  height: 100%;
   gap: 0.8rem;
   background-color: #fff;
   overflow: hidden;

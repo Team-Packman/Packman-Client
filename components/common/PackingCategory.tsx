@@ -12,12 +12,12 @@ export interface UpdateCategoryPayload {
   name: string;
 }
 interface PackingCategoryProps {
-  categoryId: string;
-  listId: string;
   name: string;
-  updateCategory: (payload: UpdateCategoryPayload) => void;
+  listId?: string;
+  categoryId?: string;
+  updateCategory?: (payload: UpdateCategoryPayload) => void;
   modalHandler?: () => void;
-  isEditing: boolean;
+  isEditing?: boolean;
   example?: boolean;
 }
 
@@ -27,8 +27,8 @@ function PackingCategory(props: PackingCategoryProps) {
   const {
     example,
     name: nameProps,
-    categoryId,
-    listId,
+    categoryId = '',
+    listId = '',
     updateCategory,
     modalHandler,
     isEditing,
@@ -43,7 +43,9 @@ function PackingCategory(props: PackingCategoryProps) {
       categoryId,
       listId,
     };
-    updateCategory(payload);
+
+    name === '' && setName(nameProps);
+    updateCategory && updateCategory(payload);
   };
 
   useEffect(() => {
@@ -71,6 +73,7 @@ function PackingCategory(props: PackingCategoryProps) {
           suppressContentEditableWarning
           contentEditable={true}
           ref={ref}
+          defaultValue={name}
           onInput={handleChange}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
         >

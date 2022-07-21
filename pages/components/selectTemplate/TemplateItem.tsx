@@ -1,10 +1,10 @@
 import { useQueryClient } from 'react-query';
 import styled, { css } from 'styled-components';
-import { GetTemplateListOutput } from '../../../service/ect';
+import { GetAloneTemplateListOutput } from '../../../service/ect/index';
 import { packmanColors } from '../../../styles/color';
 
 interface Template {
-  id: string;
+  _id: string;
   title: string;
 }
 interface TemplateItemProps {
@@ -14,6 +14,8 @@ interface TemplateItemProps {
   changeTemplateImage?: (templateId: string) => void;
   changeUserOwnTemplateImage?: () => void;
   checkIsTemplate?: (isTemplate: boolean) => void;
+  basicTemplate?: Template[];
+  myTemplate?: Template[];
 }
 
 function TemplateItem(props: TemplateItemProps) {
@@ -24,21 +26,19 @@ function TemplateItem(props: TemplateItemProps) {
     changeTemplateImage,
     changeUserOwnTemplateImage,
     checkIsTemplate,
+    basicTemplate,
+    myTemplate,
   } = props;
-  const { id, title } = template;
-  const queryClient = useQueryClient();
-  const { data } = queryClient.getQueryData('templateList') as GetTemplateListOutput;
-
-  if (!data) return null;
+  const { _id, title } = template;
 
   const onClickTemplateItem = (id: string) => {
-    data.basicTemplate.forEach((template) => {
-      if (id === template.id) {
+    basicTemplate?.forEach((template) => {
+      if (id === template._id) {
         checkIsTemplate && checkIsTemplate(true);
       }
     });
-    data.myTemplate.forEach((template) => {
-      if (id === template.id) {
+    myTemplate?.forEach((template) => {
+      if (id === template._id) {
         checkIsTemplate && checkIsTemplate(false);
       }
     });
@@ -50,9 +50,9 @@ function TemplateItem(props: TemplateItemProps) {
 
   return (
     <StyledRoot
-      isSelected={isSelected === id}
-      isListEmpty={id === ''}
-      onClick={() => onClickTemplateItem(id)}
+      isSelected={isSelected === _id}
+      isListEmpty={_id === ''}
+      onClick={() => onClickTemplateItem(_id)}
     >
       {title}
     </StyledRoot>

@@ -1,28 +1,62 @@
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import useGlobalState from '../utils/hooks/useGlobalState';
 import { packmanColors } from '../styles/color';
 import loginLogo from '/public/assets/svg/loginLogo.svg';
 import KakaoLogin from '/public/assets/png/kakaoLogin.png';
-import { calcMs } from '../utils/Draw';
+import useAPI from '../utils/hooks/useAPI';
+import { useMutation } from 'react-query';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+
 declare global {
-  interface window {
-    google: any;
-    Kakao: any;
+  interface Window {
+    google?: any;
+    Kakao?: any;
   }
 }
 
 function Login() {
-  const ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const [google, setGoogle] = useState();
-  const [token, setToken] = useGlobalState<string>('token');
+  const router = useRouter();
+  const [auth, setAuth] = useGlobalState('auth', {
+    email: '',
+  });
+
+  const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
+  const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
 
   useEffect(() => {
-    if (window.google) {
-      setGoogle(window.google);
+    if (router.isReady) {
+      if (router.query.code) {
+        const url = encodeURI('http://localhost:3000/login');
+        (async () => {
+          const { data }: { data: { access_token: string } } = await axios.post(
+            `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${router.query.code}&redirect_uri=${url}`,
+            {},
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            },
+          );
+          kakaoLogin(
+            {
+              accessToken: data.access_token,
+            },
+            {
+              onSuccess: ({ data }) => {
+                setAuth((prev) => ({ ...prev, email: data.email }));
+                router.push('/profile');
+              },
+            },
+          );
+        })();
+      }
+
+      // router.query.code &&
     }
-  }, []);
+  }, [router.isReady]);
 
   useEffect(() => {
     if (window.Kakao) {
@@ -32,32 +66,9 @@ function Login() {
     }
   }, []);
 
-  useEffect(() => {
-    if (google) {
-      google.accounts.id.initialize({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-        callback: (res: { credential: string }) => setToken(res.credential),
-      });
-      google.accounts.id.renderButton(document.getElementById('GoogleDiv'), {
-        type: 'standard',
-        theme: 'outline',
-        size: 'large',
-        text: 'continue_with',
-        shape: 'pill',
-        width: '336',
-      });
-    }
-  }, [google]);
-
-  function loginWithKakao() {
-    window.Kakao.Auth.login({
-      success: function (authObj) {
-        setToken(JSON.stringify(authObj));
-        console.log('로그인 성공');
-      },
-      fail: function (err) {
-        alert(JSON.stringify(err));
-      },
+  async function loginWithKakao() {
+    window.Kakao.Auth.authorize({
+      redirectUri: 'http://localhost:3000/login',
     });
   }
 
@@ -69,9 +80,6 @@ function Login() {
       </LogoAndTitle>
       <ButtonsContainer>
         <LoginDescription>3초만에 시작하기</LoginDescription>
-        <LoginButton>
-          <div id="GoogleDiv"></div>
-        </LoginButton>
         <LoginButton id="custom-login-btn" onClick={loginWithKakao}>
           <Image src={KakaoLogin} alt="카카오 로그인 버튼" layout="fill" />
         </LoginButton>
@@ -113,13 +121,13 @@ const Title = styled.div`
   text-align: center;
   flex-direction: row-reverse;
   padding-right: 4.3rem;
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
 `;
 
 const ButtonsContainer = styled.div`
   width: 100%;
   position: absolute;
-  top: 65%;
+  top: 75%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,6 +139,10 @@ const LoginButton = styled.div`
   width: 336px;
   height: 45px;
   position: relative;
+
+  & > div {
+    /* position: absolute !important; */
+  }
 `;
 
 const LoginDescription = styled.div`
@@ -139,5 +151,5 @@ const LoginDescription = styled.div`
   line-height: 1.2rem;
   display: flex;
   align-items: center;
-  color: ${packmanColors.white};
+  color: ${packmanColors.pmWhite};
 `;
