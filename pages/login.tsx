@@ -32,7 +32,7 @@ function Login() {
         const url = encodeURI('http://localhost:3000/login');
         (async () => {
           const { data }: { data: { access_token: string } } = await axios.post(
-            `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=48837b47f76622ab00d9c91c30bac2ce&code=${router.query.code}&redirect_uri=${url}`,
+            `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${router.query.code}&redirect_uri=${url}`,
             {},
             {
               headers: {
@@ -61,7 +61,7 @@ function Login() {
   useEffect(() => {
     if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init('cd732e0c475cc6cfa0099036b9734c6e');
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
       }
     }
   }, []);

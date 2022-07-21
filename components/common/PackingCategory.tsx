@@ -43,6 +43,8 @@ function PackingCategory(props: PackingCategoryProps) {
       categoryId,
       listId,
     };
+
+    name === '' && setName(nameProps);
     updateCategory && updateCategory(payload);
   };
 
@@ -71,6 +73,7 @@ function PackingCategory(props: PackingCategoryProps) {
           suppressContentEditableWarning
           contentEditable={true}
           ref={ref}
+          defaultValue={name}
           onInput={handleChange}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
         >

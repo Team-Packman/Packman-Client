@@ -56,6 +56,7 @@ function TogetherLanding() {
     (api) => api.packingList.alone.addAlonePackingListCategory,
   );
   const addPackingListItem = useAPI((api) => api.packingList.together.addPackingListItem);
+  const addAlonePackingListItem = useAPI((api) => api.packingList.alone.addAlonePackingListItem);
   const updatePackingListCategory = useAPI(
     (api) => api.packingList.together.updatePackingListCategory,
   );
@@ -63,6 +64,9 @@ function TogetherLanding() {
     (api) => api.packingList.alone.updateAlonePackingListCategory,
   );
   const updatePackingListItem = useAPI((api) => api.packingList.together.updatePackingListItem);
+  const updateAlonePackingListItem = useAPI(
+    (api) => api.packingList.alone.updateAlonePackingListItem,
+  );
   const updatePackingListTitle = useAPI((api) => api.packingList.together.updatePackingListTitle);
   const updatePackingListDate = useAPI((api) => api.packingList.together.updatePackingListDate);
   const updatePackingListIsSaved = useAPI(
@@ -76,6 +80,9 @@ function TogetherLanding() {
     (api) => api.packingList.alone.deleteAlonePackingListCategory,
   );
   const deletePackingListItem = useAPI((api) => api.packingList.together.deletePackingListItem);
+  const deleteAlonePackingListItem = useAPI(
+    (api) => api.packingList.alone.deleteAlonePackingListItem,
+  );
   const { data: packingListData } = useQuery('getPackingListDeatil', () =>
     getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
   );
@@ -85,6 +92,7 @@ function TogetherLanding() {
     addAlonePackingListCategory,
   );
   const { mutate: addItem } = useMutation('addPackingListItem', addPackingListItem);
+  const { mutate: addAloneItem } = useMutation('addAlonePackingListItem', addAlonePackingListItem);
   const { mutate: patchCategory } = useMutation(
     'updatePackingListCategory',
     updatePackingListCategory,
@@ -94,6 +102,10 @@ function TogetherLanding() {
     updateAlonePackingListCategory,
   );
   const { mutate: patchItem } = useMutation('updatePackingListItem', updatePackingListItem);
+  const { mutate: patchAloneItem } = useMutation(
+    'updateAlonePackingListItem',
+    updateAlonePackingListItem,
+  );
   const { mutate: patchTitle } = useMutation('updatePackingListTitle', updatePackingListTitle);
   const { mutate: patchDate } = useMutation('updatePackingListDate', updatePackingListDate);
   const { mutate: patchIsSaved } = useMutation(
@@ -110,6 +122,10 @@ function TogetherLanding() {
     deleteAlonePackingListCategory,
   );
   const { mutate: deleteItem } = useMutation('deletePackingListItem', deletePackingListItem);
+  const { mutate: deleteAloneItem } = useMutation(
+    'deleteAlonePackingListItem',
+    deleteAlonePackingListItem,
+  );
   ////////////////////////////////////////////
 
   if (!packingListData) return null;
@@ -170,36 +186,31 @@ function TogetherLanding() {
           },
         );
       }
-    } else if (currentCreatingCategory) {
-      if (!(name.length === 0)) {
-        if (!activeMode) {
-          addCategory(
-            {
-              name,
-              listId,
+    } else if (currentCreatingCategory && name.length !== 0) {
+      if (!activeMode) {
+        addCategory(
+          {
+            name,
+            listId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
             },
-            {
-              onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
-              },
-            },
-          );
-        } else {
-          addAloneCategory(
-            {
-              name,
-              listId,
-            },
-            {
-              onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
-              },
-            },
-          );
-        }
+          },
+        );
       } else {
-        createdCategoryHandler();
-        return;
+        addAloneCategory(
+          {
+            name,
+            listId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
       }
     }
     setCurrentEditing('');
@@ -209,8 +220,23 @@ function TogetherLanding() {
     const { name, listId, packId, categoryId, isChecked } = payload;
 
     if (currentEditing) {
-      if (name !== '') {
+      if (!activeMode) {
         patchItem(
+          {
+            name,
+            listId,
+            isChecked,
+            _id: packId,
+            categoryId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
+      } else {
+        patchAloneItem(
           {
             name,
             listId,
@@ -227,10 +253,42 @@ function TogetherLanding() {
       }
     } else if (currentCreating) {
       if (name.length !== 0) {
-        addItem(
+        if (!activeMode) {
+          addItem(
+            {
+              name,
+              listId,
+              categoryId,
+            },
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        } else {
+          addAloneItem(
+            {
+              name,
+              listId,
+              categoryId,
+            },
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        }
+      }
+    } else {
+      if (!activeMode) {
+        patchItem(
           {
             name,
             listId,
+            isChecked,
+            _id: packId,
             categoryId,
           },
           {
@@ -240,24 +298,21 @@ function TogetherLanding() {
           },
         );
       } else {
-        createdItemHandler();
-      }
-    } else {
-      //Needs optimistic update
-      patchItem(
-        {
-          name,
-          listId,
-          isChecked,
-          _id: packId,
-          categoryId,
-        },
-        {
-          onSuccess: () => {
-            client.invalidateQueries('getPackingListDeatil');
+        patchAloneItem(
+          {
+            name,
+            listId,
+            isChecked,
+            _id: packId,
+            categoryId,
           },
-        },
-      );
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
+      }
     }
     setCurrentEditing('');
     createdItemHandler();
@@ -363,18 +418,34 @@ function TogetherLanding() {
         return;
       }
       case 'item': {
-        deleteItem(
-          {
-            listId: packingRole[activeMode]._id,
-            categoryId: currentFocus.categoryId,
-            packId: currentFocus.packId,
-          },
-          {
-            onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+        if (!activeMode) {
+          deleteItem(
+            {
+              listId: packingRole[activeMode]._id,
+              categoryId: currentFocus.categoryId,
+              packId: currentFocus.packId,
             },
-          },
-        );
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        } else {
+          deleteAloneItem(
+            {
+              listId: packingRole[activeMode]._id,
+              categoryId: currentFocus.categoryId,
+              packId: currentFocus.packId,
+            },
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        }
+
         return;
       }
     }
@@ -466,13 +537,12 @@ function TogetherLanding() {
                           isChecked={false}
                           isEditing={true}
                           updateItem={updateItem}
+                          mode={activeMode}
                         />
                       }
                     >
                       <PackingCategory
-                        //수정용
                         categoryId={categoryId}
-                        //생성용
                         listId={list._id}
                         name={name}
                         updateCategory={updateCategory}
@@ -560,7 +630,7 @@ const StyledBg = styled.div`
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 45;
+  z-index: 9999;
 `;
 
 const StyledModal = styled.div`

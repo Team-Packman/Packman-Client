@@ -9,6 +9,12 @@ import {
   UpdateAlonePackingListCategoryOutput,
   DeleteAlonePackingListCategoryInput,
   DeleteAlonePackingListCategoryOutput,
+  AddAlonePackingListItemInput,
+  AddAlonePackingListItemOutput,
+  UpdateAlonePackingListItemOutput,
+  UpdateAlonePackingListItemInput,
+  DeleteAlonePackingListItemInput,
+  DeleteAlonePackingListItemOutput,
 } from '../../../../service/packingList/alone';
 
 export const fetchAloneFolder = async (request: AxiosInstance): Promise<GetAloneFolderOutput> => {
@@ -45,5 +51,31 @@ export const fetchDeleteAlonePackingCategory = async (
   { listId, categoryId }: DeleteAlonePackingListCategoryInput,
 ): Promise<DeleteAlonePackingListCategoryOutput> => {
   const { data } = await request.delete(`/packingList/alone/category/${listId}/${categoryId}`);
+  return data;
+};
+
+export const fetchAddAlonePackingItem = async (
+  request: AxiosInstance,
+  payload: AddAlonePackingListItemInput,
+): Promise<AddAlonePackingListItemOutput> => {
+  const { data } = await request.post(`/packingList/alone/pack`, payload);
+  return data;
+};
+
+export const fetchUpdateAlonePackingItem = async (
+  request: AxiosInstance,
+  payload: UpdateAlonePackingListItemInput,
+): Promise<UpdateAlonePackingListItemOutput> => {
+  const { data } = await request.patch(`/packingList/alone/pack`, payload);
+  return data;
+};
+
+export const fetchDeleteAlonePackingItem = async (
+  request: AxiosInstance,
+  { listId, categoryId, packId }: DeleteAlonePackingListItemInput,
+): Promise<DeleteAlonePackingListItemOutput> => {
+  const { data } = await request.delete(
+    `/packingList/alone/pack/${listId}/${categoryId}/${packId}`,
+  );
   return data;
 };

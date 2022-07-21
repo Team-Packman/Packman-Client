@@ -9,13 +9,22 @@ import {
   UpdateAlonePackingListCategoryOutput,
   DeleteAlonePackingListCategoryInput,
   DeleteAlonePackingListCategoryOutput,
+  AddAlonePackingListItemInput,
+  AddAlonePackingListItemOutput,
+  UpdateAlonePackingListItemInput,
+  UpdateAlonePackingListItemOutput,
+  DeleteAlonePackingListItemInput,
+  DeleteAlonePackingListItemOutput,
 } from './index';
 import {
   fetchAddAlonePackingCategory,
   fetchAddAlonePackingFolder,
+  fetchAddAlonePackingItem,
   fetchAloneFolder,
   fetchDeleteAlonePackingCategory,
+  fetchDeleteAlonePackingItem,
   fetchUpdateAlonePackingCategory,
+  fetchUpdateAlonePackingItem,
 } from '../../../utils/axios/packingList/alone';
 import withAuth from '../../../utils/axios/withAuth';
 
@@ -34,6 +43,15 @@ export interface AloneAPI {
     deleteAlonePackingListCategory: (
       payload: DeleteAlonePackingListCategoryInput,
     ) => Promise<DeleteAlonePackingListCategoryOutput>;
+    addAlonePackingListItem: (
+      payload: AddAlonePackingListItemInput,
+    ) => Promise<AddAlonePackingListItemOutput>;
+    updateAlonePackingListItem: (
+      payload: UpdateAlonePackingListItemInput,
+    ) => Promise<UpdateAlonePackingListItemOutput>;
+    deleteAlonePackingListItem: (
+      payload: DeleteAlonePackingListItemInput,
+    ) => Promise<DeleteAlonePackingListItemOutput>;
   };
 }
 
@@ -49,6 +67,12 @@ export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
         fetchUpdateAlonePackingCategory(withAuth(request), payload),
       deleteAlonePackingListCategory: (payload: DeleteAlonePackingListCategoryInput) =>
         fetchDeleteAlonePackingCategory(withAuth(request), payload),
+      addAlonePackingListItem: (payload: AddAlonePackingListItemInput) =>
+        fetchAddAlonePackingItem(withAuth(request), payload),
+      updateAlonePackingListItem: (payload: UpdateAlonePackingListItemInput) =>
+        fetchUpdateAlonePackingItem(withAuth(request), payload),
+      deleteAlonePackingListItem: (payload: DeleteAlonePackingListItemInput) =>
+        fetchDeleteAlonePackingItem(withAuth(request), payload),
     },
   };
 };
