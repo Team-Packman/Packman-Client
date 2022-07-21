@@ -52,9 +52,15 @@ function TogetherLanding() {
   /////////////////// api /////////////////////
   const getPackingListDeatil = useAPI((api) => api.packingList.together.getPackingListDeatil);
   const addPackingListCategory = useAPI((api) => api.packingList.together.addPackingListCategory);
+  const addAlonePackingListCategory = useAPI(
+    (api) => api.packingList.alone.addAlonePackingListCategory,
+  );
   const addPackingListItem = useAPI((api) => api.packingList.together.addPackingListItem);
   const updatePackingListCategory = useAPI(
     (api) => api.packingList.together.updatePackingListCategory,
+  );
+  const updateAlonePackingListCategory = useAPI(
+    (api) => api.packingList.alone.updateAlonePackingListCategory,
   );
   const updatePackingListItem = useAPI((api) => api.packingList.together.updatePackingListItem);
   const updatePackingListTitle = useAPI((api) => api.packingList.together.updatePackingListTitle);
@@ -66,15 +72,26 @@ function TogetherLanding() {
   const deletePackingListCategory = useAPI(
     (api) => api.packingList.together.deletePackingListCategory,
   );
+  const deleteAlonePackingListCategory = useAPI(
+    (api) => api.packingList.alone.deleteAlonePackingListCategory,
+  );
   const deletePackingListItem = useAPI((api) => api.packingList.together.deletePackingListItem);
   const { data: packingListData } = useQuery('getPackingListDeatil', () =>
     getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
   );
   const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory);
+  const { mutate: addAloneCategory } = useMutation(
+    'addAlonePackingListCategory',
+    addAlonePackingListCategory,
+  );
   const { mutate: addItem } = useMutation('addPackingListItem', addPackingListItem);
   const { mutate: patchCategory } = useMutation(
     'updatePackingListCategory',
     updatePackingListCategory,
+  );
+  const { mutate: patchAloneCategory } = useMutation(
+    'updateAlonePackingListCategory',
+    updateAlonePackingListCategory,
   );
   const { mutate: patchItem } = useMutation('updatePackingListItem', updatePackingListItem);
   const { mutate: patchTitle } = useMutation('updatePackingListTitle', updatePackingListTitle);
@@ -87,6 +104,10 @@ function TogetherLanding() {
   const { mutate: deleteCategory } = useMutation(
     'deletePackingListCategory',
     deletePackingListCategory,
+  );
+  const { mutate: deleteAloneCategory } = useMutation(
+    'deleteAlonePackingListCategory',
+    deleteAlonePackingListCategory,
   );
   const { mutate: deleteItem } = useMutation('deletePackingListItem', deletePackingListItem);
   ////////////////////////////////////////////
@@ -122,40 +143,68 @@ function TogetherLanding() {
   const updateCategory = (payload: UpdateCategoryPayload) => {
     const { name, categoryId, listId } = payload;
     if (currentEditing) {
-      patchCategory(
-        {
-          _id: categoryId,
-          name,
-          listId,
-        },
-        {
-          onSuccess: (data) => {
-            client.invalidateQueries('getPackingListDeatil');
-            console.log(data);
+      if (!activeMode) {
+        patchCategory(
+          {
+            _id: categoryId,
+            name,
+            listId,
           },
-        },
-      );
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
+      } else {
+        patchAloneCategory(
+          {
+            _id: categoryId,
+            name,
+            listId,
+          },
+          {
+            onSuccess: () => {
+              client.invalidateQueries('getPackingListDeatil');
+            },
+          },
+        );
+      }
     } else if (currentCreatingCategory) {
-      if (name.length === 0) {
+      if (!(name.length === 0)) {
+        if (!activeMode) {
+          addCategory(
+            {
+              name,
+              listId,
+            },
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        } else {
+          addAloneCategory(
+            {
+              name,
+              listId,
+            },
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        }
+      } else {
         createdCategoryHandler();
         return;
       }
-      addCategory(
-        {
-          name,
-          listId,
-        },
-        {
-          onSuccess: () => {
-            client.invalidateQueries('getPackingListDeatil');
-          },
-        },
-      );
     }
     setCurrentEditing('');
     createdCategoryHandler();
   };
-
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
 
@@ -285,17 +334,32 @@ function TogetherLanding() {
   const onDelete = () => {
     switch (currentFocus.type) {
       case 'category': {
-        deleteCategory(
-          {
-            listId: packingRole[activeMode]._id,
-            categoryId: currentFocus.categoryId,
-          },
-          {
-            onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+        if (!activeMode) {
+          deleteCategory(
+            {
+              listId: packingRole[activeMode]._id,
+              categoryId: currentFocus.categoryId,
             },
-          },
-        );
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        } else {
+          deleteAloneCategory(
+            {
+              listId: packingRole[activeMode]._id,
+              categoryId: currentFocus.categoryId,
+            },
+            {
+              onSuccess: () => {
+                client.invalidateQueries('getPackingListDeatil');
+              },
+            },
+          );
+        }
+
         return;
       }
       case 'item': {

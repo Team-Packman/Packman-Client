@@ -64,3 +64,76 @@ export interface AddAlonePackingListIntroOutput {
     isSaved: boolean;
   };
 }
+
+export interface AddAlonePackingListCategoryInput {
+  name: string; //혼자 패킹리스트에서 생성한 카테고리 이름
+  listId: string; //혼자 패킹리스트 id
+}
+
+export interface AddAlonePackingListCategoryOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
+
+export interface UpdateAlonePackingListCategoryInput {
+  _id: string; // 혼자 패킹리스트 카테고리 id
+  name: string; // 혼자 패킹리스트 카테고리 이름
+  listId: string; // 혼자 패킹리스크 id
+}
+
+export interface UpdateAlonePackingListCategoryOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
+
+export interface DeleteAlonePackingListCategoryInput {
+  listId: string; // 혼자 패킹리스크 id
+  categoryId: string;
+}
+
+export interface DeleteAlonePackingListCategoryOutput {
+  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; //  패킹리스트 id
+    category: {
+      _id: string; // 패킹리스트 카테고리 id
+      name: string;
+      pack: {
+        _id: string; // 패킹리스트 카테고리 속 짐 id
+        name: string;
+        isChecked: boolean;
+        packer: null;
+      }[];
+    }[];
+  };
+}
