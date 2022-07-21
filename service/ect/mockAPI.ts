@@ -1,11 +1,11 @@
 import { fetchTemplate, fetchTemplateList, fetchHelpTemplate } from './../../utils/axios/ect/mock';
-import { GetTemplateListOutput, GetTemplateOutput, GetHelpTemplateOutput } from './index';
+import { GetTemplateOutput, GetHelpTemplateOutput, GetTogetherTemplateListOutput } from './index';
 
 import { AxiosInstance } from 'axios';
 import withAuth from '../../utils/axios/withAuth';
 
 export interface EctAPI {
-  getTemplateList: () => Promise<GetTemplateListOutput>;
+  getTemplateList: () => Promise<GetTogetherTemplateListOutput>;
   getTemplate: () => Promise<GetTemplateOutput>;
   getHelpTemplate: () => Promise<GetHelpTemplateOutput>;
 }

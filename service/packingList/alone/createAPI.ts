@@ -15,12 +15,14 @@ import {
   UpdateAlonePackingListItemOutput,
   DeleteAlonePackingListItemInput,
   DeleteAlonePackingListItemOutput,
+  GetAlonePackingListDetailOutput,
 } from './index';
 import {
   fetchAddAlonePackingCategory,
   fetchAddAlonePackingFolder,
   fetchAddAlonePackingItem,
   fetchAloneFolder,
+  fetchAlonePackingListDetail,
   fetchDeleteAlonePackingCategory,
   fetchDeleteAlonePackingItem,
   fetchUpdateAlonePackingCategory,
@@ -31,6 +33,7 @@ import withAuth from '../../../utils/axios/withAuth';
 export interface AloneAPI {
   alone: {
     getAloneFolder: () => Promise<GetAloneFolderOutput>;
+    getAlonePackingListDetail: (listId: string) => Promise<GetAlonePackingListDetailOutput>;
     addAlonePackingListFolder: (
       payload: AddAlonePackingListIntroInput,
     ) => Promise<AddAlonePackingListIntroOutput>;
@@ -59,6 +62,8 @@ export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
   return {
     alone: {
       getAloneFolder: () => fetchAloneFolder(withAuth(request)),
+      getAlonePackingListDetail: (listId: string) =>
+        fetchAlonePackingListDetail(withAuth(request), listId),
       addAlonePackingListFolder: (payload: AddAlonePackingListIntroInput) =>
         fetchAddAlonePackingFolder(withAuth(request), payload),
       addAlonePackingListCategory: (payload: AddAlonePackingListCategoryInput) =>

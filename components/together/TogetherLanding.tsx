@@ -83,9 +83,14 @@ function TogetherLanding() {
   const deleteAlonePackingListItem = useAPI(
     (api) => api.packingList.alone.deleteAlonePackingListItem,
   );
-  const { data: packingListData } = useQuery('getPackingListDeatil', () =>
-    getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
+  const { data: packingListData } = useQuery(
+    'getPackingListDeatil',
+    () => getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
+    {
+      // refetchInterval: 3000,
+    },
   );
+  console.log(bottomModalOpen);
   const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory);
   const { mutate: addAloneCategory } = useMutation(
     'addAlonePackingListCategory',
@@ -215,6 +220,9 @@ function TogetherLanding() {
     }
     setCurrentEditing('');
     createdCategoryHandler();
+    console.log('hdsfdsfsdfsds');
+
+    bottomModalCloseHandler();
   };
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
@@ -316,6 +324,7 @@ function TogetherLanding() {
     }
     setCurrentEditing('');
     createdItemHandler();
+    bottomModalCloseHandler();
   };
   const updatePacker = (payload: PackerInfoPayload) => {
     patchPacker(payload, {
@@ -547,7 +556,11 @@ function TogetherLanding() {
                         name={name}
                         updateCategory={updateCategory}
                         modalHandler={() =>
-                          bottomModalOpenHandler({ ...initialFocus, type: 'category', categoryId })
+                          bottomModalOpenHandler({
+                            ...initialFocus,
+                            type: 'category',
+                            categoryId,
+                          })
                         }
                         isEditing={currentEditing === categoryId}
                       />

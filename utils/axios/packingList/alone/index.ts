@@ -15,6 +15,7 @@ import {
   UpdateAlonePackingListItemInput,
   DeleteAlonePackingListItemInput,
   DeleteAlonePackingListItemOutput,
+  GetAlonePackingListDetailOutput,
 } from '../../../../service/packingList/alone';
 
 export const fetchAloneFolder = async (request: AxiosInstance): Promise<GetAloneFolderOutput> => {
@@ -77,5 +78,13 @@ export const fetchDeleteAlonePackingItem = async (
   const { data } = await request.delete(
     `/packingList/alone/pack/${listId}/${categoryId}/${packId}`,
   );
+  return data;
+};
+
+export const fetchAlonePackingListDetail = async (
+  request: AxiosInstance,
+  listId: string,
+): Promise<GetAlonePackingListDetailOutput> => {
+  const { data } = await request(`/packingList/alone/${listId}`);
   return data;
 };
