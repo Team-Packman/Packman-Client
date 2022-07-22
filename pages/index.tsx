@@ -9,9 +9,6 @@ import useCache from '../utils/hooks/useCache';
 const Home: NextPage = () => {
   const router = useRouter();
   const [user] = useCache('User');
-  const { setToken, number } = useSetToken();
-  console.log(number);
-  // console.log('index', user);
 
   router.push('/together/invited/3nG1Th');
   return (
