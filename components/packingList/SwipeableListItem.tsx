@@ -142,7 +142,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   transform: ${({ isDragged, isDeleting }) => {
     switch (isDeleting) {
       case false:
-        return isDragged ? 'translateX(-6.4rem)' : 'translateX(0)';
+        return isDragged ? 'translateX(-4.7rem)' : 'translateX(0)';
       default:
         return 'translateX(6.388rem)';
     }
@@ -203,7 +203,7 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
-  padding: 0 1.4rem;
+  padding: ${({ isDragged }) => isDragged && '0 1.4rem'};
 
   & > div {
     color: ${packmanColors.pmWhite};
