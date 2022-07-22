@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 import { User } from '../../type/globalState';
+import { FONT_STYLES } from '../../styles/font';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -193,18 +194,10 @@ const StyledInputWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const StyledText = styled.div<{ nickname: boolean }>`
-  opacity: ${({ nickname }) => nickname && '0'};
-  padding-top: 0.77rem;
-  color: ${packmanColors.pmDeepGrey};
-  font-weight: 400;
-  font-size: 1.3rem;
-`;
 const StyledInput = styled.input`
   width: 12rem;
   text-align: center;
-  font-weight: 600;
-  font-size: 1.6rem;
+  font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   color: ${packmanColors.pmBlack};
   border: none;
   border-bottom: 1px solid ${packmanColors.pmDeepGrey};
@@ -218,6 +211,13 @@ const StyledInput = styled.input`
     color: #dddddd;
   }
 `;
+const StyledText = styled.div<{ nickname: boolean }>`
+  opacity: ${({ nickname }) => nickname && '0'};
+  padding-top: 0.77rem;
+  color: ${packmanColors.pmDeepGrey};
+  font-style: ${FONT_STYLES.BODY1_REGULAR};
+`;
+
 const StyledSelectProfileWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -246,8 +246,7 @@ const StyledButton = styled.button<{ isActivate: boolean }>`
   border: none;
   border-radius: 0.8rem;
   padding: 1.2rem 6.4rem;
-  font-weight: 600;
-  font-size: 1.4rem;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
   color: ${packmanColors.pmWhite};
   background-color: ${({ isActivate }) =>
     isActivate ? packmanColors.pmPink : packmanColors.pmGrey};

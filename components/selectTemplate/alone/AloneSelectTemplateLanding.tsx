@@ -17,6 +17,7 @@ import random1 from '/public/assets/png/random1.png';
 import random2 from '/public/assets/png/random2.png';
 import random3 from '/public/assets/png/random3.png';
 import random4 from '/public/assets/png/random4.png';
+import { FONT_STYLES } from '../../../styles/font';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 const randomImageList = [random1, random2, random3, random4];
@@ -32,7 +33,6 @@ function AloneSelectTemplateLanding() {
   const [templateId, setTemplateId] = useState('');
 
   if (!data) return null;
-  console.log(data);
   if (!router.query) return null;
 
   const { basicTemplate, myTemplate } = data.data;
@@ -163,8 +163,7 @@ const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>
   width: 16.3rem;
   height: 4rem;
   border-radius: 0.8rem;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
 
   ${({ isTemplate }) =>
     isTemplate

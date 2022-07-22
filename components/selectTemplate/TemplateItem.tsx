@@ -2,6 +2,7 @@ import { useQueryClient } from 'react-query';
 import styled, { css } from 'styled-components';
 import { GetAloneTemplateListOutput } from '../../service/ect/index';
 import { packmanColors } from '../../styles/color';
+import { FONT_STYLES } from '../../styles/font';
 
 interface Template {
   _id: string;
@@ -68,7 +69,7 @@ const StyledRoot = styled.div<{ isListEmpty: boolean; isSelected: boolean }>`
   height: 3.4rem;
   padding: 0.7rem 1.1rem;
   border-radius: 0.8rem;
-  font-size: 1.5rem;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
 
   ${({ isSelected }) =>
     isSelected
