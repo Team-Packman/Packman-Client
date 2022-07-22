@@ -4,6 +4,7 @@ import iCheckPink from '/public/assets/svg/iCheckPink.svg';
 import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
+import { FONT_STYLES } from '../../styles/font';
 
 interface PackingList {
   _id: string;
@@ -141,7 +142,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   transform: ${({ isDragged, isDeleting }) => {
     switch (isDeleting) {
       case false:
-        return isDragged ? 'translateX(-6.4rem)' : 'translateX(0)';
+        return isDragged ? 'translateX(-4.7rem)' : 'translateX(0)';
       default:
         return 'translateX(6.388rem)';
     }
@@ -156,13 +157,11 @@ const StyledItemInfo = styled.div`
   gap: 0.6rem;
 
   & > p:first-child {
-    font-size: 1.4rem;
+    font-style: ${FONT_STYLES.BODY1_REGULAR};
     color: ${packmanColors.pmBlueGrey};
-    font-weight: 300;
   }
   & > p:nth-child(2) {
-    font-weight: 600;
-    font-size: 1.8rem;
+    font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   }
 `;
 const StyledPackInfo = styled.div`
@@ -177,18 +176,15 @@ const StyledPackInfo = styled.div`
     justify-content: center;
     width: 8.3rem;
     height: 2.4rem;
-    background-color: #fff;
     color: ${packmanColors.pmBlack};
-    font-size: 1.3rem;
-    font-weight: 400;
+    font-style: ${FONT_STYLES.BODY1_REGULAR};
     border: 0.1rem solid ${packmanColors.pmPink};
     border-radius: 1.2rem;
     text-align: center;
   }
 `;
 const StyledPackRemainText = styled.p`
-  font-weight: 400;
-  font-size: 1.3rem;
+  font-style: ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmBlack};
   & > span {
     color: ${packmanColors.pmPink};
@@ -207,7 +203,7 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
-  padding: 0 1.4rem;
+  padding: ${({ isDragged }) => isDragged && '0 1.4rem'};
 
   & > div {
     color: ${packmanColors.pmWhite};

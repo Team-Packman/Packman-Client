@@ -1,5 +1,6 @@
 import SelectProfileSection from './SelectProfileSection';
 import styled from 'styled-components';
+import { FONT_STYLES } from '../../styles/font';
 
 interface CreateProfileProps {
   comment: React.ReactNode;
@@ -24,14 +25,12 @@ const StyledCommentWrapper = styled.h1`
   flex-direction: column;
   align-items: flex-start;
   & > div > h1 {
-    line-height: 2.9rem;
-    font-weight: 300;
-    font-size: 2.4rem;
     color: #000;
     word-break: break-all;
     word-wrap: break-word;
+    font-style: ${FONT_STYLES.DISPLAY1_LIGHT};
   }
   & b {
-    font-weight: 600;
+    font-style: ${FONT_STYLES.DISPLAY2_SEMIBOLD};
   }
 `;

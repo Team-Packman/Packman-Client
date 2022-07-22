@@ -2,6 +2,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import pmLogo from '/public/assets/svg/pmLogo.svg';
 import { packmanColors } from '../../styles/color';
+import { FONT_STYLES } from '../../styles/font';
 
 function Footer() {
   return (
@@ -37,14 +38,13 @@ const StyledInfo = styled.div`
     display: flex;
     gap: 1.718rem;
     & > p {
-      font-size: 1.2rem;
       color: ${packmanColors.pmDarkGrey};
     }
     & > p:first-child {
-      font-weight: 500;
+      font-style: ${FONT_STYLES.CAPTION2_SEMIBOLD};
     }
     & > p:nth-child(2) {
-      font-weight: 300;
+      font-style: ${FONT_STYLES.CAPTION1_REGULAR};
     }
   }
 `;

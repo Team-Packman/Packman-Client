@@ -3,9 +3,9 @@ import Image, { StaticImageData } from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { useState } from 'react';
 import Modal from '../common/Modal';
-import useAPI from '../../utils/hooks/useAPI';
 import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
+import { FONT_STYLES } from '../../styles/font';
 
 interface ProfileData {
   _id: string;
@@ -113,7 +113,7 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 74.276rem;
   overflow-y: scroll;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -122,8 +122,6 @@ const StyledRoot = styled.div`
 
   & > p {
     color: ${packmanColors.pmDeepGrey};
-    font-weight: 300;
-    font-size: 1.2rem;
   }
 `;
 
@@ -141,16 +139,14 @@ const StyledSettingWrapper = styled.main`
     top: -3.5rem;
     right: 0.5rem;
     color: ${packmanColors.pmDarkGrey};
-    font-weight: 600;
-    font-size: 1.4rem;
+    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
   }
   & > p:nth-child(2) {
     position: absolute;
     top: 0.5rem;
     right: 1.5rem;
     color: ${packmanColors.pmDeepGrey};
-    font-weight: 600;
-    font-size: 1.2rem;
+    font-style: ${FONT_STYLES.CAPTION2_SEMIBOLD};
   }
 `;
 const StyledProfile = styled.div`
@@ -170,12 +166,10 @@ const StyledProfile = styled.div`
     gap: 2.6rem;
     color: ${packmanColors.pmBlack};
     & > h1 {
-      font-weight: 600;
-      font-size: 1.8rem;
+      font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
     }
     & > p {
-      font-weight: 400;
-      font-size: 1.3rem;
+      font-style: ${FONT_STYLES.BODY1_REGULAR};
     }
   }
 `;
@@ -184,9 +178,7 @@ const StyledToggleWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   & > p {
-    width: fit-content;
-    font-size: 1.6rem;
-    font-weight: 400;
+    font-style: ${FONT_STYLES.BODY1_REGULAR};
   }
 `;
 const StyledToggle = styled.div<{ isToggled: boolean }>`
@@ -222,8 +214,7 @@ const StyledEtc = styled.div<{ gap: number; paddingTop: number; borderBottom: bo
 
   & > h1 {
     color: ${packmanColors.pmBlack};
-    font-weight: 600;
-    font-size: 1.8rem;
+    font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   }
 `;
 const StyledEtcWrapper = styled.div`
@@ -232,8 +223,8 @@ const StyledEtcWrapper = styled.div`
   align-content: space-between;
   gap: 0.8rem;
   & > p {
-    font-size: 1.6rem;
-    font-weight: 400;
+    font-style: ${FONT_STYLES.BODY3_REGULAR};
+    letter-spacing: 4%;
   }
 `;
 const StyledFooter = styled.div`
@@ -252,6 +243,5 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  font-weight: 600;
-  font-size: 1.5rem;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
 `;

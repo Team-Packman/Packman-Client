@@ -26,7 +26,7 @@ export const fetchUpdateFolderName = async (
   request: AxiosInstance,
   payload: UpdateFolderNameInput,
 ): Promise<UpdateFolderNameOutput> => {
-  const { data } = await request.patch(`/packList/recentCreatedList`, payload);
+  const { data } = await request.patch(`/folder`, payload);
   return data;
 };
 
@@ -34,7 +34,7 @@ export const fetchDeleteFolder = async (
   request: AxiosInstance,
   folderId: string,
 ): Promise<DeleteFolderOutput> => {
-  const { data } = await request.delete(`/folder/:${folderId}`);
+  const { data } = await request.delete(`/folder/${folderId}`);
   return data;
 };
 

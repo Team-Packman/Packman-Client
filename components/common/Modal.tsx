@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import iClose from '/public/assets/svg/iClose.svg';
 import Image from 'next/image';
+import { FONT_STYLES } from '../../styles/font';
 
 interface ModalProps {
   title: string;
@@ -68,8 +69,7 @@ const StyledModalInfo = styled.div`
   flex-direction: column;
   gap: 2.95rem;
   & > p {
-    font-weight: 400;
-    font-size: 1.6rem;
+    font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     color: #282828;
   }
 `;

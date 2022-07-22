@@ -7,7 +7,7 @@ import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../utils/hooks/useAPI';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
@@ -16,6 +16,7 @@ import {
   DeleteAloneInventoryInput,
   GetAloneInventoryOutput,
 } from '../../../service/inventory/alone';
+import { FONT_STYLES } from '../../../styles/font';
 interface DeleteAloneInventoryData {
   folderId: string;
   listId: string;
@@ -29,20 +30,12 @@ function AlonePackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [data, setData] = useState<GetAloneInventoryOutput | null>(null);
+  const query = router.query.id as string;
 
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-
-  useEffect(() => {
-    if (router.isReady)
-      (async () => {
-        const query = router.query.id as string;
-        const data = await queryClient.fetchQuery('getAloneInventory', () =>
-          getAloneInventory(query),
-        );
-        setData(data);
-      })();
-  }, [router.isReady, router.query.id]);
+  const { data } = useQuery('getAloneInventory', () => getAloneInventory(query), {
+    enabled: !!query,
+  });
 
   const deleteAloneInventory = useAPI(
     (api) => (params: DeleteAloneInventoryInput) =>
@@ -145,10 +138,10 @@ function AlonePackingListLanding() {
               alt="상세보기"
               width={24}
               height={24}
+              toggle={toggle ? 'true' : 'false'}
               onClick={() => {
                 setToggle(true);
               }}
-              toggle={toggle}
             />
             {toggle && (
               <DropBox
@@ -250,8 +243,7 @@ const StyledFolderInfo = styled.div`
   margin-top: 0.842rem;
 
   & > h1 {
-    font-size: 2rem;
-    font-weight: 600;
+    font-style: ${FONT_STYLES.HEADLINE2_SEMIBOLD};
   }
   & > div {
     display: flex;
@@ -259,9 +251,9 @@ const StyledFolderInfo = styled.div`
     align-items: center;
   }
 `;
-const StyledToggleImage = styled(Image)<{ toggle: boolean }>`
+const StyledToggleImage = styled(Image)<{ toggle: string }>`
   transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${({ toggle }) => (toggle === 'true' ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;
@@ -277,21 +269,17 @@ const StyledEmpty = styled.div`
   width: 20rem;
   text-align: center;
   color: ${packmanColors.pmGrey};
-  font-weight: 500;
-  font-size: 1.8rem;
+  font-style: ${FONT_STYLES.HEADLINE1_MEDIUM};
 `;
 const StyledCaptionWrapper = styled.div`
   position: relative;
   display: flex;
   width: 100%;
   height: 8.4rem;
-  font-size: 1.2rem;
-  font-weight: 300;
 
   & > span {
     position: absolute;
-    font-weight: 600;
-    font-size: 1.4rem;
+    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
     left: 2rem;
     bottom: 1rem;
     color: ${packmanColors.pmDarkGrey};
@@ -302,10 +290,10 @@ const StyledCaptionText = styled.p`
   justify-content: start;
   padding: 1.8rem 0 0 2.4rem;
   margin: 0;
-  font-size: 1.4rem;
+  font-style: ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmDeepGrey};
   & > span {
-    font-weight: 600;
+    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmPink};
   }
 `;
@@ -315,8 +303,7 @@ const StyledCaptionButtonWrapper = styled.div`
   right: 2rem;
   bottom: 0.9rem;
   & > p {
-    font-weight: 600;
-    font-size: 1.4rem;
+    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmDarkGrey};
   }
 `;
@@ -333,6 +320,5 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  font-weight: 600;
-  font-size: 1.5rem;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
 `;
