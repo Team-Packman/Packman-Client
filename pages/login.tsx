@@ -82,7 +82,7 @@ function Login() {
   async function loginWithKakao() {
     if (window.Kakao.isInitialized()) {
       window.Kakao.Auth.authorize({
-        redirectUri: 'http://localhost:3000/login',
+        redirectUri: 'https://packman.kr/login',
       });
     }
   }
