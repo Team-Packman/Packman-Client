@@ -224,6 +224,7 @@ const StyledEtcWrapper = styled.div`
   gap: 0.8rem;
   & > p {
     font-style: ${FONT_STYLES.BODY3_REGULAR};
+    letter-spacing: 4%;
   }
 `;
 const StyledFooter = styled.div`
