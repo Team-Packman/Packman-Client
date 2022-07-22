@@ -33,7 +33,7 @@ function Login() {
   useEffect(() => {
     if (router.isReady) {
       if (router.query.code) {
-        const url = encodeURI('https://packman.kr/login');
+        const url = encodeURI('http://localhost:3000/login');
         (async () => {
           const { data }: { data: { access_token: string } } = await axios.post(
             `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${router.query.code}&redirect_uri=${url}`,
@@ -44,27 +44,28 @@ function Login() {
               },
             },
           );
-          kakaoLogin(
-            {
-              accessToken: data.access_token,
-            },
-            {
-              onSuccess: ({ data }) => {
-                localStorage.setItem('User', JSON.stringify(data));
-                setToken(data.accessToken);
-                if (data.isAlreadyUser) {
-                  if (from?.url) {
-                    router.replace(from.url);
-                  } else {
-                    router.push('/folder');
-                  }
-                  setFrom({ url: '' });
-                } else if (user && !user.isAlreadyUser) {
-                  router.push('/profile');
-                }
-              },
-            },
-          );
+          router.push('/folder');
+
+          // kakaoLogin(
+          //   {
+          //     accessToken: data.access_token,
+          //   },
+          //   {
+          //     onSuccess: ({ data }) => {
+          //       localStorage.setItem('User', JSON.stringify(data));
+          //       if (data.isAlreadyUser) {
+          //         if (from?.url) {
+          //           router.replace(from.url);
+          //         } else {
+          //           router.push('/folder');
+          //         }
+          //         setFrom({ url: '' });
+          //       } else if (user && !user.isAlreadyUser) {
+          //         router.push('/profile');
+          //       }
+          //     },
+          //   },
+          // );
         })();
       }
     }
@@ -82,7 +83,7 @@ function Login() {
   async function loginWithKakao() {
     if (window.Kakao.isInitialized()) {
       window.Kakao.Auth.authorize({
-        redirectUri: 'https://packman.kr/login',
+        redirectUri: 'http://localhost:3000/login',
       });
     }
   }
@@ -154,10 +155,6 @@ const LoginButton = styled.div`
   width: 336px;
   height: 45px;
   position: relative;
-
-  & > div {
-    /* position: absolute !important; */
-  }
 `;
 
 const LoginDescription = styled.div`

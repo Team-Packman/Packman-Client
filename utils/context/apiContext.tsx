@@ -72,7 +72,17 @@ export const AuthProvider = (props: AuthProviderProps) => {
   const { children, baseURL } = props;
   const { isAuthed, user } = useContext(APIContext);
   const Axios = createAxios(baseURL);
-  const [api, setApi] = useState<APIService>(createAPIService(Axios.axiosWithAuth));
+  const [api, setApi] = useState<APIService>(
+    createAPIService(
+      axios.create({
+        baseURL,
+        headers: {
+          Authorization:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJkNmFjYmRjMTBkYzFlMTZiMmE2MzZhIn0sImlhdCI6MTY1ODIzNjA5MywiZXhwIjoxNjU5MTAwMDkzfQ.NLWE8P6cz7Kodzo1lH6eSm3GFxSOeJ0GDKKwBEOseCk',
+        },
+      }),
+    ),
+  );
   const setToken = (token: string) => {
     console.log(token);
     setApi(
