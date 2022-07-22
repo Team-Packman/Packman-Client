@@ -26,12 +26,12 @@ interface DeleteTogetherInventoryData {
 function TogetherPackingListLanding() {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const query = router.query.id as string;
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const query = router.query.id as string;
 
   //패킹리스트 데이터 조회
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
@@ -142,10 +142,10 @@ function TogetherPackingListLanding() {
               alt="상세보기"
               width={24}
               height={24}
+              toggle={toggle ? 'true' : 'false'}
               onClick={() => {
                 setToggle(true);
               }}
-              isToggled={toggle}
             />
             {toggle && (
               <DropBox
@@ -255,9 +255,9 @@ const StyledFolderInfo = styled.div`
     align-items: center;
   }
 `;
-const StyledToggleImage = styled(Image)<{ isToggled: boolean }>`
+const StyledToggleImage = styled(Image)<{ toggle: string }>`
   transition: 0.2s ease-in-out;
-  transform: ${({ isToggled }) => (isToggled ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${({ toggle }) => (toggle === 'true' ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;

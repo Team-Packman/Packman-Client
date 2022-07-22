@@ -138,10 +138,10 @@ function AlonePackingListLanding() {
               alt="상세보기"
               width={24}
               height={24}
+              toggle={toggle ? 'true' : 'false'}
               onClick={() => {
                 setToggle(true);
               }}
-              toggle={toggle}
             />
             {toggle && (
               <DropBox
@@ -251,9 +251,9 @@ const StyledFolderInfo = styled.div`
     align-items: center;
   }
 `;
-const StyledToggleImage = styled(Image)<{ toggle: boolean }>`
+const StyledToggleImage = styled(Image)<{ toggle: string }>`
   transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${({ toggle }) => (toggle === 'true' ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;
