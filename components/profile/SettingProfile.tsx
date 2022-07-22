@@ -24,12 +24,10 @@ function SettingProfile(props: SettingProfileProps) {
   const { name, email, profileImageId } = profileData;
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  // const deleteUserInfo = useAPI((api) => api.user.deleteUserInfo);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
 
   const onClickLeftModalButton = async () => {
-    // await deleteUserInfo();
     setIsWithdrawn(true);
   };
 

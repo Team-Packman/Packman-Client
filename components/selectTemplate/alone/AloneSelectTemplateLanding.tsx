@@ -98,7 +98,7 @@ function AloneSelectTemplateLanding() {
           isTemplate={false}
           isActivated={true}
           onClick={() => {
-            router.push(`/list-intro?id=${templateId}`);
+            router.push(`/list-intro?id=''&categoryName=alone`);
           }}
         >
           건너뛰기
