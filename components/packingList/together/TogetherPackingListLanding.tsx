@@ -97,10 +97,10 @@ function TogetherPackingListLanding() {
         folderId: currentFolder._id,
         listId: deleteList.join(','),
       });
-      setDeleteList([]);
-      if (!togetherPackingList.length) {
+      if (deleteList.length === togetherPackingList.length) {
         setIsDeleting(false);
       }
+      setDeleteList([]);
     } else {
       deleteTogetherInventoryMutate({
         folderId: currentFolder._id,

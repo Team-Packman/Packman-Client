@@ -93,10 +93,10 @@ function AlonePackingListLanding() {
         folderId: currentFolder._id,
         listId: deleteList.join(','),
       });
-      setDeleteList([]);
-      if (!alonePackingList.length) {
+      if (deleteList.length === alonePackingList.length) {
         setIsDeleting(false);
       }
+      setDeleteList([]);
     } else {
       deleteAloneInventoryMutate({
         folderId: currentFolder._id,

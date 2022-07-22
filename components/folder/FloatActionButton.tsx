@@ -120,14 +120,6 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   // when user hover over first button
   max-height: 52px;
 
-  ${({ isAloned }) =>
-    isAloned === 'together' &&
-    css`
-      li {
-        border-radius: 0.8rem;
-      }
-    `}
-
   li:last-child {
     margin-bottom: ${({ pageName }) => pageName === 'folder' && '0.8rem'};
     border-radius: 0.8rem;
