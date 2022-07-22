@@ -15,11 +15,15 @@ export interface UserAPI {
   addUserProfile: (payload: AddUserProfileInput) => Promise<AddUserProfileOutput>;
 }
 
-export const createUserAPI = (request: AxiosInstance): UserAPI => {
+const createUserAPI = (request: AxiosInstance): UserAPI => {
+  const authReq = request;
+
   return {
-    getUserInfo: () => fetchUserInfo(withAuth(request)),
+    getUserInfo: () => fetchUserInfo(authReq),
     updateUserProfile: (payload: UpdateUserProfileInput) =>
-      fetchUpdateUserProfile(withAuth(request), payload),
+      fetchUpdateUserProfile(authReq, payload),
     addUserProfile: (payload: AddUserProfileInput) => fetchAddUserProfile(request, payload),
   };
 };
+
+export default createUserAPI;

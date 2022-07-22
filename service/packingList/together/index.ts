@@ -402,3 +402,13 @@ export interface AddTogetherPackingListIntroOutput {
     };
   };
 }
+
+export interface GetInvitedOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    _id: string; // 함께 패킹리스트 id
+    title: string; // 함께 패킹리스트 제목
+  };
+}

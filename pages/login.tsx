@@ -5,26 +5,30 @@ import useGlobalState from '../utils/hooks/useGlobalState';
 import { packmanColors } from '../styles/color';
 import loginLogo from '/public/assets/svg/loginLogo.svg';
 import KakaoLogin from '/public/assets/png/kakaoLogin.png';
-import useAPI from '../utils/hooks/useAPI';
+import useAPI, { useSetToken } from '../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { From, User } from '../type/globalState';
+import useCache from '../utils/hooks/useCache';
+import useGlobalSelector from '../utils/hooks/useGlobalSelector';
 
 declare global {
   interface Window {
-    google?: any;
     Kakao?: any;
   }
 }
 
 function Login() {
   const router = useRouter();
-  const [_, setAuth] = useGlobalState('Auth', {
-    email: '',
-  });
+  const [user, setUser] = useGlobalState<User>('User');
+  const [cache] = useCache<User>('User');
+  const [__, setFrom] = useGlobalSelector<From>('From');
+  const [from] = useCache<From>('From');
 
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
   const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
+  const setToken = useSetToken();
 
   useEffect(() => {
     if (router.isReady) {
@@ -46,17 +50,26 @@ function Login() {
             },
             {
               onSuccess: ({ data }) => {
-                setAuth((prev) => ({ ...prev, email: data.email }));
-                router.push('/profile');
+                localStorage.setItem('User', JSON.stringify(data));
+                setToken(data.accessToken);
+                if (data.isAlreadyUser) {
+                  if (from?.url) {
+                    router.replace(from.url);
+                  } else {
+                    router.push('/folder');
+                  }
+                  setFrom({ url: '' });
+                } else if (user && !user.isAlreadyUser) {
+                  router.push('/profile');
+                }
               },
             },
           );
         })();
       }
-
-      // router.query.code &&
     }
   }, [router.isReady]);
+  //
 
   useEffect(() => {
     if (window.Kakao) {
@@ -67,9 +80,11 @@ function Login() {
   }, []);
 
   async function loginWithKakao() {
-    window.Kakao.Auth.authorize({
-      redirectUri: 'http://localhost:3000/login',
-    });
+    if (window.Kakao.isInitialized()) {
+      window.Kakao.Auth.authorize({
+        redirectUri: 'http://localhost:3000/login',
+      });
+    }
   }
 
   return (

@@ -36,9 +36,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
   const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
-  const [auth] = useGlobalState<{ email: string }>('Auth');
-  const [_, setUser] = useGlobalState<User>('User');
-
+  const [user, setUser] = useGlobalState<User>('User');
+  console.log(user);
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
   const { mutate: addUserProfileMutate } = useMutation(
@@ -98,7 +97,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       setIndex(id);
     }
   };
-
+  console.log(user);
   return (
     <StyledRoot>
       <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
@@ -158,14 +157,14 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
             : () => {
                 addUserProfileMutate(
                   {
-                    email: auth.email,
+                    email: user.email,
                     name: nickname,
                     profileImageId: profile,
                   },
                   {
                     onSuccess: (data) => {
-                      router.push('/folder');
-                      setUser(data as unknown as User);
+                      setUser(data.data);
+                      router.push('/');
                     },
                   },
                 );

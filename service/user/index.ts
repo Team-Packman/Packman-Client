@@ -51,5 +51,6 @@ export interface AddUserProfileOutput {
     email: string; // 생성된 유저 email
     profileImageId: string; // 생성된 유저 이미지 id
     accessToken: string; // 팩맨에서 사용하는 accessToken
+    isAlreadyUser: boolean; // 이미 존재하는 유저 확인
   };
 }

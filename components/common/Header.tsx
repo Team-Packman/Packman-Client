@@ -9,6 +9,7 @@ import Logo from '/public/assets/svg/logo.svg';
 import Link from 'next/link';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 import { FONT_STYLES } from '../../styles/font';
+import { useRouter } from 'next/router';
 
 type Icon = 'profile' | 'member';
 
@@ -21,13 +22,15 @@ interface HeaderProps {
 
 function Header(props: HeaderProps) {
   const { back, title, icon } = props;
+
+  const router = useRouter();
   const [scroll] = useGlobalState<boolean>('scroll');
 
   return (
     <StyledRoot>
       <StyledContent scroll={scroll}>
         {back && (
-          <StyledBack>
+          <StyledBack onClick={() => router.back()}>
             <Image src={BackIC} layout="fill" alt="back_icon" />
           </StyledBack>
         )}
@@ -65,10 +68,11 @@ function Header(props: HeaderProps) {
 export default Header;
 
 const StyledRoot = styled.header`
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  z-index: 0;
 `;
 
 const StyledContent = styled.div<{

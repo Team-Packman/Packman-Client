@@ -1,4 +1,4 @@
-import { fetchTemplate, fetchTemplateList, fetchHelpTemplate } from './../../utils/axios/ect/mock';
+import { fetchTemplate, fetchTemplateList, fetchHelpTemplate } from '../../utils/axios/ect/mock';
 import { GetTemplateOutput, GetHelpTemplateOutput, GetTogetherTemplateListOutput } from './index';
 
 import { AxiosInstance } from 'axios';

@@ -3,38 +3,61 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import useGlobalState from '../../utils/hooks/useGlobalState';
+import { From } from '../../type/globalState';
 
-function ModalForInvited() {
+interface ModalForInvitedProps {
+  title: string;
+  id: string;
+  inviteCode: string;
+}
+
+function ModalForInvited(props: ModalForInvitedProps) {
+  const { id, title, inviteCode } = props;
+
+  const router = useRouter();
+  const [_, setFrom] = useGlobalState<From>('From');
+
+  const clickHandler = () => {
+    setFrom({ url: `/together/${id}?invite=${inviteCode}` });
+    router.push('/login');
+  };
   return (
-    <StyledRoot>
+    <>
+      <StyledBg />
       <StyledModal>
         <ButtonContainer>
           <Image src={ButtonX} alt="closeModal" width="24" height="24" />
         </ButtonContainer>
-        <ListName>크리스마스캐나다여행</ListName>
+        <ListName>{title}</ListName>
         <Description>패킹 멤버로 초대되었습니다.</Description>
         <Description>
           <Packman>팩맨</Packman>과 함께 패킹을 시작해보세요!
         </Description>
-        <SeeListButton>3초만에 로그인하고 리스트 보기</SeeListButton>
+        <SeeListButton onClick={clickHandler}>3초만에 로그인하고 리스트 보기</SeeListButton>
       </StyledModal>
-    </StyledRoot>
+    </>
   );
 }
 
 export default ModalForInvited;
 
-const StyledRoot = styled.div`
+const StyledBg = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.48);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  z-index: 9999;
 `;
 
 const StyledModal = styled.div`
+  position: fixed;
   width: calc(100% - 6rem);
   background-color: ${packmanColors.pmWhite};
   display: flex;
@@ -42,8 +65,10 @@ const StyledModal = styled.div`
   align-items: center;
   padding: 0.8rem 0 2.4rem 0;
   border-radius: 10px;
-  position: absolute;
-  top: 35vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
 `;
 
 const ButtonContainer = styled.div`

@@ -1,33 +1,55 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-function ModalForInvitation() {
+interface ModalForInvitationProps {
+  inviteCode: string;
+  modalHandler: () => void;
+}
+
+function ModalForInvitation(props: ModalForInvitationProps) {
+  const { inviteCode, modalHandler } = props;
+
+  const router = useRouter();
+  const [isCopied, setIsCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(`localhost:3000${router.asPath}=${inviteCode}`);
+    setIsCopied(true);
+  };
+
   return (
-    <StyledRoot>
+    <>
+      <StyledBg onClick={modalHandler} />
       <StyledModal>
         <ButtonContainer>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" />
+          <Image src={ButtonX} alt="closeModal" width="24" height="24" onClick={modalHandler} />
         </ButtonContainer>
         <Description>함께 패킹할 멤버를 초대해보세요!</Description>
-        <CopyLinkButton>멤버 초대 링크 복사하기</CopyLinkButton>
+        <CopyLinkButton onClick={copyToClipboard} isCopied={isCopied}>
+          멤버 초대 링크 복사하기
+        </CopyLinkButton>
       </StyledModal>
-    </StyledRoot>
+    </>
   );
 }
 
 export default ModalForInvitation;
 
-const StyledRoot = styled.div`
+const StyledBg = styled.div`
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.48);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  z-index: 9999;
+  left: 0;
+  top: 0;
 `;
 
 const StyledModal = styled.div`
@@ -37,9 +59,12 @@ const StyledModal = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0.8rem 0 2.4rem 0;
-  border-radius: 10px;
-  position: absolute;
-  top: 35vh;
+  border-radius: 1rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
 `;
 
 const ButtonContainer = styled.div`
@@ -60,7 +85,9 @@ const Description = styled.div`
   color: ${packmanColors.pmBlack};
 `;
 
-const CopyLinkButton = styled.div`
+const CopyLinkButton = styled.div<{
+  isCopied: boolean;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,6 +103,21 @@ const CopyLinkButton = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-
+  position: relative;
   margin-top: 4.2rem;
+
+  ${({ isCopied }) =>
+    isCopied &&
+    css`
+      &::after {
+        position: absolute;
+        content: '복사완료';
+        width: 12.5rem;
+        height: 1.7rem;
+        top: -2.5rem;
+        font-size: 1.4rem;
+        font-weight: 400;
+        color: ${packmanColors.deepGray};
+      }
+    `}
 `;

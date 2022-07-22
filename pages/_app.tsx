@@ -3,21 +3,24 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useState } from 'react';
-import { APIProvider } from '../utils/context/apiContext';
+import { APIProvider, AuthProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
-// import '../public/assets/fonts/font.css';
+import useCache from '../utils/hooks/useCache';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [show, setShow] = useState(false);
+  const [user] = useCache('User');
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: Infinity,
+            suspense: true,
           },
         },
       }),
@@ -31,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       persistor: localStoragePersistor,
       dehydrateOptions: {
         shouldDehydrateQuery: ({ queryKey }) => {
-          return queryKey === 'user' ? true : false;
+          return queryKey === 'User' || queryKey === 'From' ? true : false;
         },
       },
     });
@@ -42,9 +45,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     window.addEventListener('resize', () => setScreenSize());
     return () => window.removeEventListener('resize', setScreenSize);
   });
-  // if (!showing) {
-  //   return null;
-  // }
+
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
+  if (!show) return null;
+  // if (Component.name !== 'Login' && !user) return null;
 
   return (
     <>
@@ -56,8 +63,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps?.dehydratedState}>
-          <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-            <Component {...pageProps} />
+          <APIProvider>
+            <AuthProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
+              <GlobalStyle />
+              <Component {...pageProps} />
+            </AuthProvider>
           </APIProvider>
         </Hydrate>
       </QueryClientProvider>

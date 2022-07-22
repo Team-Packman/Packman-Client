@@ -1,7 +1,7 @@
 import {
   fetchPackingListIntro,
   fetchPackingListWithFolders,
-} from './../../../utils/axios/packingList/alone/mock';
+} from '../../../utils/axios/packingList/alone/mock';
 import {
   AddAlonePackingListIntroOutput,
   AddAlonePackingListIntroInput,

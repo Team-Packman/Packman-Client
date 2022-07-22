@@ -23,6 +23,7 @@ import {
   GetTogetherFolderOutput,
   AddTogetherPackingListIntroInput,
   AddTogetherPackingListIntroOutput,
+  GetInvitedOutput,
 } from './../../../../service/packingList/together/index';
 import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
 import { AxiosInstance } from 'axios';
@@ -138,5 +139,13 @@ export const fetchAddTogetherPackingFolder = async (
   payload: AddTogetherPackingListIntroInput,
 ): Promise<AddTogetherPackingListIntroOutput> => {
   const { data } = await request.post(`/packingList/together`, payload);
+  return data;
+};
+
+export const fetchInvited = async (
+  request: AxiosInstance,
+  inviteCode: string,
+): Promise<GetInvitedOutput> => {
+  const { data } = await request(`/packingList/invite/${inviteCode}`);
   return data;
 };
