@@ -353,9 +353,9 @@ ex) `postUserInformation( )`
 - 폴더 안 패킹 리스트 목록을 확인할 수 있는 화면입니다.
 - 해당 화면은 함께, 혼자에 따라 구분된 폴더에 알맞게 리스트가 소속되게 하며, 폴더 우측 초록색 토글을 통해 폴더간 이동을 가능하게 합니다.
 <div style="display:flex;">
-<img width="280" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458654-234ef057-97c4-45c7-8335-df0e39e52fbc.png">
-<img width="280" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458669-73d5cb81-a3c2-4a3f-82a8-96a8fc049762.png">
-<img width="280" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458688-2f44f86e-30c5-432b-ad61-38f68bea05ba.png">
+<img width="200" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458654-234ef057-97c4-45c7-8335-df0e39e52fbc.png">
+<img width="200" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458669-73d5cb81-a3c2-4a3f-82a8-96a8fc049762.png">
+<img width="200" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458688-2f44f86e-30c5-432b-ad61-38f68bea05ba.png">
 </div>
 
 
