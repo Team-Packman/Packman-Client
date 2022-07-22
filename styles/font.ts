@@ -67,9 +67,9 @@ const getLineHeight = (type: Font['type']) => {
 
 export const FONT = ({ size, weight, type }: Font) => css`
   font-family: 'Pretendard';
-  font-size: ${size}px;
+  font-size: ${size / 10}rem;
   font-weight: ${getFontWeight(weight)};
-  line-height: ${getLineHeight(type)}px;
+  line-height: ${getLineHeight(type) / 10}rem;
 `;
 
 export const FONT_STYLES = {
