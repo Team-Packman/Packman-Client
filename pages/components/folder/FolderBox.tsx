@@ -13,7 +13,7 @@ interface AddNewFolderType {
 
 function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   const {
-    id = '',
+    _id = '',
     title = '',
     listNum = 0,
     editableFolderId = '',
@@ -27,22 +27,24 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
     handleAddFolderKeyPress,
     handleCancleAddFolder,
   } = props;
-  console.log(isNew);
+
   const inputElement = useRef<HTMLInputElement>(null);
 
-  const [isInputDisable, setInputDisable] = useState<boolean>(true);
-
-  const onClickIcon = (id: string, title: string) => {
+  const onClickIcon = (_id: string, title: string) => {
     if (!isNew) {
-      handleBottomModalOpen(id, title);
+      handleBottomModalOpen(_id, title);
     } else {
       handleCancleAddFolder();
     }
   };
 
-  const onClickFolder = (id: string, categoryName: string) => {
-    if (!isNew) {
-      handleFolderClick(id, categoryName);
+  const onClickFolder = (e: React.MouseEvent<HTMLElement>, _id: string, categoryName: string) => {
+    if (e.target instanceof HTMLInputElement) {
+      return;
+    } else {
+      if (!isNew) {
+        handleFolderClick(_id, categoryName);
+      }
     }
   };
 
@@ -63,16 +65,16 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   };
 
   useEffect(() => {
-    if (editableFolderId === id) {
+    if (editableFolderId === _id) {
       inputElement.current?.focus();
     }
-  }, [editableFolderId, id]);
+  }, [editableFolderId, _id]);
 
   return (
-    <StyledRoot key={id}>
+    <StyledRoot key={_id}>
       <StyledInfo>
         <StyledKebab>
-          <span onClick={() => onClickIcon(id, title)}>
+          <span onClick={() => onClickIcon(_id, title)}>
             {isNew ? (
               <Image src={Close} alt="Close icon" width={14} height={14} />
             ) : (
@@ -80,7 +82,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
             )}
           </span>
         </StyledKebab>
-        <StyledText onClick={() => onClickFolder(id, categoryName)}>
+        <StyledText onClick={(e) => onClickFolder(e, _id, categoryName)}>
           <StyledTitle
             type="text"
             name="title"
@@ -89,7 +91,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
             placeholder={isNew ? '폴더 이름 입력' : ''}
             onChange={(e) => onChange(e)}
             onKeyPress={(e) => onKeyPress(e)}
-            disabled={isNew ? !isNew : editableFolderId !== id}
+            disabled={isNew ? !isNew : editableFolderId !== _id}
             autoFocus
             isNew={isNew}
             maxLength={8}
@@ -157,6 +159,7 @@ export const StyledTitle = styled.input<{ isNew: boolean }>`
   -webkit-text-fill-color: ${({ isNew }) =>
     isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`};
   -webkit-opacity: 1;
+
   &:disabled {
     border: 0;
     padding: 0;

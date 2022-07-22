@@ -46,13 +46,13 @@ function BottomModal(props: BottomModalProps) {
               <button onClick={() => setIsClickDelete(false)}>
                 <p>아니요</p>
               </button>
-              <button onClick={() => onDelete(modalData?.id)}>
+              <button onClick={() => onDelete(modalData?._id)}>
                 <p>네</p>
               </button>
             </>
           ) : (
             <>
-              <button onClick={() => onEdit(modalData?.id)}>
+              <button onClick={() => onEdit(modalData?._id)}>
                 <Image src={iEdit} alt="수정" />
                 수정하기
               </button>

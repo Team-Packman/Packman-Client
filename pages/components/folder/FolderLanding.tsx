@@ -34,7 +34,7 @@ function FolderLanding() {
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
-  const editFolderName = useAPI((api) => api.folder.updateFolderName);
+  const updateFolderName = useAPI((api) => api.folder.updateFolderName);
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
@@ -56,12 +56,9 @@ function FolderLanding() {
     },
   );
 
-  const { mutate: editFolderMutate } = useMutation(
-    'editkey',
-    (editedFolderData: ModalDataProps) => {
-      return editFolderName(editedFolderData);
-    },
-  );
+  const { mutate: editFolderMutate } = useMutation((editedFolderData: ModalDataProps) => {
+    return updateFolderName(editedFolderData);
+  });
 
   const { mutate: deletFolderMutate } = useMutation((id: string) => {
     return deleteFolder(id);
@@ -88,8 +85,9 @@ function FolderLanding() {
     setModalData({ _id, title });
   };
 
-  const handleModalEditButtonClick = (id: string) => {
-    setEditableFolderId(id);
+  // bottom modal edit click handler
+  const onEdit = (_id: string) => {
+    setEditableFolderId(_id);
     setShowBottomModal(false);
   };
 
@@ -119,8 +117,7 @@ function FolderLanding() {
     if (e.key === 'Enter') {
       setEditableFolderId('');
       editFolderMutate(editedFolderData, {
-        onSuccess: (data) => {
-          console.log(data);
+        onSuccess: () => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
@@ -155,7 +152,6 @@ function FolderLanding() {
       setIsEditing(false);
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
-          console.log(data);
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
@@ -293,7 +289,7 @@ function FolderLanding() {
               setShowBottomModal(false);
             }}
             modalData={modalData}
-            onEdit={handleModalEditButtonClick}
+            onEdit={onEdit}
             onDelete={handleModalDeleteButtonClick}
           />
         )}
