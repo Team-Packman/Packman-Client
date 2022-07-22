@@ -257,7 +257,7 @@ function FolderLanding() {
           )}
         </StyledRecentBanner>
         <SwiperContainer isRecentListExist={!isError} getSwiperIndex={getSwiperIndex}>
-          {
+          {togetherFolders.length && (
             <FolderList
               key="1"
               categoryName="together"
@@ -272,7 +272,7 @@ function FolderLanding() {
               isEditing={isEditing && currentSwiperIndex === 0}
               handleCancleAddFolder={handleCancleAddFolder}
             />
-          }
+          )}
           {aloneFolders.length && (
             <FolderList
               key="2"
