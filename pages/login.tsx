@@ -33,7 +33,7 @@ function Login() {
   useEffect(() => {
     if (router.isReady) {
       if (router.query.code) {
-        const url = encodeURI('https://packman.kr/login');
+        const url = encodeURI('https://packman-n0eyes.vercel.app/login');
         (async () => {
           const { data }: { data: { access_token: string } } = await axios.post(
             `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${router.query.code}&redirect_uri=${url}`,
@@ -82,7 +82,7 @@ function Login() {
   async function loginWithKakao() {
     if (window.Kakao.isInitialized()) {
       window.Kakao.Auth.authorize({
-        redirectUri: 'https://packman.kr/login',
+        redirectUri: 'https://packman-n0eyes.vercel.app/login',
       });
     }
   }
