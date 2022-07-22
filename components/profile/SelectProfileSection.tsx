@@ -53,9 +53,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   );
 
   //프로필 수정
-  const updateUserProfile = useAPI(
-    (api) => (info: UpdateUserProfileData) => api.user.updateUserProfile(info),
-  );
+  const updateUserProfile = useAPI((api) => api.user.updateUserProfile);
   const { mutate: updateUserProfileMutate } = useMutation(
     (updateUserProfileData: UpdateUserProfileData) => {
       return updateUserProfile(updateUserProfileData);

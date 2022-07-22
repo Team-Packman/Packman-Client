@@ -3,7 +3,6 @@ import Image, { StaticImageData } from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { useState } from 'react';
 import Modal from '../common/Modal';
-import useAPI from '../../utils/hooks/useAPI';
 import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
@@ -114,7 +113,7 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 74.276rem;
   overflow-y: scroll;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -178,6 +177,9 @@ const StyledToggleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  & > p {
+    font-style: ${FONT_STYLES.BODY1_REGULAR};
+  }
 `;
 const StyledToggle = styled.div<{ isToggled: boolean }>`
   position: relative;

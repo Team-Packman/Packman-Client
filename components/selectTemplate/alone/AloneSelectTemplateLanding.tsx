@@ -45,14 +45,7 @@ function AloneSelectTemplateLanding() {
     });
   };
 
-  const shuffleArray = (array: StaticImageData[]) => {
-    return array.sort(() => Math.random() - 0.5);
-  };
-
   const changeUserOwnTemplateImage = (templateId: string) => {
-    shuffleArray(randomImageList);
-    console.log(randomImageList[0]);
-
     myTemplate.forEach(({ _id }, idx) => {
       if (_id === templateId) {
         setTemplateImageIndex(idx.toString());

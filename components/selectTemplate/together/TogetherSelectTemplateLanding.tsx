@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import styled, { css } from 'styled-components';
 import Template from '../Template';
 import useAPI from '../../../utils/hooks/useAPI';
@@ -44,8 +44,13 @@ function TogetherSelectTemplateLanding() {
     });
   };
 
-  const changeUserOwnTemplateImage = () => {
-    setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
+  const changeUserOwnTemplateImage = (templateId: string) => {
+    myTemplate.forEach(({ _id }, idx) => {
+      if (_id === templateId) {
+        setTemplateImageIndex(idx.toString());
+      }
+    });
+    // setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
   };
 
   return (
