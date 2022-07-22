@@ -19,7 +19,7 @@ declare global {
 
 function Login() {
   const router = useRouter();
-  const [auth, setAuth] = useGlobalState('auth', {
+  const [_, setAuth] = useGlobalState('Auth', {
     email: '',
   });
 

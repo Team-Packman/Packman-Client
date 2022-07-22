@@ -1,6 +1,6 @@
 import {
-  AddPackingListIntroOutput,
-  AddPakingListIntroInput,
+  AddAlonePackingListIntroInput,
+  AddAlonePackingListIntroOutput,
   GetPackingListWithFoldersOutput,
 } from './../../../../service/packingList/alone/index';
 import { AxiosInstance } from 'axios';
@@ -60,8 +60,8 @@ export const fetchPackingListWithFolders = async (
 
 export const fetchPackingListIntro = async (
   request: AxiosInstance,
-  info: AddPakingListIntroInput,
-): Promise<AddPackingListIntroOutput> => {
+  info: AddAlonePackingListIntroInput,
+): Promise<AddAlonePackingListIntroOutput> => {
   return new Promise((r) =>
     setTimeout(() => {
       r({
@@ -69,18 +69,19 @@ export const fetchPackingListIntro = async (
         success: true,
         message: '혼자 패킹리스트 생성 성공',
         data: {
-          id: '5e4d276f95e376b7976b2003',
+          _id: '5e4d276f95e376b7976b2003',
           title: '홍콩 한달 살이',
           departureDate: '2022.07.11',
           category: [
             {
-              id: '5e4d276f95e376b7976b2003',
+              _id: '5e4d276f95e376b7976b2003',
               name: '기본',
               pack: [
                 {
-                  id: '5e4d276f95e376b7976b2003',
+                  _id: '5e4d276f95e376b7976b2003',
                   name: '기본',
                   isChecked: false,
+                  packer: null,
                 },
               ],
             },

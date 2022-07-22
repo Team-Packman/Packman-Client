@@ -8,6 +8,7 @@ import MemberIC from '/public/assets/svg/member_ic.svg';
 import Logo from '/public/assets/svg/logo.svg';
 import Link from 'next/link';
 import useGlobalState from '../../utils/hooks/useGlobalState';
+import { FONT_STYLES } from '../../styles/font';
 
 type Icon = 'profile' | 'member';
 
@@ -87,8 +88,7 @@ const StyledContent = styled.div<{
   justify-content: center;
   position: relative;
   background-color: ${packmanColors.pmWhite};
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   color: ${packmanColors.pmBlack};
 
   & > picture {

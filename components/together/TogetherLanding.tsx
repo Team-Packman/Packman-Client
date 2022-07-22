@@ -16,7 +16,7 @@ import useGlobalState from '../../utils/hooks/useGlobalState';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
 import PackerModal, { PackerInfoPayload } from './PackerModal';
-import BottomModal from '../../pages/components/common/BottomModal';
+import BottomModal from '../common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 
@@ -83,9 +83,14 @@ function TogetherLanding() {
   const deleteAlonePackingListItem = useAPI(
     (api) => api.packingList.alone.deleteAlonePackingListItem,
   );
-  const { data: packingListData } = useQuery('getPackingListDeatil', () =>
-    getPackingListDeatil('62d6a1f5bb972fa649b14e9e'),
+  const { data: packingListData } = useQuery(
+    'getPackingListDeatil',
+    () => getPackingListDeatil('62d984fb07a7c2aa188b1989'),
+    {
+      // refetchInterval: 3000,
+    },
   );
+  console.log(bottomModalOpen);
   const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory);
   const { mutate: addAloneCategory } = useMutation(
     'addAlonePackingListCategory',
@@ -131,6 +136,7 @@ function TogetherLanding() {
   if (!packingListData) return null;
 
   const { data: info } = packingListData;
+  console.log(info);
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
   const creatingItemHandler = (categoryId: string) => setCurrentCreating(categoryId);
@@ -215,6 +221,9 @@ function TogetherLanding() {
     }
     setCurrentEditing('');
     createdCategoryHandler();
+    console.log('hdsfdsfsdfsds');
+
+    bottomModalCloseHandler();
   };
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
@@ -316,6 +325,7 @@ function TogetherLanding() {
     }
     setCurrentEditing('');
     createdItemHandler();
+    bottomModalCloseHandler();
   };
   const updatePacker = (payload: PackerInfoPayload) => {
     patchPacker(payload, {
@@ -369,8 +379,6 @@ function TogetherLanding() {
             },
           },
         );
-        return;
-      default:
         return;
     }
   };
@@ -547,7 +555,11 @@ function TogetherLanding() {
                         name={name}
                         updateCategory={updateCategory}
                         modalHandler={() =>
-                          bottomModalOpenHandler({ ...initialFocus, type: 'category', categoryId })
+                          bottomModalOpenHandler({
+                            ...initialFocus,
+                            type: 'category',
+                            categoryId,
+                          })
                         }
                         isEditing={currentEditing === categoryId}
                       />

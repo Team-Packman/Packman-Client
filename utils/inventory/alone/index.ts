@@ -1,9 +1,9 @@
-import { AxiosInstance } from 'axios';
 import {
   DeleteAloneInventoryInput,
   DeleteAloneInventoryOutput,
-  GetAloneInventoryOutput,
-} from '../../../service/inventory/alone';
+} from './../../../service/inventory/alone/index';
+import { AxiosInstance } from 'axios';
+import { GetAloneInventoryOutput } from '../../../service/inventory/alone';
 
 export const fetchAloneInventory = async (
   request: AxiosInstance,

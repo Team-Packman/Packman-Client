@@ -8,7 +8,7 @@ export const editHandler = (state: boolean, setter: (state: boolean) => void, fn
       }
       setter(false);
     },
-    onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => {
+    onKeyDown: (e: KeyboardEvent<HTMLInputElement | HTMLSpanElement>) => {
       if (e.key === 'Enter') {
         fn();
         setter(true);

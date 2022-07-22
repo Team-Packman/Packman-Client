@@ -1,11 +1,13 @@
 import { AxiosInstance } from 'axios';
 import {
   GetHelpTemplateOutput,
-  GetTemplateListOutput,
   GetTemplateOutput,
+  GetTogetherTemplateListOutput,
 } from '../../../service/ect';
 
-export const fetchTemplateList = async (request: AxiosInstance): Promise<GetTemplateListOutput> => {
+export const fetchTemplateList = async (
+  request: AxiosInstance,
+): Promise<GetTogetherTemplateListOutput> => {
   return new Promise((r) =>
     setTimeout(() => {
       r({
@@ -15,37 +17,37 @@ export const fetchTemplateList = async (request: AxiosInstance): Promise<GetTemp
         data: {
           basicTemplate: [
             {
-              id: '1',
+              _id: '1',
               title: '국내여행',
             },
             {
-              id: '2',
+              _id: '2',
               title: '해외여행',
             },
             {
-              id: '3',
+              _id: '3',
               title: '콘서트',
             },
             {
-              id: '4',
+              _id: '4',
               title: '토익시험',
             },
             {
-              id: '5',
+              _id: '5',
               title: '제주한달살이',
             },
             {
-              id: '6',
+              _id: '6',
               title: '반려동물과 함께여행',
             },
           ],
           myTemplate: [
             {
-              id: '7',
+              _id: '7',
               title: '앱잼 합숙',
             },
             {
-              id: '8',
+              _id: '8',
               title: '엠티',
             },
           ],
@@ -63,42 +65,34 @@ export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplate
         success: true,
         message: '템플릿 상세조회 성공',
         data: {
-          departureDate: '2022-07-20',
-          isSaved: false,
-          id: '62bbb80d9d5dc1aa4c3d28391231',
+          _id: '62bbb80d9d5dc1aa4c3d28391231',
           title: '앱잼 합숙',
-          departureDate: '2022-22-22',
-          isSaved: false,
           category: [
             {
-              id: '62bbb80d9d5dc1aa4c3d28131232139',
+              _id: '62bbb80d9d5dc1aa4c3d28131232139',
               name: '필수',
               pack: [
                 {
-                  id: '62bbb80d9d5dc1aa3454354c3d2839',
+                  _id: '62bbb80d9d5dc1aa3454354c3d2839',
                   name: '여권',
-                  isChecked: false,
                 },
                 {
-                  id: '62bbb80d9d5dc1aa354234c3d2839',
+                  _id: '62bbb80d9d5dc1aa354234c3d2839',
                   name: '가방',
-                  isChecked: false,
                 },
               ],
             },
             {
-              id: '62bbb80d9d5dc1aa4545435c3d2839',
+              _id: '62bbb80d9d5dc1aa4545435c3d2839',
               name: '의류',
               pack: [
                 {
-                  id: '62bbb80d9d5dc1aa4c35435565d2839',
+                  _id: '62bbb80d9d5dc1aa4c35435565d2839',
                   name: '모자',
-                  isChecked: false,
                 },
                 {
-                  id: '62bbb80d9d5dc1aa4c331283210d2839',
+                  _id: '62bbb80d9d5dc1aa4c331283210d2839',
                   name: '수영복',
-                  isChecked: false,
                 },
               ],
             },
