@@ -74,10 +74,11 @@ export default BottomModal;
 const StyledBackground = styled.div`
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.47);
-  z-index: 10;
+  z-index: 9999;
   overflow-y: hidden;
 `;
 const StyledRoot = styled.div`
@@ -93,7 +94,7 @@ const StyledRoot = styled.div`
   border-radius: 2.4rem 2.4rem 0 0;
   gap: 0.8rem;
   padding: 0.8rem 0;
-  z-index: 10;
+  z-index: 10000;
 
   & > h1 {
     color: #282828;
