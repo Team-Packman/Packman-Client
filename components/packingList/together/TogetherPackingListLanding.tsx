@@ -35,7 +35,7 @@ function TogetherPackingListLanding() {
 
   //패킹리스트 데이터 조회
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  const { data } = useQuery('getTogetherInventory', () => getTogetherInventory(query), {
+  const { data } = useQuery(['getTogetherInventory', query], () => getTogetherInventory(query), {
     enabled: !!query,
   });
 
@@ -98,6 +98,9 @@ function TogetherPackingListLanding() {
         listId: deleteList.join(','),
       });
       setDeleteList([]);
+      if (!togetherPackingList.length) {
+        setIsDeleting(false);
+      }
     } else {
       deleteTogetherInventoryMutate({
         folderId: currentFolder._id,
@@ -114,6 +117,8 @@ function TogetherPackingListLanding() {
       router.push('/select-template/alone');
     }
   };
+
+  console.log(isDeleting);
 
   return (
     <>
@@ -221,7 +226,13 @@ function TogetherPackingListLanding() {
             </>
           )}
         </StyledMain>
-        {!isDeleting && <FloatActionButton onClick={handleFloatClick} pageName="packingList" />}
+        {!isDeleting && (
+          <FloatActionButton
+            onClick={handleFloatClick}
+            pageName="packingList"
+            isAloned={'together'}
+          />
+        )}
       </StyledRoot>
     </>
   );
