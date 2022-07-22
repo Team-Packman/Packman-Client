@@ -126,7 +126,7 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   }
 
   li:nth-child(2) {
-    border-radius: 0 0 0.8rem 0.8rem;
+    border-radius: ${({ isAloned }) => (isAloned ? '0.8rem' : '0 0 0.8rem 0.8rem')};
   }
 
   li:nth-child(3) {

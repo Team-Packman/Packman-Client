@@ -2,6 +2,8 @@ import Error from 'next/error';
 import { ReactNode, Suspense, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from 'react-query';
+import Lottie from 'lottie-react';
+import { lottie } from '../public/assets';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
@@ -50,7 +52,9 @@ export function AsyncBoundary({ children, loadingFallback }: AsyncBoundaryProps)
       }}
       onReset={reset}
     >
-      <Suspense fallback={loadingFallback ?? <h1>loading...</h1>}>{children}</Suspense>
+      <Suspense fallback={loadingFallback ?? <Lottie animationData={lottie} />}>
+        {children}
+      </Suspense>
     </ErrorBoundary>
   );
 }
