@@ -95,7 +95,7 @@ function TogetherSelectTemplateLanding() {
           isTemplate={false}
           isActivated={true}
           onClick={() => {
-            router.push(`/list-intro?id=${templateId}`);
+            router.push(`/list-intro?id=''&categoryName=together`);
           }}
         >
           건너뛰기
