@@ -323,3 +323,53 @@ ex) `postUserInformation( )`
     ├── together.tsx
     └── together/pack/[id].tsx
 ```
+
+<br>
+
+## 서비스의 핵심 기능
+
+### 1. 회원가입, 로그인 뷰
+
+- 소셜 로그인을 통해 유저가 빠르게 회원가입과 로그인을 할 수 있도록 합니다. 구글 로그인과 카카오 로그인 두가지 소셜 로그인을 이용할 수 있습니다. (구글은 구현 진행 중)   
+<img width="200" alt="스크린샷 2022-07-22 오후 9 48 43" src="https://user-images.githubusercontent.com/73516688/180457259-3729e70b-e866-442e-ad39-7fc11b02dc7d.png">
+
+
+### 2. 폴더 뷰
+
+- 패킹 리스트 작성을 유도하는 CTA 버튼이 있는 화면입니다.
+- 사용자가 폴더를 1개 이상 생성하면 해당 버튼이 <b>+모양의 플로팅 액션 버튼</b>으로 바뀌며, 해당 버튼을 통해 혼자 및 함께 리스트를 추가 및 폴터 추가할 수 있습니다.
+
+<div style="display:flex;">
+<img width="200" alt="스크린샷 2022-07-22 오후 9 48 43" src="https://user-images.githubusercontent.com/73516688/180457874-8bb98054-ee9d-432b-90ca-07b0ec76cd46.png">
+<img width="200" alt="스크린샷 2022-07-22 오후 9 49 22" src="https://user-images.githubusercontent.com/73516688/180458048-985136db-984c-426f-a4a6-e00864f95a66.png">
+<img width="200" alt="스크린샷 2022-07-22 오후 9 49 55" src="https://user-images.githubusercontent.com/73516688/180458071-0ef00750-2d0b-43bc-bb40-52ab805a9012.png">
+<img width="200" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458082-3a219839-5b73-4bcb-b399-9ef5716e8fe7.png">
+
+</div>
+
+
+### 3. 리스트 목록 뷰
+
+- 폴더 안 패킹 리스트 목록을 확인할 수 있는 화면입니다.
+- 해당 화면은 함께, 혼자에 따라 구분된 폴더에 알맞게 리스트가 소속되게 하며, 폴더 우측 초록색 토글을 통해 폴더간 이동을 가능하게 합니다.
+<div style="display:flex;">
+<img width="280" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458654-234ef057-97c4-45c7-8335-df0e39e52fbc.png">
+<img width="280" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458669-73d5cb81-a3c2-4a3f-82a8-96a8fc049762.png">
+<img width="280" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458688-2f44f86e-30c5-432b-ad61-38f68bea05ba.png">
+</div>
+
+
+
+### 4. 혼자 패킹 리스트 뷰 / 함께 패킹 리스트 뷰
+
+#### 혼자 패킹 리스트 뷰
+- 유저는 리스트 뷰에서 손쉽게 카테고리와 리스트를 생성, 수정할 수 있습니다.
+
+#### 함께 패킹 리스트 뷰
+- 함께 패킹 리스트를 생성하면, 초대 링크를 복사할 수 있는 모달이 뜹니다.
+- 초대 링크를 통해 일행에서 리스트를 공유할 수 있습니다. 초대된 일행이 들어오면, 일행도 리스트를 작성, 수정할 수 있습니다.
+- 해당 뷰에서 사용자는 새로운 짐 추가 및 수정, 카테고리 및 리스트 수정, 짐 챙길 사람(담당자) 배정 등의 기능을 이용할 수 있습니다.
+
+<img width="280" alt="스크린샷 2022-07-22 오후 10 10 30" src="https://user-images.githubusercontent.com/73516688/180460652-ca67d099-d0c1-4303-8e8f-1d40809d0543.png">
+
+<br>
