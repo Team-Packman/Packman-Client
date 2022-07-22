@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SwipeablelistItem from './SwipeableListItem';
 import { packmanColors } from '../../styles/color';
+import { FONT_STYLES } from '../../styles/font';
 interface PackingList {
   _id: string;
   departureDate: string;
@@ -115,7 +116,7 @@ const StyledDeleteButton = styled.button`
   bottom: 1.507rem;
   width: 100%;
   height: 4.7rem;
-  font-size: 1.2rem;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
   background-color: ${packmanColors.pmPink};
   color: #fff;
   border: none;
