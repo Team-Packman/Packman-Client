@@ -76,8 +76,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   flex-direction: column;
   align-items: center;
   width: calc(100% - 4rem);
-  /* height: 100vh;
-  overflow: hidden; */
+  height: calc(var(--vh, 1vh) * 100);
 `;
 
 export const StyledSwiper = styled(Swiper)`
