@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { AddFolderInput, GetFoldersOutput } from '../../service/folder';
@@ -34,7 +34,7 @@ function FolderLanding() {
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
-  const editFolderName = useAPI((api) => api.folder.updateFolderName);
+  const updateFolderName = useAPI((api) => api.folder.updateFolderName);
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
@@ -56,12 +56,9 @@ function FolderLanding() {
     },
   );
 
-  const { mutate: editFolderMutate } = useMutation(
-    'editkey',
-    (editedFolderData: ModalDataProps) => {
-      return editFolderName(editedFolderData);
-    },
-  );
+  const { mutate: editFolderMutate } = useMutation((editedFolderData: ModalDataProps) => {
+    return updateFolderName(editedFolderData);
+  });
 
   const { mutate: deletFolderMutate } = useMutation((id: string) => {
     return deleteFolder(id);
@@ -73,11 +70,22 @@ function FolderLanding() {
 
   const folderList: GetFoldersOutput | undefined = queryClient.getQueryData('folderListKey');
 
+  useEffect(() => {
+    const updateOutdated = () => {
+      if (recentPackingData) {
+        setIsOutDated(recentPackingData?.data.remainDay < 0);
+      }
+    };
+    updateOutdated();
+  }, [recentPackingData]);
+
   if (!folderListData || !folderList) {
     return null;
   }
 
   const { aloneFolders, togetherFolders } = folderList.data;
+  console.log('aloneFolders', aloneFolders);
+  console.log('togetherFolders', togetherFolders);
 
   // Bottom modal handler
   const handleBottomModalOpen = (_id: string, title: string) => {
@@ -86,8 +94,9 @@ function FolderLanding() {
     setModalData({ _id, title });
   };
 
-  const handleModalEditButtonClick = (id: string) => {
-    setEditableFolderId(id);
+  // bottom modal edit click handler
+  const onEdit = (_id: string) => {
+    setEditableFolderId(_id);
     setShowBottomModal(false);
   };
 
@@ -142,7 +151,7 @@ function FolderLanding() {
     }
   };
 
-  // 폴더 삭제 관련 핸들러
+  // 폴더 추가 관련 핸들러
   const handleAddFolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewFolderData({ title: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
   };
@@ -236,9 +245,11 @@ function FolderLanding() {
                       <em> {'패킹'}</em>이 완료되었어요!
                     </span>
                   ) : (
-                    <span>
-                      아직<em> {recentPackingData?.data.packRemainNum}</em> 개의 짐이 남았어요!
-                    </span>
+                    !isOutDated && (
+                      <span>
+                        아직<em> {recentPackingData?.data.packRemainNum}</em> 개의 짐이 남았어요!
+                      </span>
+                    )
                   )}
                 </StyledLeftMessage>
               </StyledDday>
@@ -246,7 +257,7 @@ function FolderLanding() {
           )}
         </StyledRecentBanner>
         <SwiperContainer isRecentListExist={!isError} getSwiperIndex={getSwiperIndex}>
-          {togetherFolders.length && (
+          {
             <FolderList
               key="1"
               categoryName="together"
@@ -261,7 +272,7 @@ function FolderLanding() {
               isEditing={isEditing && currentSwiperIndex === 0}
               handleCancleAddFolder={handleCancleAddFolder}
             />
-          )}
+          }
           {aloneFolders.length && (
             <FolderList
               key="2"
@@ -289,7 +300,7 @@ function FolderLanding() {
               setShowBottomModal(false);
             }}
             modalData={modalData}
-            onEdit={handleModalEditButtonClick}
+            onEdit={onEdit}
             onDelete={handleModalDeleteButtonClick}
           />
         )}

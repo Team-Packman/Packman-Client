@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FolderBox from './FolderBox';
 export interface FolderProps {
-  id?: string;
+  _id?: string;
   title?: string;
   listNum?: number;
 }
@@ -28,7 +28,7 @@ function FolderList(props: FolderListProps) {
       <StyledWrapper>
         {isEditing && <FolderBox key={0} isNew={isEditing} {...props} />}
         {list?.map((v) => (
-          <FolderBox key={v.id} isNew={false} {...v} {...props} />
+          <FolderBox key={v._id} isNew={false} {...v} {...props} />
         ))}
       </StyledWrapper>
     </StyledListRoot>
