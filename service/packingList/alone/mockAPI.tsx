@@ -29,11 +29,11 @@ export interface AloneAPI {
 export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
   return {
     alone: {
-      getPackingListWithFolders: () => fetchPackingListWithFolders(withAuth(request)),
+      getPackingListWithFolders: () => fetchPackingListWithFolders(request),
       // 연결한 api
-      getAloneFolder: () => fetchAloneFolder(withAuth(request)),
+      getAloneFolder: () => fetchAloneFolder(request),
       addAlonePackingListFolder: (payload: AddAlonePackingListIntroInput) =>
-        fetchAddAlonePackingFolder(withAuth(request), payload),
+        fetchAddAlonePackingFolder(request, payload),
     },
   };
 };

@@ -31,12 +31,12 @@ export interface TogetherAPI {
 export const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
   return {
     together: {
-      getGroupMembers: (groupId: string) => fetchGroupMember(withAuth(request), groupId),
-      getPackingListDeatil: (listId: string) => fetchPackingListDetail(withAuth(request), listId),
+      getGroupMembers: (groupId: string) => fetchGroupMember(request, groupId),
+      getPackingListDeatil: (listId: string) => fetchPackingListDetail(request, listId),
       // 연결한 api
-      getTogetherFolder: () => fetchTogetherFolder(withAuth(request)),
+      getTogetherFolder: () => fetchTogetherFolder(request),
       addTogetherPackingListFolder: (payload: AddTogetherPackingListIntroInput) =>
-        fetchAddTogetherPackingFolder(withAuth(request), payload),
+        fetchAddTogetherPackingFolder(request, payload),
     },
   };
 };

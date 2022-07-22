@@ -20,9 +20,8 @@ export interface UserAPI {
 
 export const createUserAPI = (request: AxiosInstance): UserAPI => {
   return {
-    getUserInfo: () => fetchUserInfo(withAuth(request)),
-    deleteUserInfo: () => fetchDeleteUserInfo(withAuth(request)),
-    updateUserProfile: (info: UpdateUserProfileInput) =>
-      fetchUpdateUserProfile(withAuth(request), info),
+    getUserInfo: () => fetchUserInfo(request),
+    deleteUserInfo: () => fetchDeleteUserInfo(request),
+    updateUserProfile: (info: UpdateUserProfileInput) => fetchUpdateUserProfile(request, info),
   };
 };
