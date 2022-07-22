@@ -26,7 +26,7 @@ export interface FolderAPI {
 }
 
 const createFolderAPI = (request: AxiosInstance): FolderAPI => {
-  const authReq = withAuth(request);
+  const authReq = request;
   return {
     getFolders: () => fetchFolders(authReq),
     getRecentPackingList: () => fetchRecentPackingList(authReq),
