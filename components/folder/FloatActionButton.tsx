@@ -10,7 +10,7 @@ import { packmanColors } from '../../styles/color';
 interface FloatModalProps {
   onClick(index: number): void;
   pageName: string;
-  isAloned: string;
+  isAloned?: string;
 }
 const useStyles = makeStyles(() => ({
   backdrop: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 
 // ref : https://www.upbeatcode.com/react/implement-floating-action-button-in-react/
 const FloatActionButton = (props: FloatModalProps) => {
-  const { onClick: handleFloatClick, pageName, isAloned } = props;
+  const { onClick: handleFloatClick, pageName, isAloned = '' } = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
 
