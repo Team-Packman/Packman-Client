@@ -98,7 +98,7 @@ const StyledRoot = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   gap: 0.8rem;
   background-color: #fff;
   overflow: hidden;
@@ -110,6 +110,8 @@ const StyledSwipeableListWrapper = styled.div`
   align-items: center;
   gap: 1rem;
   margin-bottom: 9.7rem;
+  height: 100%;
+  overflow-y: scroll;
 `;
 const StyledDeleteButton = styled.button`
   position: fixed;

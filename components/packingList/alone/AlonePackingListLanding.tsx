@@ -33,7 +33,7 @@ function AlonePackingListLanding() {
   const query = router.query.id as string;
 
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-  const { data } = useQuery('getAloneInventory', () => getAloneInventory(query), {
+  const { data } = useQuery(['getAloneInventory', query], () => getAloneInventory(query), {
     enabled: !!query,
   });
 
@@ -93,6 +93,9 @@ function AlonePackingListLanding() {
         folderId: currentFolder._id,
         listId: deleteList.join(','),
       });
+      if (deleteList.length === alonePackingList.length) {
+        setIsDeleting(false);
+      }
       setDeleteList([]);
     } else {
       deleteAloneInventoryMutate({
@@ -217,7 +220,9 @@ function AlonePackingListLanding() {
             </>
           )}
         </StyledMain>
-        {!isDeleting && <FloatActionButton onClick={handleFloatClick} pageName="packingList" />}
+        {!isDeleting && (
+          <FloatActionButton onClick={handleFloatClick} pageName="packingList" isAloned="alone" />
+        )}
       </StyledRoot>
     </>
   );
