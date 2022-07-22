@@ -12,12 +12,15 @@ export interface AloneAPI {
   };
 }
 
-export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
+const createAloneAPI = (request: AxiosInstance): AloneAPI => {
+  const authReq = request;
   return {
     alone: {
-      getAloneInventory: (folderId: string) => fetchAloneInventory(withAuth(request), folderId),
+      getAloneInventory: (folderId: string) => fetchAloneInventory(authReq, folderId),
       deleteAloneInventory: (params: DeleteAloneInventoryInput) =>
-        fetchDeleteAloneInventory(withAuth(request), params),
+        fetchDeleteAloneInventory(authReq, params),
     },
   };
 };
+
+export default createAloneAPI;

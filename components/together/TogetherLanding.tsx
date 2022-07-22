@@ -1,4 +1,4 @@
-import React, { useState, UIEvent } from 'react';
+import React, { useState, UIEvent, useEffect } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
@@ -19,6 +19,11 @@ import PackerModal, { PackerInfoPayload } from './PackerModal';
 import BottomModal from '../common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
+import { useRouter } from 'next/router';
+import ModalForInvitation from '../common/ModalForInvitation';
+import ModalForInvited from '../common/ModalForInvited';
+import useCache from '../../utils/hooks/useCache';
+import { User } from '../../type/globalState';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -37,11 +42,19 @@ type RemainingInfoType = 'title' | 'departure' | 'save';
 
 function TogetherLanding() {
   const client = useQueryClient();
+  const router = useRouter();
+  const { id, invite } = router.query;
+  const [user, isLoaded] = useCache<User>('User');
+  const [globalUser] = useGlobalState<User>('User');
+  console.log('user', user);
+  console.log('globalUser', globalUser);
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
+  const [invitationModalOpen, setInvitationModalOpen] = useState(false);
+  const [invitedModalOpen, setInvitedModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState(0);
   //category, item 끼리 서로 id 중복 X?
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
@@ -84,13 +97,13 @@ function TogetherLanding() {
     (api) => api.packingList.alone.deleteAlonePackingListItem,
   );
   const { data: packingListData } = useQuery(
-    'getPackingListDeatil',
-    () => getPackingListDeatil('62d984fb07a7c2aa188b1989'),
+    ['getPackingListDeatil', id],
+    () => getPackingListDeatil(id as string),
     {
-      // refetchInterval: 3000,
+      refetchInterval: 3000,
+      enabled: !!id,
     },
   );
-  console.log(bottomModalOpen);
   const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory);
   const { mutate: addAloneCategory } = useMutation(
     'addAlonePackingListCategory',
@@ -133,10 +146,32 @@ function TogetherLanding() {
   );
   ////////////////////////////////////////////
 
-  if (!packingListData) return null;
+  useEffect(() => {
+    if (router.isReady) {
+      if (!invite) {
+        setInvitationModalOpen(true);
+        // invitationModalOpenHandler();
+        console.log('!invite');
+      } else if (isLoaded) {
+        console.log('is loadied');
+        if (user && user.isAlreadyUser) {
+          console.log('zzzxxx');
+          console.log(user);
+          // invitedModalCloseHandler();
+          setInvitedModalOpen(false);
+        } else {
+          // router.push('/login');
+        }
+        //유저가 있으면 모달 x
+        //없으면 모달 띄우기
+      }
+    }
+  }, [router.isReady, user]);
 
+  if (!user || !globalUser) return <div>user loading........</div>;
+  //   return <ModalForInvited title={router.query.title as string} />;
+  if (!packingListData) return <div>data loading.......</div>;
   const { data: info } = packingListData;
-  console.log(info);
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
   const creatingItemHandler = (categoryId: string) => setCurrentCreating(categoryId);
@@ -161,6 +196,8 @@ function TogetherLanding() {
     setCurrentFocus(initialFocus);
     setPackerModalOpen(false);
   };
+  const invitationModalOpenHandler = () => setInvitationModalOpen(true);
+  const invitationModalCloseHandler = () => setInvitationModalOpen(false);
 
   const updateCategory = (payload: UpdateCategoryPayload) => {
     const { name, categoryId, listId } = payload;
@@ -221,8 +258,6 @@ function TogetherLanding() {
     }
     setCurrentEditing('');
     createdCategoryHandler();
-    console.log('hdsfdsfsdfsds');
-
     bottomModalCloseHandler();
   };
   const updateItem = (payload: UpdateItemPayload) => {
@@ -514,6 +549,7 @@ function TogetherLanding() {
                               packId={packId}
                               name={name}
                               isChecked={isChecked}
+                              mode={activeMode}
                               modalHandler={() =>
                                 bottomModalOpenHandler({
                                   ...initialFocus,
@@ -610,6 +646,12 @@ function TogetherLanding() {
           packId={currentFocus.packId}
           listId={info.togetherPackingList._id}
           updatePacker={updatePacker}
+        />
+      )}
+      {invitationModalOpen && (
+        <ModalForInvitation
+          inviteCode={info.togetherPackingList.inviteCode}
+          modalHandler={invitationModalCloseHandler}
         />
       )}
     </Layout>

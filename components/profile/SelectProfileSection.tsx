@@ -7,6 +7,7 @@ import useAPI from '../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import useGlobalState from '../../utils/hooks/useGlobalState';
+import { User } from '../../type/globalState';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -34,8 +35,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
   const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
-  const [auth] = useGlobalState('Auth');
-
+  const [user, setUser] = useGlobalState<User>('User');
+  console.log(user);
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
   const { mutate: addUserProfileMutate } = useMutation(
@@ -65,7 +66,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   );
 
   const setIsActivate = () => {
-    console.log(profile, index);
     if (isEditing) {
       if (!profile) {
         return false;
@@ -96,7 +96,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       setIndex(id);
     }
   };
-
+  console.log(user);
   return (
     <StyledRoot>
       <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
@@ -154,12 +154,19 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                 }
               }
             : () => {
-                addUserProfileMutate({
-                  email: 'ohmygirl@gmail.com',
-                  name: '오마이걸',
-                  profileImageId: '4',
-                });
-                router.push('/folder');
+                addUserProfileMutate(
+                  {
+                    email: user.email,
+                    name: nickname,
+                    profileImageId: profile,
+                  },
+                  {
+                    onSuccess: (data) => {
+                      setUser(data.data);
+                      router.push('/');
+                    },
+                  },
+                );
               }
         }
       >

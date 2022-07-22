@@ -20,13 +20,15 @@ export interface TogetherAPI {
   };
 }
 
-export const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
+const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
+  const authReq = request;
   return {
     together: {
-      getTogetherInventory: (folderId: string) =>
-        fetchTogetherInventory(withAuth(request), folderId),
+      getTogetherInventory: (folderId: string) => fetchTogetherInventory(authReq, folderId),
       deleteTogetherInventory: (params: DeleteTogetherInventoryInput) =>
-        fetchDeleteTogetherInventory(withAuth(request), params),
+        fetchDeleteTogetherInventory(authReq, params),
     },
   };
 };
+
+export default createTogetherAPI;

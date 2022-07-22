@@ -98,7 +98,7 @@ function PackingItem(props: PackingItemProps) {
         )}
       </label>
       <StyledOptionWrapper>
-        {mode === 0 && assginee && assginee}
+        {mode === 0 && assginee}
         <StyledKebab onClick={modalHandler}>
           {!isEditing && <Image src={Kebab} alt="kebab" layout="fill" />}
         </StyledKebab>

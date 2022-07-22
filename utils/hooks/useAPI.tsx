@@ -1,13 +1,19 @@
 import { useContext } from 'react';
 import { APIService } from '../../service';
-import { APIContext } from '../context/apiContext';
+import { AuthContext } from '../context/apiContext';
 
 function useAPI<Req extends unknown[], Res>(
   callback: (api: APIService) => (...args: Req) => Promise<Res>,
 ) {
-  const api = useContext(APIContext);
+  const { api } = useContext(AuthContext);
 
   return callback(api);
 }
 
 export default useAPI;
+
+export function useSetToken() {
+  const { setToken } = useContext(AuthContext);
+
+  return setToken;
+}

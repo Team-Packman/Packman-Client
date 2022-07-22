@@ -2,7 +2,7 @@ import {
   fetchDeleteUserInfo,
   fetchUserInfo,
   fetchUpdateUserProfile,
-} from './../../utils/axios/user/mock';
+} from '../../utils/axios/user/mock';
 import { AxiosInstance } from 'axios';
 import withAuth from '../../utils/axios/withAuth';
 import {

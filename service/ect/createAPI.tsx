@@ -14,10 +14,13 @@ export interface EctAPI {
   getTogetherTemplateList: () => Promise<GetTogetherTemplateListOutput>;
 }
 
-export const createEctAPI = (request: AxiosInstance): EctAPI => {
+const createEctAPI = (request: AxiosInstance): EctAPI => {
+  const authReq = request;
   return {
-    getTemplate: (paylod: GetTemplateInput) => fetchTemplate(withAuth(request), paylod),
-    getAloneTemplateList: () => fetchAloneTemplateList(withAuth(request)),
-    getTogetherTemplateList: () => fetchTogetherTemplateList(withAuth(request)),
+    getTemplate: (paylod: GetTemplateInput) => fetchTemplate(authReq, paylod),
+    getAloneTemplateList: () => fetchAloneTemplateList(authReq),
+    getTogetherTemplateList: () => fetchTogetherTemplateList(authReq),
   };
 };
+
+export default createEctAPI;

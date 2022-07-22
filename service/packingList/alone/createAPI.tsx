@@ -58,26 +58,28 @@ export interface AloneAPI {
   };
 }
 
-export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
+const createAloneAPI = (request: AxiosInstance): AloneAPI => {
+  const authReq = request;
   return {
     alone: {
-      getAloneFolder: () => fetchAloneFolder(withAuth(request)),
-      getAlonePackingListDetail: (listId: string) =>
-        fetchAlonePackingListDetail(withAuth(request), listId),
+      getAloneFolder: () => fetchAloneFolder(authReq),
+      getAlonePackingListDetail: (listId: string) => fetchAlonePackingListDetail(authReq, listId),
       addAlonePackingListFolder: (payload: AddAlonePackingListIntroInput) =>
-        fetchAddAlonePackingFolder(withAuth(request), payload),
+        fetchAddAlonePackingFolder(authReq, payload),
       addAlonePackingListCategory: (payload: AddAlonePackingListCategoryInput) =>
-        fetchAddAlonePackingCategory(withAuth(request), payload),
+        fetchAddAlonePackingCategory(authReq, payload),
       updateAlonePackingListCategory: (payload: UpdateAlonePackingListCategoryInput) =>
-        fetchUpdateAlonePackingCategory(withAuth(request), payload),
+        fetchUpdateAlonePackingCategory(authReq, payload),
       deleteAlonePackingListCategory: (payload: DeleteAlonePackingListCategoryInput) =>
-        fetchDeleteAlonePackingCategory(withAuth(request), payload),
+        fetchDeleteAlonePackingCategory(authReq, payload),
       addAlonePackingListItem: (payload: AddAlonePackingListItemInput) =>
-        fetchAddAlonePackingItem(withAuth(request), payload),
+        fetchAddAlonePackingItem(authReq, payload),
       updateAlonePackingListItem: (payload: UpdateAlonePackingListItemInput) =>
-        fetchUpdateAlonePackingItem(withAuth(request), payload),
+        fetchUpdateAlonePackingItem(authReq, payload),
       deleteAlonePackingListItem: (payload: DeleteAlonePackingListItemInput) =>
-        fetchDeleteAlonePackingItem(withAuth(request), payload),
+        fetchDeleteAlonePackingItem(authReq, payload),
     },
   };
 };
+
+export default createAloneAPI;
