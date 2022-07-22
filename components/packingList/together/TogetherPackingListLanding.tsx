@@ -7,7 +7,7 @@ import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../utils/hooks/useAPI';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
@@ -31,21 +31,13 @@ function TogetherPackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [data, setData] = useState<GetTogetherInventoryOutput | null>(null);
+  const query = router.query.id as string;
 
   //패킹리스트 데이터 조회
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  useEffect(() => {
-    if (router.isReady) {
-      (async () => {
-        const query = router.query.id as string;
-        const data = await queryClient.fetchQuery('getTogetherInventory', () =>
-          getTogetherInventory(query),
-        );
-        setData(data);
-      })();
-    }
-  }, [router.isReady]);
+  const { data } = useQuery('getTogetherInventory', () => getTogetherInventory(query), {
+    enabled: !!query,
+  });
 
   const deleteTogetherInventory = useAPI(
     (api) => (params: DeleteTogetherInventoryInput) =>

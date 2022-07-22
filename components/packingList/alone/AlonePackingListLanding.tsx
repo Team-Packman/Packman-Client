@@ -7,7 +7,7 @@ import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../utils/hooks/useAPI';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
@@ -30,20 +30,12 @@ function AlonePackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [data, setData] = useState<GetAloneInventoryOutput | null>(null);
+  const query = router.query.id as string;
 
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-
-  useEffect(() => {
-    if (router.isReady)
-      (async () => {
-        const query = router.query.id as string;
-        const data = await queryClient.fetchQuery('getAloneInventory', () =>
-          getAloneInventory(query),
-        );
-        setData(data);
-      })();
-  }, [router.isReady, router.query.id]);
+  const { data } = useQuery('getAloneInventory', () => getAloneInventory(query), {
+    enabled: !!query,
+  });
 
   const deleteAloneInventory = useAPI(
     (api) => (params: DeleteAloneInventoryInput) =>
