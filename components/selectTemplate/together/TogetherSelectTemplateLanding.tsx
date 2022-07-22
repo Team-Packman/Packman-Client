@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import styled, { css } from 'styled-components';
 import Template from '../Template';
 import useAPI from '../../../utils/hooks/useAPI';
@@ -19,7 +19,6 @@ import random3 from '/public/assets/png/random3.png';
 import random4 from '/public/assets/png/random4.png';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
-const randomImageList = [random1, random2, random3, random4];
 
 function TogetherSelectTemplateLanding() {
   const router = useRouter();
@@ -30,6 +29,7 @@ function TogetherSelectTemplateLanding() {
   const [templateImageIndex, setTemplateImageIndex] = useState('');
   const [isBasicTemplate, setIsBasicTemplate] = useState(false);
   const [templateId, setTemplateId] = useState('');
+  const [randomImageList, setRandomImageList] = useState([random1, random2, random3, random4]);
 
   if (!data) return null;
   if (!router.query) return null;
@@ -44,8 +44,14 @@ function TogetherSelectTemplateLanding() {
     });
   };
 
-  const changeUserOwnTemplateImage = () => {
-    setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
+  const changeUserOwnTemplateImage = (templateId: string) => {
+    myTemplate.forEach(({ _id }, idx) => {
+      if (_id === templateId) {
+        setTemplateImageIndex(idx.toString());
+        setRandomImageList((prev) => prev.sort(() => Math.random() - 0.5));
+      }
+    });
+    // setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
   };
 
   return (

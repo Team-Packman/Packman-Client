@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import TemplateList from './TemplateList';
 import TemplateItem from './TemplateItem';
+import { FONT_STYLES } from '../../styles/font';
 
 interface Template {
   _id: string;
@@ -49,7 +50,7 @@ function Template(props: TemplateProps) {
   useEffect(() => {
     activate(isSelected);
   }, [isSelected]);
-  console.log(basicTemplate);
+
   return (
     <StyledRoot>
       <StyledTemplateWrapper>
@@ -128,13 +129,11 @@ const StyledTemplateWrapper = styled.div`
   width: 100%;
   gap: 1rem;
   & > h1 {
-    font-weight: 600;
-    font-size: 1.6rem;
+    font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     color: ${packmanColors.pmBlack};
   }
   & > p {
-    font-weight: 400;
-    font-size: 1.2rem;
+    font-style: ${FONT_STYLES.CAPTION1_REGULAR};
     color: ${packmanColors.pmDeepGrey};
   }
 `;

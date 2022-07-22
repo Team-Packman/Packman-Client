@@ -9,6 +9,7 @@ import { persistQueryClient } from 'react-query/persistQueryClient-experimental'
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
+// import '../public/assets/fonts/font.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -56,7 +57,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps?.dehydratedState}>
           <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-            <GlobalStyle />
             <Component {...pageProps} />
           </APIProvider>
         </Hydrate>

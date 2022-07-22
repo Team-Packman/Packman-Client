@@ -7,6 +7,8 @@ import useAPI from '../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import useGlobalState from '../../utils/hooks/useGlobalState';
+import { User } from '../../type/globalState';
+import { FONT_STYLES } from '../../styles/font';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -34,7 +36,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
   const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
-  const [auth] = useGlobalState('Auth');
+  const [auth] = useGlobalState<{ email: string }>('Auth');
+  const [_, setUser] = useGlobalState<User>('User');
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -50,9 +53,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   );
 
   //프로필 수정
-  const updateUserProfile = useAPI(
-    (api) => (info: UpdateUserProfileData) => api.user.updateUserProfile(info),
-  );
+  const updateUserProfile = useAPI((api) => api.user.updateUserProfile);
   const { mutate: updateUserProfileMutate } = useMutation(
     (updateUserProfileData: UpdateUserProfileData) => {
       return updateUserProfile(updateUserProfileData);
@@ -65,7 +66,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   );
 
   const setIsActivate = () => {
-    console.log(profile, index);
     if (isEditing) {
       if (!profile) {
         return false;
@@ -79,9 +79,11 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       }
     }
   };
+
   useEffect(() => {
     if (oldProfileImageId) {
       setProfile(oldProfileImageId);
+      setIndex(oldProfileImageId);
     }
     if (oldNickname) {
       setNickname(oldNickname);
@@ -154,12 +156,19 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                 }
               }
             : () => {
-                addUserProfileMutate({
-                  email: 'ohmygirl@gmail.com',
-                  name: '오마이걸',
-                  profileImageId: '4',
-                });
-                router.push('/folder');
+                addUserProfileMutate(
+                  {
+                    email: auth.email,
+                    name: nickname,
+                    profileImageId: profile,
+                  },
+                  {
+                    onSuccess: (data) => {
+                      router.push('/folder');
+                      setUser(data as unknown as User);
+                    },
+                  },
+                );
               }
         }
       >
@@ -183,18 +192,10 @@ const StyledInputWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const StyledText = styled.div<{ nickname: boolean }>`
-  opacity: ${({ nickname }) => nickname && '0'};
-  padding-top: 0.77rem;
-  color: ${packmanColors.pmDeepGrey};
-  font-weight: 400;
-  font-size: 1.3rem;
-`;
 const StyledInput = styled.input`
   width: 12rem;
   text-align: center;
-  font-weight: 600;
-  font-size: 1.6rem;
+  font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   color: ${packmanColors.pmBlack};
   border: none;
   border-bottom: 1px solid ${packmanColors.pmDeepGrey};
@@ -208,6 +209,13 @@ const StyledInput = styled.input`
     color: #dddddd;
   }
 `;
+const StyledText = styled.div<{ nickname: boolean }>`
+  opacity: ${({ nickname }) => nickname && '0'};
+  padding-top: 0.77rem;
+  color: ${packmanColors.pmDeepGrey};
+  font-style: ${FONT_STYLES.BODY1_REGULAR};
+`;
+
 const StyledSelectProfileWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -236,8 +244,7 @@ const StyledButton = styled.button<{ isActivate: boolean }>`
   border: none;
   border-radius: 0.8rem;
   padding: 1.2rem 6.4rem;
-  font-weight: 600;
-  font-size: 1.4rem;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
   color: ${packmanColors.pmWhite};
   background-color: ${({ isActivate }) =>
     isActivate ? packmanColors.pmPink : packmanColors.pmGrey};

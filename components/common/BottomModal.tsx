@@ -6,6 +6,7 @@ import iSwipeBar from '/public/assets/svg/iSwipeBar.svg';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { ModalDataProps } from '../folder/FolderLanding';
+import { FONT_STYLES } from '../../styles/font';
 
 interface BottomModalProps {
   content?: string;
@@ -96,8 +97,7 @@ const StyledRoot = styled.div`
 
   & > h1 {
     color: #282828;
-    font-weight: 700;
-    font-size: 1.6rem;
+    font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   }
 `;
 
@@ -117,8 +117,7 @@ const StyledButtonWrapper = styled.div`
     padding: 0;
     border: none;
     border-radius: 0.8rem;
-    font-weight: 600;
-    font-size: 1.4rem;
+    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
     background: ${packmanColors.pmBlueGrey};
   }
 `;

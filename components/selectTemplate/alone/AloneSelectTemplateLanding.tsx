@@ -1,4 +1,4 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import styled, { css } from 'styled-components';
 import Template from '../Template';
 import useAPI from '../../../utils/hooks/useAPI';
@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import Header from '../../common/Header';
 import { packmanColors } from '../../../styles/color';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import korea_travel from '/public/assets/png/korea_travel.png';
 import oversea_travel from '/public/assets/png/oversea_travel.png';
 import jeju from '/public/assets/png/jeju.png';
@@ -17,9 +17,9 @@ import random1 from '/public/assets/png/random1.png';
 import random2 from '/public/assets/png/random2.png';
 import random3 from '/public/assets/png/random3.png';
 import random4 from '/public/assets/png/random4.png';
+import { FONT_STYLES } from '../../../styles/font';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
-const randomImageList = [random1, random2, random3, random4];
 
 function AloneSelectTemplateLanding() {
   const router = useRouter();
@@ -30,9 +30,9 @@ function AloneSelectTemplateLanding() {
   const [templateImageIndex, setTemplateImageIndex] = useState('');
   const [isBasicTemplate, setIsBasicTemplate] = useState(false);
   const [templateId, setTemplateId] = useState('');
+  const [randomImageList, setRandomImageList] = useState([random1, random2, random3, random4]);
 
   if (!data) return null;
-  console.log(data);
   if (!router.query) return null;
 
   const { basicTemplate, myTemplate } = data.data;
@@ -45,17 +45,11 @@ function AloneSelectTemplateLanding() {
     });
   };
 
-  const shuffleArray = (array: StaticImageData[]) => {
-    return array.sort(() => Math.random() - 0.5);
-  };
-
   const changeUserOwnTemplateImage = (templateId: string) => {
-    shuffleArray(randomImageList);
-    console.log(randomImageList[0]);
-
     myTemplate.forEach(({ _id }, idx) => {
       if (_id === templateId) {
         setTemplateImageIndex(idx.toString());
+        setRandomImageList((prev) => prev.sort(() => Math.random() - 0.5));
       }
     });
     // setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
@@ -163,8 +157,7 @@ const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>
   width: 16.3rem;
   height: 4rem;
   border-radius: 0.8rem;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
 
   ${({ isTemplate }) =>
     isTemplate
