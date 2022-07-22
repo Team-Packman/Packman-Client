@@ -33,7 +33,7 @@ function Login() {
   useEffect(() => {
     if (router.isReady) {
       if (router.query.code) {
-        const url = encodeURI('http://localhost:3000/login');
+        const url = encodeURI('https://packman.kr/login');
         (async () => {
           const { data }: { data: { access_token: string } } = await axios.post(
             `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${router.query.code}&redirect_uri=${url}`,
