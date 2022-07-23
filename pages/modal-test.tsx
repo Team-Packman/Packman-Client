@@ -1,8 +1,8 @@
-import ModalForShare from '../components/common/ModalForShare';
+import Error from '../components/common/Error';
 import React from 'react';
 
 function modalTest() {
-  return <ModalForShare></ModalForShare>;
+  return <Error></Error>;
 }
 
 export default modalTest;
