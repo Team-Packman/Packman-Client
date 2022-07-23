@@ -78,7 +78,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
         baseURL,
         headers: {
           Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJkNmFjYmRjMTBkYzFlMTZiMmE2MzZhIn0sImlhdCI6MTY1ODIzNjA5MywiZXhwIjoxNjU5MTAwMDkzfQ.NLWE8P6cz7Kodzo1lH6eSm3GFxSOeJ0GDKKwBEOseCk',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJkYjE0Y2FhYjVmNmY5MzkzMzhjZmU3In0sImlhdCI6MTY1ODUyNDg3NCwiZXhwIjoxNjU5Mzg4ODc0fQ.qEZXp8uuWV6T8BHUdIXzztt2x_NwxKbWdPWiQPGLTvI',
         },
       }),
     ),

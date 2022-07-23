@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 import Image from 'next/image';
 import { useState } from 'react';
-import FAB from '/public/assets/svg/kebab_ic.svg';
-import FABOPEN from '/public/assets/svg/kebab_ic.svg';
+import FAB from '/public/assets/svg/fab_ic.svg';
+import FABOPEN from '/public/assets/svg/fab_open_ic.svg';
 import { Backdrop } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { packmanColors } from '../../styles/color';

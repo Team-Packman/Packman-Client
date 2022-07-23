@@ -43,18 +43,16 @@ const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 export function AsyncBoundary({ children, loadingFallback }: AsyncBoundaryProps) {
   const { reset } = useQueryErrorResetBoundary();
   return (
-    <ErrorBoundary
-      FallbackComponent={({ error, resetErrorBoundary }) => {
-        if (isExpectedError(error)) {
-          return errorFallback({ error, resetErrorBoundary });
-        }
-        return <h1>Unexpected Error</h1>;
-      }}
-      onReset={reset}
-    >
-      <Suspense fallback={loadingFallback ?? <Lottie animationData={lottie} />}>
-        {children}
-      </Suspense>
-    </ErrorBoundary>
+    // <ErrorBoundary
+    //   FallbackComponent={({ error, resetErrorBoundary }) => {
+    //     if (isExpectedError(error)) {
+    //       return errorFallback({ error, resetErrorBoundary });
+    //     }
+    //     return <h1>Unexpected Error</h1>;
+    //   }}
+    //   onReset={reset}
+    // >
+    <Suspense fallback={loadingFallback ?? <Lottie animationData={lottie} />}>{children}</Suspense>
+    // </ErrorBoundary>
   );
 }

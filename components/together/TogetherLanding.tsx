@@ -24,6 +24,7 @@ import ModalForInvitation from '../common/ModalForInvitation';
 import ModalForInvited from '../common/ModalForInvited';
 import useCache from '../../utils/hooks/useCache';
 import { User } from '../../type/globalState';
+import TogetherLandingBottom from '../common/TogetherLandingBottom';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -168,9 +169,7 @@ function TogetherLanding() {
     }
   }, [router.isReady, user]);
 
-  if (!user || !globalUser) return <div>user loading........</div>;
-  //   return <ModalForInvited title={router.query.title as string} />;
-  if (!packingListData) return <div>data loading.......</div>;
+  if (!packingListData) return null;
   const { data: info } = packingListData;
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
@@ -627,18 +626,7 @@ function TogetherLanding() {
           </AddTemplateButton>
         </FunctionSection>
       </StyledTogetherLanding>
-      {bottomModalOpen && (
-        <StyledBg onClick={bottomModalCloseHandler}>
-          <StyledModal>
-            <button onClick={onEdit} style={{ width: '8rem', height: '8rem' }}>
-              update
-            </button>
-            <button onClick={onDelete} style={{ width: '8rem', height: '8rem' }}>
-              delete
-            </button>
-          </StyledModal>
-        </StyledBg>
-      )}
+
       {packerModalOpen && (
         <PackerModal
           members={info.group.members}
@@ -652,6 +640,13 @@ function TogetherLanding() {
         <ModalForInvitation
           inviteCode={info.togetherPackingList.inviteCode}
           modalHandler={invitationModalCloseHandler}
+        />
+      )}
+      {bottomModalOpen && (
+        <TogetherLandingBottom
+          onEdit={onEdit}
+          onDelete={onDelete}
+          closeModal={bottomModalCloseHandler}
         />
       )}
     </Layout>

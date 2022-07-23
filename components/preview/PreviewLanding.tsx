@@ -20,6 +20,7 @@ interface Query {
 
 function PreviewLanding() {
   const router = useRouter();
+  const { id, type, categoryName } = router.query;
   const client = useQueryClient();
   const [data, setData] = useState<GetTemplateOutput | null>(null);
 
@@ -30,7 +31,10 @@ function PreviewLanding() {
       (async () => {
         const query = router.query;
         const data = await client.fetchQuery('getTemplate', () =>
-          getTemplate({ templateId: query?.id as Query['id'], type: query?.type as Query['type'] }),
+          getTemplate({
+            templateId: id as string,
+            type: categoryName as 'basic' | 'alone' | 'together',
+          }),
         );
         setData(data);
       })();

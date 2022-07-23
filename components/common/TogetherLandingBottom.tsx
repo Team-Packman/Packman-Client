@@ -10,14 +10,14 @@ import { FONT_STYLES } from '../../styles/font';
 
 interface BottomModalProps {
   content?: string;
-  modalData: ModalDataProps;
+  // modalData: ModalDataProps;
   closeModal: () => void;
-  onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
-function BottomModal(props: BottomModalProps) {
-  const { closeModal, modalData, onEdit, onDelete } = props;
+function TogetherLandingBottom(props: BottomModalProps) {
+  const { closeModal, onEdit, onDelete } = props;
 
   const [isClickDelete, setIsClickDelete] = useState(false);
 
@@ -36,25 +36,30 @@ function BottomModal(props: BottomModalProps) {
     };
   }, []);
 
+  const deleteHandler = () => {
+    onDelete();
+    closeModal();
+  };
+
   return (
     <>
       <StyledBackground onClick={closeModal} />
       <StyledRoot>
         <Image src={iSwipeBar} alt="스와이프바" />
-        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : modalData?.title}</h1>
+        <h1>{isClickDelete && '정말 삭제하시겠어요?'}</h1>
         <StyledButtonWrapper>
           {isClickDelete ? (
             <>
               <button onClick={() => setIsClickDelete(false)}>
                 <p>아니요</p>
               </button>
-              <button onClick={() => onDelete(modalData?._id)}>
+              <button onClick={deleteHandler}>
                 <p>네</p>
               </button>
             </>
           ) : (
             <>
-              <button onClick={() => onEdit(modalData?._id)}>
+              <button onClick={onEdit}>
                 <Image src={iEdit} alt="수정" />
                 수정하기
               </button>
@@ -70,7 +75,7 @@ function BottomModal(props: BottomModalProps) {
   );
 }
 
-export default BottomModal;
+export default TogetherLandingBottom;
 
 const StyledBackground = styled.div`
   position: fixed;
