@@ -57,6 +57,8 @@ function AlonePackingListLanding() {
 
   if (!data) return null;
 
+  console.log(data);
+
   const { alonePackingList, folder, currentFolder } = data.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
@@ -216,6 +218,9 @@ function AlonePackingListLanding() {
                 setSelectedIndex={(id: number) => setSelectedIndex(id)}
                 setDeleteList={(arr) => setDeleteList(arr)}
                 isDragged={isDragged}
+                routeToList={(idx: number) => {
+                  router.push(`/alone/${alonePackingList[idx]._id}?invite=''`);
+                }}
               />
             </>
           )}

@@ -1,9 +1,9 @@
-import Error from 'next/error';
 import { ReactNode, Suspense, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from 'react-query';
 import Lottie from 'lottie-react';
 import { lottie } from '../public/assets';
+import Error from '../components/common/Error';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
@@ -34,7 +34,7 @@ export const useErrorBubbling = () => {
 const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
     <div>
-      error
+      <Error />
       <button onClick={resetErrorBoundary}>reset</button>
     </div>
   );

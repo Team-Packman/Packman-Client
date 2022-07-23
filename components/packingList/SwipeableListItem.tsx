@@ -5,6 +5,7 @@ import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
+import { useRouter } from 'next/router';
 
 interface PackingList {
   _id: string;
@@ -23,9 +24,11 @@ interface ItemProps {
   checkDeleteList: (id: string) => void;
   onClickDeleteButton: (idx: number) => void;
   packingList: PackingList[];
+  routeToList: (id: number) => void;
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
+  const router = useRouter();
   const {
     idx,
     handleIsDragged,
@@ -35,6 +38,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     checkDeleteList,
     onClickDeleteButton,
     packingList,
+    routeToList,
   } = props;
 
   const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
@@ -64,7 +68,7 @@ export default function SwipeablelistItem(props: ItemProps) {
   };
 
   return (
-    <StyledRoot>
+    <StyledRoot onClick={() => routeToList(idx)}>
       {isDeleting && (
         <StyledSelectDelete>
           <Image
