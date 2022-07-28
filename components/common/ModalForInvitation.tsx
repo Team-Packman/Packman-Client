@@ -17,7 +17,9 @@ function ModalForInvitation(props: ModalForInvitationProps) {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(`localhost:3000${router.asPath}=${inviteCode}`);
+    navigator.clipboard.writeText(
+      `http://localhost:3000/together/invited/${router.query.id}?invited=${inviteCode}`,
+    );
     setIsCopied(true);
   };
 

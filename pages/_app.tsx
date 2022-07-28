@@ -10,6 +10,7 @@ import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor
 import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import useCache from '../utils/hooks/useCache';
+import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -51,7 +52,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   if (!show) return null;
-  // if (Component.name !== 'Login' && !user) return null;
 
   return (
     <>
@@ -61,16 +61,18 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
       </Head>
       <GlobalStyle />
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps?.dehydratedState}>
-          <APIProvider>
-            <AuthProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-              <GlobalStyle />
-              <Component {...pageProps} />
-            </AuthProvider>
-          </APIProvider>
-        </Hydrate>
-      </QueryClientProvider>
+      <RecoilRoot>
+        <APIProvider>
+          <AuthProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
+            <QueryClientProvider client={queryClient}>
+              <Hydrate state={pageProps?.dehydratedState}>
+                <GlobalStyle />
+                <Component {...pageProps} />
+              </Hydrate>
+            </QueryClientProvider>
+          </AuthProvider>
+        </APIProvider>
+      </RecoilRoot>
     </>
   );
 }

@@ -1,17 +1,15 @@
 import Image from 'next/image';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import useGlobalState from '../utils/hooks/useGlobalState';
 import { packmanColors } from '../styles/color';
 import loginLogo from '/public/assets/svg/loginLogo.svg';
 import KakaoLogin from '/public/assets/png/kakaoLogin.png';
-import useAPI, { useSetToken } from '../utils/hooks/useAPI';
+import useAPI from '../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { From, User } from '../type/globalState';
-import useCache from '../utils/hooks/useCache';
-import useGlobalSelector from '../utils/hooks/useGlobalSelector';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { authedUser, creatingUser, from } from '../utils/recoil/atom/atom';
 
 declare global {
   interface Window {
@@ -21,14 +19,12 @@ declare global {
 
 function Login() {
   const router = useRouter();
-  const [user, setUser] = useGlobalState<User>('User');
-  const [cache] = useCache<User>('User');
-  const [__, setFrom] = useGlobalSelector<From>('From');
-  const [from] = useCache<From>('From');
 
+  const [fromInfo, setFromInfo] = useRecoilState(from);
+  const setUser = useSetRecoilState(authedUser);
+  const setCreatingUser = useSetRecoilState(creatingUser);
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
   const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
-  const setToken = useSetToken();
 
   useEffect(() => {
     if (router.isReady) {
@@ -44,28 +40,29 @@ function Login() {
               },
             },
           );
-          router.push('/folder');
+          kakaoLogin(
+            {
+              accessToken: data.access_token,
+            },
+            {
+              onSuccess: ({ data }) => {
+                console.log('kakao login success');
 
-          // kakaoLogin(
-          //   {
-          //     accessToken: data.access_token,
-          //   },
-          //   {
-          //     onSuccess: ({ data }) => {
-          //       localStorage.setItem('User', JSON.stringify(data));
-          //       if (data.isAlreadyUser) {
-          //         if (from?.url) {
-          //           router.replace(from.url);
-          //         } else {
-          //           router.push('/folder');
-          //         }
-          //         setFrom({ url: '' });
-          //       } else if (user && !user.isAlreadyUser) {
-          //         router.push('/profile');
-          //       }
-          //     },
-          //   },
-          // );
+                if (data.isAlreadyUser) {
+                  setUser(data);
+                  if (fromInfo.url) {
+                    router.replace(fromInfo.url);
+                  } else {
+                    router.replace('/folder');
+                  }
+                  setFromInfo({ url: '' });
+                } else {
+                  setCreatingUser(data);
+                  router.replace('/profile');
+                }
+              },
+            },
+          );
         })();
       }
     }

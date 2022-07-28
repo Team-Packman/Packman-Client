@@ -41,6 +41,10 @@ function TogetherLandingBottom(props: BottomModalProps) {
     closeModal();
   };
 
+  const editHandler = () => {
+    onEdit();
+    closeModal();
+  };
   return (
     <>
       <StyledBackground onClick={closeModal} />
@@ -59,7 +63,7 @@ function TogetherLandingBottom(props: BottomModalProps) {
             </>
           ) : (
             <>
-              <button onClick={onEdit}>
+              <button onClick={editHandler}>
                 <Image src={iEdit} alt="수정" />
                 수정하기
               </button>

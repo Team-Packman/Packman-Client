@@ -3,14 +3,10 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Layout from '../components/common/Layout';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
-import { useSetToken } from '../utils/hooks/useAPI';
-import useCache from '../utils/hooks/useCache';
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const [user] = useCache('User');
 
-  router.push('/together/invited/3nG1Th');
   return (
     <AsyncBoundary>
       <Layout back title="logo" icon="profile">

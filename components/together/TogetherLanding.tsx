@@ -21,10 +21,9 @@ import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 import { useRouter } from 'next/router';
 import ModalForInvitation from '../common/ModalForInvitation';
-import ModalForInvited from '../common/ModalForInvited';
-import useCache from '../../utils/hooks/useCache';
-import { User } from '../../type/globalState';
 import TogetherLandingBottom from '../common/TogetherLandingBottom';
+import { useRecoilValue } from 'recoil';
+import { authedUser } from '../../utils/recoil/atom/atom';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -45,26 +44,22 @@ function TogetherLanding() {
   const client = useQueryClient();
   const router = useRouter();
   const { id, invite } = router.query;
-  const [user, isLoaded] = useCache<User>('User');
-  const [globalUser] = useGlobalState<User>('User');
-  console.log('user', user);
-  console.log('globalUser', globalUser);
+  const user = useRecoilValue(authedUser);
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
   const [invitationModalOpen, setInvitationModalOpen] = useState(false);
-  const [invitedModalOpen, setInvitedModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState(0);
-  //category, item 끼리 서로 id 중복 X?
+
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
   const [currentCreating, setCurrentCreating] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
 
   /////////////////// api /////////////////////
-  const getPackingListDeatil = useAPI((api) => api.packingList.together.getPackingListDeatil);
+  const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDeatil);
   const addPackingListCategory = useAPI((api) => api.packingList.together.addPackingListCategory);
   const addAlonePackingListCategory = useAPI(
     (api) => api.packingList.alone.addAlonePackingListCategory,
@@ -98,8 +93,8 @@ function TogetherLanding() {
     (api) => api.packingList.alone.deleteAlonePackingListItem,
   );
   const { data: packingListData } = useQuery(
-    ['getPackingListDeatil', id],
-    () => getPackingListDeatil(id as string),
+    ['getPackingListDetail', id],
+    () => getPackingListDetail(id as string),
     {
       refetchInterval: 3000,
       enabled: !!id,
@@ -148,26 +143,9 @@ function TogetherLanding() {
   ////////////////////////////////////////////
 
   useEffect(() => {
-    if (router.isReady) {
-      if (!invite) {
-        setInvitationModalOpen(true);
-        // invitationModalOpenHandler();
-        console.log('!invite');
-      } else if (isLoaded) {
-        console.log('is loadied');
-        if (user && user.isAlreadyUser) {
-          console.log('zzzxxx');
-          console.log(user);
-          // invitedModalCloseHandler();
-          setInvitedModalOpen(false);
-        } else {
-          // router.push('/login');
-        }
-        //유저가 있으면 모달 x
-        //없으면 모달 띄우기
-      }
-    }
-  }, [router.isReady, user]);
+    // from 체크 후 최초 진입시만 초대 모달 띄우기
+    setInvitationModalOpen(true);
+  }, []);
 
   if (!packingListData) return null;
   const { data: info } = packingListData;
@@ -210,7 +188,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -223,7 +201,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -237,7 +215,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -249,7 +227,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -274,7 +252,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -289,7 +267,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -305,7 +283,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
+                client.invalidateQueries('getPackingListDetail');
               },
             },
           );
@@ -318,7 +296,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
+                client.invalidateQueries('getPackingListDetail');
               },
             },
           );
@@ -336,7 +314,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -351,7 +329,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -364,7 +342,7 @@ function TogetherLanding() {
   const updatePacker = (payload: PackerInfoPayload) => {
     patchPacker(payload, {
       onSuccess: () => {
-        client.invalidateQueries('getPackingListDeatil');
+        client.invalidateQueries('getPackingListDetail');
       },
     });
   };
@@ -381,7 +359,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -395,7 +373,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -409,7 +387,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDeatil');
+              client.invalidateQueries('getPackingListDetail');
             },
           },
         );
@@ -439,7 +417,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
+                client.invalidateQueries('getPackingListDetail');
               },
             },
           );
@@ -451,7 +429,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
+                client.invalidateQueries('getPackingListDetail');
               },
             },
           );
@@ -469,7 +447,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
+                client.invalidateQueries('getPackingListDetail');
               },
             },
           );
@@ -482,7 +460,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDeatil');
+                client.invalidateQueries('getPackingListDetail');
               },
             },
           );

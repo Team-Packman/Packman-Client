@@ -9,6 +9,8 @@ import { ProfileList } from '../../utils/profileImages';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 import { User } from '../../type/globalState';
 import { FONT_STYLES } from '../../styles/font';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { authedUser, creatingUser } from '../../utils/recoil/atom/atom';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -36,8 +38,10 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
   const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
-  const [user, setUser] = useGlobalState<User>('User');
-  console.log(user);
+  // const [user, setUser] = useGlobalState<User>('User');
+  const setUser = useSetRecoilState(authedUser);
+  const user = useRecoilValue(creatingUser);
+  console.log('user', user);
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
   const { mutate: addUserProfileMutate } = useMutation(
@@ -162,8 +166,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                     profileImageId: profile,
                   },
                   {
-                    onSuccess: (data) => {
-                      setUser(data.data);
+                    onSuccess: ({ data }) => {
+                      setUser(data);
                       router.push('/');
                     },
                   },

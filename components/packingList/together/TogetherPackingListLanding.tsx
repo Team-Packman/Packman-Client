@@ -223,7 +223,7 @@ function TogetherPackingListLanding() {
                 setDeleteList={(arr) => setDeleteList(arr)}
                 isDragged={isDragged}
                 routeToList={(idx: number) => {
-                  router.push(`/together/${togetherPackingList[idx]._id}?invite=''`);
+                  router.push(`/together/${togetherPackingList[idx]._id}`);
                 }}
               />
             </>

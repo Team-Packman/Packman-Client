@@ -90,7 +90,7 @@ const StyledRoot = styled.div`
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  bottom: 0;
+  bottom: 0 !important;
   width: 100%;
   height: 14.1rem;
   background-color: #fff;

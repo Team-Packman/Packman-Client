@@ -6,6 +6,7 @@ import createEctAPI, { EctAPI } from './ect/createAPI';
 import createInventoryAPI, { InventoryAPI } from './inventory';
 import createUserAPI, { UserAPI } from './user/createAPI';
 import createAuthAPI, { AuthAPI } from './auth/createAPI';
+import withAuth from '../utils/axios/withAuth';
 
 export interface APIService {
   auth: AuthAPI;
