@@ -50,8 +50,10 @@ function FolderLanding() {
     {
       suspense: true,
       onSuccess: (data) => {
-        const { remainDay } = data.data;
-        setIsOutDated(remainDay < 0);
+        if (data.data) {
+          const { remainDay } = data.data;
+          setIsOutDated(remainDay < 0);
+        }
       },
     },
   );
@@ -84,8 +86,6 @@ function FolderLanding() {
   }
 
   const { aloneFolders, togetherFolders } = folderList.data;
-  console.log('aloneFolders', aloneFolders);
-  console.log('togetherFolders', togetherFolders);
 
   // Bottom modal handler
   const handleBottomModalOpen = (_id: string, title: string) => {
@@ -200,7 +200,7 @@ function FolderLanding() {
 
   // router 관련 핸들러
   const handleRecentBannerClick = () => {
-    router.push(`${recentPackingData?.data.url}`);
+    router.push(`${recentPackingData?.data?.url}`);
   };
 
   const handleFolderClick = (id: string, categoryName: string) => {
@@ -230,24 +230,24 @@ function FolderLanding() {
           {!isError && (
             <>
               <StyledLabel>
-                <StyledTitle>{recentPackingData?.data.title}</StyledTitle>
+                <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
                 <StyledPackTotalNum>
-                  총{recentPackingData?.data.packTotalNum}개의 짐
+                  총{recentPackingData?.data?.packTotalNum}개의 짐
                 </StyledPackTotalNum>
               </StyledLabel>
               <StyledDday>
                 <StyledRemainDay>
-                  {isOutDated ? 'Done!' : `D-${recentPackingData?.data.remainDay}`}
+                  {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
                 </StyledRemainDay>
                 <StyledLeftMessage>
-                  {!isOutDated && recentPackingData?.data.packRemainNum !== 0 ? (
+                  {!isOutDated && recentPackingData?.data?.packRemainNum !== 0 ? (
                     <span>
                       <em> {'패킹'}</em>이 완료되었어요!
                     </span>
                   ) : (
                     !isOutDated && (
                       <span>
-                        아직<em> {recentPackingData?.data.packRemainNum}</em> 개의 짐이 남았어요!
+                        아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
                       </span>
                     )
                   )}
