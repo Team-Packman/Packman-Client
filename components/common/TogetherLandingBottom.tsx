@@ -5,19 +5,17 @@ import iEdit from '/public/assets/svg/iEdit.svg';
 import iSwipeBar from '/public/assets/svg/iSwipeBar.svg';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ModalDataProps } from '../folder/FolderLanding';
 import { FONT_STYLES } from '../../styles/font';
 
-interface BottomModalProps {
+interface TogetherLandingBottomProps {
   content?: string;
-  // modalData: ModalDataProps;
   closeModal: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-function TogetherLandingBottom(props: BottomModalProps) {
-  const { closeModal, onEdit, onDelete } = props;
+function TogetherLandingBottom(props: TogetherLandingBottomProps) {
+  const { content, closeModal, onEdit, onDelete } = props;
 
   const [isClickDelete, setIsClickDelete] = useState(false);
 
@@ -50,7 +48,7 @@ function TogetherLandingBottom(props: BottomModalProps) {
       <StyledBackground onClick={closeModal} />
       <StyledRoot>
         <Image src={iSwipeBar} alt="스와이프바" />
-        <h1>{isClickDelete && '정말 삭제하시겠어요?'}</h1>
+        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : content}</h1>
         <StyledButtonWrapper>
           {isClickDelete ? (
             <>
@@ -107,10 +105,21 @@ const StyledRoot = styled.div`
   gap: 0.8rem;
   padding: 0.8rem 0;
   z-index: 10000;
+  animation: appear 0.3s;
 
   & > h1 {
     color: #282828;
     font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+  }
+
+  @keyframes appear {
+    from {
+      bottom: -10rem;
+    }
+
+    to {
+      bottom: 0;
+    }
   }
 `;
 
