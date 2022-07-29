@@ -9,12 +9,11 @@ import CheckListSubHeader from '../together/CheckListSubHeader';
 import { packmanColors } from '../../styles/color';
 import PackagesWithCategory from '../common/PackagesWithCategory';
 import PackingItem, { UpdateItemPayload } from '../common/PackingItem';
-import { GetAlonePackingListDetailOutput } from '../../service/packingList/alone';
 import PackingCategory, { UpdateCategoryPayload } from '../common/PackingCategory';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 import SharePackingListButton from '../common/SharePackingListButton';
-import PackerModal from '../together/PackerModal';
+import { useRouter } from 'next/router';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -33,6 +32,8 @@ type RemainingInfoType = 'title' | 'departure' | 'save';
 
 function AloneLanding() {
   const client = useQueryClient();
+  const router = useRouter();
+  const { id } = router.query;
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -46,10 +47,11 @@ function AloneLanding() {
     (api) => api.packingList.alone.getAlonePackingListDetail,
   );
   const { data } = useQuery(
-    'getAlonePackingListDetail',
-    () => getAlonePackingListDetail('62d9865024ff58dcf717984d'),
+    ['getAlonePackingListDetail', id],
+    () => getAlonePackingListDetail(id as string),
     {
       refetchInterval: 3000,
+      enabled: !!id,
     },
   );
 
