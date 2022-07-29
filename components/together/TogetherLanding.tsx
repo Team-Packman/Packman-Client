@@ -29,6 +29,7 @@ interface FocusInfo {
   type: 'category' | 'item';
   categoryId: string;
   packId: string;
+  title: string;
 }
 interface RemainingInfoPayload {
   listId: string;
@@ -45,7 +46,7 @@ function TogetherLanding() {
   const router = useRouter();
   const { id, invite } = router.query;
   const user = useRecoilValue(authedUser);
-  const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '' };
+  const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
@@ -533,6 +534,7 @@ function TogetherLanding() {
                                   type: 'item',
                                   categoryId,
                                   packId,
+                                  title: name,
                                 })
                               }
                               isEditing={currentEditing === packId}
@@ -572,6 +574,7 @@ function TogetherLanding() {
                             ...initialFocus,
                             type: 'category',
                             categoryId,
+                            title: name,
                           })
                         }
                         isEditing={currentEditing === categoryId}
@@ -625,6 +628,7 @@ function TogetherLanding() {
           onEdit={onEdit}
           onDelete={onDelete}
           closeModal={bottomModalCloseHandler}
+          content={currentFocus.title}
         />
       )}
     </Layout>
