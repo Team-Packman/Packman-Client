@@ -11,9 +11,3 @@ function useAPI<Req extends unknown[], Res>(
 }
 
 export default useAPI;
-
-export function useSetToken() {
-  const { setToken } = useContext(AuthContext);
-
-  return setToken;
-}
