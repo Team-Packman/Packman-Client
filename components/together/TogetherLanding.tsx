@@ -16,12 +16,11 @@ import useGlobalState from '../../utils/hooks/useGlobalState';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
 import PackerModal, { PackerInfoPayload } from './PackerModal';
-import BottomModal from '../common/BottomModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 import { useRouter } from 'next/router';
 import ModalForInvitation from '../common/ModalForInvitation';
-import TogetherLandingBottom from '../common/TogetherLandingBottom';
+import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRecoilValue } from 'recoil';
 import { authedUser } from '../../utils/recoil/atom/atom';
 
@@ -624,7 +623,7 @@ function TogetherLanding() {
         />
       )}
       {bottomModalOpen && (
-        <TogetherLandingBottom
+        <PackingListBottomModal
           onEdit={onEdit}
           onDelete={onDelete}
           closeModal={bottomModalCloseHandler}
@@ -653,22 +652,4 @@ const StyledBody = styled.div`
   margin-bottom: 24.4rem;
   padding: 0 2rem;
   padding-top: 1.6rem;
-`;
-const StyledBg = styled.div`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-`;
-
-const StyledModal = styled.div`
-  width: 30rem;
-  height: 10rem;
-  display: flex;
-  position: absolute;
-  top: 50%;
-  left: 50%;
 `;

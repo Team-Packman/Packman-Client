@@ -13,12 +13,14 @@ import PackingCategory, { UpdateCategoryPayload } from '../common/PackingCategor
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 import SharePackingListButton from '../common/SharePackingListButton';
+import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRouter } from 'next/router';
 
 interface FocusInfo {
   type: 'category' | 'item';
   categoryId: string;
   packId: string;
+  title: string;
 }
 interface RemainingInfoPayload {
   listId: string;
@@ -34,7 +36,7 @@ function AloneLanding() {
   const client = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
-  const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '' };
+  const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
@@ -350,6 +352,7 @@ function AloneLanding() {
                           type: 'item',
                           packId,
                           categoryId,
+                          title: name,
                         })
                       }
                       isEditing={currentEditing === packId}
@@ -378,7 +381,12 @@ function AloneLanding() {
                 name={name}
                 updateCategory={updateCategory}
                 modalHandler={() =>
-                  bottomModalOpenHandler({ ...initialFocus, type: 'category', categoryId })
+                  bottomModalOpenHandler({
+                    ...initialFocus,
+                    type: 'category',
+                    categoryId,
+                    title: name,
+                  })
                 }
                 isEditing={currentEditing === categoryId}
               />
@@ -406,16 +414,12 @@ function AloneLanding() {
         </FunctionSection>
       </StyledAloneLanding>
       {bottomModalOpen && (
-        <StyledBg onClick={bottomModalCloseHandler}>
-          <StyledModal>
-            <button onClick={onEdit} style={{ width: '8rem', height: '8rem' }}>
-              update
-            </button>
-            <button onClick={onDelete} style={{ width: '8rem', height: '8rem' }}>
-              delete
-            </button>
-          </StyledModal>
-        </StyledBg>
+        <PackingListBottomModal
+          onEdit={onEdit}
+          onDelete={onDelete}
+          closeModal={bottomModalCloseHandler}
+          content={currentFocus.title}
+        />
       )}
     </Layout>
   );
@@ -439,23 +443,4 @@ const StyledBody = styled.div`
   margin-bottom: 24.4rem;
   padding: 0 2rem;
   padding-top: 1.6rem;
-`;
-
-const StyledBg = styled.div`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-`;
-
-const StyledModal = styled.div`
-  width: 30rem;
-  height: 10rem;
-  display: flex;
-  position: absolute;
-  top: 50%;
-  left: 50%;
 `;
