@@ -7,6 +7,7 @@ import { packmanColors } from '../../styles/color';
 interface SharePackingListButtonProps {
   children?: ReactNode;
   icon?: boolean;
+  onClick?: () => void;
 }
 
 function SharePackingListButton(props: SharePackingListButtonProps) {

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import React from 'react';
+import { useQuery } from 'react-query';
 import useAPI from '../../utils/hooks/useAPI';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
@@ -11,37 +11,28 @@ import SharePackingListButton from '../common/SharePackingListButton';
 import PackagesWithCategory from '../common/PackagesWithCategory';
 import PackingCategory from '../common/PackingCategory';
 import PackingItem from '../common/PackingItem';
-import { GetTemplateOutput } from '../../service/ect';
-interface Query {
-  categoryName: 'alone' | 'together';
-  type: 'basic' | 'alone' | 'together';
-  id: string;
-}
+
+type CategoryName = 'alone' | 'together';
+type TemplateType = 'basic' | 'alone' | 'together';
 
 function PreviewLanding() {
   const router = useRouter();
-  const { id, type, categoryName } = router.query;
-  const client = useQueryClient();
-  const [data, setData] = useState<GetTemplateOutput | null>(null);
+  const { id, type } = router.query;
 
   const getTemplate = useAPI((api) => api.ect.getTemplate);
+  const { data } = useQuery(
+    'getTemplate',
+    () =>
+      getTemplate({
+        templateId: id as string,
+        type: type as TemplateType,
+      }),
+    {
+      enabled: !!id && !!type,
+    },
+  );
 
-  useEffect(() => {
-    if (router.isReady) {
-      (async () => {
-        const query = router.query;
-        const data = await client.fetchQuery('getTemplate', () =>
-          getTemplate({
-            templateId: id as string,
-            type: categoryName as 'basic' | 'alone' | 'together',
-          }),
-        );
-        setData(data);
-      })();
-    }
-  }, [router.isReady]);
-
-  if (!data || !router.query) return null;
+  if (!data) return null;
   const { data: info } = data;
   return (
     <Layout
@@ -66,6 +57,7 @@ function PreviewLanding() {
         ))}
       </StyledBody>
       <FunctionSection>
+        {/* 추후 템플릿 작성 뷰 완성되면 버튼 로직 추가 */}
         <AddTemplateButton
           onClick={() => {
             //
