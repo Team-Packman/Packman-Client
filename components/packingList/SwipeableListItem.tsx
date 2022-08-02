@@ -65,6 +65,12 @@ export default function SwipeablelistItem(props: ItemProps) {
     document.addEventListener('touchend', End);
   };
 
+  const moveToPackingList = () => {
+    if (!isDeleting) {
+      router.push(`/together/${packingList[idx]._id}`);
+    }
+  };
+
   return (
     <StyledRoot isDeleting={!isDeleting}>
       {isDeleting && (
@@ -83,7 +89,7 @@ export default function SwipeablelistItem(props: ItemProps) {
         onTouchStart={onTouchStart}
         isDragged={isDragged}
         isDeleting={isDeleting}
-        onClick={() => router.push(`/together/${packingList[idx]._id}`)}
+        onClick={moveToPackingList}
       >
         <StyledItemInfo>
           <p>{departureDate}</p>

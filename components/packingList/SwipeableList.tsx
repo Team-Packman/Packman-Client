@@ -14,47 +14,18 @@ interface SwipeableListProps {
   packingList: PackingList[];
   deleteList: string[];
   isDeleting: boolean;
-  checkDeleteList: (id: string) => void;
-  handleIsDragged: (tmpArr: boolean[]) => void;
   openModal: () => void;
-  setSelectedIndex: (id: number) => void;
   setDeleteList: (arr: string[]) => void;
-  isDragged: boolean[];
+  swipeableListItem: React.ReactNode;
 }
 
 export default function SwipeableList(props: SwipeableListProps) {
-  const {
-    packingList,
-    deleteList,
-    isDeleting,
-    checkDeleteList,
-    handleIsDragged,
-    openModal,
-    setSelectedIndex,
-    setDeleteList,
-    isDragged,
-  } = props;
+  const { packingList, deleteList, isDeleting, openModal, setDeleteList, swipeableListItem } =
+    props;
 
   return (
     <StyledRoot>
-      <StyledSwipeableListWrapper>
-        {packingList?.map((item, idx) => (
-          <SwipeablelistItem
-            key={item._id}
-            idx={idx}
-            isDragged={isDragged[idx]}
-            handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-            isDeleting={isDeleting}
-            deleteList={deleteList}
-            checkDeleteList={(id: string) => checkDeleteList(id)}
-            onClickDeleteButton={() => {
-              setSelectedIndex(idx);
-              openModal();
-            }}
-            packingList={packingList}
-          />
-        ))}
-      </StyledSwipeableListWrapper>
+      <StyledSwipeableListWrapper>{swipeableListItem}</StyledSwipeableListWrapper>
 
       {isDeleting && (
         <StyledButtonWrapper>

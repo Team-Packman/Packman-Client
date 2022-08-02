@@ -17,6 +17,7 @@ import {
   GetTogetherInventoryOutput,
 } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
+import SwipeablelistItem from '../SwipeableListItem';
 
 interface DeleteTogetherInventoryData {
   folderId: string;
@@ -213,12 +214,24 @@ function TogetherPackingListLanding() {
                 packingList={togetherPackingList}
                 deleteList={deleteList}
                 isDeleting={isDeleting}
-                checkDeleteList={checkDeleteList}
-                handleIsDragged={handleIsDragged}
                 openModal={openModal}
-                setSelectedIndex={(id: number) => setSelectedIndex(id)}
                 setDeleteList={(arr) => setDeleteList(arr)}
-                isDragged={isDragged}
+                swipeableListItem={togetherPackingList?.map((item, idx) => (
+                  <SwipeablelistItem
+                    key={item._id}
+                    idx={idx}
+                    isDragged={isDragged[idx]}
+                    handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                    isDeleting={isDeleting}
+                    deleteList={deleteList}
+                    checkDeleteList={(id: string) => checkDeleteList(id)}
+                    onClickDeleteButton={() => {
+                      setSelectedIndex(idx);
+                      openModal();
+                    }}
+                    packingList={togetherPackingList}
+                  />
+                ))}
               />
             </>
           )}
