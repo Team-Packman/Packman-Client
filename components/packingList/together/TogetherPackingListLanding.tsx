@@ -118,8 +118,6 @@ function TogetherPackingListLanding() {
     }
   };
 
-  console.log(isDeleting);
-
   return (
     <>
       <Header back title="패킹 리스트" icon="profile" />
@@ -222,9 +220,6 @@ function TogetherPackingListLanding() {
                 setSelectedIndex={(id: number) => setSelectedIndex(id)}
                 setDeleteList={(arr) => setDeleteList(arr)}
                 isDragged={isDragged}
-                routeToList={(idx: number) => {
-                  router.push(`/together/${togetherPackingList[idx]._id}`);
-                }}
               />
             </>
           )}

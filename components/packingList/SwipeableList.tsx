@@ -20,7 +20,6 @@ interface SwipeableListProps {
   setSelectedIndex: (id: number) => void;
   setDeleteList: (arr: string[]) => void;
   isDragged: boolean[];
-  routeToList: (id: number) => void;
 }
 
 export default function SwipeableList(props: SwipeableListProps) {
@@ -34,7 +33,6 @@ export default function SwipeableList(props: SwipeableListProps) {
     setSelectedIndex,
     setDeleteList,
     isDragged,
-    routeToList,
   } = props;
 
   return (
@@ -54,7 +52,6 @@ export default function SwipeableList(props: SwipeableListProps) {
               openModal();
             }}
             packingList={packingList}
-            routeToList={routeToList}
           />
         ))}
       </StyledSwipeableListWrapper>

@@ -24,7 +24,6 @@ interface ItemProps {
   checkDeleteList: (id: string) => void;
   onClickDeleteButton: (idx: number) => void;
   packingList: PackingList[];
-  routeToList: (id: number) => void;
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
@@ -38,7 +37,6 @@ export default function SwipeablelistItem(props: ItemProps) {
     checkDeleteList,
     onClickDeleteButton,
     packingList,
-    routeToList,
   } = props;
 
   const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
@@ -68,7 +66,7 @@ export default function SwipeablelistItem(props: ItemProps) {
   };
 
   return (
-    <StyledRoot onClick={() => routeToList(idx)}>
+    <StyledRoot onClick={() => router.push(`/together/${packingList[idx]._id}`)}>
       {isDeleting && (
         <StyledSelectDelete>
           <Image
@@ -207,7 +205,6 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
-  padding: ${({ isDragged }) => isDragged && '0 1.4rem'};
 
   & > div {
     color: ${packmanColors.pmWhite};
