@@ -168,7 +168,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                   {
                     onSuccess: ({ data }) => {
                       setUser(data);
-                      router.push('/');
+                      router.push('/folder');
                     },
                   },
                 );
