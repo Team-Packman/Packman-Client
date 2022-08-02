@@ -92,7 +92,6 @@ function TogetherPackingListLanding() {
   const onClickRightModalButton = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
-      console.log(deleteList.join(','));
       deleteTogetherInventoryMutate({
         folderId: currentFolder._id,
         listId: deleteList.join(','),
@@ -293,7 +292,7 @@ const StyledCaptionWrapper = styled.div`
   & > span {
     position: absolute;
     left: 2.6rem;
-    bottom: 1rem;
+    bottom: 0.8rem;
     font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmDeepGrey};
   }
@@ -314,8 +313,9 @@ const StyledCaptionButtonWrapper = styled.div`
   position: absolute;
   display: flex;
   right: 2rem;
-  bottom: 0.9rem;
+  bottom: 0.8rem;
   & > p {
+    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmDeepGrey};
   }
 `;
