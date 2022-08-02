@@ -66,7 +66,7 @@ export default function SwipeablelistItem(props: ItemProps) {
   };
 
   return (
-    <StyledRoot onClick={() => router.push(`/together/${packingList[idx]._id}`)}>
+    <StyledRoot isDeleting={!isDeleting}>
       {isDeleting && (
         <StyledSelectDelete>
           <Image
@@ -75,10 +75,16 @@ export default function SwipeablelistItem(props: ItemProps) {
             onClick={() => checkDeleteList(_id)}
             width={24}
             height={24}
+            layout="fixed"
           />
         </StyledSelectDelete>
       )}
-      <StyledItemWrapper onTouchStart={onTouchStart} isDragged={isDragged} isDeleting={isDeleting}>
+      <StyledItemWrapper
+        onTouchStart={onTouchStart}
+        isDragged={isDragged}
+        isDeleting={isDeleting}
+        onClick={() => router.push(`/together/${packingList[idx]._id}`)}
+      >
         <StyledItemInfo>
           <p>{departureDate}</p>
           <p>{title}</p>
@@ -107,29 +113,27 @@ export default function SwipeablelistItem(props: ItemProps) {
   );
 }
 
-const StyledRoot = styled.div`
+const StyledRoot = styled.div<{ isDeleting: boolean }>`
   display: flex;
-  justify-content: center;
+  justify-content: ${({ isDeleting }) => isDeleting && 'center'};
   align-items: center;
-  width: 33.6rem;
+  width: 37.5rem;
   height: 11.4rem;
   gap: 2.7rem;
+  overflow-x: hidden;
 `;
 
 const StyledSelectDelete = styled.div`
   position: absolute;
   left: 3.288rem;
-  display: flex;
-  width: 8.4rem;
-  height: 2.4rem;
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
-  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  min-width: 33.6rem;
+  overflow-x: hidden;
   height: inherit;
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
@@ -146,7 +150,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
       case false:
         return isDragged ? 'translateX(-4.7rem)' : 'translateX(0)';
       default:
-        return 'translateX(6.388rem)';
+        return 'translateX(8.388rem)';
     }
   }};
 `;
