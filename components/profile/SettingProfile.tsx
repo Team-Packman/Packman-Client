@@ -134,7 +134,7 @@ const StyledSettingWrapper = styled.main`
 
   & > p:first-child {
     position: absolute;
-    top: -3.5rem;
+    top: -1.9rem;
     right: 0.5rem;
     color: ${packmanColors.pmDarkGrey};
     font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
