@@ -149,6 +149,7 @@ const StyledSettingWrapper = styled.main`
 `;
 const StyledProfile = styled.div`
   display: flex;
+  align-items: center;
   padding: 1.6rem;
   gap: 2.4rem;
   background-color: ${packmanColors.pmBlueGrey};
@@ -161,7 +162,8 @@ const StyledProfile = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2.6rem;
+    justify-content: space-between;
+    height: 6.5rem;
     color: ${packmanColors.pmBlack};
     & > h1 {
       font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
