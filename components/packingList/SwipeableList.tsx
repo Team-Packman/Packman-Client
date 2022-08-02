@@ -57,37 +57,39 @@ export default function SwipeableList(props: SwipeableListProps) {
       </StyledSwipeableListWrapper>
 
       {isDeleting && (
-        <StyledDeleteButton>
-          {!deleteList.length ? (
-            <div
-              onClick={() => {
-                const tempArr: string[] = [];
-                if (packingList) {
-                  packingList.forEach(({ _id }) => tempArr.push(_id));
-                }
-                setDeleteList(tempArr);
-              }}
-            >
-              전체 선택
-            </div>
-          ) : deleteList.length === packingList?.length ? (
-            <div
-              onClick={() => {
-                openModal();
-              }}
-            >
-              전체 삭제
-            </div>
-          ) : (
-            <div
-              onClick={() => {
-                openModal();
-              }}
-            >
-              선택 삭제
-            </div>
-          )}
-        </StyledDeleteButton>
+        <StyledButtonWrapper>
+          <StyledDeleteButton>
+            {!deleteList.length ? (
+              <div
+                onClick={() => {
+                  const tempArr: string[] = [];
+                  if (packingList) {
+                    packingList.forEach(({ _id }) => tempArr.push(_id));
+                  }
+                  setDeleteList(tempArr);
+                }}
+              >
+                전체 선택
+              </div>
+            ) : deleteList.length === packingList?.length ? (
+              <div
+                onClick={() => {
+                  openModal();
+                }}
+              >
+                전체 삭제
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  openModal();
+                }}
+              >
+                선택 삭제
+              </div>
+            )}
+          </StyledDeleteButton>
+        </StyledButtonWrapper>
       )}
     </StyledRoot>
   );
@@ -113,10 +115,14 @@ const StyledSwipeableListWrapper = styled.div`
   height: 100%;
   overflow-y: scroll;
 `;
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 const StyledDeleteButton = styled.button`
   position: fixed;
   bottom: 1.507rem;
-  width: 100%;
+  width: 33.6rem;
   height: 4.7rem;
   font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
   background-color: ${packmanColors.pmPink};
