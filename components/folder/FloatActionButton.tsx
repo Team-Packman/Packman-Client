@@ -51,9 +51,9 @@ const FloatActionButton = (props: FloatModalProps) => {
       <StyledFABContainer pageName={pageName} isAloned={isAloned}>
         <li onClick={handleOpen}>
           {open ? (
-            <Image src={FABOPEN} width={89} height={89} alt="FAB" />
+            <Image src={FABOPEN} width={57} height={57} alt="FAB" />
           ) : (
-            <Image src={FAB} width={89} height={89} alt="FAB" />
+            <Image src={FAB} width={57} height={57} alt="FAB" />
           )}
         </li>
         {pageName === 'folder' ? (
@@ -115,7 +115,7 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   // Display button to the bottom right
   position: fixed;
   right: 2rem;
-  bottom: 9rem;
+  bottom: 7rem;
 
   // Set max height to only trigger mouse enter
   // when user hover over first button
