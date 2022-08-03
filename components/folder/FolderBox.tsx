@@ -78,7 +78,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
             {isNew ? (
               <Image src={Close} alt="Close icon" width={14} height={14} />
             ) : (
-              <Image src={Kebab} alt="kebab icon" width={3} height={14} />
+              <Image src={Kebab} alt="kebab icon" width={25} height={25} />
             )}
           </span>
         </StyledKebab>
@@ -135,7 +135,7 @@ export const StyledInfo = styled.div`
 export const StyledKebab = styled.div`
   display: flex;
   justify-content: end;
-  padding: 0.9rem 1.6rem 0 0;
+  padding: 0.3rem 0;
   z-index: 10;
   cursor: pointer;
 `;
