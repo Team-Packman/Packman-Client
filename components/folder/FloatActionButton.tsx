@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Image from 'next/image';
 import { useState } from 'react';
 import FAB from '/public/assets/svg/fab_ic.svg';
@@ -6,6 +6,7 @@ import FABOPEN from '/public/assets/svg/fab_open_ic.svg';
 import { Backdrop } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { packmanColors } from '../../styles/color';
+import { FONT_STYLES } from '../../styles/font';
 
 interface FloatModalProps {
   onClick(index: number): void;
@@ -50,9 +51,9 @@ const FloatActionButton = (props: FloatModalProps) => {
       <StyledFABContainer pageName={pageName} isAloned={isAloned}>
         <li onClick={handleOpen}>
           {open ? (
-            <Image src={FABOPEN} width={63} height={63} alt="FAB" />
+            <Image src={FABOPEN} width={89} height={89} alt="FAB" />
           ) : (
-            <Image src={FAB} width={63} height={63} alt="FAB" />
+            <Image src={FAB} width={89} height={89} alt="FAB" />
           )}
         </li>
         {pageName === 'folder' ? (
@@ -113,12 +114,18 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
 
   // Display button to the bottom right
   position: fixed;
-  right: 2em;
-  bottom: 2em;
+  right: 2rem;
+  bottom: 9rem;
 
   // Set max height to only trigger mouse enter
   // when user hover over first button
   max-height: 52px;
+
+  li:first-child {
+    position: fixed;
+    right: 1rem;
+    bottom: 0;
+  }
 
   li:last-child {
     margin-bottom: ${({ pageName }) => pageName === 'folder' && '0.8rem'};
@@ -138,6 +145,7 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
   display: flex;
   justify-content: flex-start;
   font-size: 1.5rem;
+  align-items: center;
   padding: 1.2rem 1.627rem 1.2rem 1.2rem;
   cursor: pointer;
   position: relative;
@@ -149,11 +157,15 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
   transition: transform 300ms, opacity 300ms;
   opacity: ${({ open }) => (open ? '1' : '0')};
 
+  span:first-child {
+    width: 1.6rem;
+    font-size: 1.6rem;
+  }
+
   span:last-child {
     /* '폴더 추가' 중앙 정렬을 위한 코드 */
-    font-weight: 600;
-    font-size: 1.5rem;
-    padding-left: ${({ index }) => (index === 2 ? '3.2rem' : '1rem')};
+    font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+    padding-left: ${({ index }) => (index === 2 ? '3.2rem' : '1.4rem')};
     flex-shrink: 0;
   }
 `;
