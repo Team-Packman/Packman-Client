@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import iCheck from '/public/assets/svg/iCheck.svg';
 import iCheckPink from '/public/assets/svg/iCheckPink.svg';
 import iRightArrow from '/public/assets/svg/iRightArrow.svg';
@@ -151,7 +151,6 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
   background-color: ${packmanColors.pmBlueGrey};
-  /* transition: ${({ isDeleting }) => !isDeleting && '0.4s ease-in-out'}; */
   transition: 0.4s ease-in-out;
 
   -webkit-user-select: none;
@@ -159,14 +158,32 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   -ms-user-select: none;
   user-select: none;
 
-  transform: ${({ isDragged, isDeleting }) => {
+  ${({ isDragged, isDeleting }) => {
     switch (isDeleting) {
       case false:
-        return isDragged ? 'translateX(-4.7rem)' : 'translateX(0)';
+        return isDragged
+          ? css`
+              transform: translateX(-4.7rem);
+            `
+          : css`
+              transform: translateX(0);
+            `;
       default:
-        return 'translateX(8.388rem)';
+        return css`
+          animation: 0.4s ease-in-out slide;
+          transform: translateX(8.388rem);
+        `;
     }
   }};
+
+  @keyframes slide {
+    from {
+      transform: translateX(2rem);
+    }
+    to {
+      transform: translateX(8.388rem);
+    }
+  }
 `;
 
 const StyledItemInfo = styled.div`
