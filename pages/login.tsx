@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authedUser, creatingUser, from } from '../utils/recoil/atom/atom';
+import Link from 'next/link';
 
 declare global {
   interface Window {
@@ -30,6 +31,7 @@ function Login() {
     if (router.isReady) {
       if (router.query.code) {
         const url = encodeURI(process.env.NEXT_PUBLIC_REDIRECT ?? '');
+
         (async () => {
           const { data }: { data: { access_token: string } } = await axios.post(
             `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${router.query.code}&redirect_uri=${url}`,
@@ -46,8 +48,6 @@ function Login() {
             },
             {
               onSuccess: ({ data }) => {
-                console.log('kakao login success');
-
                 if (data.isAlreadyUser) {
                   setUser(data);
                   if (fromInfo.url) {
@@ -64,26 +64,15 @@ function Login() {
             },
           );
         })();
+      } else if (router.query.error) {
+        if (router.query.error_description) {
+          alert(router.query.error_description);
+        } else {
+          alert('문제 발생');
+        }
       }
     }
   }, [router.isReady]);
-  //
-
-  useEffect(() => {
-    if (window.Kakao) {
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-      }
-    }
-  }, []);
-
-  async function loginWithKakao() {
-    if (window.Kakao.isInitialized()) {
-      window.Kakao.Auth.authorize({
-        redirectUri: process.env.NEXT_PUBLIC_REDIRECT,
-      });
-    }
-  }
 
   return (
     <StyledRoot>
@@ -93,9 +82,15 @@ function Login() {
       </LogoAndTitle>
       <ButtonsContainer>
         <LoginDescription>3초만에 시작하기</LoginDescription>
-        <LoginButton id="custom-login-btn" onClick={loginWithKakao}>
-          <Image src={KakaoLogin} alt="카카오 로그인 버튼" layout="fill" />
-        </LoginButton>
+        <Link
+          href={`https://kauth.kakao.com/oauth/authorize?client_id=${
+            process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID
+          }&redirect_uri=${encodeURI(process.env.NEXT_PUBLIC_REDIRECT ?? '')}&response_type=code`}
+        >
+          <LoginButton id="custom-login-btn">
+            <Image src={KakaoLogin} alt="카카오 로그인 버튼" layout="fill" />
+          </LoginButton>
+        </Link>
         <LoginDescription>
           로그인 시 이용약관과 개인정보 처리 방침에 동의하게 됩니다.
         </LoginDescription>

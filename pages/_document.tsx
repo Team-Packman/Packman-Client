@@ -38,8 +38,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <script src="https://accounts.google.com/gsi/client" async defer></script>
-          <script src="https://developers.kakao.com/sdk/js/kakao.js " async defer></script>
           <link
             rel="stylesheet"
             type="text/css"
