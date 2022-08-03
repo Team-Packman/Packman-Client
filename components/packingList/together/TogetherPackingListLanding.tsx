@@ -118,6 +118,14 @@ function TogetherPackingListLanding() {
     }
   };
 
+  const onClickCaptionButton = () => {
+    setIsDragged(Array(togetherPackingList?.length).fill(false));
+    setIsDeleting((prev) => !prev);
+    if (!isDeleting) {
+      setDeleteList([]);
+    }
+  };
+
   return (
     <>
       <Header back title="패킹 리스트" icon="profile" />
@@ -186,15 +194,7 @@ function TogetherPackingListLanding() {
                 </span>
               )}
 
-              <StyledCaptionButtonWrapper
-                onClick={() => {
-                  setIsDragged(Array(togetherPackingList?.length).fill(false));
-                  setIsDeleting((prev) => !prev);
-                  if (!isDeleting) {
-                    setDeleteList([]);
-                  }
-                }}
-              >
+              <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                 {isDeleting ? (
                   <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
                     취소
@@ -287,7 +287,7 @@ const StyledMain = styled.div<{ isEmpty: boolean }>`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: calc(100vh - 18rem);
+  height: calc(var(--vh, 1vh) * 100 - 16.7rem);
 `;
 const StyledEmpty = styled.div`
   display: flex;

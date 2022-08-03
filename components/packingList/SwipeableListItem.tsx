@@ -151,7 +151,8 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
   background-color: ${packmanColors.pmBlueGrey};
-  transition: ${({ isDeleting }) => !isDeleting && '0.4s ease-in-out'};
+  /* transition: ${({ isDeleting }) => !isDeleting && '0.4s ease-in-out'}; */
+  transition: 0.4s ease-in-out;
 
   -webkit-user-select: none;
   -moz-user-select: none;

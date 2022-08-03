@@ -33,31 +33,18 @@ export default function SwipeableList(props: SwipeableListProps) {
             {!deleteList.length ? (
               <div
                 onClick={() => {
-                  const tempArr: string[] = [];
                   if (packingList) {
-                    packingList.forEach(({ _id }) => tempArr.push(_id));
+                    const payload = packingList.map(({ _id }) => _id);
+                    setDeleteList(payload);
                   }
-                  setDeleteList(tempArr);
                 }}
               >
                 전체 선택
               </div>
             ) : deleteList.length === packingList?.length ? (
-              <div
-                onClick={() => {
-                  openModal();
-                }}
-              >
-                전체 삭제
-              </div>
+              <div onClick={openModal}>전체 삭제</div>
             ) : (
-              <div
-                onClick={() => {
-                  openModal();
-                }}
-              >
-                선택 삭제
-              </div>
+              <div onClick={openModal}>선택 삭제</div>
             )}
           </StyledDeleteButton>
         </StyledButtonWrapper>
@@ -70,12 +57,13 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: flex-start; */
   width: 100%;
-  height: calc(100vh - 20.5rem);
+  height: calc(var(--vh, 1vh) * 100 - 20.5rem);
   gap: 0.8rem;
   background-color: #fff;
   overflow-y: auto;
+
+  /* 브라우저별 스크롤바 숨김 설정 */
   -ms-overflow-style: none; // Edge
   scrollbar-width: none; // Firefox
   &::-webkit-scrollbar {
