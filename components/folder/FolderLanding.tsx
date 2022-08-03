@@ -31,6 +31,7 @@ function FolderLanding() {
     isAloned: false,
   });
   const [isOutDated, setIsOutDated] = useState<boolean>(false);
+  const [isRecentListExist, setIsRecentListExist] = useState<boolean>(false);
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
@@ -44,19 +45,16 @@ function FolderLanding() {
     refetchOnWindowFocus: false,
   });
 
-  const { data: recentPackingData, isError } = useQuery(
-    'recentPacking',
-    () => getRecentPackingList(),
-    {
-      suspense: true,
-      onSuccess: (data) => {
-        if (data.data) {
-          const { remainDay } = data.data;
-          setIsOutDated(remainDay < 0);
-        }
-      },
+  const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
+    suspense: true,
+    onSuccess: (data) => {
+      if (data.data) {
+        const { remainDay } = data.data;
+        setIsOutDated(remainDay < 0);
+        setIsRecentListExist(true);
+      }
     },
-  );
+  });
 
   const { mutate: editFolderMutate } = useMutation((editedFolderData: ModalDataProps) => {
     return updateFolderName(editedFolderData);
@@ -226,37 +224,35 @@ function FolderLanding() {
     <>
       <StyledRoot>
         <Header title="logo" icon="profile" />
-        <StyledRecentBanner isRecentListExist={!isError} onClick={handleRecentBannerClick}>
-          {!isError && (
-            <>
-              <StyledLabel>
-                <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
-                <StyledPackTotalNum>
-                  총{recentPackingData?.data?.packTotalNum}개의 짐
-                </StyledPackTotalNum>
-              </StyledLabel>
-              <StyledDday>
-                <StyledRemainDay>
-                  {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
-                </StyledRemainDay>
-                <StyledLeftMessage>
-                  {!isOutDated && recentPackingData?.data?.packRemainNum !== 0 ? (
+        <StyledRecentBanner isRecentListExist={isRecentListExist} onClick={handleRecentBannerClick}>
+          <>
+            <StyledLabel>
+              <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
+              <StyledPackTotalNum>
+                총{recentPackingData?.data?.packTotalNum}개의 짐
+              </StyledPackTotalNum>
+            </StyledLabel>
+            <StyledDday>
+              <StyledRemainDay>
+                {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
+              </StyledRemainDay>
+              <StyledLeftMessage>
+                {!isOutDated && recentPackingData?.data?.packRemainNum !== 0 ? (
+                  <span>
+                    <em> {'패킹'}</em>이 완료되었어요!
+                  </span>
+                ) : (
+                  !isOutDated && (
                     <span>
-                      <em> {'패킹'}</em>이 완료되었어요!
+                      아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
                     </span>
-                  ) : (
-                    !isOutDated && (
-                      <span>
-                        아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
-                      </span>
-                    )
-                  )}
-                </StyledLeftMessage>
-              </StyledDday>
-            </>
-          )}
+                  )
+                )}
+              </StyledLeftMessage>
+            </StyledDday>
+          </>
         </StyledRecentBanner>
-        <SwiperContainer isRecentListExist={!isError} getSwiperIndex={getSwiperIndex}>
+        <SwiperContainer isRecentListExist={isRecentListExist} getSwiperIndex={getSwiperIndex}>
           {
             <FolderList
               key="1"
@@ -290,7 +286,7 @@ function FolderLanding() {
             />
           )}
         </SwiperContainer>
-        {!isError && !showBottomModal && (
+        {isRecentListExist && !showBottomModal && (
           <FloatActionButton onClick={handleFloatClick} pageName="folder" />
         )}
         {showBottomModal && (
@@ -323,7 +319,7 @@ export const StyledRoot = styled.article`
 
 // 최근 생성 리스트
 export const StyledRecentBanner = styled.article<{ isRecentListExist: boolean }>`
-  display: flex;
+  display: ${({ isRecentListExist }) => (isRecentListExist ? 'flex' : 'none')};
   align-items: center;
   justify-content: space-between;
   border: 0;

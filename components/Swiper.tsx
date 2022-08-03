@@ -77,6 +77,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   align-items: center;
   width: calc(100% - 4rem);
   height: calc(var(--vh, 1vh) * 100);
+  margin-top: ${({ isRecentListExist }) => (isRecentListExist ? '0' : '4.2rem')};
 `;
 
 export const StyledSwiper = styled(Swiper)`
