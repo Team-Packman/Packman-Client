@@ -156,9 +156,10 @@ export const StyledTitle = styled.input<{ isNew: boolean }>`
   border-radius: 0.4rem;
   margin: 0 0.8rem 0 0;
   color: ${({ isNew }) => (isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`)};
+  /* Safari에서 font color 무시되는 경우를 위한 코드 */
   -webkit-text-fill-color: ${({ isNew }) =>
     isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`};
-  -webkit-opacity: 1;
+  opacity: 1;
 
   &:disabled {
     border: 0;
