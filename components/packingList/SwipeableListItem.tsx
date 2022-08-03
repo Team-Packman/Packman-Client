@@ -123,7 +123,7 @@ const StyledRoot = styled.div<{ isDeleting: boolean }>`
   display: flex;
   justify-content: ${({ isDeleting }) => isDeleting && 'center'};
   align-items: center;
-  width: 37.5rem;
+  width: 100%;
   height: 11.4rem;
   gap: 2.7rem;
   overflow-x: hidden;
@@ -138,7 +138,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-width: 33.6rem;
+  width: calc(100vw - 4rem);
   overflow-x: hidden;
   height: inherit;
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
@@ -196,9 +196,12 @@ const StyledPackInfo = styled.div`
   }
 `;
 const StyledPackRemainText = styled.p`
+  position: absolute;
+  right: 3.557rem;
   font-style: ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmBlack};
   & > span {
+    font-weight: bold;
     color: ${packmanColors.pmPink};
   }
 `;
