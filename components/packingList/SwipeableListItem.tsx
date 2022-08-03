@@ -96,9 +96,15 @@ export default function SwipeablelistItem(props: ItemProps) {
           <p>{title}</p>
           <StyledPackInfo>
             <span>총 {packTotalNum}개의 짐</span>
-            <StyledPackRemainText>
-              아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
-            </StyledPackRemainText>
+            {packRemainNum ? (
+              <StyledPackRemainText>
+                아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
+              </StyledPackRemainText>
+            ) : (
+              <StyledPackRemainText>
+                <span>패킹</span>이 완료되었어요!
+              </StyledPackRemainText>
+            )}
           </StyledPackInfo>
         </StyledItemInfo>
         <Image src={iRightArrow} alt="열기" width={24} height={24} />
@@ -120,13 +126,14 @@ export default function SwipeablelistItem(props: ItemProps) {
 }
 
 const StyledRoot = styled.div<{ isDeleting: boolean }>`
+  position: relative;
   display: flex;
   justify-content: ${({ isDeleting }) => isDeleting && 'center'};
   align-items: center;
   width: 100%;
-  height: 11.4rem;
+  height: 10.8rem;
   gap: 2.7rem;
-  overflow-x: hidden;
+  overflow: hidden;
 `;
 
 const StyledSelectDelete = styled.div`

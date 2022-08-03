@@ -161,81 +161,82 @@ function TogetherPackingListLanding() {
           </div>
         </StyledFolderInfo>
 
-        <StyledMain isEmpty={!togetherPackingList.length}>
-          {!togetherPackingList.length ? (
+        {!togetherPackingList.length ? (
+          <StyledMain isEmpty={!togetherPackingList.length}>
             <StyledEmpty>
               <p>&apos;+&apos; 버튼을 눌러</p>
               <p>패킹 리스트를 추가해주세요</p>
             </StyledEmpty>
-          ) : (
-            <>
-              <StyledCaptionWrapper>
-                {!isDeleting && (
-                  <StyledCaptionText>
-                    <span>{togetherPackingList?.length}</span>개의 패킹 리스트
-                  </StyledCaptionText>
-                )}
-                {isDeleting && (
-                  <span
-                    onClick={() => {
-                      deleteList.length > 0 && setDeleteList([]);
-                    }}
-                  >
-                    선택해제
-                  </span>
-                )}
-
-                <StyledCaptionButtonWrapper
+          </StyledMain>
+        ) : (
+          <>
+            <StyledCaptionWrapper>
+              {!isDeleting && (
+                <StyledCaptionText>
+                  <span>{togetherPackingList?.length}</span>개의 패킹 리스트
+                </StyledCaptionText>
+              )}
+              {isDeleting && (
+                <span
                   onClick={() => {
-                    setIsDragged(Array(togetherPackingList?.length).fill(false));
-                    setIsDeleting((prev) => !prev);
-                    if (!isDeleting) {
-                      setDeleteList([]);
-                    }
+                    deleteList.length > 0 && setDeleteList([]);
                   }}
                 >
-                  {isDeleting ? (
-                    <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
-                      취소
-                    </p>
-                  ) : (
-                    <Image
-                      src={iTrash}
-                      alt="삭제"
-                      width={24}
-                      height={24}
-                      onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
-                    />
-                  )}
-                </StyledCaptionButtonWrapper>
-              </StyledCaptionWrapper>
+                  선택해제
+                </span>
+              )}
 
-              <SwipeableList
-                packingList={togetherPackingList}
-                deleteList={deleteList}
-                isDeleting={isDeleting}
-                openModal={openModal}
-                setDeleteList={(arr) => setDeleteList(arr)}
-                swipeableListItem={togetherPackingList?.map((item, idx) => (
-                  <SwipeablelistItem
-                    key={item._id}
-                    idx={idx}
-                    isDragged={isDragged[idx]}
-                    handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-                    isDeleting={isDeleting}
-                    deleteList={deleteList}
-                    checkDeleteList={(id: string) => checkDeleteList(id)}
-                    onClickDeleteButton={() => {
-                      setSelectedIndex(idx);
-                      openModal();
-                    }}
-                    packingList={togetherPackingList}
+              <StyledCaptionButtonWrapper
+                onClick={() => {
+                  setIsDragged(Array(togetherPackingList?.length).fill(false));
+                  setIsDeleting((prev) => !prev);
+                  if (!isDeleting) {
+                    setDeleteList([]);
+                  }
+                }}
+              >
+                {isDeleting ? (
+                  <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
+                    취소
+                  </p>
+                ) : (
+                  <Image
+                    src={iTrash}
+                    alt="삭제"
+                    width={24}
+                    height={24}
+                    onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
                   />
-                ))}
-              />
-            </>
-          )}
-        </StyledMain>
+                )}
+              </StyledCaptionButtonWrapper>
+            </StyledCaptionWrapper>
+
+            <SwipeableList
+              packingList={togetherPackingList}
+              deleteList={deleteList}
+              isDeleting={isDeleting}
+              openModal={openModal}
+              setDeleteList={(arr) => setDeleteList(arr)}
+              swipeableListItem={togetherPackingList?.map((item, idx) => (
+                <SwipeablelistItem
+                  key={item._id}
+                  idx={idx}
+                  isDragged={isDragged[idx]}
+                  handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                  isDeleting={isDeleting}
+                  deleteList={deleteList}
+                  checkDeleteList={(id: string) => checkDeleteList(id)}
+                  onClickDeleteButton={() => {
+                    setSelectedIndex(idx);
+                    openModal();
+                  }}
+                  packingList={togetherPackingList}
+                />
+              ))}
+            />
+          </>
+        )}
+
         {!isDeleting && (
           <FloatActionButton
             onClick={handleFloatClick}
@@ -286,7 +287,7 @@ const StyledMain = styled.div<{ isEmpty: boolean }>`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: ${({ isEmpty }) => isEmpty && '61.8rem'};
+  height: calc(100vh - 18rem);
 `;
 const StyledEmpty = styled.div`
   display: flex;
@@ -300,7 +301,7 @@ const StyledCaptionWrapper = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  height: 8.4rem;
+  height: 6.9rem;
 
   & > span {
     position: absolute;
