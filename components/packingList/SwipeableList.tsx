@@ -69,9 +69,10 @@ export default function SwipeableList(props: SwipeableListProps) {
 const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: center;
+  /* justify-content: flex-start; */
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 20.5rem);
   gap: 0.8rem;
   background-color: #fff;
   overflow-y: auto;
@@ -86,10 +87,9 @@ const StyledSwipeableListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 1rem;
   width: 100%;
-  height: fit-content;
   margin-bottom: 9.7rem;
 `;
 const StyledButtonWrapper = styled.div`
