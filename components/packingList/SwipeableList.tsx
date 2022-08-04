@@ -23,6 +23,13 @@ export default function SwipeableList(props: SwipeableListProps) {
   const { packingList, deleteList, isDeleting, openModal, setDeleteList, swipeableListItem } =
     props;
 
+  const onClickDeleteButton = () => {
+    if (packingList) {
+      const payload = packingList.map(({ _id }) => _id);
+      setDeleteList(payload);
+    }
+  };
+
   return (
     <StyledRoot>
       <StyledSwipeableListWrapper>{swipeableListItem}</StyledSwipeableListWrapper>
@@ -31,16 +38,7 @@ export default function SwipeableList(props: SwipeableListProps) {
         <StyledButtonWrapper>
           <StyledDeleteButton>
             {!deleteList.length ? (
-              <div
-                onClick={() => {
-                  if (packingList) {
-                    const payload = packingList.map(({ _id }) => _id);
-                    setDeleteList(payload);
-                  }
-                }}
-              >
-                전체 선택
-              </div>
+              <div onClick={onClickDeleteButton}>전체 선택</div>
             ) : deleteList.length === packingList?.length ? (
               <div onClick={openModal}>전체 삭제</div>
             ) : (

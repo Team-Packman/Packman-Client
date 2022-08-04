@@ -72,7 +72,7 @@ export default function SwipeablelistItem(props: ItemProps) {
   };
 
   return (
-    <StyledRoot isDeleting={!isDeleting}>
+    <StyledRoot isDeleting={isDeleting}>
       {isDeleting && (
         <StyledSelectDelete>
           <Image
@@ -128,7 +128,7 @@ export default function SwipeablelistItem(props: ItemProps) {
 const StyledRoot = styled.div<{ isDeleting: boolean }>`
   position: relative;
   display: flex;
-  justify-content: ${({ isDeleting }) => isDeleting && 'center'};
+  justify-content: ${({ isDeleting }) => !isDeleting && 'center'};
   align-items: center;
   width: 100%;
   height: 10.8rem;
