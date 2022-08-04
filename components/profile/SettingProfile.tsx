@@ -6,7 +6,10 @@ import Modal from '../common/Modal';
 import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
-
+import { useResetRecoilState } from 'recoil';
+import { authedUser, kakaoAccessToken } from '../../utils/recoil/atom/atom';
+import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 interface ProfileData {
   _id: string;
   name: string;
@@ -26,6 +29,7 @@ function SettingProfile(props: SettingProfileProps) {
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
+  const accessToken = useRecoilValue(kakaoAccessToken).accessToken;
 
   const onClickLeftModalButton = async () => {
     setIsWithdrawn(true);
@@ -35,10 +39,29 @@ function SettingProfile(props: SettingProfileProps) {
     setShowModal(false);
   };
 
+  const resetUserState = useResetRecoilState(authedUser); //유저 전역변수 초기화
+
+  const onClickLogout = () => {
+    (async () => {
+      //로그아웃
+      const { data } = await axios.post(
+        'https://kapi.kakao.com/v1/user/logout',
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+    })();
+    resetUserState();
+  };
+
   return (
     <StyledRoot>
       <StyledSettingWrapper>
-        <p>로그아웃</p>
+        <p onClick={onClickLogout}>로그아웃</p>
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
