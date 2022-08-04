@@ -17,6 +17,7 @@ import {
   GetAloneInventoryOutput,
 } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
+import SwipeablelistItem from '../SwipeableListItem';
 interface DeleteAloneInventoryData {
   folderId: string;
   listId: string;
@@ -212,15 +213,24 @@ function AlonePackingListLanding() {
                 packingList={alonePackingList}
                 deleteList={deleteList}
                 isDeleting={isDeleting}
-                checkDeleteList={checkDeleteList}
-                handleIsDragged={handleIsDragged}
                 openModal={openModal}
-                setSelectedIndex={(id: number) => setSelectedIndex(id)}
                 setDeleteList={(arr) => setDeleteList(arr)}
-                isDragged={isDragged}
-                routeToList={(idx: number) => {
-                  router.push(`/alone/${alonePackingList[idx]._id}?invite=''`);
-                }}
+                swipeableListItem={alonePackingList?.map((item, idx) => (
+                  <SwipeablelistItem
+                    key={item._id}
+                    idx={idx}
+                    isDragged={isDragged[idx]}
+                    handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                    isDeleting={isDeleting}
+                    deleteList={deleteList}
+                    checkDeleteList={(id: string) => checkDeleteList(id)}
+                    onClickDeleteButton={() => {
+                      setSelectedIndex(idx);
+                      openModal();
+                    }}
+                    packingList={alonePackingList}
+                  />
+                ))}
               />
             </>
           )}
