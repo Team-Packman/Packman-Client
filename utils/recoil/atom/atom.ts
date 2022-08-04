@@ -38,7 +38,7 @@ export const from = atom<From>({
 });
 
 export const kakaoAccessToken = atom<Kakao>({
-  key: 'KAKAO',
+  key: 'kakaoAccessToken',
   default: {
     accessToken: '',
   },

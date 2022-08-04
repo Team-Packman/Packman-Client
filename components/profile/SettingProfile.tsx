@@ -44,7 +44,7 @@ function SettingProfile(props: SettingProfileProps) {
   const onClickLogout = () => {
     (async () => {
       //로그아웃
-      const { data } = await axios.post(
+      await axios.post(
         'https://kapi.kakao.com/v1/user/logout',
         {},
         {
