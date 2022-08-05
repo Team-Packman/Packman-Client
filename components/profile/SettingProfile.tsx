@@ -10,6 +10,7 @@ import { useResetRecoilState } from 'recoil';
 import { authedUser, kakaoAccessToken } from '../../utils/recoil/atom/atom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
+import { useRouter } from 'next/router';
 interface ProfileData {
   _id: string;
   name: string;
@@ -30,6 +31,7 @@ function SettingProfile(props: SettingProfileProps) {
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const accessToken = useRecoilValue(kakaoAccessToken).accessToken;
+  const router = useRouter();
 
   const onClickLeftModalButton = async () => {
     setIsWithdrawn(true);
@@ -41,21 +43,25 @@ function SettingProfile(props: SettingProfileProps) {
 
   const resetUserState = useResetRecoilState(authedUser); //유저 전역변수 초기화
 
+  //로그아웃
   const onClickLogout = () => {
     (async () => {
-      //로그아웃
-      await axios.post(
-        'https://kapi.kakao.com/v1/user/logout',
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `Bearer ${accessToken}`,
+      try {
+        await axios.post(
+          'https://kapi.kakao.com/v1/user/logout',
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        },
-      );
+        );
+      } finally {
+        resetUserState();
+        router.push('/login');
+      }
     })();
-    resetUserState();
   };
 
   return (
