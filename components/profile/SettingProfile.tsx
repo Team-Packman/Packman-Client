@@ -134,7 +134,6 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /* height: calc(var(--vh, 1vh) * 100); */
   height: fit-content;
   overflow-y: visible;
 

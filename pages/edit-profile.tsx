@@ -52,7 +52,6 @@ const StyledRoot = styled.div`
   align-items: center;
   padding: 0 2rem;
   width: 100vw;
-  /* height: 100%; */
   height: calc(var(--vh, 1vh) * 100 - 8rem);
   overflow-y: auto;
   /* 브라우저별 스크롤바 숨김 설정 */
