@@ -38,10 +38,9 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState('');
   const [profile, setProfile] = useState('');
   const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
-  // const [user, setUser] = useGlobalState<User>('User');
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
-  console.log('user', user);
+
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
   const { mutate: addUserProfileMutate } = useMutation(
@@ -101,7 +100,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       setIndex(id);
     }
   };
-  console.log(user);
   return (
     <StyledRoot>
       <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
@@ -198,7 +196,7 @@ const StyledInputWrapper = styled.div`
 const StyledInput = styled.input`
   width: 12rem;
   text-align: center;
-  font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+  ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   color: ${packmanColors.pmBlack};
   border: none;
   border-bottom: 1px solid ${packmanColors.pmDeepGrey};
@@ -216,7 +214,7 @@ const StyledText = styled.div<{ nickname: boolean }>`
   opacity: ${({ nickname }) => nickname && '0'};
   padding-top: 0.77rem;
   color: ${packmanColors.pmDeepGrey};
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
 `;
 
 const StyledSelectProfileWrapper = styled.div`
@@ -247,7 +245,7 @@ const StyledButton = styled.button<{ isActivate: boolean }>`
   border: none;
   border-radius: 0.8rem;
   padding: 1.2rem 6.4rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
   color: ${packmanColors.pmWhite};
   background-color: ${({ isActivate }) =>
     isActivate ? packmanColors.pmPink : packmanColors.pmGrey};
