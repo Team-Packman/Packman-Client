@@ -119,7 +119,7 @@ function AlonePackingListLanding() {
 
   return (
     <>
-      <Header back title="패킹 리스트" icon="profile" />
+      <Header back title="리스트 목록" icon="profile" />
       <StyledRoot onTouchMove={() => setToggle(false)}>
         {showModal && (
           <Modal
