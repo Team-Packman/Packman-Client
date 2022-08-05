@@ -10,7 +10,6 @@ function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
-  console.log(data);
 
   if (!data) return null;
 

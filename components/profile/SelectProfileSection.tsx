@@ -1,15 +1,13 @@
 import Image, { StaticImageData } from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
-import useGlobalState from '../../utils/hooks/useGlobalState';
-import { User } from '../../type/globalState';
 import { FONT_STYLES } from '../../styles/font';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authedUser, creatingUser } from '../../utils/recoil/atom/atom';
 
 interface AddUserProfileData {
@@ -67,6 +65,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     },
   );
 
+  //버튼 활성화 여부
   const setIsActivate = () => {
     if (isEditing) {
       if (!profile) {
@@ -82,6 +81,53 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   };
 
+  //프로필 이미지 클릭(선택) 이벤트 처리
+  const onClickProfileImage = (id: string) => {
+    if (profile === id) {
+      setProfile('');
+    } else {
+      setProfile(id);
+      setIndex(id);
+    }
+  };
+
+  //닉네임 입력 이벤트 처리
+  const onChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    {
+      if (nickname.length > 4) {
+        setNickname((prev) => prev.substring(0, 4));
+      } else {
+        setNickname(e.target.value);
+      }
+    }
+  };
+
+  const onClickGoToPackingButton = () => {
+    isEditing
+      ? (async () => {
+          if (finishEditing) {
+            updateUserProfileMutate({
+              name: nickname,
+              profileImageId: profile,
+            });
+            finishEditing();
+          }
+        })()
+      : addUserProfileMutate(
+          {
+            email: user.email,
+            name: nickname,
+            profileImageId: profile,
+          },
+          {
+            onSuccess: ({ data }) => {
+              setUser(data);
+              router.push('/folder');
+            },
+          },
+        );
+  };
+
   useEffect(() => {
     if (oldProfileImageId) {
       setProfile(oldProfileImageId);
@@ -92,14 +138,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   }, []);
 
-  const onClickProfileImage = (id: string) => {
-    if (profile === id) {
-      setProfile('');
-    } else {
-      setProfile(id);
-      setIndex(id);
-    }
-  };
   return (
     <StyledRoot>
       <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
@@ -111,13 +149,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
           placeholder="김팩맨"
           value={nickname}
           maxLength={4}
-          onChange={(e) => {
-            if (nickname.length > 4) {
-              setNickname((prev) => prev.substring(0, 4));
-            } else {
-              setNickname(e.target.value);
-            }
-          }}
+          onChange={onChangeNickname}
         />
         <StyledText nickname={nickname !== ''}>닉네임을 입력해주세요 (4자 이내)</StyledText>
       </StyledInputWrapper>
@@ -145,33 +177,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         type="button"
         disabled={!setIsActivate()}
         isActivate={setIsActivate()}
-        onClick={
-          isEditing
-            ? async () => {
-                if (finishEditing) {
-                  updateUserProfileMutate({
-                    name: nickname,
-                    profileImageId: profile,
-                  });
-                  finishEditing();
-                }
-              }
-            : () => {
-                addUserProfileMutate(
-                  {
-                    email: user.email,
-                    name: nickname,
-                    profileImageId: profile,
-                  },
-                  {
-                    onSuccess: ({ data }) => {
-                      setUser(data);
-                      router.push('/folder');
-                    },
-                  },
-                );
-              }
-        }
+        onClick={onClickGoToPackingButton}
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
       </StyledButton>
