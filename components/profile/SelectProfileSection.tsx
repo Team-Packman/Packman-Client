@@ -36,7 +36,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const [nickname, setNickname] = useState('');
-  const [profile, setProfile] = useState('');
+  const [profile, setProfile] = useState(oldProfileImageId ? '' : '0');
   const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
