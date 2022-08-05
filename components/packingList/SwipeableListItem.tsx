@@ -151,7 +151,8 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
   background-color: ${packmanColors.pmBlueGrey};
-  transition: 0.4s ease-in-out;
+  transition: ease-in-out;
+  transition-duration: 0.4s;
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -172,6 +173,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
         return css`
           animation: 0.4s ease-in-out slide;
           transform: translateX(8.388rem);
+          -webkit-transform: translate3d(0, 0, 0) translateX(8.388rem); //Safari 대응
         `;
     }
   }};
