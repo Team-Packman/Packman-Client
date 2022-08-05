@@ -263,7 +263,7 @@ const StyledFolderInfo = styled.div`
   margin-top: 0.842rem;
 
   & > h1 {
-    font-style: ${FONT_STYLES.HEADLINE2_SEMIBOLD};
+    ${FONT_STYLES.HEADLINE2_SEMIBOLD};
   }
   & > div {
     display: flex;
@@ -289,7 +289,7 @@ const StyledEmpty = styled.div`
   width: 20rem;
   text-align: center;
   color: ${packmanColors.pmGrey};
-  font-style: ${FONT_STYLES.HEADLINE1_MEDIUM};
+  ${FONT_STYLES.HEADLINE1_MEDIUM};
 `;
 const StyledCaptionWrapper = styled.div`
   position: relative;
@@ -299,7 +299,7 @@ const StyledCaptionWrapper = styled.div`
 
   & > span {
     position: absolute;
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     left: 2rem;
     bottom: 1rem;
     color: ${packmanColors.pmDarkGrey};
@@ -310,10 +310,10 @@ const StyledCaptionText = styled.p`
   justify-content: start;
   padding: 1.8rem 0 0 2.4rem;
   margin: 0;
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmDeepGrey};
   & > span {
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmPink};
   }
 `;
@@ -323,7 +323,7 @@ const StyledCaptionButtonWrapper = styled.div`
   right: 2rem;
   bottom: 0.9rem;
   & > p {
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmDarkGrey};
   }
 `;
@@ -340,5 +340,5 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 `;

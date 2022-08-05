@@ -87,7 +87,7 @@ const StyledDeleteButton = styled.button`
   bottom: 1.507rem;
   width: calc(100vw - 4rem);
   height: 4.7rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
   background-color: ${packmanColors.pmPink};
   color: #fff;
   border: none;

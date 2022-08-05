@@ -194,11 +194,11 @@ const StyledItemInfo = styled.div`
   gap: 0.6rem;
 
   & > p:first-child {
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
     color: ${packmanColors.pmBlueGrey};
   }
   & > p:nth-child(2) {
-    font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   }
 `;
 const StyledPackInfo = styled.div`
@@ -214,7 +214,7 @@ const StyledPackInfo = styled.div`
     width: 8.3rem;
     height: 2.4rem;
     color: ${packmanColors.pmBlack};
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
     border: 0.1rem solid ${packmanColors.pmPink};
     border-radius: 1.2rem;
     text-align: center;
@@ -223,7 +223,7 @@ const StyledPackInfo = styled.div`
 const StyledPackRemainText = styled.p`
   position: absolute;
   right: 3.557rem;
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmBlack};
   & > span {
     font-weight: bold;

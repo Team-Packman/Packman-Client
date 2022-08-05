@@ -69,7 +69,7 @@ const StyledRoot = styled.div<{ isListEmpty: boolean; isSelected: boolean }>`
   height: 3.4rem;
   padding: 0.7rem 1.1rem;
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 
   ${({ isSelected }) =>
     isSelected

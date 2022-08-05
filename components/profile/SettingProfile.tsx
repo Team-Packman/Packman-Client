@@ -137,14 +137,14 @@ const StyledSettingWrapper = styled.main`
     top: -1.9rem;
     right: 0.5rem;
     color: ${packmanColors.pmDarkGrey};
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
   }
   & > p:nth-child(2) {
     position: absolute;
     top: 0.5rem;
     right: 1.5rem;
     color: ${packmanColors.pmDeepGrey};
-    font-style: ${FONT_STYLES.CAPTION2_SEMIBOLD};
+    ${FONT_STYLES.CAPTION2_SEMIBOLD};
   }
 `;
 const StyledProfile = styled.div`
@@ -166,10 +166,10 @@ const StyledProfile = styled.div`
     height: 6.5rem;
     color: ${packmanColors.pmBlack};
     & > h1 {
-      font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+      ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
     }
     & > p {
-      font-style: ${FONT_STYLES.BODY1_REGULAR};
+      ${FONT_STYLES.BODY1_REGULAR};
     }
   }
 `;
@@ -178,7 +178,7 @@ const StyledToggleWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   & > p {
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
   }
 `;
 const StyledToggle = styled.div<{ isToggled: boolean }>`
@@ -214,7 +214,7 @@ const StyledEtc = styled.div<{ gap: number; paddingTop: number; borderBottom: bo
 
   & > h1 {
     color: ${packmanColors.pmBlack};
-    font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   }
 `;
 const StyledEtcWrapper = styled.div`
@@ -223,7 +223,7 @@ const StyledEtcWrapper = styled.div`
   align-content: space-between;
   gap: 0.8rem;
   & > p {
-    font-style: ${FONT_STYLES.BODY3_REGULAR};
+    ${FONT_STYLES.BODY3_REGULAR};
     letter-spacing: 4%;
   }
 `;
@@ -243,5 +243,5 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 `;
