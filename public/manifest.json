@@ -1,6 +1,6 @@
 {
-  "background_color": "",
-  "description": "",
+  "background_color": "#FF307B",
+  "description": "내 손안의 짐 챙김 도우미, 팩맨",
   "dir": "ltr",
   "display": "standalone",
   "name": "Packman",
@@ -8,6 +8,31 @@
   "scope": "/",
   "short_name": "Packman",
   "start_url": "/",
-  "theme_color": "",
-  "icons": []
+  "theme_color": "#FF307B",
+  "icons": [
+    {
+      "src": "/public/assets/pwa/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/public/assets/pwa/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/public/assets/pwa/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/public/assets/pwa/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }
