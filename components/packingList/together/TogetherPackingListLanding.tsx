@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -12,10 +12,7 @@ import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import {
-  DeleteTogetherInventoryInput,
-  GetTogetherInventoryOutput,
-} from '../../../service/inventory/together';
+import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
