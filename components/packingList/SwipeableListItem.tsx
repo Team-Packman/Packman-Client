@@ -40,6 +40,7 @@ export default function SwipeablelistItem(props: ItemProps) {
   } = props;
 
   const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const listType = router.pathname.split('/').at(-2); // togetehr | alone
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -67,7 +68,7 @@ export default function SwipeablelistItem(props: ItemProps) {
 
   const moveToPackingList = () => {
     if (!isDeleting) {
-      router.push(`/together/${packingList[idx]._id}`);
+      router.push(`/${listType}/${packingList[idx]._id}`);
     }
   };
 

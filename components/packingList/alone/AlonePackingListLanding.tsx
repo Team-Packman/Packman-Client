@@ -12,10 +12,7 @@ import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import {
-  DeleteAloneInventoryInput,
-  GetAloneInventoryOutput,
-} from '../../../service/inventory/alone';
+import { DeleteAloneInventoryInput } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
 interface DeleteAloneInventoryData {
@@ -57,8 +54,6 @@ function AlonePackingListLanding() {
   );
 
   if (!data) return null;
-
-  console.log(data);
 
   const { alonePackingList, folder, currentFolder } = data.data;
 
@@ -117,6 +112,14 @@ function AlonePackingListLanding() {
     }
   };
 
+  const onClickCaptionButton = () => {
+    setIsDragged(Array(alonePackingList?.length).fill(false));
+    setIsDeleting((prev) => !prev);
+    if (!isDeleting) {
+      setDeleteList([]);
+    }
+  };
+
   return (
     <>
       <Header back title="패킹 리스트" icon="profile" />
@@ -145,9 +148,7 @@ function AlonePackingListLanding() {
               width={24}
               height={24}
               toggle={toggle ? 'true' : 'false'}
-              onClick={() => {
-                setToggle(true);
-              }}
+              onClick={() => setToggle(true)}
             />
             {toggle && (
               <DropBox
@@ -175,24 +176,10 @@ function AlonePackingListLanding() {
                   </StyledCaptionText>
                 )}
                 {isDeleting && (
-                  <span
-                    onClick={() => {
-                      deleteList.length > 0 && setDeleteList([]);
-                    }}
-                  >
-                    선택 해제
-                  </span>
+                  <span onClick={() => deleteList.length > 0 && setDeleteList([])}>선택 해제</span>
                 )}
 
-                <StyledCaptionButtonWrapper
-                  onClick={() => {
-                    setIsDragged(Array(alonePackingList?.length).fill(false));
-                    setIsDeleting((prev) => !prev);
-                    if (!isDeleting) {
-                      setDeleteList([]);
-                    }
-                  }}
-                >
+                <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                   {isDeleting ? (
                     <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>
                       취소
