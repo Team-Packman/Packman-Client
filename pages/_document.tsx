@@ -56,7 +56,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#FF307B" />
           <link rel="manifest" href="/manifest.json" />
           <meta name="apple-mobile-web-app-title" content="Packman" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
           <link rel="apple-touch-icon" href="/assets/pwa/apple-icon-180.png" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <link
