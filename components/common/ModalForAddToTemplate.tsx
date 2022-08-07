@@ -18,13 +18,13 @@ function ModalForAddToTemplate(props: ModalForAddToTemplateProps) {
         <StyledButtonContainer onClick={modalHandler}>
           <Image src={ButtonX} alt="closeModal" width="24" height="24" />
         </StyledButtonContainer>
-        <StyledDescriptionWrapper>
+        <div>
           <StyledTitle>{title}</StyledTitle>
           <StyledDescription>
             <span>나만의 템플릿</span>
             <span>으로 추가되었습니다.</span>
           </StyledDescription>
-        </StyledDescriptionWrapper>
+        </div>
         <StyledConfirmButton onClick={modalHandler}>확인</StyledConfirmButton>
       </StyledModal>
     </>
@@ -68,8 +68,6 @@ const StyledButtonContainer = styled.div`
   padding-right: 0.8rem;
   margin-bottom: 1.1rem;
 `;
-
-const StyledDescriptionWrapper = styled.div``;
 
 const StyledTitle = styled.div`
   font-weight: 800;
