@@ -10,6 +10,7 @@ import { FONT_STYLES } from '../styles/font';
 
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
+  const finishEditingProfileHandler = () => setIsEditing(false);
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
 
@@ -31,9 +32,7 @@ function EditProfile() {
               }
               oldNickname={name}
               oldProfileImageId={profileImageId}
-              finishEditing={() => {
-                setIsEditing(false);
-              }}
+              finishEditing={finishEditingProfileHandler}
             />
           </>
         ) : (

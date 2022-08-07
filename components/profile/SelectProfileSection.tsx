@@ -102,35 +102,41 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   };
 
+  // 프로필 수정
+  const editUserProfile = () => {
+    if (finishEditing) {
+      updateUserProfileMutate({
+        name: nickname,
+        profileImageId: profile,
+      });
+      finishEditing();
+    }
+  };
+
+  // 회원가입
+  const createUserAccount = () => {
+    addUserProfileMutate(
+      {
+        email: user.email,
+        name: nickname,
+        profileImageId: profile,
+      },
+      {
+        onSuccess: ({ data }) => {
+          setUser(data);
+          router.push('/folder');
+        },
+      },
+    );
+  };
+
   const onClickGoToPackingButton = () => {
-    isEditing
-      ? (async () => {
-          if (finishEditing) {
-            updateUserProfileMutate({
-              name: nickname,
-              profileImageId: profile,
-            });
-            finishEditing();
-          }
-        })()
-      : addUserProfileMutate(
-          {
-            email: user.email,
-            name: nickname,
-            profileImageId: profile,
-          },
-          {
-            onSuccess: ({ data }) => {
-              setUser(data);
-              router.push('/folder');
-            },
-          },
-        );
+    isEditing ? editUserProfile() : createUserAccount();
   };
 
   return (
     <StyledRoot>
-      <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
+      <div style={{ position: 'relative', width: '120', height: '120' }}>
         <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
       </div>
       <StyledInputWrapper>
