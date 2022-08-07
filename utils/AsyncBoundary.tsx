@@ -4,6 +4,7 @@ import { useQueryErrorResetBoundary } from 'react-query';
 import Lottie from 'lottie-react';
 import { lottie } from '../public/assets';
 import Error from '../components/common/Error';
+import Layout from '../components/common/Layout';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
@@ -52,7 +53,15 @@ export function AsyncBoundary({ children, loadingFallback }: AsyncBoundaryProps)
       }}
       onReset={reset}
     >
-      <Suspense fallback={loadingFallback ?? <Lottie animationData={lottie} />}>
+      <Suspense
+        fallback={
+          loadingFallback ?? (
+            <Layout>
+              <Lottie animationData={lottie} />
+            </Layout>
+          )
+        }
+      >
         {children}
       </Suspense>
     </ErrorBoundary>

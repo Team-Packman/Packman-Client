@@ -51,6 +51,7 @@ function Login() {
                 if (data.isAlreadyUser) {
                   setUser(data);
                   if (fromInfo.url) {
+                    // 그룹원 등록 api 추가 예정 > 성공시 아래 경로로 라우팅
                     router.replace(fromInfo.url);
                   } else {
                     router.replace('/folder');

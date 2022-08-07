@@ -15,6 +15,8 @@ import AddTemplateButton from '../common/AddTemplateButton';
 import SharePackingListButton from '../common/SharePackingListButton';
 import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRouter } from 'next/router';
+import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
+import ModalForShare from '../common/ModalForShare';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -44,6 +46,8 @@ function AloneLanding() {
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
+  const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
+  const [shareTemplateModalOpen, setShareTemplateModalOpen] = useState(false);
 
   const getAlonePackingListDetail = useAPI(
     (api) => api.packingList.alone.getAlonePackingListDetail,
@@ -52,7 +56,6 @@ function AloneLanding() {
     ['getAlonePackingListDetail', id],
     () => getAlonePackingListDetail(id as string),
     {
-      refetchInterval: 3000,
       enabled: !!id,
     },
   );
@@ -113,6 +116,10 @@ function AloneLanding() {
   );
   if (!data) return null;
   const { data: list } = data;
+  const addTemplateModalOpenHandler = () => setAddTemplateModalOpen(true);
+  const addTemplateModalCloseHandler = () => setAddTemplateModalOpen(false);
+  const shareTemplateModalOpenHandler = () => setShareTemplateModalOpen(true);
+  const shareTemplateModalCloseHandler = () => setShareTemplateModalOpen(false);
   const bottomModalOpenHandler = (payload: FocusInfo) => {
     if (!currentEditing) {
       setCurrentFocus(payload);
@@ -166,6 +173,7 @@ function AloneLanding() {
           {
             onSuccess: () => {
               client.invalidateQueries('getAlonePackingListDetail');
+              addTemplateModalOpenHandler();
             },
           },
         );
@@ -316,7 +324,7 @@ function AloneLanding() {
       setTimeout(() => setIsScrolling(false), 500);
     }
   };
-  console.log(list);
+
   return (
     <Layout
       back
@@ -410,7 +418,9 @@ function AloneLanding() {
           >
             나만의 템플릿으로 추가
           </AddTemplateButton>
-          <SharePackingListButton icon>패킹 리스트 공유</SharePackingListButton>
+          <SharePackingListButton icon onClick={shareTemplateModalOpenHandler}>
+            패킹 리스트 공유
+          </SharePackingListButton>
         </FunctionSection>
       </StyledAloneLanding>
       {bottomModalOpen && (
@@ -421,6 +431,10 @@ function AloneLanding() {
           content={currentFocus.title}
         />
       )}
+      {addTemplateModalOpen && (
+        <ModalForAddToTemplate title={list.title} onClick={addTemplateModalCloseHandler} />
+      )}
+      {shareTemplateModalOpen && <ModalForShare onClick={shareTemplateModalCloseHandler} />}
     </Layout>
   );
 }

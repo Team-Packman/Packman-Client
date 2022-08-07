@@ -11,9 +11,9 @@ interface SharePackingListButtonProps {
 }
 
 function SharePackingListButton(props: SharePackingListButtonProps) {
-  const { children, icon } = props;
+  const { children, icon, onClick: modalHanlder } = props;
   return (
-    <StyledRoot>
+    <StyledRoot onClick={modalHanlder}>
       {icon && (
         <div>
           <Image src={ShareIc} alt="share_ic" layout="fill" />
