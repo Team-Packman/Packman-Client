@@ -42,4 +42,5 @@ export const kakaoAccessToken = atom<Kakao>({
   default: {
     accessToken: '',
   },
+  effects_UNSTABLE: [persistAtom],
 });
