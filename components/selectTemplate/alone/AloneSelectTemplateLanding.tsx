@@ -88,7 +88,7 @@ function AloneSelectTemplateLanding() {
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
           activate={(isSelected: string) =>
-            isSelected === '' ? deactivateConfirmButton : activateConfirmButton
+            isSelected === '' ? deactivateConfirmButton() : activateConfirmButton()
           }
           changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
           changeUserOwnTemplateImage={(templateId: string) =>
