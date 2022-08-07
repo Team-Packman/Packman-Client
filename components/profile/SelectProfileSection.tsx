@@ -33,9 +33,9 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const router = useRouter();
   const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
-  const [nickname, setNickname] = useState('');
-  const [profile, setProfile] = useState(oldProfileImageId ? '' : '0');
-  const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
+  const [nickname, setNickname] = useState(oldNickname ? oldNickname : '');
+  const [profile, setProfile] = useState(oldProfileImageId ? oldProfileImageId : '0');
+  const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
 
@@ -128,20 +128,10 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         );
   };
 
-  useEffect(() => {
-    if (oldProfileImageId) {
-      setProfile(oldProfileImageId);
-      setIndex(oldProfileImageId);
-    }
-    if (oldNickname) {
-      setNickname(oldNickname);
-    }
-  }, []);
-
   return (
     <StyledRoot>
       <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
-        <Image src={profileImage[+index].src} alt="profile-image" layout="fill" />
+        <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
       </div>
       <StyledInputWrapper>
         <StyledInput
@@ -168,6 +158,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
               width={80}
               height={80}
               selected={profile === id}
+              priority
             />
           </StyledImageWrapper>
         ))}
