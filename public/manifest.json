@@ -8,6 +8,15 @@
   "scope": "/",
   "short_name": "Packman",
   "start_url": "/",
+  "shortcuts": [
+    {
+      "name": "Open Folder",
+      "short_name": "Folder",
+      "description": "View the list of folder you saved",
+      "url": "/folder",
+      "icons": [{ "src": "/assets/pwa/manifest-icon-192.maskable.png", "sizes": "192x192" }]
+    }
+  ],
   "theme_color": "#FF307B",
   "icons": [
     {
