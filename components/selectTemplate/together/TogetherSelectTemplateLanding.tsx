@@ -70,6 +70,7 @@ function TogetherSelectTemplateLanding() {
               alt="template-image"
               width={375}
               height={211}
+              priority
             />
           )}
         </picture>
