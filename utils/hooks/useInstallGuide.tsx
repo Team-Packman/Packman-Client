@@ -43,7 +43,7 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
         setDeferredPrompt(undefined);
       });
     } else {
-      console.log('already installed');
+      console.log('already installed or not android');
     }
   };
 
