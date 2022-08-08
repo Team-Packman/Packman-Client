@@ -129,11 +129,11 @@ const StyledTemplateWrapper = styled.div`
   width: 100%;
   gap: 1rem;
   & > h1 {
-    font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     color: ${packmanColors.pmBlack};
   }
   & > p {
-    font-style: ${FONT_STYLES.CAPTION1_REGULAR};
+    ${FONT_STYLES.CAPTION1_REGULAR};
     color: ${packmanColors.pmDeepGrey};
   }
 `;

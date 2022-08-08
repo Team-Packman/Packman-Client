@@ -28,9 +28,9 @@ const StyledCommentWrapper = styled.h1`
     color: #000;
     word-break: break-all;
     word-wrap: break-word;
-    font-style: ${FONT_STYLES.DISPLAY1_LIGHT};
+    ${FONT_STYLES.DISPLAY1_LIGHT};
   }
   & b {
-    font-style: ${FONT_STYLES.DISPLAY2_SEMIBOLD};
+    ${FONT_STYLES.DISPLAY2_SEMIBOLD};
   }
 `;

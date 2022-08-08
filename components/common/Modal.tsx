@@ -69,7 +69,7 @@ const StyledModalInfo = styled.div`
   flex-direction: column;
   gap: 2.95rem;
   & > p {
-    font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     color: #282828;
   }
 `;

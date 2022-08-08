@@ -41,10 +41,10 @@ const StyledInfo = styled.div`
       color: ${packmanColors.pmDarkGrey};
     }
     & > p:first-child {
-      font-style: ${FONT_STYLES.CAPTION2_SEMIBOLD};
+      ${FONT_STYLES.CAPTION2_SEMIBOLD};
     }
     & > p:nth-child(2) {
-      font-style: ${FONT_STYLES.CAPTION1_REGULAR};
+      ${FONT_STYLES.CAPTION1_REGULAR};
     }
   }
 `;

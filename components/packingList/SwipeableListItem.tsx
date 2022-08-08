@@ -40,6 +40,7 @@ export default function SwipeablelistItem(props: ItemProps) {
   } = props;
 
   const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const listType = router.pathname.split('/').at(-2); // togetehr | alone
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -67,7 +68,7 @@ export default function SwipeablelistItem(props: ItemProps) {
 
   const moveToPackingList = () => {
     if (!isDeleting) {
-      router.push(`/together/${packingList[idx]._id}`);
+      router.push(`/${listType}/${packingList[idx]._id}`);
     }
   };
 
@@ -151,7 +152,8 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
   background-color: ${packmanColors.pmBlueGrey};
-  transition: 0.4s ease-in-out;
+  transition: ease-in-out;
+  transition-duration: 0.4s;
 
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -172,6 +174,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
         return css`
           animation: 0.4s ease-in-out slide;
           transform: translateX(8.388rem);
+          -webkit-transform: translate3d(0, 0, 0) translateX(8.388rem); //Safari 대응
         `;
     }
   }};
@@ -194,11 +197,11 @@ const StyledItemInfo = styled.div`
   gap: 0.6rem;
 
   & > p:first-child {
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
     color: ${packmanColors.pmBlueGrey};
   }
   & > p:nth-child(2) {
-    font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   }
 `;
 const StyledPackInfo = styled.div`
@@ -214,7 +217,7 @@ const StyledPackInfo = styled.div`
     width: 8.3rem;
     height: 2.4rem;
     color: ${packmanColors.pmBlack};
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
     border: 0.1rem solid ${packmanColors.pmPink};
     border-radius: 1.2rem;
     text-align: center;
@@ -223,7 +226,7 @@ const StyledPackInfo = styled.div`
 const StyledPackRemainText = styled.p`
   position: absolute;
   right: 3.557rem;
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmBlack};
   & > span {
     font-weight: bold;
