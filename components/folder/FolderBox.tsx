@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FolderListProps, FolderProps } from './FolderList';
@@ -108,21 +108,11 @@ export default FolderBox;
 export const StyledRoot = styled.section`
   height: 16.4rem;
   background-color: ${packmanColors.pmBlueGrey};
+  background-image: linear-gradient(to top, ${packmanColors.pmGrey} 8%, rgba(0, 0, 0, 0) 8%);
   border-radius: 1rem;
   border-color: #fff;
   position: relative;
   z-index: 1;
-
-  &:before {
-    position: absolute;
-    content: '';
-    bottom: 0;
-    border-style: solid;
-    width: 100%;
-    border-width: 0.5rem;
-    border-color: ${packmanColors.pmGrey};
-    border-radius: 0 0 0.8rem 0.8rem;
-  }
 `;
 
 export const StyledInfo = styled.div`
@@ -138,6 +128,11 @@ export const StyledKebab = styled.div`
   padding: 0.3rem 0;
   z-index: 10;
   cursor: pointer;
+
+  & > span {
+    z-index: 100;
+    cursor: pointer;
+  }
 `;
 
 export const StyledText = styled.div`

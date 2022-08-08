@@ -25,12 +25,13 @@ function FolderLanding() {
   const [editableFolderId, setEditableFolderId] = useState<string>('');
   const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ _id: '', title: '' });
   const [currentSwiperIndex, setCurrentSwiperIndex] = useState<number>(0);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [addNewFolder, setAddNewFolder] = useState<boolean>(false);
   const [newFolderData, setNewFolderData] = useState<AddFolderInput>({
     title: '',
     isAloned: false,
   });
   const [isOutDated, setIsOutDated] = useState<boolean>(false);
+  const [isRecentListExist, setIsRecentListExist] = useState<boolean>(false);
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
@@ -39,24 +40,19 @@ function FolderLanding() {
   const addFolder = useAPI((api) => api.folder.addFolder);
 
   const { data: folderListData } = useQuery('folderListKey', () => getFolders(), {
-    suspense: true,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 
-  const { data: recentPackingData, isError } = useQuery(
-    'recentPacking',
-    () => getRecentPackingList(),
-    {
-      suspense: true,
-      onSuccess: (data) => {
-        if (data.data) {
-          const { remainDay } = data.data;
-          setIsOutDated(remainDay < 0);
-        }
-      },
+  const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
+    onSuccess: (data) => {
+      if (data.data) {
+        const { remainDay } = data.data;
+        setIsOutDated(remainDay < 0);
+        setIsRecentListExist(true);
+      }
     },
-  );
+  });
 
   const { mutate: editFolderMutate } = useMutation((editedFolderData: ModalDataProps) => {
     return updateFolderName(editedFolderData);
@@ -152,13 +148,17 @@ function FolderLanding() {
   };
 
   // 폴더 추가 관련 핸들러
+  const handleStartButtonInInit = () => {
+    setAddNewFolder(true);
+  };
+
   const handleAddFolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewFolderData({ title: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
   };
 
   const handleAddFolderKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setIsEditing(false);
+      setAddNewFolder(false);
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
@@ -195,7 +195,7 @@ function FolderLanding() {
   };
 
   const handleCancleAddFolder = () => {
-    setIsEditing(false);
+    setAddNewFolder(false);
   };
 
   // router 관련 핸들러
@@ -218,7 +218,7 @@ function FolderLanding() {
     } else if (index === 1) {
       router.push('/select-template/alone');
     } else if (index === 2) {
-      setIsEditing(true);
+      setAddNewFolder(true);
     }
   };
 
@@ -226,37 +226,35 @@ function FolderLanding() {
     <>
       <StyledRoot>
         <Header title="logo" icon="profile" />
-        <StyledRecentBanner isRecentListExist={!isError} onClick={handleRecentBannerClick}>
-          {!isError && (
-            <>
-              <StyledLabel>
-                <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
-                <StyledPackTotalNum>
-                  총{recentPackingData?.data?.packTotalNum}개의 짐
-                </StyledPackTotalNum>
-              </StyledLabel>
-              <StyledDday>
-                <StyledRemainDay>
-                  {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
-                </StyledRemainDay>
-                <StyledLeftMessage>
-                  {!isOutDated && recentPackingData?.data?.packRemainNum !== 0 ? (
+        <StyledRecentBanner isRecentListExist={isRecentListExist} onClick={handleRecentBannerClick}>
+          <>
+            <StyledLabel>
+              <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
+              <StyledPackTotalNum>
+                총{recentPackingData?.data?.packTotalNum}개의 짐
+              </StyledPackTotalNum>
+            </StyledLabel>
+            <StyledDday>
+              <StyledRemainDay>
+                {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
+              </StyledRemainDay>
+              <StyledLeftMessage>
+                {!isOutDated && recentPackingData?.data?.packRemainNum !== 0 ? (
+                  <span>
+                    <em> {'패킹'}</em>이 완료되었어요!
+                  </span>
+                ) : (
+                  !isOutDated && (
                     <span>
-                      <em> {'패킹'}</em>이 완료되었어요!
+                      아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
                     </span>
-                  ) : (
-                    !isOutDated && (
-                      <span>
-                        아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
-                      </span>
-                    )
-                  )}
-                </StyledLeftMessage>
-              </StyledDday>
-            </>
-          )}
+                  )
+                )}
+              </StyledLeftMessage>
+            </StyledDday>
+          </>
         </StyledRecentBanner>
-        <SwiperContainer isRecentListExist={!isError} getSwiperIndex={getSwiperIndex}>
+        <SwiperContainer isRecentListExist={isRecentListExist} getSwiperIndex={getSwiperIndex}>
           {
             <FolderList
               key="1"
@@ -269,28 +267,30 @@ function FolderLanding() {
               onFolderClick={handleFolderClick}
               handleAddFolderChange={handleAddFolderChange}
               handleAddFolderKeyPress={handleAddFolderKeyPress}
-              isEditing={isEditing && currentSwiperIndex === 0}
+              addNewFolder={addNewFolder && currentSwiperIndex === 0}
               handleCancleAddFolder={handleCancleAddFolder}
+              handleStartButtonInInit={handleStartButtonInInit}
+              isRecentListExist={isRecentListExist}
             />
           }
-          {aloneFolders.length && (
-            <FolderList
-              key="2"
-              categoryName="alone"
-              list={aloneFolders}
-              editableFolderId={editableFolderId}
-              onClick={handleBottomModalOpen}
-              onChange={handleFolderNameChange}
-              onKeyPress={handleEnterKeyPress}
-              onFolderClick={handleFolderClick}
-              handleAddFolderChange={handleAddFolderChange}
-              handleAddFolderKeyPress={handleAddFolderKeyPress}
-              isEditing={isEditing && currentSwiperIndex === 1}
-              handleCancleAddFolder={handleCancleAddFolder}
-            />
-          )}
+          <FolderList
+            key="2"
+            categoryName="alone"
+            list={aloneFolders}
+            editableFolderId={editableFolderId}
+            onClick={handleBottomModalOpen}
+            onChange={handleFolderNameChange}
+            onKeyPress={handleEnterKeyPress}
+            onFolderClick={handleFolderClick}
+            handleAddFolderChange={handleAddFolderChange}
+            handleAddFolderKeyPress={handleAddFolderKeyPress}
+            addNewFolder={addNewFolder && currentSwiperIndex === 1}
+            handleCancleAddFolder={handleCancleAddFolder}
+            handleStartButtonInInit={handleStartButtonInInit}
+            isRecentListExist={isRecentListExist}
+          />
         </SwiperContainer>
-        {!isError && !showBottomModal && (
+        {!isRecentListExist && !showBottomModal && (
           <FloatActionButton onClick={handleFloatClick} pageName="folder" />
         )}
         {showBottomModal && (
@@ -323,7 +323,7 @@ export const StyledRoot = styled.article`
 
 // 최근 생성 리스트
 export const StyledRecentBanner = styled.article<{ isRecentListExist: boolean }>`
-  display: flex;
+  display: ${({ isRecentListExist }) => (isRecentListExist ? 'flex' : 'none')};
   align-items: center;
   justify-content: space-between;
   border: 0;
