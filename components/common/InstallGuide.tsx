@@ -1,15 +1,9 @@
 import { Alert, Button, IconButton, Slide, SlideProps, Snackbar } from '@mui/material';
 import React from 'react';
+import useInstallGuide from '../../utils/hooks/useInstallGuide';
 
-interface InstallGuideProps {
-  installHandler: () => void;
-  closeHandler: () => void;
-  agent: 'ios' | 'and';
-  open: boolean;
-}
-
-function InstallGuide(props: InstallGuideProps) {
-  const { closeHandler, installHandler, open, agent } = props;
+function InstallGuide() {
+  const [installGuide, installHandler, closeGuide] = useInstallGuide();
 
   const TransitionLeft = (props: SlideProps) => {
     return <Slide {...props} direction="up" />;
@@ -17,9 +11,9 @@ function InstallGuide(props: InstallGuideProps) {
 
   return (
     <Snackbar
-      open={open}
-      autoHideDuration={10000}
-      onClose={closeHandler}
+      open={installGuide.open}
+      autoHideDuration={110000}
+      onClose={closeGuide}
       TransitionComponent={TransitionLeft}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
     >
@@ -39,14 +33,20 @@ function InstallGuide(props: InstallGuideProps) {
           },
         }}
       >
-        {agent === 'ios' ? (
+        {installGuide.agent === 'ios' ? (
           <>
             <div>
               Packman을 앱으로 사용해보세요!
               <br />
               공유하기 버튼을 누른뒤 홈 화면에 추가하세요
             </div>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={closeHandler}>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={closeGuide}
+              sx={{ marginLeft: '0.5rem' }}
+            >
               X
             </IconButton>
           </>
@@ -61,7 +61,7 @@ function InstallGuide(props: InstallGuideProps) {
             >
               Install
             </Button>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={closeHandler}>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={closeGuide}>
               X
             </IconButton>
           </>

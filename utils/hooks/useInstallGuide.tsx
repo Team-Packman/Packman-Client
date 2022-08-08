@@ -25,7 +25,7 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
 
   const isIos = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod|safari/.test(userAgent);
+    return /iphone|ipad|ipod|mac/.test(userAgent);
   };
 
   const isRunningStandalone = () => {
@@ -51,11 +51,10 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
 
   useEffect(() => {
     if (!isRunningStandalone()) {
+      console.log(isIos());
       if (isIos()) {
-        alert('hi im ios');
         setInstallGuide((prev) => ({ ...prev, agent: 'ios', open: true }));
       } else {
-        alert('hi im android');
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           setDeferredPrompt(e as BeforeInstallPromptEvent);
