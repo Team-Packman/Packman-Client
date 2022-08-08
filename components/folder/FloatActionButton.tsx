@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Image from 'next/image';
 import { useState } from 'react';
 import FAB from '/public/assets/svg/fab_ic.svg';
@@ -51,9 +51,9 @@ const FloatActionButton = (props: FloatModalProps) => {
       <StyledFABContainer pageName={pageName} isAloned={isAloned}>
         <li onClick={handleOpen}>
           {open ? (
-            <Image src={FABOPEN} width={63} height={63} alt="FAB" />
+            <Image src={FABOPEN} width={57} height={57} alt="FAB" />
           ) : (
-            <Image src={FAB} width={63} height={63} alt="FAB" />
+            <Image src={FAB} width={57} height={57} alt="FAB" />
           )}
         </li>
         {pageName === 'folder' ? (
@@ -115,11 +115,17 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   // Display button to the bottom right
   position: fixed;
   right: 2rem;
-  bottom: 2rem;
+  bottom: 7rem;
 
   // Set max height to only trigger mouse enter
   // when user hover over first button
   max-height: 52px;
+
+  li:first-child {
+    position: fixed;
+    right: 1rem;
+    bottom: 0;
+  }
 
   li:last-child {
     margin-bottom: ${({ pageName }) => pageName === 'folder' && '0.8rem'};
@@ -138,6 +144,7 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
 export const StyledList = styled.li<{ open: boolean; index: number }>`
   display: flex;
   justify-content: flex-start;
+  font-size: 1.5rem;
   align-items: center;
   padding: 1.2rem 1.627rem 1.2rem 1.2rem;
   cursor: pointer;

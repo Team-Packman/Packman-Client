@@ -78,7 +78,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
             {isNew ? (
               <Image src={Close} alt="Close icon" width={14} height={14} />
             ) : (
-              <Image src={Kebab} alt="kebab icon" width={3} height={14} />
+              <Image src={Kebab} alt="kebab icon" width={25} height={25} />
             )}
           </span>
         </StyledKebab>
@@ -134,8 +134,8 @@ export const StyledInfo = styled.div`
 
 export const StyledKebab = styled.div`
   display: flex;
-  justify-content: end;
-  padding: 0.9rem 1.6rem 0 0;
+  justify-content: flex-end;
+  padding: 0.3rem 0;
   z-index: 10;
   cursor: pointer;
 `;
@@ -156,9 +156,10 @@ export const StyledTitle = styled.input<{ isNew: boolean }>`
   border-radius: 0.4rem;
   margin: 0 0.8rem 0 0;
   color: ${({ isNew }) => (isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`)};
+  /* Safari에서 font color 무시되는 경우를 위한 코드 */
   -webkit-text-fill-color: ${({ isNew }) =>
     isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`};
-  -webkit-opacity: 1;
+  opacity: 1;
 
   &:disabled {
     border: 0;
