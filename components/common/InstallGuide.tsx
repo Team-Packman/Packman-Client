@@ -21,6 +21,7 @@ function InstallGuide(props: InstallGuideProps) {
       autoHideDuration={10000}
       onClose={closeHandler}
       TransitionComponent={TransitionLeft}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
     >
       <Alert
         severity="info"
