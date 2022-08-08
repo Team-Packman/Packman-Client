@@ -145,7 +145,7 @@ const StyledRoot = styled.div`
 
   & > p {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     height: 8rem;
     color: ${packmanColors.pmDeepGrey};
   }
@@ -260,7 +260,7 @@ const StyledFooter = styled.div`
   align-items: flex-end;
   height: calc(100vh - 74rem);
   min-height: 10.5rem;
-  margin: 6.1rem 0 5rem 0;
+  margin: 2.1rem 0 5rem 0;
 `;
 const StyledModalButtonWrapper = styled.div`
   display: flex;
