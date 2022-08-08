@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FolderBox from './FolderBox';
+import FolderInitial from './FolderInitial';
 export interface FolderProps {
   _id?: string;
   title?: string;
@@ -8,9 +9,10 @@ export interface FolderProps {
 }
 export interface FolderListProps {
   list: FolderProps[];
-  categoryName?: string;
+  categoryName: string;
   editableFolderId?: string;
-  isEditing: boolean;
+  addNewFolder: boolean;
+  isRecentListExist: boolean;
   onClick(id: string, title: string): void;
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
   onKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void;
@@ -18,18 +20,46 @@ export interface FolderListProps {
   handleAddFolderChange(e: React.ChangeEvent<HTMLInputElement>): void;
   handleAddFolderKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void;
   handleCancleAddFolder(): void;
+  handleStartButtonInInit(): void;
 }
 
 function FolderList(props: FolderListProps) {
-  const { list, isEditing } = props;
+  const {
+    list,
+    addNewFolder,
+    categoryName = '',
+    isRecentListExist = false,
+    handleStartButtonInInit,
+  } = props;
+
+  const [showInitialPage, setShowIntitialPage] = useState<boolean>(list.length <= 0);
+
+  const handleStartButton = () => {
+    setShowIntitialPage(false);
+    handleStartButtonInInit();
+  };
+
+  useEffect(() => {
+    setShowIntitialPage(list.length <= 0);
+  }, [list.length]);
 
   return (
     <StyledListRoot>
       <StyledWrapper>
-        {isEditing && <FolderBox key={0} isNew={isEditing} {...props} />}
-        {list?.map((v) => (
-          <FolderBox key={v._id} isNew={false} {...v} {...props} />
-        ))}
+        {!showInitialPage ? (
+          <>
+            {addNewFolder && <FolderBox key={0} isNew={addNewFolder} {...props} />}
+            {list?.map((v) => (
+              <FolderBox key={v._id} isNew={false} {...v} {...props} />
+            ))}
+          </>
+        ) : (
+          <FolderInitial
+            categoryName={categoryName}
+            isRecentListExist={isRecentListExist}
+            onClick={handleStartButton}
+          />
+        )}
       </StyledWrapper>
     </StyledListRoot>
   );

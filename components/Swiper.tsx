@@ -1,10 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { ReactNode, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import styled from 'styled-components';
 import SwiperCore, { Virtual, Navigation, Pagination } from 'swiper';
-import InitLogo from '/public/assets/svg/home_init.svg';
-import Image from 'next/image';
 import { packmanColors } from '../styles/color';
 
 import 'swiper/css/pagination';
@@ -24,11 +22,6 @@ function SwiperContainer(props: SwiperProps) {
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(); /* eslint-disable no-unused-vars */
   const [bullet] = useState<string[]>(['함께 패킹', '혼자 패킹']);
-  const [initialLables] = useState<string[]>([
-    '친구와 함께 짐 목록을 작성해보세요',
-    '짐 목록을 작성해보세요',
-  ]);
-  const [initialButtons] = useState<string[]>(['함께 패킹 시작하기', '혼자 패킹 시작하기']);
   const [slides] = useState(Array.from({ length: 2 }).map((_, idx) => <div key={idx}></div>));
 
   const pagination = {
@@ -49,19 +42,7 @@ function SwiperContainer(props: SwiperProps) {
       >
         {slides.map((slideContent, index) => (
           <SwiperSlide key={slideContent.key} virtualIndex={index}>
-            {children[index] ? (
-              children[index]
-            ) : (
-              <>
-                <Image src={InitLogo} width={258} height={258} alt="test" />
-                <StyledInitialWrapper>
-                  <StyledLabel>{initialLables[index]}</StyledLabel>
-                  {!isRecentListExist && (
-                    <StyledStratButton>{initialButtons[index]}</StyledStratButton>
-                  )}
-                </StyledInitialWrapper>
-              </>
-            )}
+            {children[index]}
           </SwiperSlide>
         ))}
       </StyledSwiper>
@@ -77,6 +58,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   align-items: center;
   width: calc(100% - 4rem);
   height: calc(var(--vh, 1vh) * 100);
+  margin-top: ${({ isRecentListExist }) => (isRecentListExist ? '0' : '4.2rem')};
 `;
 
 export const StyledSwiper = styled(Swiper)`
@@ -138,28 +120,4 @@ export const StyledButton = styled.button`
   height: 100%;
   width: 100%;
   cursor: pointer;
-`;
-
-export const StyledInitialWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 6rem;
-  width: 100%;
-`;
-
-export const StyledLabel = styled.p`
-  font-size: 1.4rem;
-  color: ${packmanColors.pmDeepGrey};
-  margin-bottom: 1rem;
-`;
-
-export const StyledStratButton = styled.button`
-  width: 100%;
-  padding: 1.2rem 2.9rem;
-  font-size: 1.4rem;
-  color: ${packmanColors.pmWhite};
-  background: ${packmanColors.pmPink};
-  border: none;
-  border-radius: 8px;
 `;
