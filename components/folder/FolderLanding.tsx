@@ -25,7 +25,7 @@ function FolderLanding() {
   const [editableFolderId, setEditableFolderId] = useState<string>('');
   const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ _id: '', title: '' });
   const [currentSwiperIndex, setCurrentSwiperIndex] = useState<number>(0);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [addNewFolder, setAddNewFolder] = useState<boolean>(false);
   const [newFolderData, setNewFolderData] = useState<AddFolderInput>({
     title: '',
     isAloned: false,
@@ -150,13 +150,17 @@ function FolderLanding() {
   };
 
   // 폴더 추가 관련 핸들러
+  const handleStartButtonInInit = () => {
+    setAddNewFolder(true);
+  };
+
   const handleAddFolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewFolderData({ title: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
   };
 
   const handleAddFolderKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setIsEditing(false);
+      setAddNewFolder(false);
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
@@ -193,7 +197,7 @@ function FolderLanding() {
   };
 
   const handleCancleAddFolder = () => {
-    setIsEditing(false);
+    setAddNewFolder(false);
   };
 
   // router 관련 핸들러
@@ -216,7 +220,7 @@ function FolderLanding() {
     } else if (index === 1) {
       router.push('/select-template/alone');
     } else if (index === 2) {
-      setIsEditing(true);
+      setAddNewFolder(true);
     }
   };
 
@@ -265,28 +269,30 @@ function FolderLanding() {
               onFolderClick={handleFolderClick}
               handleAddFolderChange={handleAddFolderChange}
               handleAddFolderKeyPress={handleAddFolderKeyPress}
-              isEditing={isEditing && currentSwiperIndex === 0}
+              addNewFolder={addNewFolder && currentSwiperIndex === 0}
               handleCancleAddFolder={handleCancleAddFolder}
+              handleStartButtonInInit={handleStartButtonInInit}
+              isRecentListExist={isRecentListExist}
             />
           }
-          {aloneFolders.length && (
-            <FolderList
-              key="2"
-              categoryName="alone"
-              list={aloneFolders}
-              editableFolderId={editableFolderId}
-              onClick={handleBottomModalOpen}
-              onChange={handleFolderNameChange}
-              onKeyPress={handleEnterKeyPress}
-              onFolderClick={handleFolderClick}
-              handleAddFolderChange={handleAddFolderChange}
-              handleAddFolderKeyPress={handleAddFolderKeyPress}
-              isEditing={isEditing && currentSwiperIndex === 1}
-              handleCancleAddFolder={handleCancleAddFolder}
-            />
-          )}
+          <FolderList
+            key="2"
+            categoryName="alone"
+            list={aloneFolders}
+            editableFolderId={editableFolderId}
+            onClick={handleBottomModalOpen}
+            onChange={handleFolderNameChange}
+            onKeyPress={handleEnterKeyPress}
+            onFolderClick={handleFolderClick}
+            handleAddFolderChange={handleAddFolderChange}
+            handleAddFolderKeyPress={handleAddFolderKeyPress}
+            addNewFolder={addNewFolder && currentSwiperIndex === 1}
+            handleCancleAddFolder={handleCancleAddFolder}
+            handleStartButtonInInit={handleStartButtonInInit}
+            isRecentListExist={isRecentListExist}
+          />
         </SwiperContainer>
-        {isRecentListExist && !showBottomModal && (
+        {!isRecentListExist && !showBottomModal && (
           <FloatActionButton onClick={handleFloatClick} pageName="folder" />
         )}
         {showBottomModal && (
