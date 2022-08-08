@@ -69,6 +69,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
 
     detectSWUpdate();
+
+    alert('[V1] noti test');
   }, []);
 
   if (!show) return null;
