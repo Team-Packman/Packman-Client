@@ -52,8 +52,16 @@ function AloneSelectTemplateLanding() {
         setRandomImageList((prev) => prev.sort(() => Math.random() - 0.5));
       }
     });
-    // setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
   };
+
+  const onClickConfirmButton = () => {
+    isBasicTemplate
+      ? router.push(`/preview?id=${templateId}&type=basic&categoryName=alone`)
+      : router.push(`/preview?id=${templateId}&type=myTemplate&categoryName=alone`);
+  };
+
+  const activateConfirmButton = () => setActivateButton(true);
+  const deactivateConfirmButton = () => setActivateButton(false);
 
   return (
     <StyledRoot>
@@ -71,6 +79,7 @@ function AloneSelectTemplateLanding() {
               alt="template-image"
               width={375}
               height={211}
+              priority
             />
           )}
         </picture>
@@ -78,13 +87,9 @@ function AloneSelectTemplateLanding() {
           isAloned={true}
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
-          activate={(isSelected: string) => {
-            if (isSelected === '') {
-              setActivateButton(false);
-            } else {
-              setActivateButton(true);
-            }
-          }}
+          activate={(isSelected: string) =>
+            isSelected === '' ? deactivateConfirmButton() : activateConfirmButton()
+          }
           changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
           changeUserOwnTemplateImage={(templateId: string) =>
             changeUserOwnTemplateImage(templateId)
@@ -97,9 +102,7 @@ function AloneSelectTemplateLanding() {
         <StyleButton
           isTemplate={false}
           isActivated={true}
-          onClick={() => {
-            router.push(`/list-intro?id=''&categoryName=alone`);
-          }}
+          onClick={() => router.push(`/list-intro?id=''&categoryName=alone`)}
         >
           건너뛰기
         </StyleButton>
@@ -107,13 +110,7 @@ function AloneSelectTemplateLanding() {
           isTemplate={true}
           disabled={!activateButton}
           isActivated={activateButton}
-          onClick={() => {
-            if (isBasicTemplate) {
-              router.push(`/preview?id=${templateId}&type=basic&categoryName=alone`);
-            } else {
-              router.push(`/preview?id=${templateId}&type=myTemplate&categoryName=alone`);
-            }
-          }}
+          onClick={onClickConfirmButton}
         >
           확인
         </StyleButton>

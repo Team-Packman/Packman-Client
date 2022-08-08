@@ -5,12 +5,14 @@ import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import EditingProfile from '../components/profile/EditingProfile';
 import SettingProfile from '../components/profile/SettingProfile';
+import { packmanColors } from '../styles/color';
+import { FONT_STYLES } from '../styles/font';
 
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
+  const finishEditingProfileHandler = () => setIsEditing(false);
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
-  console.log(data);
 
   if (!data) return null;
 
@@ -24,15 +26,13 @@ function EditProfile() {
           <>
             <EditingProfile
               comment={
-                <h1>
+                <StyledTitle>
                   <b>프로필 수정</b>을 완료해주세요!
-                </h1>
+                </StyledTitle>
               }
               oldNickname={name}
               oldProfileImageId={profileImageId}
-              finishEditing={() => {
-                setIsEditing(false);
-              }}
+              finishEditing={finishEditingProfileHandler}
             />
           </>
         ) : (
@@ -53,5 +53,22 @@ const StyledRoot = styled.div`
   align-items: center;
   padding: 0 2rem;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100 - 8rem);
+  overflow-y: auto;
+  /* 브라우저별 스크롤바 숨김 설정 */
+  -ms-overflow-style: none; // Edge
+  scrollbar-width: none; // Firefox
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
+`;
+const StyledTitle = styled.h1`
+  ${FONT_STYLES.DISPLAY1_LIGHT};
+  color: ${packmanColors.pmBlack};
+  word-break: break-all;
+  word-wrap: break-word;
+
+  & > b {
+    ${FONT_STYLES.DISPLAY2_SEMIBOLD};
+  }
 `;

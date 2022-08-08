@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -12,11 +12,9 @@ import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import {
-  DeleteAloneInventoryInput,
-  GetAloneInventoryOutput,
-} from '../../../service/inventory/alone';
+import { DeleteAloneInventoryInput } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
+import SwipeablelistItem from '../SwipeableListItem';
 interface DeleteAloneInventoryData {
   folderId: string;
   listId: string;
@@ -56,8 +54,6 @@ function AlonePackingListLanding() {
   );
 
   if (!data) return null;
-
-  console.log(data);
 
   const { alonePackingList, folder, currentFolder } = data.data;
 
@@ -116,9 +112,17 @@ function AlonePackingListLanding() {
     }
   };
 
+  const onClickCaptionButton = () => {
+    setIsDragged(Array(alonePackingList?.length).fill(false));
+    setIsDeleting((prev) => !prev);
+    if (!isDeleting) {
+      setDeleteList([]);
+    }
+  };
+
   return (
     <>
-      <Header back title="패킹 리스트" icon="profile" />
+      <Header back title="리스트 목록" icon="profile" />
       <StyledRoot onTouchMove={() => setToggle(false)}>
         {showModal && (
           <Modal
@@ -144,9 +148,7 @@ function AlonePackingListLanding() {
               width={24}
               height={24}
               toggle={toggle ? 'true' : 'false'}
-              onClick={() => {
-                setToggle(true);
-              }}
+              onClick={() => setToggle(true)}
             />
             {toggle && (
               <DropBox
@@ -174,24 +176,10 @@ function AlonePackingListLanding() {
                   </StyledCaptionText>
                 )}
                 {isDeleting && (
-                  <span
-                    onClick={() => {
-                      deleteList.length > 0 && setDeleteList([]);
-                    }}
-                  >
-                    선택 해제
-                  </span>
+                  <span onClick={() => deleteList.length > 0 && setDeleteList([])}>선택 해제</span>
                 )}
 
-                <StyledCaptionButtonWrapper
-                  onClick={() => {
-                    setIsDragged(Array(alonePackingList?.length).fill(false));
-                    setIsDeleting((prev) => !prev);
-                    if (!isDeleting) {
-                      setDeleteList([]);
-                    }
-                  }}
-                >
+                <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                   {isDeleting ? (
                     <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>
                       취소
@@ -212,15 +200,24 @@ function AlonePackingListLanding() {
                 packingList={alonePackingList}
                 deleteList={deleteList}
                 isDeleting={isDeleting}
-                checkDeleteList={checkDeleteList}
-                handleIsDragged={handleIsDragged}
                 openModal={openModal}
-                setSelectedIndex={(id: number) => setSelectedIndex(id)}
                 setDeleteList={(arr) => setDeleteList(arr)}
-                isDragged={isDragged}
-                routeToList={(idx: number) => {
-                  router.push(`/alone/${alonePackingList[idx]._id}?invite=''`);
-                }}
+                swipeableListItem={alonePackingList?.map((item, idx) => (
+                  <SwipeablelistItem
+                    key={item._id}
+                    idx={idx}
+                    isDragged={isDragged[idx]}
+                    handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                    isDeleting={isDeleting}
+                    deleteList={deleteList}
+                    checkDeleteList={(id: string) => checkDeleteList(id)}
+                    onClickDeleteButton={() => {
+                      setSelectedIndex(idx);
+                      openModal();
+                    }}
+                    packingList={alonePackingList}
+                  />
+                ))}
               />
             </>
           )}
@@ -253,7 +250,7 @@ const StyledFolderInfo = styled.div`
   margin-top: 0.842rem;
 
   & > h1 {
-    font-style: ${FONT_STYLES.HEADLINE2_SEMIBOLD};
+    ${FONT_STYLES.HEADLINE2_SEMIBOLD};
   }
   & > div {
     display: flex;
@@ -279,7 +276,7 @@ const StyledEmpty = styled.div`
   width: 20rem;
   text-align: center;
   color: ${packmanColors.pmGrey};
-  font-style: ${FONT_STYLES.HEADLINE1_MEDIUM};
+  ${FONT_STYLES.HEADLINE1_MEDIUM};
 `;
 const StyledCaptionWrapper = styled.div`
   position: relative;
@@ -289,7 +286,7 @@ const StyledCaptionWrapper = styled.div`
 
   & > span {
     position: absolute;
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     left: 2rem;
     bottom: 1rem;
     color: ${packmanColors.pmDarkGrey};
@@ -300,10 +297,10 @@ const StyledCaptionText = styled.p`
   justify-content: start;
   padding: 1.8rem 0 0 2.4rem;
   margin: 0;
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmDeepGrey};
   & > span {
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmPink};
   }
 `;
@@ -313,7 +310,7 @@ const StyledCaptionButtonWrapper = styled.div`
   right: 2rem;
   bottom: 0.9rem;
   & > p {
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmDarkGrey};
   }
 `;
@@ -330,5 +327,5 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 `;

@@ -1,15 +1,13 @@
 import Image, { StaticImageData } from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
-import useGlobalState from '../../utils/hooks/useGlobalState';
-import { User } from '../../type/globalState';
 import { FONT_STYLES } from '../../styles/font';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authedUser, creatingUser } from '../../utils/recoil/atom/atom';
 
 interface AddUserProfileData {
@@ -35,13 +33,12 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const router = useRouter();
   const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
-  const [nickname, setNickname] = useState('');
-  const [profile, setProfile] = useState('');
-  const [index, setIndex] = useState(''); //중앙 120px 이미지 다룰 인덱스
-  // const [user, setUser] = useGlobalState<User>('User');
+  const [nickname, setNickname] = useState(oldNickname ? oldNickname : '');
+  const [profile, setProfile] = useState(oldProfileImageId ? oldProfileImageId : '0');
+  const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
-  console.log('user', user);
+
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
   const { mutate: addUserProfileMutate } = useMutation(
@@ -68,6 +65,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     },
   );
 
+  //버튼 활성화 여부
   const setIsActivate = () => {
     if (isEditing) {
       if (!profile) {
@@ -83,16 +81,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   };
 
-  useEffect(() => {
-    if (oldProfileImageId) {
-      setProfile(oldProfileImageId);
-      setIndex(oldProfileImageId);
-    }
-    if (oldNickname) {
-      setNickname(oldNickname);
-    }
-  }, []);
-
+  //프로필 이미지 클릭(선택) 이벤트 처리
   const onClickProfileImage = (id: string) => {
     if (profile === id) {
       setProfile('');
@@ -101,11 +90,54 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       setIndex(id);
     }
   };
-  console.log(user);
+
+  //닉네임 입력 이벤트 처리
+  const onChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    {
+      if (nickname.length > 4) {
+        setNickname((prev) => prev.substring(0, 4));
+      } else {
+        setNickname(e.target.value);
+      }
+    }
+  };
+
+  // 프로필 수정
+  const editUserProfile = () => {
+    if (finishEditing) {
+      updateUserProfileMutate({
+        name: nickname,
+        profileImageId: profile,
+      });
+      finishEditing();
+    }
+  };
+
+  // 회원가입
+  const createUserAccount = () => {
+    addUserProfileMutate(
+      {
+        email: user.email,
+        name: nickname,
+        profileImageId: profile,
+      },
+      {
+        onSuccess: ({ data }) => {
+          setUser(data);
+          router.push('/folder');
+        },
+      },
+    );
+  };
+
+  const onClickGoToPackingButton = () => {
+    isEditing ? editUserProfile() : createUserAccount();
+  };
+
   return (
     <StyledRoot>
-      <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
-        <Image src={profileImage[+index].src} alt="profile-image" layout="fill" />
+      <div style={{ position: 'relative', width: '120', height: '120' }}>
+        <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
       </div>
       <StyledInputWrapper>
         <StyledInput
@@ -113,13 +145,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
           placeholder="김팩맨"
           value={nickname}
           maxLength={4}
-          onChange={(e) => {
-            if (nickname.length > 4) {
-              setNickname((prev) => prev.substring(0, 4));
-            } else {
-              setNickname(e.target.value);
-            }
-          }}
+          onChange={onChangeNickname}
         />
         <StyledText nickname={nickname !== ''}>닉네임을 입력해주세요 (4자 이내)</StyledText>
       </StyledInputWrapper>
@@ -138,6 +164,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
               width={80}
               height={80}
               selected={profile === id}
+              priority
             />
           </StyledImageWrapper>
         ))}
@@ -147,33 +174,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         type="button"
         disabled={!setIsActivate()}
         isActivate={setIsActivate()}
-        onClick={
-          isEditing
-            ? async () => {
-                if (finishEditing) {
-                  updateUserProfileMutate({
-                    name: nickname,
-                    profileImageId: profile,
-                  });
-                  finishEditing();
-                }
-              }
-            : () => {
-                addUserProfileMutate(
-                  {
-                    email: user.email,
-                    name: nickname,
-                    profileImageId: profile,
-                  },
-                  {
-                    onSuccess: ({ data }) => {
-                      setUser(data);
-                      router.push('/folder');
-                    },
-                  },
-                );
-              }
-        }
+        onClick={onClickGoToPackingButton}
       >
         {isEditing ? '수정 완료' : '패킹하러 가기'}
       </StyledButton>
@@ -198,7 +199,7 @@ const StyledInputWrapper = styled.div`
 const StyledInput = styled.input`
   width: 12rem;
   text-align: center;
-  font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+  ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   color: ${packmanColors.pmBlack};
   border: none;
   border-bottom: 1px solid ${packmanColors.pmDeepGrey};
@@ -216,7 +217,7 @@ const StyledText = styled.div<{ nickname: boolean }>`
   opacity: ${({ nickname }) => nickname && '0'};
   padding-top: 0.77rem;
   color: ${packmanColors.pmDeepGrey};
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
 `;
 
 const StyledSelectProfileWrapper = styled.div`
@@ -247,7 +248,7 @@ const StyledButton = styled.button<{ isActivate: boolean }>`
   border: none;
   border-radius: 0.8rem;
   padding: 1.2rem 6.4rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
   color: ${packmanColors.pmWhite};
   background-color: ${({ isActivate }) =>
     isActivate ? packmanColors.pmPink : packmanColors.pmGrey};

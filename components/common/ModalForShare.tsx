@@ -1,37 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import forShare from '/public/assets/png/forShare.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-function ModalForShare() {
+interface ModalForShareProps {
+  onClick?: () => void;
+}
+
+function ModalForShare(props: ModalForShareProps) {
+  const { onClick: modalHandler } = props;
+
+  const router = useRouter();
+  const [isCopied, setIsCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(
+      `${process.env.NEXT_PUBLIC_DOMAIN}/alone/invited/${router.query.id}`,
+    );
+    setIsCopied(true);
+  };
+
   return (
-    <StyledRoot>
+    <>
+      <StyledBg onClick={modalHandler} />
       <StyledModal>
         <ButtonContainer>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" />
+          <Image src={ButtonX} alt="closeModal" width="24" height="24" onClick={modalHandler} />
         </ButtonContainer>
         <Description>패킹 리스트 공유</Description>
         <Image src={forShare} alt="forShare" width="260" height="260" />
-        <SubDescription>나의 패킹 리스트를 공유해보세요!</SubDescription>
-        <SeeListButton>링크 복사</SeeListButton>
+        <SubDescription>
+          {isCopied ? '복사되었습니다!' : '나의 패킹 리스트를 공유해보세요!'}
+        </SubDescription>
+        <SeeListButton onClick={copyToClipboard}>링크 복사</SeeListButton>
       </StyledModal>
-    </StyledRoot>
+    </>
   );
 }
 
 export default ModalForShare;
 
-const StyledRoot = styled.div`
+const StyledBg = styled.div`
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.48);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  position: relative;
+  z-index: 9999;
+  left: 0;
+  top: 0;
 `;
 
 const StyledModal = styled.div`
@@ -42,6 +64,11 @@ const StyledModal = styled.div`
   align-items: center;
   padding: 0.8rem 0 2.4rem 0;
   border-radius: 1rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
 `;
 
 const ButtonContainer = styled.div`

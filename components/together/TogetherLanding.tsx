@@ -23,6 +23,7 @@ import ModalForInvitation from '../common/ModalForInvitation';
 import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRecoilValue } from 'recoil';
 import { authedUser } from '../../utils/recoil/atom/atom';
+import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -51,6 +52,7 @@ function TogetherLanding() {
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
   const [invitationModalOpen, setInvitationModalOpen] = useState(false);
+  const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState(0);
 
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
@@ -175,6 +177,8 @@ function TogetherLanding() {
   };
   const invitationModalOpenHandler = () => setInvitationModalOpen(true);
   const invitationModalCloseHandler = () => setInvitationModalOpen(false);
+  const addTemplateModalOpenHandler = () => setAddTemplateModalOpen(true);
+  const addTemplateModalCloseHandler = () => setAddTemplateModalOpen(false);
 
   const updateCategory = (payload: UpdateCategoryPayload) => {
     const { name, categoryId, listId } = payload;
@@ -388,6 +392,7 @@ function TogetherLanding() {
           {
             onSuccess: () => {
               client.invalidateQueries('getPackingListDetail');
+              addTemplateModalOpenHandler();
             },
           },
         );
@@ -629,6 +634,9 @@ function TogetherLanding() {
           closeModal={bottomModalCloseHandler}
           content={currentFocus.title}
         />
+      )}
+      {addTemplateModalOpen && (
+        <ModalForAddToTemplate title={info.title} onClick={addTemplateModalCloseHandler} />
       )}
     </Layout>
   );

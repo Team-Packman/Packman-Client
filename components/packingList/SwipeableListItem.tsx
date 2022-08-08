@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import iCheck from '/public/assets/svg/iCheck.svg';
 import iCheckPink from '/public/assets/svg/iCheckPink.svg';
 import iRightArrow from '/public/assets/svg/iRightArrow.svg';
@@ -24,7 +24,6 @@ interface ItemProps {
   checkDeleteList: (id: string) => void;
   onClickDeleteButton: (idx: number) => void;
   packingList: PackingList[];
-  routeToList: (id: number) => void;
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
@@ -38,10 +37,10 @@ export default function SwipeablelistItem(props: ItemProps) {
     checkDeleteList,
     onClickDeleteButton,
     packingList,
-    routeToList,
   } = props;
 
   const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const listType = router.pathname.split('/').at(-2); // togetehr | alone
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -67,8 +66,14 @@ export default function SwipeablelistItem(props: ItemProps) {
     document.addEventListener('touchend', End);
   };
 
+  const moveToPackingList = () => {
+    if (!isDeleting) {
+      router.push(`/${listType}/${packingList[idx]._id}`);
+    }
+  };
+
   return (
-    <StyledRoot onClick={() => routeToList(idx)}>
+    <StyledRoot isDeleting={isDeleting}>
       {isDeleting && (
         <StyledSelectDelete>
           <Image
@@ -77,18 +82,30 @@ export default function SwipeablelistItem(props: ItemProps) {
             onClick={() => checkDeleteList(_id)}
             width={24}
             height={24}
+            layout="fixed"
           />
         </StyledSelectDelete>
       )}
-      <StyledItemWrapper onTouchStart={onTouchStart} isDragged={isDragged} isDeleting={isDeleting}>
+      <StyledItemWrapper
+        onTouchStart={onTouchStart}
+        isDragged={isDragged}
+        isDeleting={isDeleting}
+        onClick={moveToPackingList}
+      >
         <StyledItemInfo>
           <p>{departureDate}</p>
           <p>{title}</p>
           <StyledPackInfo>
             <span>총 {packTotalNum}개의 짐</span>
-            <StyledPackRemainText>
-              아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
-            </StyledPackRemainText>
+            {packRemainNum ? (
+              <StyledPackRemainText>
+                아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
+              </StyledPackRemainText>
+            ) : (
+              <StyledPackRemainText>
+                <span>패킹</span>이 완료되었어요!
+              </StyledPackRemainText>
+            )}
           </StyledPackInfo>
         </StyledItemInfo>
         <Image src={iRightArrow} alt="열기" width={24} height={24} />
@@ -109,48 +126,67 @@ export default function SwipeablelistItem(props: ItemProps) {
   );
 }
 
-const StyledRoot = styled.div`
+const StyledRoot = styled.div<{ isDeleting: boolean }>`
+  position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: ${({ isDeleting }) => !isDeleting && 'center'};
   align-items: center;
-  width: 33.6rem;
-  height: 11.4rem;
+  width: 100%;
+  height: 10.8rem;
   gap: 2.7rem;
+  overflow: hidden;
 `;
 
 const StyledSelectDelete = styled.div`
   position: absolute;
   left: 3.288rem;
-  display: flex;
-  width: 8.4rem;
-  height: 2.4rem;
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
-  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: calc(100vw - 4rem);
+  overflow-x: hidden;
   height: inherit;
   padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
   background-color: ${packmanColors.pmBlueGrey};
-  transition: ${({ isDeleting }) => !isDeleting && '0.4s ease-in-out'};
+  transition: ease-in-out;
+  transition-duration: 0.4s;
 
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 
-  transform: ${({ isDragged, isDeleting }) => {
+  ${({ isDragged, isDeleting }) => {
     switch (isDeleting) {
       case false:
-        return isDragged ? 'translateX(-4.7rem)' : 'translateX(0)';
+        return isDragged
+          ? css`
+              transform: translateX(-4.7rem);
+            `
+          : css`
+              transform: translateX(0);
+            `;
       default:
-        return 'translateX(6.388rem)';
+        return css`
+          animation: 0.4s ease-in-out slide;
+          transform: translateX(8.388rem);
+          -webkit-transform: translate3d(0, 0, 0) translateX(8.388rem); //Safari 대응
+        `;
     }
   }};
+
+  @keyframes slide {
+    from {
+      transform: translateX(2rem);
+    }
+    to {
+      transform: translateX(8.388rem);
+    }
+  }
 `;
 
 const StyledItemInfo = styled.div`
@@ -161,11 +197,11 @@ const StyledItemInfo = styled.div`
   gap: 0.6rem;
 
   & > p:first-child {
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
     color: ${packmanColors.pmBlueGrey};
   }
   & > p:nth-child(2) {
-    font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   }
 `;
 const StyledPackInfo = styled.div`
@@ -181,16 +217,19 @@ const StyledPackInfo = styled.div`
     width: 8.3rem;
     height: 2.4rem;
     color: ${packmanColors.pmBlack};
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
     border: 0.1rem solid ${packmanColors.pmPink};
     border-radius: 1.2rem;
     text-align: center;
   }
 `;
 const StyledPackRemainText = styled.p`
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  position: absolute;
+  right: 3.557rem;
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmBlack};
   & > span {
+    font-weight: bold;
     color: ${packmanColors.pmPink};
   }
 `;
@@ -207,7 +246,6 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
-  padding: ${({ isDragged }) => isDragged && '0 1.4rem'};
 
   & > div {
     color: ${packmanColors.pmWhite};

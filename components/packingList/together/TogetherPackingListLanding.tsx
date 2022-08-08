@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -12,11 +12,9 @@ import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import {
-  DeleteTogetherInventoryInput,
-  GetTogetherInventoryOutput,
-} from '../../../service/inventory/together';
+import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
+import SwipeablelistItem from '../SwipeableListItem';
 
 interface DeleteTogetherInventoryData {
   folderId: string;
@@ -92,7 +90,6 @@ function TogetherPackingListLanding() {
   const onClickRightModalButton = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
-      console.log(deleteList.join(','));
       deleteTogetherInventoryMutate({
         folderId: currentFolder._id,
         listId: deleteList.join(','),
@@ -118,11 +115,17 @@ function TogetherPackingListLanding() {
     }
   };
 
-  console.log(isDeleting);
+  const onClickCaptionButton = () => {
+    setIsDragged(Array(togetherPackingList?.length).fill(false));
+    setIsDeleting((prev) => !prev);
+    if (!isDeleting) {
+      setDeleteList([]);
+    }
+  };
 
   return (
     <>
-      <Header back title="패킹 리스트" icon="profile" />
+      <Header back title="리스트 목록" icon="profile" />
       <StyledRoot onTouchMove={() => setToggle(false)}>
         {showModal && (
           <Modal
@@ -163,72 +166,74 @@ function TogetherPackingListLanding() {
           </div>
         </StyledFolderInfo>
 
-        <StyledMain isEmpty={!togetherPackingList.length}>
-          {!togetherPackingList.length ? (
+        {!togetherPackingList.length ? (
+          <StyledMain isEmpty={!togetherPackingList.length}>
             <StyledEmpty>
               <p>&apos;+&apos; 버튼을 눌러</p>
               <p>패킹 리스트를 추가해주세요</p>
             </StyledEmpty>
-          ) : (
-            <>
-              <StyledCaptionWrapper>
-                {!isDeleting && (
-                  <StyledCaptionText>
-                    <span>{togetherPackingList?.length}</span>개의 패킹 리스트
-                  </StyledCaptionText>
-                )}
-                {isDeleting && (
-                  <span
-                    onClick={() => {
-                      deleteList.length > 0 && setDeleteList([]);
-                    }}
-                  >
-                    선택해제
-                  </span>
-                )}
-
-                <StyledCaptionButtonWrapper
+          </StyledMain>
+        ) : (
+          <>
+            <StyledCaptionWrapper>
+              {!isDeleting && (
+                <StyledCaptionText>
+                  <span>{togetherPackingList?.length}</span>개의 패킹 리스트
+                </StyledCaptionText>
+              )}
+              {isDeleting && (
+                <span
                   onClick={() => {
-                    setIsDragged(Array(togetherPackingList?.length).fill(false));
-                    setIsDeleting((prev) => !prev);
-                    if (!isDeleting) {
-                      setDeleteList([]);
-                    }
+                    deleteList.length > 0 && setDeleteList([]);
                   }}
                 >
-                  {isDeleting ? (
-                    <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
-                      취소
-                    </p>
-                  ) : (
-                    <Image
-                      src={iTrash}
-                      alt="삭제"
-                      width={24}
-                      height={24}
-                      onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
-                    />
-                  )}
-                </StyledCaptionButtonWrapper>
-              </StyledCaptionWrapper>
+                  선택해제
+                </span>
+              )}
 
-              <SwipeableList
-                packingList={togetherPackingList}
-                deleteList={deleteList}
-                isDeleting={isDeleting}
-                checkDeleteList={checkDeleteList}
-                handleIsDragged={handleIsDragged}
-                openModal={openModal}
-                setSelectedIndex={(id: number) => setSelectedIndex(id)}
-                setDeleteList={(arr) => setDeleteList(arr)}
-                isDragged={isDragged}
-                routeToList={(idx: number) => {
-                  router.push(`/together/${togetherPackingList[idx]._id}`);
-                }}
-              />
-            </>
-          )}
-        </StyledMain>
+              <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
+                {isDeleting ? (
+                  <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
+                    취소
+                  </p>
+                ) : (
+                  <Image
+                    src={iTrash}
+                    alt="삭제"
+                    width={24}
+                    height={24}
+                    onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
+                  />
+                )}
+              </StyledCaptionButtonWrapper>
+            </StyledCaptionWrapper>
+
+            <SwipeableList
+              packingList={togetherPackingList}
+              deleteList={deleteList}
+              isDeleting={isDeleting}
+              openModal={openModal}
+              setDeleteList={(arr) => setDeleteList(arr)}
+              swipeableListItem={togetherPackingList?.map((item, idx) => (
+                <SwipeablelistItem
+                  key={item._id}
+                  idx={idx}
+                  isDragged={isDragged[idx]}
+                  handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                  isDeleting={isDeleting}
+                  deleteList={deleteList}
+                  checkDeleteList={(id: string) => checkDeleteList(id)}
+                  onClickDeleteButton={() => {
+                    setSelectedIndex(idx);
+                    openModal();
+                  }}
+                  packingList={togetherPackingList}
+                />
+              ))}
+            />
+          </>
+        )}
+
         {!isDeleting && (
           <FloatActionButton
             onClick={handleFloatClick}
@@ -261,7 +266,7 @@ const StyledFolderInfo = styled.div`
   margin-top: 0.842rem;
 
   & > h1 {
-    font-style: ${FONT_STYLES.HEADLINE2_SEMIBOLD};
+    ${FONT_STYLES.HEADLINE2_SEMIBOLD};
   }
   & > div {
     display: flex;
@@ -279,7 +284,7 @@ const StyledMain = styled.div<{ isEmpty: boolean }>`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: ${({ isEmpty }) => isEmpty && '61.8rem'};
+  height: calc(var(--vh, 1vh) * 100 - 16.7rem);
 `;
 const StyledEmpty = styled.div`
   display: flex;
@@ -287,19 +292,19 @@ const StyledEmpty = styled.div`
   width: 20rem;
   text-align: center;
   color: ${packmanColors.pmGrey};
-  font-style: ${FONT_STYLES.HEADLINE1_MEDIUM};
+  ${FONT_STYLES.HEADLINE1_MEDIUM};
 `;
 const StyledCaptionWrapper = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  height: 8.4rem;
+  height: 6.9rem;
 
   & > span {
     position: absolute;
     left: 2.6rem;
-    bottom: 1rem;
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    bottom: 0.8rem;
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmDeepGrey};
   }
 `;
@@ -308,10 +313,10 @@ const StyledCaptionText = styled.p`
   justify-content: start;
   padding: 1.8rem 0 0 2.4rem;
   margin: 0;
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmDeepGrey};
   & > span {
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmPink};
   }
 `;
@@ -319,8 +324,9 @@ const StyledCaptionButtonWrapper = styled.div`
   position: absolute;
   display: flex;
   right: 2rem;
-  bottom: 0.9rem;
+  bottom: 0.8rem;
   & > p {
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmDeepGrey};
   }
 `;
@@ -337,5 +343,5 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 `;

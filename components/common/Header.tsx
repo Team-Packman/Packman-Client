@@ -92,7 +92,7 @@ const StyledContent = styled.div<{
   justify-content: center;
   position: relative;
   background-color: ${packmanColors.pmWhite};
-  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+  ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   color: ${packmanColors.pmBlack};
 
   & > picture {

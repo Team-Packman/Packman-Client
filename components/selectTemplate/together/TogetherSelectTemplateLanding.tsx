@@ -51,8 +51,16 @@ function TogetherSelectTemplateLanding() {
         setRandomImageList((prev) => prev.sort(() => Math.random() - 0.5));
       }
     });
-    // setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
   };
+
+  const onClickConfirmButton = () => {
+    isBasicTemplate
+      ? router.push(`/preview?id=${templateId}&type=basic&categoryName=together`)
+      : router.push(`/preview?id=${templateId}&type=myTemplate&categoryName=together`);
+  };
+
+  const activateConfirmButton = () => setActivateButton(true);
+  const deactivateConfirmButton = () => setActivateButton(false);
 
   return (
     <StyledRoot>
@@ -70,6 +78,7 @@ function TogetherSelectTemplateLanding() {
               alt="template-image"
               width={375}
               height={211}
+              priority
             />
           )}
         </picture>
@@ -77,13 +86,9 @@ function TogetherSelectTemplateLanding() {
           isAloned={false}
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
-          activate={(isSelected: string) => {
-            if (isSelected === '') {
-              setActivateButton(false);
-            } else {
-              setActivateButton(true);
-            }
-          }}
+          activate={(isSelected: string) =>
+            isSelected === '' ? deactivateConfirmButton() : activateConfirmButton()
+          }
           changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
           changeUserOwnTemplateImage={changeUserOwnTemplateImage}
           checkIsTemplate={(isTemplate: boolean) => setIsBasicTemplate(isTemplate)}
@@ -94,9 +99,7 @@ function TogetherSelectTemplateLanding() {
         <StyleButton
           isTemplate={false}
           isActivated={true}
-          onClick={() => {
-            router.push(`/list-intro?id=''&categoryName=together`);
-          }}
+          onClick={() => router.push(`/list-intro?id=''&categoryName=together`)}
         >
           건너뛰기
         </StyleButton>
@@ -104,13 +107,7 @@ function TogetherSelectTemplateLanding() {
           isTemplate={true}
           disabled={!activateButton}
           isActivated={activateButton}
-          onClick={() => {
-            if (isBasicTemplate) {
-              router.push(`/preview?id=${templateId}&type=basic&categoryName=together`);
-            } else {
-              router.push(`/preview?id=${templateId}&type=myTemplate&categoryName=together`);
-            }
-          }}
+          onClick={onClickConfirmButton}
         >
           확인
         </StyleButton>

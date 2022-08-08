@@ -1,4 +1,4 @@
-import { User, From } from './';
+import { User, From, Kakao } from './';
 import { recoilPersist } from 'recoil-persist';
 import { atom } from 'recoil';
 
@@ -33,6 +33,14 @@ export const from = atom<From>({
   key: 'from',
   default: {
     url: '',
+  },
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const kakaoAccessToken = atom<Kakao>({
+  key: 'kakaoAccessToken',
+  default: {
+    accessToken: '',
   },
   effects_UNSTABLE: [persistAtom],
 });
