@@ -110,12 +110,12 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   list-style: none;
   margin: 0;
   padding: 0;
-  z-index: 105;
+  z-index: 1600;
 
   // Display button to the bottom right
   position: fixed;
   right: 2rem;
-  bottom: 7rem;
+  bottom: 8rem;
 
   // Set max height to only trigger mouse enter
   // when user hover over first button
@@ -123,8 +123,8 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
 
   li:first-child {
     position: fixed;
-    right: 1rem;
-    bottom: 0;
+    right: 2rem;
+    bottom: 1rem;
   }
 
   li:last-child {
