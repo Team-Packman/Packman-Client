@@ -10,9 +10,12 @@ import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor
 import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import { RecoilRoot } from 'recoil';
+import useInstallGuide from '../utils/hooks/useInstallGuide';
+import InstallGuide from '../components/common/InstallGuide';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
+  const [installGuide, installHandler, closeGuide] = useInstallGuide();
 
   const [queryClient] = useState(
     () =>
@@ -53,11 +56,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <CssBaseline />
       <Head>
         <title>Packman</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
       </Head>
+      <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
         <APIProvider>
@@ -66,6 +69,12 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Hydrate state={pageProps?.dehydratedState}>
                 <GlobalStyle />
                 <Component {...pageProps} />
+                <InstallGuide
+                  open={installGuide.open}
+                  agent={installGuide.agent}
+                  installHandler={installHandler}
+                  closeHandler={closeGuide}
+                />
               </Hydrate>
             </QueryClientProvider>
           </AuthProvider>
