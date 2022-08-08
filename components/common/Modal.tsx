@@ -32,7 +32,7 @@ const StyledBackground = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100);
   background-color: rgba(0, 0, 0, 0.47);
   z-index: 110;
   overflow: hidden;
@@ -43,9 +43,9 @@ const StyledRoot = styled.div`
   justify-content: center;
   text-align: center;
   position: absolute;
-  top: 50%;
+  top: calc(var(--vh, 1vh) * 100 / 2);
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -100%);
   width: 31.5rem;
   height: 17.6rem;
   background-color: #fff;
