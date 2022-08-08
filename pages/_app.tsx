@@ -11,9 +11,11 @@ import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import useCache from '../utils/hooks/useCache';
 import { RecoilRoot } from 'recoil';
+import UpdateNotification from '../components/common/UpdateNotification';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
+  const [updated, setUpdated] = useState(false);
   const [user] = useCache('User');
 
   const [queryClient] = useState(
@@ -49,6 +51,24 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     setShow(true);
+
+    async function detectSWUpdate() {
+      const registration = await navigator.serviceWorker.ready;
+
+      registration.addEventListener('updatefound', (event) => {
+        const newSW = registration.installing;
+
+        if (newSW) {
+          newSW.addEventListener('statechange', (event) => {
+            if (newSW.state == 'installed') {
+              setUpdated(true);
+            }
+          });
+        }
+      });
+    }
+
+    detectSWUpdate();
   }, []);
 
   if (!show) return null;
@@ -68,6 +88,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Hydrate state={pageProps?.dehydratedState}>
                 <GlobalStyle />
                 <Component {...pageProps} />
+                {updated && <UpdateNotification />}
               </Hydrate>
             </QueryClientProvider>
           </AuthProvider>
