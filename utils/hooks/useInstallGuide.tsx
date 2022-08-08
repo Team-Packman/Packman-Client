@@ -52,15 +52,17 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
   useEffect(() => {
     if (!isRunningStandalone()) {
       if (isIos()) {
-        setInstallGuide((prev) => ({ ...prev, open: true }));
+        alert('hi im ios');
+        setInstallGuide((prev) => ({ ...prev, agent: 'ios', open: true }));
       } else {
+        alert('hi im android');
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           setDeferredPrompt(e as BeforeInstallPromptEvent);
+          setInstallGuide((prev) => ({ ...prev, agent: 'and', open: true }));
 
           return false;
         });
-        setInstallGuide((prev) => ({ ...prev, agent: 'and', open: true }));
       }
     } else {
       setInstallGuide((prev) => ({ ...prev, standAlone: true, open: false }));
