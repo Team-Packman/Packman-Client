@@ -6,7 +6,11 @@ import Modal from '../common/Modal';
 import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
-
+import { useResetRecoilState } from 'recoil';
+import { authedUser, kakaoAccessToken } from '../../utils/recoil/atom/atom';
+import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+import { useRouter } from 'next/router';
 interface ProfileData {
   _id: string;
   name: string;
@@ -26,6 +30,8 @@ function SettingProfile(props: SettingProfileProps) {
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
+  const accessToken = useRecoilValue(kakaoAccessToken).accessToken;
+  const router = useRouter();
 
   const onClickLeftModalButton = async () => {
     setIsWithdrawn(true);
@@ -35,10 +41,33 @@ function SettingProfile(props: SettingProfileProps) {
     setShowModal(false);
   };
 
+  const resetUserState = useResetRecoilState(authedUser); //유저 전역변수 초기화
+
+  //로그아웃
+  const onClickLogout = () => {
+    (async () => {
+      try {
+        await axios.post(
+          'https://kapi.kakao.com/v1/user/logout',
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+      } finally {
+        resetUserState();
+        router.push('/login');
+      }
+    })();
+  };
+
   return (
     <StyledRoot>
       <StyledSettingWrapper>
-        <p>로그아웃</p>
+        <p onClick={onClickLogout}>로그아웃</p>
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
@@ -111,14 +140,13 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 74.276rem;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  height: fit-content;
+  overflow-y: visible;
 
   & > p {
+    display: flex;
+    align-items: flex-end;
+    height: 8rem;
     color: ${packmanColors.pmDeepGrey};
   }
 `;
@@ -137,14 +165,14 @@ const StyledSettingWrapper = styled.main`
     top: -1.9rem;
     right: 0.5rem;
     color: ${packmanColors.pmDarkGrey};
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
   }
   & > p:nth-child(2) {
     position: absolute;
     top: 0.5rem;
     right: 1.5rem;
     color: ${packmanColors.pmDeepGrey};
-    font-style: ${FONT_STYLES.CAPTION2_SEMIBOLD};
+    ${FONT_STYLES.CAPTION2_SEMIBOLD};
   }
 `;
 const StyledProfile = styled.div`
@@ -166,10 +194,10 @@ const StyledProfile = styled.div`
     height: 6.5rem;
     color: ${packmanColors.pmBlack};
     & > h1 {
-      font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+      ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
     }
     & > p {
-      font-style: ${FONT_STYLES.BODY1_REGULAR};
+      ${FONT_STYLES.BODY1_REGULAR};
     }
   }
 `;
@@ -178,7 +206,7 @@ const StyledToggleWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   & > p {
-    font-style: ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY1_REGULAR};
   }
 `;
 const StyledToggle = styled.div<{ isToggled: boolean }>`
@@ -214,7 +242,7 @@ const StyledEtc = styled.div<{ gap: number; paddingTop: number; borderBottom: bo
 
   & > h1 {
     color: ${packmanColors.pmBlack};
-    font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   }
 `;
 const StyledEtcWrapper = styled.div`
@@ -223,11 +251,15 @@ const StyledEtcWrapper = styled.div`
   align-content: space-between;
   gap: 0.8rem;
   & > p {
-    font-style: ${FONT_STYLES.BODY3_REGULAR};
+    ${FONT_STYLES.BODY3_REGULAR};
     letter-spacing: 4%;
   }
 `;
 const StyledFooter = styled.div`
+  display: flex;
+  align-items: flex-end;
+  height: calc(100vh - 74rem);
+  min-height: 10.5rem;
   margin: 6.1rem 0 5rem 0;
 `;
 const StyledModalButtonWrapper = styled.div`
@@ -243,5 +275,5 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 `;

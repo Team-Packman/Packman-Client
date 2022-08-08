@@ -10,3 +10,7 @@ export interface User {
 export interface From {
   url: string;
 }
+
+export interface Kakao {
+  accessToken: string;
+}
