@@ -136,7 +136,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   return (
     <StyledRoot>
-      <div style={{ position: 'relative', width: '120', height: '120' }}>
+      <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
         <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
       </div>
       <StyledInputWrapper>

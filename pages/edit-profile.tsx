@@ -26,9 +26,9 @@ function EditProfile() {
           <>
             <EditingProfile
               comment={
-                <StyledTitle>
+                <h1>
                   <b>프로필 수정</b>을 완료해주세요!
-                </StyledTitle>
+                </h1>
               }
               oldNickname={name}
               oldProfileImageId={profileImageId}
@@ -60,15 +60,5 @@ const StyledRoot = styled.div`
   scrollbar-width: none; // Firefox
   &::-webkit-scrollbar {
     display: none; // Chrome, Safari, Opera
-  }
-`;
-const StyledTitle = styled.h1`
-  ${FONT_STYLES.DISPLAY1_LIGHT};
-  color: ${packmanColors.pmBlack};
-  word-break: break-all;
-  word-wrap: break-word;
-
-  & > b {
-    ${FONT_STYLES.DISPLAY2_SEMIBOLD};
   }
 `;
