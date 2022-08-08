@@ -18,7 +18,7 @@ function ModalForInvitation(props: ModalForInvitationProps) {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(
-      `http://localhost:3000/together/invited/${router.query.id}?invited=${inviteCode}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/together/invited/${router.query.id}?invited=${inviteCode}`,
     );
     setIsCopied(true);
   };
