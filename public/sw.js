@@ -81,7 +81,7 @@ define(['./workbox-74d02f44'], function (workbox) {
    * See https://goo.gl/2aRDsh
    */
 
-  importScripts();
+  importScripts('fallback-development.js');
   self.skipWaiting();
   workbox.clientsClaim();
   workbox.registerRoute(
@@ -102,6 +102,9 @@ define(['./workbox-74d02f44'], function (workbox) {
             return response;
           },
         },
+        {
+          handlerDidError: async ({ request }) => self.fallback(request),
+        },
       ],
     }),
     'GET',
@@ -110,7 +113,11 @@ define(['./workbox-74d02f44'], function (workbox) {
     /.*/i,
     new workbox.NetworkOnly({
       cacheName: 'dev',
-      plugins: [],
+      plugins: [
+        {
+          handlerDidError: async ({ request }) => self.fallback(request),
+        },
+      ],
     }),
     'GET',
   );
