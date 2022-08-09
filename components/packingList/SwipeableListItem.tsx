@@ -52,7 +52,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     function End() {
       let tmpArr = Array(packingList?.length).fill(false);
 
-      if (startX > endX) {
+      if (startX - endX > 100) {
         tmpArr = tmpArr.map((x, index) => (idx === index ? true : false));
       } else if (startX < endX) {
         tmpArr = Array(packingList?.length).fill(false);
