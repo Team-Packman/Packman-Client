@@ -17,6 +17,7 @@ import random1 from '/public/assets/png/random1.png';
 import random2 from '/public/assets/png/random2.png';
 import random3 from '/public/assets/png/random3.png';
 import random4 from '/public/assets/png/random4.png';
+import { FONT_STYLES } from '../../../styles/font';
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 
@@ -138,18 +139,17 @@ const StyledButtonWrapper = styled.div`
   position: absolute;
   bottom: 1.656rem;
   display: flex;
-  justify-content: center;
   gap: 1.1rem;
   width: 100%;
-  background-color: #fff;
   height: 4rem;
+  background-color: #fff;
+  padding: 0 2rem;
 `;
 const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>`
-  width: 16.3rem;
-  height: 4rem;
+  width: 100%;
+  height: 100%;
   border-radius: 0.8rem;
-  font-size: 1.5rem;
-  font-weight: 600;
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 
   ${({ isTemplate }) =>
     isTemplate
