@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FolderListProps, FolderProps } from './FolderList';
@@ -21,14 +21,15 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
     isNew = false,
     onClick: handleBottomModalOpen,
     onChange: handleFolderNameChange,
-    onKeyPress: handleEnterKeyPress,
     onFolderClick: handleFolderClick,
     handleAddFolderChange,
-    handleAddFolderKeyPress,
+    handleOnBlurInAdd,
     handleCancleAddFolder,
+    handleOnBlurInEdit,
   } = props;
 
   const inputElement = useRef<HTMLInputElement>(null);
+  const [activeInput, setActiveInput] = useState<boolean>(false);
 
   const onClickIcon = (_id: string, title: string) => {
     if (!isNew) {
@@ -39,6 +40,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   };
 
   const onClickFolder = (e: React.MouseEvent<HTMLElement>, _id: string, categoryName: string) => {
+    e.preventDefault();
     if (e.target instanceof HTMLInputElement) {
       return;
     } else {
@@ -49,6 +51,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     if (!isNew) {
       handleFolderNameChange(e);
     } else {
@@ -57,18 +60,34 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   };
 
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.key === 'Enter') {
+      onBlur();
+    }
+  };
+
+  const onBlur = () => {
+    setActiveInput(false);
     if (!isNew) {
-      handleEnterKeyPress(e);
+      handleOnBlurInEdit();
     } else {
-      handleAddFolderKeyPress(e);
+      handleOnBlurInAdd();
     }
   };
 
   useEffect(() => {
-    if (editableFolderId === _id) {
+    if (inputElement.current || activeInput) {
       inputElement.current?.focus();
     }
-  }, [editableFolderId, _id]);
+
+    if (editableFolderId === _id) {
+      setActiveInput(true);
+    }
+
+    if (isNew) {
+      setActiveInput(true);
+    }
+  }, [inputElement, editableFolderId, _id, isNew, activeInput]);
 
   return (
     <StyledRoot key={_id}>
@@ -83,6 +102,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
           </span>
         </StyledKebab>
         <StyledText onClick={(e) => onClickFolder(e, _id, categoryName)}>
+          <input type="password" autoComplete="off" style={{ display: 'none' }} />
           <StyledTitle
             type="text"
             name="title"
@@ -91,7 +111,8 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
             placeholder={isNew ? '폴더 이름 입력' : ''}
             onChange={(e) => onChange(e)}
             onKeyPress={(e) => onKeyPress(e)}
-            disabled={isNew ? !isNew : editableFolderId !== _id}
+            onBlur={onBlur}
+            disabled={!activeInput}
             autoFocus
             isNew={isNew}
             maxLength={8}
@@ -125,7 +146,7 @@ export const StyledInfo = styled.div`
 export const StyledKebab = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 0.3rem 0;
+  padding: 0.5rem 0.4rem 0 0;
   z-index: 10;
   cursor: pointer;
 
