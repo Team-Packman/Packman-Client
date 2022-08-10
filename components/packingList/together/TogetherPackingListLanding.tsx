@@ -15,6 +15,7 @@ import FloatActionButton from '../../folder/FloatActionButton';
 import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
+import VConsole from 'vconsole';
 
 interface DeleteTogetherInventoryData {
   folderId: string;
@@ -30,6 +31,11 @@ function TogetherPackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const vConsole = new VConsole();
+
+  // call `console` methods as usual
+  console.log('Hello world');
 
   //패킹리스트 데이터 조회
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
