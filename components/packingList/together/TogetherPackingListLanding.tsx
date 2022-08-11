@@ -122,6 +122,12 @@ function TogetherPackingListLanding() {
     }
   };
 
+  const moveToPackingList = (id: string) => {
+    if (!isDeleting) {
+      router.push(`/together/${id}`);
+    }
+  };
+
   return (
     <>
       <Header back title="리스트 목록" icon="profile" />
@@ -227,6 +233,7 @@ function TogetherPackingListLanding() {
                     openModal();
                   }}
                   packingList={togetherPackingList}
+                  moveToPackingList={() => moveToPackingList(item._id)}
                 />
               ))}
             />

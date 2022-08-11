@@ -121,6 +121,12 @@ function AlonePackingListLanding() {
     }
   };
 
+  const moveToPackingList = (id: string) => {
+    if (!isDeleting) {
+      router.push(`/alone/${id}`);
+    }
+  };
+
   return (
     <>
       <Header back title="리스트 목록" icon="profile" />
@@ -217,6 +223,7 @@ function AlonePackingListLanding() {
                       openModal();
                     }}
                     packingList={alonePackingList}
+                    moveToPackingList={() => moveToPackingList(item._id)}
                   />
                 ))}
               />
