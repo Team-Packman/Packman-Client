@@ -150,6 +150,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   transition: ease-in-out;
   transition-duration: 0.4s;
 
+  /* 드래그했을 때 아이템이 딸려오는 현상 방지 */
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -161,15 +162,18 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
         return isDragged
           ? css`
               transform: translateX(-4.7rem);
+              -webkit-transform: 0.4s translateX(-4.7rem);
             `
           : css`
               transform: translateX(0);
+              -webkit-transform: 0.4s translateX(0);
             `;
       default:
         return css`
           animation: 0.4s ease-in-out slide;
+          -webkit-animation: 0.4s ease-in-out slide;
           transform: translateX(8.388rem);
-          -webkit-transform: translate3d(0, 0, 0) translateX(8.388rem); //Safari 대응
+          -webkit-transform: 0.4s translateX(0, 0, 0) translateX(8.388rem); // Safari 대응
         `;
     }
   }};
@@ -177,9 +181,11 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   @keyframes slide {
     from {
       transform: translateX(2rem);
+      -webkit-transform: translateX(2rem);
     }
     to {
       transform: translateX(8.388rem);
+      -webkit-transform: translateX(8.388rem);
     }
   }
 `;
