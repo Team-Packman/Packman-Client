@@ -29,9 +29,7 @@
     "recoil-persist": "^4.2.0",
     "styled-components": "^5.3.5",
     "styled-reset": "^4.4.2",
-    "swiper": "^8.3.1",
-    "vconsole": "^3.14.6",
-    "xmlhttprequest": "^1.8.0"
+    "swiper": "^8.3.1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.2.0",
