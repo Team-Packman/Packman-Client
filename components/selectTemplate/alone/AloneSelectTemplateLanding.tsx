@@ -141,20 +141,17 @@ const StyledButtonWrapper = styled.div`
   position: absolute;
   bottom: 1.656rem;
   display: flex;
-  justify-content: center;
   gap: 1.1rem;
   width: 100%;
-  background-color: #fff;
   height: 4rem;
+  background-color: #fff;
+  padding: 0 2rem;
 `;
 const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 16.3rem;
-  height: 4rem;
+  width: 100%;
+  height: 100%;
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
 
   ${({ isTemplate }) =>
     isTemplate
