@@ -175,7 +175,7 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
           animation: 0.4s ease-in-out slide;
           -webkit-animation: 0.4s ease-in-out slide;
           transform: translateX(8.388rem);
-          -webkit-transform: 0.4s translateX(0, 0, 0) translateX(8.388rem); // Safari 대응
+          -webkit-transform: 0.4s translateX(2rem) translateX(8.388rem); // Safari 대응
         `;
     }
   }};
