@@ -15,7 +15,6 @@ import FloatActionButton from '../../folder/FloatActionButton';
 import { DeleteAloneInventoryInput } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
-import VConsole from 'vconsole';
 
 interface DeleteAloneInventoryData {
   folderId: string;
@@ -31,8 +30,6 @@ function AlonePackingListLanding() {
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const query = router.query.id as string;
-
-  const vConsole = new VConsole();
 
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
   const { data } = useQuery(['getAloneInventory', query], () => getAloneInventory(query), {
