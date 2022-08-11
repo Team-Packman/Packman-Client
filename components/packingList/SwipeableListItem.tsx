@@ -149,6 +149,8 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   background-color: ${packmanColors.pmBlueGrey};
   transition: ease-in-out;
   transition-duration: 0.4s;
+  -webkit-transition: ease-in-out;
+  -webkit-transition-duration: 0.4s;
 
   /* 드래그했을 때 아이템이 딸려오는 현상 방지 */
   -webkit-user-select: none;
