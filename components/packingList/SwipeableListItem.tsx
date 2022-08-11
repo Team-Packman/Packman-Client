@@ -24,6 +24,7 @@ interface ItemProps {
   checkDeleteList: (id: string) => void;
   onClickDeleteButton: (idx: number) => void;
   packingList: PackingList[];
+  moveToPackingList: () => void;
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
@@ -37,10 +38,10 @@ export default function SwipeablelistItem(props: ItemProps) {
     checkDeleteList,
     onClickDeleteButton,
     packingList,
+    moveToPackingList,
   } = props;
 
   const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
-  const listType = router.pathname.split('/').at(-2); // togetehr | alone
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -64,12 +65,6 @@ export default function SwipeablelistItem(props: ItemProps) {
     }
     document.addEventListener('touchmove', Move);
     document.addEventListener('touchend', End);
-  };
-
-  const moveToPackingList = () => {
-    if (!isDeleting) {
-      router.push(`/${listType}/${packingList[idx]._id}`);
-    }
   };
 
   return (
