@@ -9,11 +9,12 @@ interface CheckListSubHeaderProps {
   activeMode?: number;
   modeHandler?: (idx: number) => void;
   together?: boolean;
+  isScrolling: boolean;
   categoryHandler: () => void;
 }
 
 function CheckListSubHeader(props: CheckListSubHeaderProps) {
-  const { together, activeMode, modeHandler, categoryHandler } = props;
+  const { together, activeMode, isScrolling, modeHandler, categoryHandler } = props;
   const swiper = useSwiper();
   const [scroll] = useGlobalState<boolean>('scroll');
 
@@ -21,6 +22,10 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
     modeHandler && modeHandler(idx);
     swiper.slideTo(idx);
   };
+
+  if (isScrolling) {
+    swiper.allowTouchMove = false;
+  }
 
   return (
     <StyledRoot>
