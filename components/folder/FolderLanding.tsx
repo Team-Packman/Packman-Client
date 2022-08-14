@@ -49,7 +49,6 @@ function FolderLanding() {
       if (data.data) {
         const { remainDay } = data.data;
         setIsOutDated(remainDay < 0);
-        setIsRecentListExist(true);
       }
     },
   });
@@ -72,6 +71,7 @@ function FolderLanding() {
     const updateOutdated = () => {
       if (recentPackingData) {
         setIsOutDated(recentPackingData?.data.remainDay < 0);
+        setIsRecentListExist(true);
       }
     };
     updateOutdated();
@@ -118,9 +118,10 @@ function FolderLanding() {
     setEditedFolerData({ _id: modalData._id, title: e.target.value });
   };
 
-  const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      setEditableFolderId('');
+  const handleOnBlurInEdit = () => {
+    setEditableFolderId('');
+
+    if (editedFolderData.title) {
       editFolderMutate(editedFolderData, {
         onSuccess: () => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
@@ -156,15 +157,15 @@ function FolderLanding() {
     setNewFolderData({ title: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
   };
 
-  const handleAddFolderKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      setAddNewFolder(false);
+  const handleOnBlurInAdd = () => {
+    setAddNewFolder(false);
+
+    if (newFolderData.title) {
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
-              // TODO : 혼자폴더인지 함께 폴더인지 구분하고 폴더를 추가해야함.
               data: {
                 aloneFolders:
                   currentSwiperIndex === 1
@@ -263,10 +264,10 @@ function FolderLanding() {
               editableFolderId={editableFolderId}
               onClick={handleBottomModalOpen}
               onChange={handleFolderNameChange}
-              onKeyPress={handleEnterKeyPress}
               onFolderClick={handleFolderClick}
               handleAddFolderChange={handleAddFolderChange}
-              handleAddFolderKeyPress={handleAddFolderKeyPress}
+              handleOnBlurInAdd={handleOnBlurInAdd}
+              handleOnBlurInEdit={handleOnBlurInEdit}
               addNewFolder={addNewFolder && currentSwiperIndex === 0}
               handleCancleAddFolder={handleCancleAddFolder}
               handleStartButtonInInit={handleStartButtonInInit}
@@ -280,17 +281,17 @@ function FolderLanding() {
             editableFolderId={editableFolderId}
             onClick={handleBottomModalOpen}
             onChange={handleFolderNameChange}
-            onKeyPress={handleEnterKeyPress}
             onFolderClick={handleFolderClick}
             handleAddFolderChange={handleAddFolderChange}
-            handleAddFolderKeyPress={handleAddFolderKeyPress}
+            handleOnBlurInAdd={handleOnBlurInAdd}
+            handleOnBlurInEdit={handleOnBlurInEdit}
             addNewFolder={addNewFolder && currentSwiperIndex === 1}
             handleCancleAddFolder={handleCancleAddFolder}
             handleStartButtonInInit={handleStartButtonInInit}
             isRecentListExist={isRecentListExist}
           />
         </SwiperContainer>
-        {!isRecentListExist && !showBottomModal && (
+        {isRecentListExist && !showBottomModal && (
           <FloatActionButton onClick={handleFloatClick} pageName="folder" />
         )}
         {showBottomModal && (

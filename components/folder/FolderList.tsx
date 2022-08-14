@@ -15,10 +15,10 @@ export interface FolderListProps {
   isRecentListExist: boolean;
   onClick(id: string, title: string): void;
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
-  onKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void;
   onFolderClick(id: string, categoryName: string): void;
   handleAddFolderChange(e: React.ChangeEvent<HTMLInputElement>): void;
-  handleAddFolderKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void;
+  handleOnBlurInEdit(): void;
+  handleOnBlurInAdd(): void;
   handleCancleAddFolder(): void;
   handleStartButtonInInit(): void;
 }
