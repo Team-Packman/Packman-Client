@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { packmanColors } from '../styles/color';
 import { FONT_STYLES } from '../styles/font';
 
-const members = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// const members = [1, 2];
+const members = [1, 2, 3, 4, 5];
+// const members = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function MemberManage() {
   return (
@@ -100,7 +102,7 @@ const WithMembersEditButton = styled.div`
 
 const WithMembers = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(6.4rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr));
   gap: 2rem;
   justify-items: center;
 `;
