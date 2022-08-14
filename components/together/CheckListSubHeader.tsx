@@ -25,6 +25,8 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
 
   if (isScrolling) {
     swiper.allowTouchMove = false;
+  } else {
+    swiper.allowTouchMove = true;
   }
 
   return (
