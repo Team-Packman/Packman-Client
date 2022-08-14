@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { packmanColors } from '../styles/color';
 import { FONT_STYLES } from '../styles/font';
 
-// const members = [1, 2];
-const members = [1, 2, 3, 4, 5];
-// const members = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// const members = [1];
+// const members = [1, 2, 3, 4, 5];
+const members = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function MemberManage() {
   return (
@@ -40,7 +40,7 @@ function MemberManage() {
           );
         })}
       </WithMembers>
-
+      <InviteOtherMember length={members.length}>함께 패킹할 멤버를 초대해보세요</InviteOtherMember>
       <InvitingButton>멤버 초대하기</InvitingButton>
     </StyledRoot>
   );
@@ -53,6 +53,7 @@ const StyledRoot = styled.div`
   height: 100vh;
   padding: 0 2rem;
   overflow-y: scroll;
+  position: relative;
 `;
 
 const StyledHeader = styled.section`
@@ -97,7 +98,7 @@ const WithMembersLabel = styled.h1`
 const WithMembersEditButton = styled.div`
   font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
   color: ${packmanColors.pmDarkGrey};
-  margin-bottom: 3.5rem;
+  margin-bottom: 4rem;
 `;
 
 const WithMembers = styled.div`
@@ -135,8 +136,19 @@ const MemberName = styled.div`
   color: ${packmanColors.pmDarkGrey};
 `;
 
+const InviteOtherMember = styled.div<{ length: number }>`
+  display: ${({ length }) => (length === 1 ? 'block;' : 'none;')};
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+  color: ${packmanColors.pmGrey};
+  white-space: nowrap;
+`;
+
 const InvitingButton = styled.div`
-  width: 100%;
+  width: calc(100vw - 4rem);
   height: 4rem;
   color: white;
   background-color: ${packmanColors.pmPink};
@@ -145,5 +157,6 @@ const InvitingButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10rem 0 7rem;
+  position: absolute;
+  bottom: 8rem;
 `;
