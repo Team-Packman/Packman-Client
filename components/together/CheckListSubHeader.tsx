@@ -9,7 +9,7 @@ interface CheckListSubHeaderProps {
   activeMode?: number;
   modeHandler?: (idx: number) => void;
   together?: boolean;
-  isScrolling: boolean;
+  isScrolling?: boolean;
   categoryHandler: () => void;
 }
 
