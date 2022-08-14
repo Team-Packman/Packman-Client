@@ -481,7 +481,7 @@ function TogetherLanding() {
     } else if (!isScrolling) {
       setIsScrolling(true);
       !scroll && setScroll(true);
-      setTimeout(() => setIsScrolling(false), 5500);
+      setTimeout(() => setIsScrolling(false), 500);
     }
   };
 
