@@ -513,6 +513,7 @@ function TogetherLanding() {
             activeMode={activeMode}
             modeHandler={modeHandler}
             categoryHandler={creatingCategoryHandler}
+            isScrolling={isScrolling}
           />
           {packingRole.map((list, i) => {
             return (
@@ -652,6 +653,7 @@ const StyledTogetherLanding = styled.div`
 
 const StyledBody = styled.div`
   display: flex;
+  width: 100%;
   //100% - subheader - device
   height: calc(100% - 11rem - 10rem);
   flex-direction: column;
