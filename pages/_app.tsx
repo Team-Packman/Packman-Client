@@ -13,6 +13,7 @@ import { RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log('github actions test');
   const [show, setShow] = useState(false);
 
   const [queryClient] = useState(
