@@ -21,6 +21,8 @@ const StyledRoot = styled.div`
   gap: 1rem;
   padding: 1rem 0;
   overflow-y: scroll;
+  align-content: flex-start;
+
   // 스크롤바 항상 표시
   ::-webkit-scrollbar {
     width: 0.2rem;

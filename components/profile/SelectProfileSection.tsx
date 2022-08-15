@@ -188,7 +188,7 @@ const StyledRoot = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  height: fit-content;
   margin-top: 4.84rem;
 `;
 const StyledInputWrapper = styled.div`
@@ -242,7 +242,7 @@ const StyledImage = styled(Image)<{ selected: boolean }>`
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
   position: absolute;
-  bottom: 1.5rem;
+  bottom: 3.4rem;
   width: 33.6rem;
   height: 4.1rem;
   border: none;
