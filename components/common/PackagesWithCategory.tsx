@@ -33,7 +33,6 @@ function PackagesWithCategory(props: PackagesWithCategoryProps) {
 export default PackagesWithCategory;
 
 const StyledRoot = styled.ul`
-  width: 100%;
   & > ul {
     margin-top: 0.8rem;
   }
