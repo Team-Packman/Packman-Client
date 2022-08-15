@@ -130,6 +130,7 @@ const StyledRoot = styled.div<{ isDeleting: boolean }>`
   height: 10.8rem;
   gap: 2.7rem;
   overflow: hidden;
+  background-color: ${packmanColors.pmWhite};
 `;
 
 const StyledSelectDelete = styled.div`
@@ -243,11 +244,14 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${({ isDragged }) => (isDragged ? '5.6rem' : '0rem')};
+  width: 5.6rem;
   height: 11.4rem;
   background-color: #ff0000;
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
+  -webkit-transition: 0.4s ease-in-out;
+  transform: ${({ isDragged }) => (isDragged ? 'translateX(0rem)' : 'translateX(5.6rem)')};
+  -webkit-transform: ${({ isDragged }) => (isDragged ? 'translateX(0rem)' : 'translateX(5.6rem)')};
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
 
   & > div {
