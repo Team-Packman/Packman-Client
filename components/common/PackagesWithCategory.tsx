@@ -20,11 +20,12 @@ function PackagesWithCategory(props: PackagesWithCategoryProps) {
       <ul>
         {packages}
         {isCreating && creating}
+        <li>
+          <StyledAddButton onClick={createHandler}>
+            <Image src={PlucIC} alt="pluc_ic" layout="fill" />
+          </StyledAddButton>
+        </li>
       </ul>
-
-      <StyledAddButton onClick={createHandler}>
-        <Image src={PlucIC} alt="pluc_ic" layout="fill" />
-      </StyledAddButton>
     </StyledRoot>
   );
 }
