@@ -10,7 +10,6 @@ interface PackagesWithCategoryProps {
   isCreating?: boolean;
   createHandler?: () => void;
 }
-
 function PackagesWithCategory(props: PackagesWithCategoryProps) {
   const { children, packages, isCreating, creating, createHandler } = props;
 
@@ -36,6 +35,10 @@ const StyledRoot = styled.ul`
   & > ul {
     margin-top: 0.8rem;
   }
+
+  & > ul > li {
+    background-color: pink;
+  }
   margin-bottom: 1.2rem;
 `;
 
@@ -47,4 +50,5 @@ const StyledAddButton = styled.button`
   border: 1px dashed ${packmanColors.dashGray};
   border-radius: 0.8rem;
   margin-top: 0.4rem;
+  padding: 0;
 `;
