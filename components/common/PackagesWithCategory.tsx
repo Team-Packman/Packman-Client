@@ -1,8 +1,7 @@
 import Image from 'next/image';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { packmanColors } from '../../styles/color';
-import PlucIC from '/public/assets/svg/plus_ic.svg';
+import AddItem from '/public/assets/svg/add_item_ic.svg';
 interface PackagesWithCategoryProps {
   children?: ReactNode;
   creating?: ReactNode;
@@ -21,7 +20,7 @@ function PackagesWithCategory(props: PackagesWithCategoryProps) {
         {isCreating && creating}
         <li>
           <StyledAddButton onClick={createHandler}>
-            <Image src={PlucIC} alt="pluc_ic" layout="fill" />
+            <Image src={AddItem} alt="pluc_ic" layout="fill" />
           </StyledAddButton>
         </li>
       </ul>
@@ -47,8 +46,9 @@ const StyledAddButton = styled.button`
   width: 100%;
   height: 3.2rem;
   background-color: transparent;
-  border: 1px dashed ${packmanColors.dashGray};
+  border: none;
   border-radius: 0.8rem;
   margin-top: 0.4rem;
+  cursor: pointer;
   padding: 0;
 `;
