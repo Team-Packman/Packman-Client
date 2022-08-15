@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import InitLogo from '/public/assets/svg/home_init.svg';
+import InitAloneLogo from '/public/assets/svg/home_init_alone.svg';
 
 export interface FolderInitialProps {
   categoryName: string;
@@ -22,7 +23,11 @@ function FolderInitial(props: FolderInitialProps) {
 
   return (
     <StyledRoot>
-      <Image src={InitLogo} width={258} height={258} alt="test" />
+      {currentIndex === 0 ? (
+        <Image src={InitLogo} width={273} height={273} alt="test" />
+      ) : (
+        <Image src={InitAloneLogo} width={273} height={273} alt="test" />
+      )}
       <StyledInitialWrapper>
         <StyledLabel>{initialLables[currentIndex]}</StyledLabel>
         {!isRecentListExist && (
