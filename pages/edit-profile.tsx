@@ -51,6 +51,7 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 0 2rem;
   width: 100vw;
   height: calc(var(--vh, 1vh) * 100 - 8rem);
