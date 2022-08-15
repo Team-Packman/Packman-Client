@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../styles/color';
 import { FONT_STYLES } from '../styles/font';
+import { setScreenSize } from '../utils/setScreenSize';
 
 // const members = [1];
 // const members = [1, 2, 3, 4, 5];
 const members = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function MemberManage() {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  const EditMembers = () => {
+    setIsEditing((prev) => !prev);
+  };
+
   return (
     <StyledRoot>
       <StyledHeader>
@@ -19,7 +26,9 @@ function MemberManage() {
       </StyledHeader>
       <WithMembersLabelAndEdit>
         <WithMembersLabel>함께하는 멤버</WithMembersLabel>
-        <WithMembersEditButton>편집</WithMembersEditButton>
+        <WithMembersEditButton onClick={EditMembers}>
+          {isEditing ? '취소' : '편집'}
+        </WithMembersEditButton>
       </WithMembersLabelAndEdit>
       <WithMembers>
         {members.map((member, index: number) => {
@@ -36,12 +45,13 @@ function MemberManage() {
             <Member key={index}>
               <MemberImage index={index} />
               <MemberName>대장나심</MemberName>
+              <DeleteButton src={'/assets/png/deleteMemberButton.png'} isEditing={isEditing} />
             </Member>
           );
         })}
       </WithMembers>
       <InviteOtherMember length={members.length}>함께 패킹할 멤버를 초대해보세요</InviteOtherMember>
-      <InvitingButton>멤버 초대하기</InvitingButton>
+      <InvitingButton>{isEditing ? '완료' : '멤버 초대하기'}</InvitingButton>
     </StyledRoot>
   );
 }
@@ -113,6 +123,15 @@ const Member = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const DeleteButton = styled.img<{ isEditing: boolean }>`
+  display: ${({ isEditing }) => (isEditing ? 'block' : 'none')};
+  width: 2.4rem;
+  height: 2.4rem;
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
 `;
 
 const Crown = styled.img`
