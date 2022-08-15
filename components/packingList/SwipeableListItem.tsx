@@ -75,9 +75,7 @@ export default function SwipeablelistItem(props: ItemProps) {
             src={deleteList.includes(_id) ? iCheckPink : iCheck}
             alt="체크"
             onClick={() => checkDeleteList(_id)}
-            width={24}
-            height={24}
-            layout="fixed"
+            layout="fill"
           />
         </StyledSelectDelete>
       )}
@@ -129,13 +127,15 @@ const StyledRoot = styled.div<{ isDeleting: boolean }>`
   width: 100%;
   height: 10.8rem;
   gap: 2.7rem;
+  padding: 0 2rem;
   overflow: hidden;
-  background-color: ${packmanColors.pmWhite};
 `;
 
 const StyledSelectDelete = styled.div`
   position: absolute;
   left: 3.288rem;
+  width: 2.4rem;
+  height: 2.4rem;
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
@@ -173,24 +173,11 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
             `;
       default:
         return css`
-          animation: 0.4s ease-in-out slide;
-          -webkit-animation: 0.4s ease-in-out slide;
-          transform: translateX(8.388rem);
-          -webkit-transform: 0.4s translateX(2rem) translateX(8.388rem); // Safari 대응
+          transform: translateX(6.388rem);
+          -webkit-transform: translateX(6.388rem); // Safari 대응
         `;
     }
   }};
-
-  @keyframes slide {
-    from {
-      transform: translateX(2rem);
-      -webkit-transform: translateX(2rem);
-    }
-    to {
-      transform: translateX(8.388rem);
-      -webkit-transform: translateX(8.388rem);
-    }
-  }
 `;
 
 const StyledItemInfo = styled.div`
