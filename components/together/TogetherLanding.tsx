@@ -661,5 +661,4 @@ const StyledBody = styled.div`
   margin-bottom: 24.4rem;
   padding: 0 2rem;
   padding-top: 1.6rem;
-  background-color: dodgerblue;
 `;
