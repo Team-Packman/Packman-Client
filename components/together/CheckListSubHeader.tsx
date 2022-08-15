@@ -24,9 +24,9 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
   };
 
   if (isScrolling) {
-    swiper.allowTouchMove = false;
+    swiper.disable();
   } else {
-    swiper.allowTouchMove = true;
+    swiper.enable();
   }
 
   return (
