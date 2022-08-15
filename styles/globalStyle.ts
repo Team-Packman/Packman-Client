@@ -25,6 +25,8 @@ export const GlobalStyle = createGlobalStyle`
 
     * {
         box-sizing: border-box;
+        -moz-box-sizing:border-box; /* Firefox */
+        -webkit-box-sizing:border-box; /* Safari */
         transition: ${createTransitionQuery()};
     }
     
