@@ -15,6 +15,14 @@ function MemberManage() {
     setIsEditing((prev) => !prev);
   };
 
+  const DeleteMember = (e) => {
+    e.target.parentElement;
+  };
+
+  const ClickInvitingButton = () => {
+    if (isEditing) setIsEditing(false);
+  };
+
   return (
     <StyledRoot>
       <StyledHeader>
@@ -45,13 +53,19 @@ function MemberManage() {
             <Member key={index}>
               <MemberImage index={index} />
               <MemberName>대장나심</MemberName>
-              <DeleteButton src={'/assets/png/deleteMemberButton.png'} isEditing={isEditing} />
+              <RemoveButton
+                onClick={DeleteMember}
+                src={'/assets/png/removeMember.png'}
+                isEditing={isEditing}
+              />
             </Member>
           );
         })}
       </WithMembers>
       <InviteOtherMember length={members.length}>함께 패킹할 멤버를 초대해보세요</InviteOtherMember>
-      <InvitingButton>{isEditing ? '완료' : '멤버 초대하기'}</InvitingButton>
+      <InvitingButton onClick={ClickInvitingButton}>
+        {isEditing ? '완료' : '멤버 초대하기'}
+      </InvitingButton>
     </StyledRoot>
   );
 }
@@ -125,7 +139,7 @@ const Member = styled.div`
   align-items: center;
 `;
 
-const DeleteButton = styled.img<{ isEditing: boolean }>`
+const RemoveButton = styled.img<{ isEditing: boolean }>`
   display: ${({ isEditing }) => (isEditing ? 'block' : 'none')};
   width: 2.4rem;
   height: 2.4rem;
