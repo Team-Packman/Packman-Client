@@ -513,7 +513,6 @@ function TogetherLanding() {
             activeMode={activeMode}
             modeHandler={modeHandler}
             categoryHandler={creatingCategoryHandler}
-            isScrolling={isScrolling}
           />
           {packingRole.map((list, i) => {
             return (
