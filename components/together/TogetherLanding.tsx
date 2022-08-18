@@ -543,7 +543,7 @@ function TogetherLanding() {
                               }
                               isEditing={currentEditing === packId}
                               updateItem={updateItem}
-                              assginee={
+                              assignee={
                                 <Packer
                                   packer={packer}
                                   modalHandler={() => packerModalOpenHandler(packId)}

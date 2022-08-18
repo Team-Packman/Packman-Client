@@ -19,7 +19,7 @@ interface PackingItemProps {
   packId?: string;
   isEditing?: boolean;
   isChecked?: boolean;
-  assginee?: ReactNode;
+  assignee?: ReactNode;
   example?: boolean;
   modalHandler?: () => void;
   updateItem?: (payload: UpdateItemPayload) => void;
@@ -35,7 +35,7 @@ function PackingItem(props: PackingItemProps) {
     listId = '',
     categoryId = '',
     packId = '',
-    assginee,
+    assignee,
     updateItem,
     modalHandler,
     isChecked,
@@ -98,7 +98,7 @@ function PackingItem(props: PackingItemProps) {
         )}
       </label>
       <StyledOptionWrapper>
-        {mode === 0 && assginee}
+        {mode === 0 && assignee}
         <StyledKebab onClick={modalHandler}>
           {!isEditing && <Image src={Kebab} alt="kebab" layout="fill" />}
         </StyledKebab>
