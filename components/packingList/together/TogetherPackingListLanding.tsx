@@ -64,11 +64,9 @@ function TogetherPackingListLanding() {
   };
 
   const checkDeleteList = (id: string) => {
-    if (deleteList.includes(id)) {
-      setDeleteList((prev) => prev.filter((idx) => idx !== id));
-    } else {
-      setDeleteList([...deleteList, id]);
-    }
+    deleteList.includes(id)
+      ? setDeleteList((prev) => prev.filter((idx) => idx !== id))
+      : setDeleteList([...deleteList, id]);
   };
 
   const openModal = () => {
@@ -153,8 +151,6 @@ function TogetherPackingListLanding() {
             <StyledToggleImage
               src={iShowMore}
               alt="상세보기"
-              width={24}
-              height={24}
               toggle={toggle ? 'true' : 'false'}
               onClick={() => {
                 setToggle(true);
@@ -281,6 +277,8 @@ const StyledFolderInfo = styled.div`
   }
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
+  width: 2.4rem;
+  height: 2.4rem;
   transition: 0.2s ease-in-out;
   transform: ${({ toggle }) => (toggle === 'true' ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
