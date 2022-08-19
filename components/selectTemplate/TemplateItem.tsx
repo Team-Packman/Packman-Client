@@ -1,6 +1,4 @@
-import { useQueryClient } from 'react-query';
 import styled, { css } from 'styled-components';
-import { GetAloneTemplateListOutput } from '../../service/ect/index';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 
