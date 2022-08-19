@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
-import { shallowEqualObjects } from 'react-query/types/core/utils';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 
@@ -26,7 +24,7 @@ function DropBox(props: DropBoxProps) {
             key={_id}
             currentId={_id === currentId}
             onClick={() => {
-              router.push(`/packing-list/${categoryName}/${_id}`, undefined, { shallow: true });
+              router.replace(`/packing-list/${categoryName}/${_id}`);
 
               queryClient.invalidateQueries('getAloneInventory');
               queryClient.invalidateQueries('getTogetherInventory');
