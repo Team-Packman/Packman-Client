@@ -15,6 +15,15 @@ function DropBox(props: DropBoxProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  const onClickFolderItem = (id: string) => {
+    router.replace(`/packing-list/${categoryName}/${id}`);
+
+    queryClient.invalidateQueries('getAloneInventory');
+    queryClient.invalidateQueries('getTogetherInventory');
+
+    closeDropBox();
+  };
+
   return (
     <>
       <StyledBackground onClick={closeDropBox} />
@@ -23,12 +32,7 @@ function DropBox(props: DropBoxProps) {
           <StyledItem
             key={_id}
             currentId={_id === currentId}
-            onClick={() => {
-              router.replace(`/packing-list/${categoryName}/${_id}`);
-
-              queryClient.invalidateQueries('getAloneInventory');
-              queryClient.invalidateQueries('getTogetherInventory');
-            }}
+            onClick={() => onClickFolderItem(_id)}
           >
             {title}
           </StyledItem>
