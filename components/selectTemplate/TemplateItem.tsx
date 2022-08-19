@@ -9,10 +9,9 @@ interface Template {
 interface TemplateItemProps {
   template: Template;
   isSelected: string;
-  onClick?: () => void;
-  changeTemplateImage?: (templateId: string) => void;
-  changeUserOwnTemplateImage?: () => void;
-  checkIsTemplate?: (isTemplate: boolean) => void;
+  handleTemplateItem?: () => void;
+  changeTemplateImage?: (template: Template[], templateId: string, templateType: string) => void;
+  checkIsTemplate?: (templateType: string) => void;
   basicTemplate?: Template[];
   myTemplate?: Template[];
 }
@@ -21,10 +20,8 @@ function TemplateItem(props: TemplateItemProps) {
   const {
     template,
     isSelected,
-    onClick,
+    handleTemplateItem,
     changeTemplateImage,
-    changeUserOwnTemplateImage,
-    checkIsTemplate,
     basicTemplate,
     myTemplate,
   } = props;
@@ -33,18 +30,15 @@ function TemplateItem(props: TemplateItemProps) {
   const onClickTemplateItem = (id: string) => {
     basicTemplate?.forEach((template) => {
       if (id === template._id) {
-        checkIsTemplate && checkIsTemplate(true);
+        changeTemplateImage && changeTemplateImage(basicTemplate, id, 'basic');
       }
     });
     myTemplate?.forEach((template) => {
       if (id === template._id) {
-        checkIsTemplate && checkIsTemplate(false);
+        changeTemplateImage && changeTemplateImage(myTemplate, id, 'myTemplate');
       }
     });
-
-    onClick && onClick();
-    changeTemplateImage && changeTemplateImage(id);
-    changeUserOwnTemplateImage && changeUserOwnTemplateImage();
+    handleTemplateItem && handleTemplateItem();
   };
 
   return (
