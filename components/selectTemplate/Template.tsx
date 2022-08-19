@@ -30,11 +30,7 @@ function Template(props: TemplateProps) {
     } else {
       setIsSelected(id);
     }
-  };
-
-  const handleTemplateItem = (template: Template) => {
-    onClickTemplateItem(template._id);
-    setTemplateId(template._id);
+    setTemplateId(id);
   };
 
   useEffect(() => {
@@ -55,7 +51,7 @@ function Template(props: TemplateProps) {
                   key={template._id}
                   template={template}
                   isSelected={isSelected}
-                  handleTemplateItem={() => handleTemplateItem(template)}
+                  handleTemplateItem={() => onClickTemplateItem(template._id)}
                   changeTemplateImage={changeTemplateImage}
                   basicTemplate={basicTemplate}
                   myTemplate={myTemplate}
@@ -83,7 +79,7 @@ function Template(props: TemplateProps) {
                   key={template._id}
                   template={template}
                   isSelected={isSelected}
-                  handleTemplateItem={() => handleTemplateItem(template)}
+                  handleTemplateItem={() => onClickTemplateItem(template._id)}
                   changeTemplateImage={changeTemplateImage}
                   basicTemplate={basicTemplate}
                   myTemplate={myTemplate}
