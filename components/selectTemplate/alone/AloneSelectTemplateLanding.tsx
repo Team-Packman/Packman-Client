@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import Header from '../../common/Header';
 import { packmanColors } from '../../../styles/color';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import korea_travel from '/public/assets/png/korea_travel.png';
 import oversea_travel from '/public/assets/png/oversea_travel.png';
 import jeju from '/public/assets/png/jeju.png';

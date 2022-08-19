@@ -1,6 +1,6 @@
 import Image, { StaticImageData } from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
@@ -160,7 +160,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
             <StyledImage
               key={id}
               src={src}
-              alt="profile-images"
+              alt="profile-image"
               width={80}
               height={80}
               selected={profile === id}
