@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 

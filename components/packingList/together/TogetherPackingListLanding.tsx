@@ -120,10 +120,6 @@ function TogetherPackingListLanding() {
     }
   };
 
-  const resetIsDragged = () => {
-    setIsDragged(Array(togetherPackingList?.length).fill(false));
-  };
-
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
       router.push(`/together/${id}`);
@@ -198,9 +194,19 @@ function TogetherPackingListLanding() {
 
               <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                 {isDeleting ? (
-                  <p onClick={resetIsDragged}>취소</p>
+                  <p
+                    onClick={() => handleIsDragged(Array(togetherPackingList?.length).fill(false))}
+                  >
+                    취소
+                  </p>
                 ) : (
-                  <Image src={iTrash} alt="삭제" width={24} height={24} onClick={resetIsDragged} />
+                  <Image
+                    src={iTrash}
+                    alt="삭제"
+                    width={24}
+                    height={24}
+                    onClick={() => handleIsDragged(Array(togetherPackingList?.length).fill(false))}
+                  />
                 )}
               </StyledCaptionButtonWrapper>
             </StyledCaptionWrapper>
