@@ -64,11 +64,9 @@ function TogetherPackingListLanding() {
   };
 
   const checkDeleteList = (id: string) => {
-    if (deleteList.includes(id)) {
-      setDeleteList((prev) => prev.filter((idx) => idx !== id));
-    } else {
-      setDeleteList([...deleteList, id]);
-    }
+    deleteList.includes(id)
+      ? setDeleteList((prev) => prev.filter((idx) => idx !== id))
+      : setDeleteList([...deleteList, id]);
   };
 
   const openModal = () => {
@@ -153,9 +151,7 @@ function TogetherPackingListLanding() {
             <StyledToggleImage
               src={iShowMore}
               alt="상세보기"
-              width={24}
-              height={24}
-              toggle={toggle ? 'true' : 'false'}
+              toggle={toggle.toString()}
               onClick={() => {
                 setToggle(true);
               }}
@@ -198,7 +194,9 @@ function TogetherPackingListLanding() {
 
               <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                 {isDeleting ? (
-                  <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
+                  <p
+                    onClick={() => handleIsDragged(Array(togetherPackingList?.length).fill(false))}
+                  >
                     취소
                   </p>
                 ) : (
@@ -207,7 +205,7 @@ function TogetherPackingListLanding() {
                     alt="삭제"
                     width={24}
                     height={24}
-                    onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
+                    onClick={() => handleIsDragged(Array(togetherPackingList?.length).fill(false))}
                   />
                 )}
               </StyledCaptionButtonWrapper>
@@ -281,6 +279,8 @@ const StyledFolderInfo = styled.div`
   }
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
+  width: 2.4rem;
+  height: 2.4rem;
   transition: 0.2s ease-in-out;
   transform: ${({ toggle }) => (toggle === 'true' ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;

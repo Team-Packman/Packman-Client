@@ -5,8 +5,6 @@ import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
-import { useRouter } from 'next/router';
-
 interface PackingList {
   _id: string;
   departureDate: string;
@@ -28,7 +26,6 @@ interface ItemProps {
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
-  const router = useRouter();
   const {
     idx,
     handleIsDragged,
@@ -54,9 +51,7 @@ export default function SwipeablelistItem(props: ItemProps) {
       let tmpArr = Array(packingList?.length).fill(false);
 
       if (startX - endX > 100) {
-        tmpArr = tmpArr.map((x, index) => (idx === index ? true : false));
-      } else if (startX < endX) {
-        tmpArr = Array(packingList?.length).fill(false);
+        tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
       }
       handleIsDragged(tmpArr);
 
@@ -73,7 +68,7 @@ export default function SwipeablelistItem(props: ItemProps) {
         <StyledSelectDelete>
           <Image
             src={deleteList.includes(_id) ? iCheckPink : iCheck}
-            alt="체크"
+            alt="check"
             onClick={() => checkDeleteList(_id)}
             layout="fill"
           />
@@ -101,7 +96,7 @@ export default function SwipeablelistItem(props: ItemProps) {
             )}
           </StyledPackInfo>
         </StyledItemInfo>
-        <Image src={iRightArrow} alt="열기" width={24} height={24} />
+        <Image src={iRightArrow} alt="right-arrow" width={24} height={24} />
       </StyledItemWrapper>
 
       {!isDeleting && (

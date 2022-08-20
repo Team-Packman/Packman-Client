@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { ReactNode } from 'react';
 import { packmanColors } from '../../styles/color';
 
 interface TemplateListProps {
-  templateList: ReactNode;
+  templateList: React.ReactNode;
 }
 
 function TemplateList(props: TemplateListProps) {

@@ -1,4 +1,4 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import styled, { css } from 'styled-components';
 import Template from '../Template';
 import useAPI from '../../../utils/hooks/useAPI';
@@ -19,6 +19,11 @@ import random3 from '/public/assets/png/random3.png';
 import random4 from '/public/assets/png/random4.png';
 import { FONT_STYLES } from '../../../styles/font';
 
+interface Itemplate {
+  _id: string;
+  title: string;
+}
+
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 
 function TogetherSelectTemplateLanding() {
@@ -28,7 +33,7 @@ function TogetherSelectTemplateLanding() {
   const { data } = useQuery('templateList', () => getTogetherTemplateList());
 
   const [templateImageIndex, setTemplateImageIndex] = useState('');
-  const [isBasicTemplate, setIsBasicTemplate] = useState(false);
+  const [templateType, setTemplateType] = useState('');
   const [templateId, setTemplateId] = useState('');
   const [randomImageList, setRandomImageList] = useState([random1, random2, random3, random4]);
 
@@ -37,31 +42,24 @@ function TogetherSelectTemplateLanding() {
 
   const { basicTemplate, myTemplate } = data.data;
 
-  const changeTemplateImage = (templateId: string) => {
-    basicTemplate.forEach(({ _id }, idx) => {
+  const changeTemplateImage = (template: Itemplate[], templateId: string, templateType: string) => {
+    template.forEach(({ _id }, idx) => {
       if (_id === templateId) {
         setTemplateImageIndex(idx.toString());
-      }
-    });
-  };
-
-  const changeUserOwnTemplateImage = (templateId: string) => {
-    myTemplate.forEach(({ _id }, idx) => {
-      if (_id === templateId) {
-        setTemplateImageIndex(idx.toString());
-        setRandomImageList((prev) => prev.sort(() => Math.random() - 0.5));
+        setTemplateType(templateType);
+        templateType === 'myTemplate' &&
+          setRandomImageList((prev) => prev.sort(() => Math.random() - 0.5));
       }
     });
   };
 
   const onClickConfirmButton = () => {
-    isBasicTemplate
-      ? router.push(`/preview?id=${templateId}&type=basic&categoryName=together`)
-      : router.push(`/preview?id=${templateId}&type=myTemplate&categoryName=together`);
+    router.push(`/preview?id=${templateId}&type=${templateType}&categoryName=together`);
   };
 
-  const activateConfirmButton = () => setActivateButton(true);
-  const deactivateConfirmButton = () => setActivateButton(false);
+  const activateConfirmButtonHandler = () => setActivateButton(true);
+  const deactivateConfirmButtonHandler = () => setActivateButton(false);
+  const setTemplateIdHandler = (templateId: string) => setTemplateId(templateId);
 
   return (
     <StyledRoot>
@@ -72,7 +70,7 @@ function TogetherSelectTemplateLanding() {
             randomImageList[+templateImageIndex]) && (
             <Image
               src={
-                isBasicTemplate
+                templateType === 'basic'
                   ? basicTemplateImageList[+templateImageIndex]
                   : randomImageList[+templateImageIndex]
               }
@@ -88,30 +86,30 @@ function TogetherSelectTemplateLanding() {
           basicTemplate={basicTemplate}
           myTemplate={myTemplate}
           activate={(isSelected: string) =>
-            isSelected === '' ? deactivateConfirmButton() : activateConfirmButton()
+            isSelected === '' ? deactivateConfirmButtonHandler() : activateConfirmButtonHandler()
           }
-          changeTemplateImage={(templateId: string) => changeTemplateImage(templateId)}
-          changeUserOwnTemplateImage={changeUserOwnTemplateImage}
-          checkIsTemplate={(isTemplate: boolean) => setIsBasicTemplate(isTemplate)}
-          setTemplateId={(templateId: string) => setTemplateId(templateId)}
+          changeTemplateImage={(template: Itemplate[], templateId: string, templateType: string) =>
+            changeTemplateImage(template, templateId, templateType)
+          }
+          setTemplateId={(templateId: string) => setTemplateIdHandler(templateId)}
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
-        <StyleButton
+        <StyledButton
           isTemplate={false}
           isActivated={true}
           onClick={() => router.push(`/list-intro?id=''&categoryName=together`)}
         >
           건너뛰기
-        </StyleButton>
-        <StyleButton
+        </StyledButton>
+        <StyledButton
           isTemplate={true}
           disabled={!activateButton}
           isActivated={activateButton}
           onClick={onClickConfirmButton}
         >
           확인
-        </StyleButton>
+        </StyledButton>
       </StyledButtonWrapper>
     </StyledRoot>
   );
@@ -145,7 +143,7 @@ const StyledButtonWrapper = styled.div`
   background-color: #fff;
   padding: 0 2rem;
 `;
-const StyleButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>`
+const StyledButton = styled.button<{ isTemplate: boolean; isActivated: boolean }>`
   width: 100%;
   height: 100%;
   border-radius: 0.8rem;
