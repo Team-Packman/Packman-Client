@@ -513,7 +513,6 @@ function TogetherLanding() {
             activeMode={activeMode}
             modeHandler={modeHandler}
             categoryHandler={creatingCategoryHandler}
-            isScrolling={isScrolling}
           />
           {packingRole.map((list, i) => {
             return (
@@ -544,7 +543,7 @@ function TogetherLanding() {
                               }
                               isEditing={currentEditing === packId}
                               updateItem={updateItem}
-                              assginee={
+                              assignee={
                                 <Packer
                                   packer={packer}
                                   modalHandler={() => packerModalOpenHandler(packId)}
