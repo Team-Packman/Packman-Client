@@ -32,10 +32,10 @@ export const useErrorBubbling = () => {
     },
   };
 };
-const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+const errorFallback = ({ resetErrorBoundary }: FallbackProps) => {
   return (
     <div>
-      <Error error={error} />
+      <Error />
       <button onClick={resetErrorBoundary}>reset</button>
     </div>
   );
