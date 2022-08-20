@@ -119,6 +119,10 @@ function AlonePackingListLanding() {
     }
   };
 
+  const resetIsDragged = () => {
+    setIsDragged(Array(alonePackingList?.length).fill(false));
+  };
+
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
       router.push(`/alone/${id}`);
@@ -150,7 +154,7 @@ function AlonePackingListLanding() {
             <StyledToggleImage
               src={iShowMore}
               alt="상세보기"
-              toggle={toggle ? 'true' : 'false'}
+              toggle={toggle.toString()}
               onClick={() => setToggle(true)}
             />
             {toggle && (
@@ -184,16 +188,14 @@ function AlonePackingListLanding() {
 
                 <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                   {isDeleting ? (
-                    <p onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}>
-                      취소
-                    </p>
+                    <p onClick={resetIsDragged}>취소</p>
                   ) : (
                     <Image
                       src={iTrash}
                       alt="삭제"
                       width={24}
                       height={24}
-                      onClick={() => setIsDragged(Array(alonePackingList?.length).fill(false))}
+                      onClick={resetIsDragged}
                     />
                   )}
                 </StyledCaptionButtonWrapper>

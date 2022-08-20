@@ -120,6 +120,10 @@ function TogetherPackingListLanding() {
     }
   };
 
+  const resetIsDragged = () => {
+    setIsDragged(Array(togetherPackingList?.length).fill(false));
+  };
+
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
       router.push(`/together/${id}`);
@@ -151,7 +155,7 @@ function TogetherPackingListLanding() {
             <StyledToggleImage
               src={iShowMore}
               alt="상세보기"
-              toggle={toggle ? 'true' : 'false'}
+              toggle={toggle.toString()}
               onClick={() => {
                 setToggle(true);
               }}
@@ -194,17 +198,9 @@ function TogetherPackingListLanding() {
 
               <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                 {isDeleting ? (
-                  <p onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}>
-                    취소
-                  </p>
+                  <p onClick={resetIsDragged}>취소</p>
                 ) : (
-                  <Image
-                    src={iTrash}
-                    alt="삭제"
-                    width={24}
-                    height={24}
-                    onClick={() => setIsDragged(Array(togetherPackingList?.length).fill(false))}
-                  />
+                  <Image src={iTrash} alt="삭제" width={24} height={24} onClick={resetIsDragged} />
                 )}
               </StyledCaptionButtonWrapper>
             </StyledCaptionWrapper>
