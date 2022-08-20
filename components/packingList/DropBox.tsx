@@ -13,13 +13,9 @@ interface DropBoxProps {
 function DropBox(props: DropBoxProps) {
   const { folderList, closeDropBox, currentId, categoryName } = props;
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const onClickFolderItem = (id: string) => {
     router.replace(`/packing-list/${categoryName}/${id}`);
-
-    queryClient.invalidateQueries('getAloneInventory');
-    queryClient.invalidateQueries('getTogetherInventory');
 
     closeDropBox();
   };
