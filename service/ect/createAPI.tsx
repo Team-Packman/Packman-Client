@@ -17,7 +17,7 @@ export interface EctAPI {
 const createEctAPI = (request: AxiosInstance): EctAPI => {
   const authReq = request;
   return {
-    getTemplate: (paylod: GetTemplateInput) => fetchTemplate(authReq, paylod),
+    getTemplate: (payload: GetTemplateInput) => fetchTemplate(authReq, payload),
     getAloneTemplateList: () => fetchAloneTemplateList(authReq),
     getTogetherTemplateList: () => fetchTogetherTemplateList(authReq),
   };
