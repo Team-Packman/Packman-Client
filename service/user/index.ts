@@ -55,11 +55,3 @@ export interface AddUserProfileOutput {
     isAlreadyUser: boolean; // 이미 존재하는 유저 확인
   };
 }
-
-export interface GetKakaoProfileInfoOutput {
-  kakao_account: {
-    profile: {
-      nickname: string;
-    };
-  };
-}

@@ -9,6 +9,7 @@ import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authedUser, creatingUser, kakao } from '../../utils/recoil/atom/atom';
+import axios from 'axios';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -29,6 +30,14 @@ interface SelectProfileSectionProps {
   finishEditing?: () => void;
 }
 
+interface KakaoProfileInfo {
+  kakao_account: {
+    profile: {
+      nickname: string;
+    };
+  };
+}
+
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -40,10 +49,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
   const { accessToken } = useRecoilValue(kakao);
-
-  // 카카오톡 사용자 프로필 정보 조회
-  const getKakaoProfileInfo = useAPI((api) => api.user.getKakaoProfileInfo);
-  const { data } = useQuery('getKakaoProfileInfo', () => getKakaoProfileInfo(accessToken));
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -119,24 +124,38 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   };
 
+  // 카카오톡 사용자 프로필 닉네임 조회
+  const getKakaoProfileInfo = async () => {
+    const { data }: { data: KakaoProfileInfo } = await axios.post(
+      `https://kapi.kakao.com/v2/user/me`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return data;
+  };
+
   // 회원가입
-  const createUserAccount = () => {
-    if (data) {
-      addUserProfileMutate(
-        {
-          email: user.email,
-          name: data.kakao_account.profile.nickname,
-          nickname,
-          profileImage: profile,
+  const createUserAccount = async () => {
+    const data = await getKakaoProfileInfo();
+
+    addUserProfileMutate(
+      {
+        email: user.email,
+        name: data.kakao_account.profile.nickname,
+        nickname,
+        profileImage: profile,
+      },
+      {
+        onSuccess: ({ data }) => {
+          setUser(data);
+          router.push('/folder');
         },
-        {
-          onSuccess: ({ data }) => {
-            setUser(data);
-            router.push('/folder');
-          },
-        },
-      );
-    }
+      },
+    );
   };
 
   const onClickGoToPackingButton = () => {

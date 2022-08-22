@@ -1,8 +1,7 @@
-import axios, { AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axios';
 import {
   AddUserProfileInput,
   AddUserProfileOutput,
-  GetKakaoProfileInfoOutput,
   GetUserInfoOutput,
   UpdateUserProfileInput,
   UpdateUserProfileOutput,
@@ -26,18 +25,5 @@ export const fetchAddUserProfile = async (
   payload: AddUserProfileInput,
 ): Promise<AddUserProfileOutput> => {
   const { data } = await request.post(`/user/profile`, payload);
-  return data;
-};
-
-export const fetchKakaoProfileInfo = async (accessToken: string) => {
-  const { data }: { data: GetKakaoProfileInfoOutput } = await axios.post(
-    `https://kapi.kakao.com/v2/user/me`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
   return data;
 };
