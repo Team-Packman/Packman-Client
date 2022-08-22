@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -39,7 +39,11 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
-  const { nickname: kakaoProfileNickname } = useRecoilValue(kakao);
+  const { accessToken } = useRecoilValue(kakao);
+
+  // 카카오톡 사용자 프로필 정보 조회
+  const getKakaoProfileInfo = useAPI((api) => api.user.getKakaoProfileInfo);
+  const { data } = useQuery('getKakaoProfileInfo', () => getKakaoProfileInfo(accessToken));
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -117,20 +121,22 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   // 회원가입
   const createUserAccount = () => {
-    addUserProfileMutate(
-      {
-        email: user.email,
-        name: kakaoProfileNickname,
-        nickname,
-        profileImage: profile,
-      },
-      {
-        onSuccess: ({ data }) => {
-          setUser(data);
-          router.push('/folder');
+    if (data) {
+      addUserProfileMutate(
+        {
+          email: user.email,
+          name: data.kakao_account.profile.nickname,
+          nickname,
+          profileImage: profile,
         },
-      },
-    );
+        {
+          onSuccess: ({ data }) => {
+            setUser(data);
+            router.push('/folder');
+          },
+        },
+      );
+    }
   };
 
   const onClickGoToPackingButton = () => {

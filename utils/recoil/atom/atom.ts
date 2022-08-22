@@ -41,7 +41,6 @@ export const kakao = atom<Kakao>({
   key: 'kakao',
   default: {
     accessToken: '',
-    nickname: '',
   },
   effects_UNSTABLE: [persistAtom],
 });

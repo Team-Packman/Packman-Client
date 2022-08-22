@@ -18,16 +18,6 @@ declare global {
   }
 }
 
-interface KakaoProfile {
-  data: {
-    kakao_account: {
-      profile: {
-        nickname: string;
-      };
-    };
-  };
-}
-
 function Login() {
   const router = useRouter();
 
@@ -54,21 +44,9 @@ function Login() {
             },
           );
 
-          /** 카카오 사용자 정보 가져오기 api 요청 */
-          const res: KakaoProfile = await axios.post(
-            `https://kapi.kakao.com/v2/user/me`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${data.access_token}`,
-              },
-            },
-          );
-
           /** 카카오 액세스 토큰, 유저 닉네임 저장 */
           setKakaoInfo({
             accessToken: data.access_token,
-            nickname: res.data.kakao_account.profile.nickname,
           });
           kakaoLogin(
             {
