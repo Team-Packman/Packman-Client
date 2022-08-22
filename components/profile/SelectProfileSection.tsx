@@ -8,12 +8,13 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authedUser, creatingUser } from '../../utils/recoil/atom/atom';
+import { authedUser, creatingUser, kakao } from '../../utils/recoil/atom/atom';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
-  name: string; // 회원가입한 유저의 닉네임
-  profileImageId: string; // 회원가입한 유저의 프로필 이미지
+  name: string; //회원가입한 유저의 카카오 프로필 네임
+  nickname: string; // 회원가입한 유저의 닉네임
+  profileImage: string; // 회원가입한 유저의 프로필 이미지
 }
 
 interface UpdateUserProfileData {
@@ -38,6 +39,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
+  const { nickname: kakaoProfileNickname } = useRecoilValue(kakao);
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -118,8 +120,9 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     addUserProfileMutate(
       {
         email: user.email,
-        name: nickname,
-        profileImageId: profile,
+        name: kakaoProfileNickname,
+        nickname,
+        profileImage: profile,
       },
       {
         onSuccess: ({ data }) => {

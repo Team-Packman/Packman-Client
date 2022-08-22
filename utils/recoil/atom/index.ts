@@ -13,4 +13,5 @@ export interface From {
 
 export interface Kakao {
   accessToken: string;
+  nickname: string;
 }

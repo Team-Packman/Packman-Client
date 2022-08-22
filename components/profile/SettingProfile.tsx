@@ -7,7 +7,7 @@ import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useResetRecoilState } from 'recoil';
-import { authedUser, kakaoAccessToken } from '../../utils/recoil/atom/atom';
+import { authedUser, kakao } from '../../utils/recoil/atom/atom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
@@ -30,7 +30,7 @@ function SettingProfile(props: SettingProfileProps) {
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
-  const accessToken = useRecoilValue(kakaoAccessToken).accessToken;
+  const { accessToken } = useRecoilValue(kakao);
   const router = useRouter();
 
   const onClickLeftModalButton = async () => {

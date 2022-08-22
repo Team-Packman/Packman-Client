@@ -37,10 +37,11 @@ export const from = atom<From>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const kakaoAccessToken = atom<Kakao>({
-  key: 'kakaoAccessToken',
+export const kakao = atom<Kakao>({
+  key: 'kakao',
   default: {
     accessToken: '',
+    nickname: '',
   },
   effects_UNSTABLE: [persistAtom],
 });
