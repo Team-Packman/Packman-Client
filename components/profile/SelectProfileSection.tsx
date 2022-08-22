@@ -246,7 +246,7 @@ const StyledImage = styled(Image)<{ selected: boolean }>`
 const StyledButton = styled.button<{ isActivate: boolean }>`
   position: absolute;
   bottom: 3.4rem;
-  width: 33.6rem;
+  width: calc(100vw - 4rem);
   height: 4.1rem;
   border: none;
   border-radius: 0.8rem;
