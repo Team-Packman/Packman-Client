@@ -4,16 +4,18 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authedUser, creatingUser } from '../../utils/recoil/atom/atom';
+import { authedUser, creatingUser, kakao } from '../../utils/recoil/atom/atom';
+import axios from 'axios';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
-  name: string; // 회원가입한 유저의 닉네임
-  profileImageId: string; // 회원가입한 유저의 프로필 이미지
+  name: string; //회원가입한 유저의 카카오 프로필 네임
+  nickname: string; // 회원가입한 유저의 닉네임
+  profileImage: string; // 회원가입한 유저의 프로필 이미지
 }
 
 interface UpdateUserProfileData {
@@ -28,6 +30,14 @@ interface SelectProfileSectionProps {
   finishEditing?: () => void;
 }
 
+interface KakaoProfileInfo {
+  kakao_account: {
+    profile: {
+      nickname: string;
+    };
+  };
+}
+
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -38,6 +48,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
   const setUser = useSetRecoilState(authedUser);
   const user = useRecoilValue(creatingUser);
+  const { accessToken } = useRecoilValue(kakao);
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -113,13 +124,30 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     }
   };
 
+  // 카카오톡 사용자 프로필 닉네임 조회
+  const getKakaoProfileInfo = async () => {
+    const { data }: { data: KakaoProfileInfo } = await axios.post(
+      `https://kapi.kakao.com/v2/user/me`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return data;
+  };
+
   // 회원가입
-  const createUserAccount = () => {
+  const createUserAccount = async () => {
+    const data = await getKakaoProfileInfo();
+
     addUserProfileMutate(
       {
         email: user.email,
-        name: nickname,
-        profileImageId: profile,
+        name: data.kakao_account.profile.nickname,
+        nickname,
+        profileImage: profile,
       },
       {
         onSuccess: ({ data }) => {
@@ -243,7 +271,7 @@ const StyledImage = styled(Image)<{ selected: boolean }>`
 const StyledButton = styled.button<{ isActivate: boolean }>`
   position: absolute;
   bottom: 3.4rem;
-  width: 33.6rem;
+  width: calc(100vw - 4rem);
   height: 4.1rem;
   border: none;
   border-radius: 0.8rem;

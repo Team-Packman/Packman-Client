@@ -6,7 +6,6 @@ import {
   UpdateUserProfileInput,
   UpdateUserProfileOutput,
 } from '.';
-import withAuth from '../../utils/axios/withAuth';
 import { fetchAddUserProfile, fetchUpdateUserProfile, fetchUserInfo } from '../../utils/axios/user';
 
 export interface UserAPI {
