@@ -48,14 +48,14 @@ export interface AddAlonePackingListIntroOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string;
+    id: string;
     title: string;
     departureDate: string;
     category: {
-      _id: string;
+      id: string;
       name: string;
       pack: {
-        _id: string;
+        id: string;
         name: string;
         isChecked: boolean;
         packer: null;
