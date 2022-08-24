@@ -614,7 +614,7 @@ function TogetherLanding() {
 
       {packerModalOpen && (
         <PackerModal
-          members={info.group.member}
+          member={info.group.member}
           modalHandler={packerModalCloseHandler}
           packId={currentFocus.packId}
           listId={info.togetherPackingList.id}
