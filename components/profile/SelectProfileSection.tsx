@@ -7,8 +7,8 @@ import useAPI from '../../utils/hooks/useAPI';
 import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { authedUser, creatingUser } from '../../utils/recoil/atom/atom';
+import { useRecoilState } from 'recoil';
+import { creatingUser } from '../../utils/recoil/atom/atom';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
@@ -37,7 +37,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState(oldNickname ? oldNickname : '');
   const [profile, setProfile] = useState(oldProfileImageId ? oldProfileImageId : '0');
   const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
-  const [user, setUser] = useRecoilState(authedUser);
+  const [user, setUser] = useRecoilState(creatingUser);
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
