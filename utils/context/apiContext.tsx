@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { APIService, createAPIService } from '../../service';
 import createAxios from '../axios/axios';
 import withAuth from '../axios/withAuth';
-import { authedUser } from '../recoil/atom/atom';
+import { authUserAtom } from '../recoil/atom/atom';
 
 interface APIProviderProps {
   children: ReactNode;
@@ -41,7 +41,7 @@ export const AuthContext = createContext<AuthContext>({
 export const AuthProvider = (props: AuthProviderProps) => {
   const { children, baseURL } = props;
   const { axiosWithAuth } = createAxios(baseURL);
-  const user = useRecoilValue(authedUser);
+  const user = useRecoilValue(authUserAtom);
   const api = createAPIService(withAuth(axiosWithAuth, user));
 
   return <AuthContext.Provider value={{ api }}>{children}</AuthContext.Provider>;

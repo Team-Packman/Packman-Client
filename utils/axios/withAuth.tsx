@@ -1,11 +1,8 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { useRecoilValue } from 'recoil';
-import { User } from '../recoil/atom';
-import { authedUser } from '../recoil/atom/atom';
+import { AuthUser } from '../recoil/atom';
 
-function withAuth(axios: AxiosInstance, user: User) {
+function withAuth(axios: AxiosInstance, user: AuthUser) {
   const router = useRouter();
   const requestIntercept = axios.interceptors.request.use(
     (config: AxiosRequestConfig) => {
