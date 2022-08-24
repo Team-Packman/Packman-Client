@@ -82,7 +82,7 @@ function FolderLanding() {
     return null;
   }
 
-  const { aloneFolders, togetherFolders } = folderList.data;
+  const { aloneFolder, togetherFolder } = folderList.data;
 
   // Bottom modal handler
   const handleBottomModalOpen = (_id: string, title: string) => {
@@ -105,8 +105,8 @@ function FolderLanding() {
           return {
             ...oldData,
             data: {
-              aloneFolders: aloneFolders.filter((v) => v._id !== id),
-              togetherFolders: togetherFolders.filter((v) => v._id !== id),
+              aloneFolders: aloneFolder.filter((v) => v.id !== id),
+              togetherFolders: togetherFolder.filter((v) => v.id !== id),
             },
           };
         });
@@ -129,14 +129,14 @@ function FolderLanding() {
             return {
               ...oldData,
               data: {
-                aloneFolders: aloneFolders.map((v) => {
-                  if (v._id === editedFolderData._id) {
+                aloneFolders: aloneFolder.map((v) => {
+                  if (v.id === editedFolderData._id) {
                     return { ...v, title: editedFolderData.title };
                   }
                   return v;
                 }),
-                togetherFolders: togetherFolders.map((v) => {
-                  if (v._id === editedFolderData._id) {
+                togetherFolders: togetherFolder.map((v) => {
+                  if (v.id === editedFolderData._id) {
                     return { ...v, title: editedFolderData.title };
                   }
                   return v;
@@ -172,22 +172,22 @@ function FolderLanding() {
                   currentSwiperIndex === 1
                     ? [
                         {
-                          _id: data.data.aloneFolder[0].id,
-                          title: newFolderData.title,
-                          listNum: 0,
+                          id: data.data.aloneFolder[0].id,
+                          name: newFolderData.title,
+                          listNum: '0',
                         },
-                      ].concat(aloneFolders)
-                    : aloneFolders,
+                      ].concat(aloneFolder)
+                    : aloneFolder,
                 togetherFolders:
                   currentSwiperIndex === 0
                     ? [
                         {
-                          _id: data.data.togetherFolder[0].id,
-                          title: newFolderData.title,
-                          listNum: 0,
+                          id: data.data.togetherFolder[0].id,
+                          name: newFolderData.title,
+                          listNum: '0',
                         },
-                      ].concat(togetherFolders)
-                    : togetherFolders,
+                      ].concat(togetherFolder)
+                    : togetherFolder,
               },
             };
           });
@@ -261,7 +261,7 @@ function FolderLanding() {
             <FolderList
               key="1"
               categoryName="together"
-              list={togetherFolders}
+              list={togetherFolder}
               editableFolderId={editableFolderId}
               onClick={handleBottomModalOpen}
               onChange={handleFolderNameChange}
@@ -278,7 +278,7 @@ function FolderLanding() {
           <FolderList
             key="2"
             categoryName="alone"
-            list={aloneFolders}
+            list={aloneFolder}
             editableFolderId={editableFolderId}
             onClick={handleBottomModalOpen}
             onChange={handleFolderNameChange}

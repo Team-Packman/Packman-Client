@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import FolderBox from './FolderBox';
 import FolderInitial from './FolderInitial';
 export interface FolderProps {
-  _id?: string;
-  title?: string;
-  listNum?: number;
+  id?: string;
+  name?: string;
+  listNum?: string;
 }
 export interface FolderListProps {
   list: FolderProps[];
@@ -50,7 +50,7 @@ function FolderList(props: FolderListProps) {
           <>
             {addNewFolder && <FolderBox key={0} isNew={addNewFolder} {...props} />}
             {list?.map((v) => (
-              <FolderBox key={v._id} isNew={false} {...v} {...props} />
+              <FolderBox key={v.id} isNew={false} {...v} {...props} />
             ))}
           </>
         ) : (
