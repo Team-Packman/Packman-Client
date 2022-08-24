@@ -63,33 +63,28 @@ export const fetchAddFolders = async (
         success: true,
         message: '폴더 생성 성공',
         data: {
-          aloneFolders: [
+          aloneFolder: [
             {
-              _id: '62bbb80d9d5dc1aa4c3d2839',
-              title: '국내여행',
-              listNum: 3,
+              id: '62bbb80d9d5dc1aa4c3d2839',
+              name: '국내여행',
+              listNum: '3',
             },
             {
-              _id: '62bbb80d9d5dc1aa4c3d2838',
-              title: '본가갈 때 챙겨',
-              listNum: 5,
+              id: '62bbb80d9d5dc1aa4c3d2839',
+              name: '본가 갈때 챙겨',
+              listNum: '3',
             },
           ],
-          togetherFolders: [
+          togetherFolder: [
             {
-              _id: '62bbb80d9d5dc1aa4c3d2',
-              title: '새 폴더',
-              listNum: 0,
+              id: '62bbb80d9d5dc1aa4c3d2839',
+              name: '해외여행',
+              listNum: '3',
             },
             {
-              _id: '62bbb80d9d5dc1aa4c3d2837',
-              title: '해외여행',
-              listNum: 3,
-            },
-            {
-              _id: '62bbb80d9d5dc1aa4c3d2836',
-              title: '엠티, 수련회',
-              listNum: 1,
+              id: '62bbb80d9d5dc1aa4c3d2839',
+              name: '엠티 수련회',
+              listNum: '3',
             },
           ],
         },

@@ -172,7 +172,7 @@ function FolderLanding() {
                   currentSwiperIndex === 1
                     ? [
                         {
-                          _id: data.data.aloneFolders[0]._id,
+                          _id: data.data.aloneFolder[0].id,
                           title: newFolderData.title,
                           listNum: 0,
                         },
@@ -182,7 +182,7 @@ function FolderLanding() {
                   currentSwiperIndex === 0
                     ? [
                         {
-                          _id: data.data.togetherFolders[0]._id,
+                          _id: data.data.togetherFolder[0].id,
                           title: newFolderData.title,
                           listNum: 0,
                         },
