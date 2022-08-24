@@ -7,12 +7,9 @@ const { persistAtom } = recoilPersist();
 export const authedUser = atom<User>({
   key: 'USER',
   default: {
-    _id: '',
-    email: '',
-    name: '',
-    profileImageId: '',
-    accessToken: '',
     isAlreadyUser: false,
+    name: '',
+    email: '',
   },
   effects_UNSTABLE: [persistAtom],
 });
@@ -20,12 +17,9 @@ export const authedUser = atom<User>({
 export const creatingUser = atom<User>({
   key: 'creatingUser',
   default: {
-    _id: '',
-    email: '',
-    name: '',
-    profileImageId: '',
-    accessToken: '',
     isAlreadyUser: false,
+    name: '',
+    email: '',
   },
 });
 
