@@ -9,7 +9,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { authedUser, creatingUser, from, kakaoAccessToken } from '../utils/recoil/atom/atom';
+import { authedUser, creatingUser, from, kakao } from '../utils/recoil/atom/atom';
 import Link from 'next/link';
 
 declare global {
@@ -26,7 +26,7 @@ function Login() {
   const setCreatingUser = useSetRecoilState(creatingUser);
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
   const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
-  const setKakaoAccessToken = useSetRecoilState(kakaoAccessToken);
+  const setKakaoInfo = useSetRecoilState(kakao);
 
   useEffect(() => {
     if (router.isReady) {
@@ -43,7 +43,11 @@ function Login() {
               },
             },
           );
-          setKakaoAccessToken({ accessToken: data.access_token });
+
+          /** 카카오 액세스 토큰, 유저 닉네임 저장 */
+          setKakaoInfo({
+            accessToken: data.access_token,
+          });
           kakaoLogin(
             {
               accessToken: data.access_token,
