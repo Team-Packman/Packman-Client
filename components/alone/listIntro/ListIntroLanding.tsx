@@ -57,7 +57,7 @@ function ListIntroLanding() {
 
   if (!aloneFolderData || !togetherFolderData) return null;
 
-  const { aloneFolders } = aloneFolderData.data;
+  const { aloneFolder } = aloneFolderData.data;
   const { togetherFolder } = togetherFolderData.data;
 
   const getTodayDate = () => {
@@ -178,13 +178,13 @@ function ListIntroLanding() {
         </div>
         <StyledTagContainer>
           {isAloned
-            ? aloneFolders?.map((v, index) => (
+            ? aloneFolder?.map((v, index) => (
                 <StyledTag
-                  key={v._id}
+                  key={v.id}
                   isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v._id, index)}
+                  onClick={() => handleTagClick(v.id, index)}
                 >
-                  {v.title}
+                  {v.name}
                 </StyledTag>
               ))
             : togetherFolder.map((v, index) => (
