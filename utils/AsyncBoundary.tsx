@@ -56,8 +56,8 @@ export function AsyncBoundary({ children, loadingFallback }: AsyncBoundaryProps)
       <Suspense
         fallback={
           loadingFallback ?? (
-            <Layout>
-              <Lottie animationData={lottie} />
+            <Layout hasHeader={false}>
+              <Lottie animationData={lottie} style={{ height: '100%' }} />
             </Layout>
           )
         }

@@ -12,13 +12,14 @@ interface LayoutProps {
   title?: string;
   icon?: Icon;
   option?: ReactNode;
+  hasHeader?: boolean;
 }
 
 function Layout(props: LayoutProps) {
-  const { children, back, title, icon, option, padding } = props;
+  const { children, back, title, icon, option, padding, hasHeader } = props;
   return (
     <StyledRoot>
-      <Header back={back} title={title} icon={icon} />
+      {hasHeader && <Header back={back} title={title} icon={icon} />}
       {option}
       <StyledMain hasOption={option !== undefined} padding={padding ? true : false}>
         {children}
