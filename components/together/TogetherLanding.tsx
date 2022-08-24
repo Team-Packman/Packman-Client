@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import ModalForInvitation from '../common/ModalForInvitation';
 import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRecoilValue } from 'recoil';
-import { authedUser } from '../../utils/recoil/atom/atom';
+import { authUserAtom } from '../../utils/recoil/atom/atom';
 import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 
 interface FocusInfo {
@@ -45,7 +45,7 @@ function TogetherLanding() {
   const client = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
-  const user = useRecoilValue(authedUser);
+  const user = useRecoilValue(authUserAtom);
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);

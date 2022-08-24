@@ -125,7 +125,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       },
       {
         onSuccess: ({ data }) => {
-          setUser((prev) => ({ ...prev, data }));
+          setUser((prev) => ({ ...prev, ...data }));
           router.push('/folder');
         },
       },

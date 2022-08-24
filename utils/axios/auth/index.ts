@@ -17,3 +17,8 @@ export const fetchKakaoLogin = async (
   const { data } = await request.post(`/auth/kakao`, payload);
   return data;
 };
+
+export const fetchRefresh = async (request: AxiosInstance) => {
+  const { data } = await request(`/auth/token`);
+  return data;
+};
