@@ -98,6 +98,7 @@ function FolderLanding() {
 
   const handleModalDeleteButtonClick = (id: string) => {
     setShowBottomModal(false);
+    setNewFolderData({ title: '', isAloned: false });
     deletFolderMutate(id, {
       onSuccess: () => {
         queryClient.setQueryData('folderListKey', (oldData: any) => {
