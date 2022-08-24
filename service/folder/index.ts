@@ -93,11 +93,11 @@ export interface GetRecentPackingListOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 최근 생성한 패킹리스트 id
+    id: string; // 최근 생성한 패킹리스트 id
     title: string; // 최근 생성한 패킹리스트 제목
-    remainDay: number; // 최근 생성한 패킹리스트 남은 날짜
-    packTotalNum: number; // 최근 생성한 패킹리스트의 총 짐의 수
-    packRemainNum: number; // 최근 생성한 패킹리스트의 체크안된 짐의 수
+    remainDay: string; // 최근 생성한 패킹리스트 남은 날짜
+    packTotalNum: string; // 최근 생성한 패킹리스트의 총 짐의 수
+    packRemainNum: string; // 최근 생성한 패킹리스트의 체크안된 짐의 수
     url: string; // 혼자/함께 패킹리스트 여부
   };
 }

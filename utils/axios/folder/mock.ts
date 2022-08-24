@@ -187,11 +187,11 @@ export const fetchRecentPackingList = async (
         success: true,
         message: '폴더 속 함께 패킹리스트 조회 성공',
         data: {
-          _id: '62bbb80d9d5dc1aa4c3d2839',
+          id: '62bbb80d9d5dc1aa4c3d2839',
           title: '혼자 밀라노 여행',
-          remainDay: 10,
-          packTotalNum: 20,
-          packRemainNum: 3,
+          remainDay: '10',
+          packTotalNum: '20',
+          packRemainNum: '3',
           url: '/packing-list/alone/62bbb80d9d5dc1aa4c3d2839',
         },
       });

@@ -48,7 +48,7 @@ function FolderLanding() {
     onSuccess: (data) => {
       if (data.data) {
         const { remainDay } = data.data;
-        setIsOutDated(remainDay < 0);
+        setIsOutDated(Number(remainDay) < 0);
       }
     },
   });
@@ -70,7 +70,8 @@ function FolderLanding() {
   useEffect(() => {
     const updateOutdated = () => {
       if (recentPackingData) {
-        setIsOutDated(recentPackingData?.data.remainDay < 0);
+        const remainDay = Number(recentPackingData?.data.remainDay);
+        setIsOutDated(remainDay < 0);
         setIsRecentListExist(true);
       }
     };
@@ -240,7 +241,7 @@ function FolderLanding() {
                 {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
               </StyledRemainDay>
               <StyledLeftMessage>
-                {!isOutDated && recentPackingData?.data?.packRemainNum !== 0 ? (
+                {!isOutDated && recentPackingData?.data?.packRemainNum !== '0' ? (
                   <span>
                     <em> {'패킹'}</em>이 완료되었어요!
                   </span>
