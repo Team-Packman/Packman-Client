@@ -363,6 +363,7 @@ export interface AddTogetherPackingListIntroOutput {
   success: boolean;
   message: string;
   data: {
+    id: string; // 패킹리스트 id
     title: string; // 패킹리스트 제목
     departureDate: string; // 출발 날짜
     togetherPackingList: {
