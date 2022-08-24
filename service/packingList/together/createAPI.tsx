@@ -61,7 +61,7 @@ export interface TogetherAPI {
       payload: UpdatePackingListPackerInput,
     ) => Promise<UpdatePackingListPackerOutput>;
     getGroupMembers: (groupId: string) => Promise<GetGroupMembersOutput>;
-    getPackingListDeatil: (
+    getPackingListDetail: (
       pacingListId: string,
       inviteCode?: string,
     ) => Promise<GetTogetherPackingListDetailOutput>;
@@ -84,7 +84,7 @@ export interface TogetherAPI {
       payload: DeleteTogetherPackingListItemInput,
     ) => Promise<DeleteTogetherPackingListItemOutput>;
     getTogetherFolder: () => Promise<GetTogetherFolderOutput>;
-    addTogetherPakingListFolder: (
+    addTogetherPackingListFolder: (
       payload: AddTogetherPackingListIntroInput,
     ) => Promise<AddTogetherPackingListIntroOutput>;
     getInvited: (inviteCode: string) => Promise<GetInvitedOutput>;
@@ -105,8 +105,7 @@ const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
       updatePackingListPacker: (payload: UpdatePackingListPackerInput) =>
         fetchUpdatePackingListPacker(authReq, payload),
       getGroupMembers: (groupId: string) => fetchGroupMember(authReq, groupId),
-      getPackingListDeatil: (pacingListId: string, inviteCode?: string) =>
-        fetchPackingListDetail(authReq, pacingListId, inviteCode),
+      getPackingListDetail: (pacingListId: string) => fetchPackingListDetail(authReq, pacingListId),
       addPackingListCategory: (payload: AddTogetherPackingListCategoryInput) =>
         fetchAddPackingListCategory(authReq, payload),
       updatePackingListCategory: (payload: UpdateTogetherPackingListCategoryInput) =>
@@ -120,7 +119,7 @@ const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
       deletePackingListItem: (payload: DeleteTogetherPackingListItemInput) =>
         fetchDeletePackingListItem(authReq, payload),
       getTogetherFolder: () => fetchTogetherFolder(authReq),
-      addTogetherPakingListFolder: (payload: AddTogetherPackingListIntroInput) =>
+      addTogetherPackingListFolder: (payload: AddTogetherPackingListIntroInput) =>
         fetchAddTogetherPackingFolder(authReq, payload),
       getInvited: (inviteCode: string) => fetchInvited(authReq, inviteCode),
     },

@@ -90,8 +90,8 @@ export interface AddAlonePackingListCategoryOutput {
 }
 
 export interface UpdateAlonePackingListCategoryInput {
-  _id: string; // 혼자 패킹리스트 카테고리 id
-  name: string; // 혼자 패킹리스트 카테고리 이름
+  id: string; // 혼자 패킹리스트 카테고리 id
+  nickname: string; // 혼자 패킹리스트 카테고리 이름
   listId: string; // 혼자 패킹리스크 id
 }
 
@@ -100,13 +100,13 @@ export interface UpdateAlonePackingListCategoryOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 패킹리스트 id
+    id: string; // 패킹리스트 id
     category: {
-      _id: string; // 패킹리스트 카테고리 id
+      id: string; // 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 패킹리스트 카테고리 속 짐 id
-        name: string;
+        id: string; // 패킹리스트 카테고리 속 짐 id
+        nickname: string;
         isChecked: boolean;
         packer: null;
       }[];
@@ -164,7 +164,7 @@ export interface AddAlonePackingListItemOutput {
 }
 
 export interface UpdateAlonePackingListItemInput {
-  _id: string; // 혼자 패킹리스트 짐 idㅍ
+  id: string; // 혼자 패킹리스트 짐 idㅍ
   name: string; // 혼자 패킹리스트 짐
   isChecked: boolean; // 혼자 패킹리스트 짐 체크 여부
   listId: string; // 혼자 패킹리스트 id

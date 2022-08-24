@@ -12,9 +12,9 @@ export interface PackerInfoPayload {
 
 interface PackerModalProps {
   members: {
-    _id: string;
-    name: string;
-    profileImageId: string;
+    id: string;
+    nickname: string;
+    profileImage: string;
   }[];
   packId: string;
   listId: string;
@@ -27,10 +27,11 @@ function PackerModal(props: PackerModalProps) {
 
   const TICK = 30;
   const ITERATOR = Array(TICK).fill('').entries();
-  const ID_LIST = members.map(({ _id }) => _id);
+  const ID_LIST = members.map(({ id }) => id);
   const drawId = () => Math.floor(Math.random() * members.length);
   const [selected, setSelected] = useState('');
 
+  /** @todo 랜덤 배정 로직 수정 */
   const draw = () => {
     const randomId = ID_LIST[drawId()];
     setSelected(randomId);
@@ -61,12 +62,12 @@ function PackerModal(props: PackerModalProps) {
         <StyledTitle>챙길 사람을 선택해주세요</StyledTitle>
         <StyledRandomButton onClick={StartDraw}>랜덤 배정</StyledRandomButton>
         <StyledPackerWrapper>
-          {members.map(({ _id, name, profileImageId }, i) => (
-            <StyledPacker key={_id} onClick={() => setSelected(_id)}>
-              <StyledPackerImg selected={selected === _id}>
-                <Image src={ProfileList[+profileImageId]} alt="profile" layout="fill" />
+          {members.map(({ id, nickname, profileImage }, i) => (
+            <StyledPacker key={id} onClick={() => setSelected(id)}>
+              <StyledPackerImg selected={selected === id}>
+                <Image src={ProfileList[+profileImage]} alt="profile" layout="fill" />
               </StyledPackerImg>
-              <StyledPackerName>{name}</StyledPackerName>
+              <StyledPackerName>{nickname}</StyledPackerName>
             </StyledPacker>
           ))}
         </StyledPackerWrapper>
