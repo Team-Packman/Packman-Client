@@ -44,7 +44,7 @@ function FolderList(props: FolderListProps) {
   }, [list.length]);
 
   useEffect(() => {
-    if (addNewFolder) {
+    if (addNewFolder && showInitialPage) {
       setShowIntitialPage(false);
     }
   }, [addNewFolder]);
