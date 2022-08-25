@@ -87,7 +87,7 @@ function AlonePackingListLanding() {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
       deleteAloneInventoryMutate({
-        folderId: currentFolder._id,
+        folderId: currentFolder.id,
         listId: deleteList.join(','),
       });
       if (deleteList.length === alonePackingList.length) {
@@ -96,8 +96,8 @@ function AlonePackingListLanding() {
       setDeleteList([]);
     } else {
       deleteAloneInventoryMutate({
-        folderId: currentFolder._id,
-        listId: alonePackingList[selectedIndex]._id,
+        folderId: currentFolder.id,
+        listId: alonePackingList[selectedIndex].id,
       });
     }
     closeModal();
@@ -145,7 +145,7 @@ function AlonePackingListLanding() {
         )}
 
         <StyledFolderInfo>
-          <h1>{currentFolder.title}</h1>
+          <h1>{currentFolder.name}</h1>
           <div>
             <StyledToggleImage
               src={iShowMore}
@@ -157,7 +157,7 @@ function AlonePackingListLanding() {
               <DropBox
                 folderList={folder}
                 closeDropBox={() => setToggle(false)}
-                currentId={currentFolder._id}
+                currentId={currentFolder.id}
                 categoryName="alone"
               />
             )}
@@ -207,7 +207,7 @@ function AlonePackingListLanding() {
                 setDeleteList={(arr) => setDeleteList(arr)}
                 swipeableListItem={alonePackingList?.map((item, idx) => (
                   <SwipeablelistItem
-                    key={item._id}
+                    key={item.id}
                     idx={idx}
                     isDragged={isDragged[idx]}
                     handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
@@ -219,7 +219,7 @@ function AlonePackingListLanding() {
                       openModal();
                     }}
                     packingList={alonePackingList}
-                    moveToPackingList={() => moveToPackingList(item._id)}
+                    moveToPackingList={() => moveToPackingList(item.id)}
                   />
                 ))}
               />

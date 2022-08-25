@@ -88,7 +88,7 @@ function TogetherPackingListLanding() {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
       deleteTogetherInventoryMutate({
-        folderId: currentFolder._id,
+        folderId: currentFolder.id,
         listId: deleteList.join(','),
       });
       if (deleteList.length === togetherPackingList.length) {
@@ -97,8 +97,8 @@ function TogetherPackingListLanding() {
       setDeleteList([]);
     } else {
       deleteTogetherInventoryMutate({
-        folderId: currentFolder._id,
-        listId: togetherPackingList[selectedIndex]._id,
+        folderId: currentFolder.id,
+        listId: togetherPackingList[selectedIndex].id,
       });
     }
     closeModal();
@@ -146,7 +146,7 @@ function TogetherPackingListLanding() {
         )}
 
         <StyledFolderInfo>
-          <h1>{currentFolder.title}</h1>
+          <h1>{currentFolder.name}</h1>
           <div>
             <StyledToggleImage
               src={iShowMore}
@@ -160,7 +160,7 @@ function TogetherPackingListLanding() {
               <DropBox
                 folderList={folder}
                 closeDropBox={() => setToggle(false)}
-                currentId={currentFolder._id}
+                currentId={currentFolder.id}
                 categoryName="together"
               />
             )}
@@ -219,7 +219,7 @@ function TogetherPackingListLanding() {
               setDeleteList={(arr) => setDeleteList(arr)}
               swipeableListItem={togetherPackingList?.map((item, idx) => (
                 <SwipeablelistItem
-                  key={item._id}
+                  key={item.id}
                   idx={idx}
                   isDragged={isDragged[idx]}
                   handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
@@ -231,7 +231,7 @@ function TogetherPackingListLanding() {
                     openModal();
                   }}
                   packingList={togetherPackingList}
-                  moveToPackingList={() => moveToPackingList(item._id)}
+                  moveToPackingList={() => moveToPackingList(item.id)}
                 />
               ))}
             />
@@ -242,7 +242,7 @@ function TogetherPackingListLanding() {
           <FloatActionButton
             onClick={handleFloatClick}
             pageName="packingList"
-            isAloned={'together'}
+            isAloned="together"
           />
         )}
       </StyledRoot>

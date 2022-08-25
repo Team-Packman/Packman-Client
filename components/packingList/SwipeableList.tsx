@@ -1,13 +1,12 @@
 import styled from 'styled-components';
-import SwipeablelistItem from './SwipeableListItem';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 interface PackingList {
-  _id: string;
+  id: string;
   departureDate: string;
   title: string;
-  packTotalNum: number;
-  packRemainNum: number;
+  packTotalNum: string;
+  packRemainNum: string;
 }
 
 interface SwipeableListProps {
@@ -25,7 +24,7 @@ export default function SwipeableList(props: SwipeableListProps) {
 
   const onClickDeleteButton = () => {
     if (packingList) {
-      const payload = packingList.map(({ _id }) => _id);
+      const payload = packingList.map(({ id }) => id);
       setDeleteList(payload);
     }
   };
