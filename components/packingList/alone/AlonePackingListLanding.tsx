@@ -15,6 +15,7 @@ import FloatActionButton from '../../folder/FloatActionButton';
 import { DeleteAloneInventoryInput } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
+import { useGetAloneInventory } from '../../../utils/hooks/queries/inventory/inventory';
 
 interface DeleteAloneInventoryData {
   folderId: string;
@@ -31,10 +32,8 @@ function AlonePackingListLanding() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const query = router.query.id as string;
 
-  const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-  const { data } = useQuery(['getAloneInventory', query], () => getAloneInventory(query), {
-    enabled: !!query,
-  });
+  // 혼자 패킹리스트 데이터 조회
+  const aloneInventory = useGetAloneInventory(query);
 
   const deleteAloneInventory = useAPI(
     (api) => (params: DeleteAloneInventoryInput) =>
@@ -51,12 +50,12 @@ function AlonePackingListLanding() {
     },
   );
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data?.data.alonePackingList.length).fill(false),
+    Array(aloneInventory?.data.alonePackingList.length).fill(false),
   );
 
-  if (!data) return null;
+  if (!aloneInventory) return null;
 
-  const { alonePackingList, folder, currentFolder } = data.data;
+  const { alonePackingList, folder, currentFolder } = aloneInventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);

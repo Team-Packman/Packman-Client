@@ -14,7 +14,7 @@ function withAuth(axiosWithAuth: AxiosInstance) {
   const requestIntercept = axiosWithAuth.interceptors.request.use(
     (config: AxiosRequestConfig) => {
       if (config.headers && !config.headers['Authorization']) {
-        // config.headers['Authorization'] = `${accessToken}`;
+        config.headers['Authorization'] = `${accessToken}`;
         return config;
       }
 

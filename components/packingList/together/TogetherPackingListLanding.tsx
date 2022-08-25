@@ -15,6 +15,7 @@ import FloatActionButton from '../../folder/FloatActionButton';
 import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
+import { useGetTogetherInventory } from '../../../utils/hooks/queries/inventory/inventory';
 interface DeleteTogetherInventoryData {
   folderId: string;
   listId: string;
@@ -30,11 +31,8 @@ function TogetherPackingListLanding() {
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  //패킹리스트 데이터 조회
-  const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  const { data } = useQuery(['getTogetherInventory', query], () => getTogetherInventory(query), {
-    enabled: !!query,
-  });
+  // 함께 패킹리스트 데이터 조회
+  const togetherInventory = useGetTogetherInventory(query);
 
   const deleteTogetherInventory = useAPI(
     (api) => (params: DeleteTogetherInventoryInput) =>
@@ -52,12 +50,12 @@ function TogetherPackingListLanding() {
   );
 
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data?.data.togetherPackingList.length).fill(false),
+    Array(togetherInventory?.data.togetherPackingList.length).fill(false),
   );
 
-  if (!data) return null;
+  if (!togetherInventory) return null;
 
-  const { togetherPackingList, folder, currentFolder } = data.data;
+  const { togetherPackingList, folder, currentFolder } = togetherInventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
