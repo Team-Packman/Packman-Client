@@ -227,11 +227,7 @@ function AlonePackingListLanding() {
         {isDeleting && (
           <StyledButtonWrapper>
             <StyledDeleteButton>
-              <div
-                onClick={
-                  deleteList.length === alonePackingList.length ? openModal : onClickDeleteButton
-                }
-              >
+              <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
                 {!deleteList.length
                   ? ' 전체 선택'
                   : deleteList.length === alonePackingList.length
