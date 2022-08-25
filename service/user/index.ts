@@ -3,10 +3,10 @@ export interface GetUserInfoOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 로그인된 유저 아이디
-    name: string; // 로그인된 유저 닉네임
+    id: string; // 로그인된 유저 아이디
+    nickname: string; // 로그인된 유저 닉네임
     email: string; // 로그인된 유저 이메일
-    profileImageId: string; // 로그인된 유저의 이미지 id
+    profileImage: string; // 로그인된 유저의 이미지 id
   };
 }
 
@@ -21,7 +21,7 @@ export interface DeleteUserInfoOutput {
 
 export interface UpdateUserProfileInput {
   name: string;
-  profileImageId: string;
+  profileImage: string;
 }
 
 export interface UpdateUserProfileOutput {
@@ -29,10 +29,10 @@ export interface UpdateUserProfileOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 수정된 유저의 id
-    name: string; // 수정된 유저의 닉네임
+    id: string; // 수정된 유저의 id
+    nickname: string; // 수정된 유저의 닉네임
     email: string; // 수정된 유저의 이메일
-    profileImageId: string; // 수정된 유저의 프로필 이미지id
+    profileImage: string; // 수정된 유저의 프로필 이미지id
   };
 }
 
