@@ -17,7 +17,7 @@ export const useRefresh = (tokens: RefreshInput) => {
       const { data } = await client.fetchQuery<RefreshOutput>('refresh', () =>
         fetchRefresh(tokens),
       );
-      setUser((prev) => ({ ...prev, ...tokens }));
+      setUser((prev) => ({ ...prev, ...data }));
 
       return data;
     } catch (error) {
