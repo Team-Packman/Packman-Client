@@ -5,7 +5,7 @@ import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authedUser, from } from '../../utils/recoil/atom/atom';
+import { authUserAtom, from } from '../../utils/recoil/atom/atom';
 
 interface ModalForInvitedProps {
   title: string;
@@ -15,7 +15,7 @@ interface ModalForInvitedProps {
 function ModalForInvited(props: ModalForInvitedProps) {
   const { id, title } = props;
   const router = useRouter();
-  const user = useRecoilValue(authedUser);
+  const user = useRecoilValue(authUserAtom);
   const setFrom = useSetRecoilState(from);
 
   const clickHandler = () => {

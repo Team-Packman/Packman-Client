@@ -7,7 +7,7 @@ import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useResetRecoilState } from 'recoil';
-import { authedUser, kakao } from '../../utils/recoil/atom/atom';
+import { authUserAtom, kakao } from '../../utils/recoil/atom/atom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
@@ -41,7 +41,7 @@ function SettingProfile(props: SettingProfileProps) {
     setShowModal(false);
   };
 
-  const resetUserState = useResetRecoilState(authedUser); //유저 전역변수 초기화
+  const resetUserState = useResetRecoilState(authUserAtom); //유저 전역변수 초기화
 
   //로그아웃
   const onClickLogout = () => {
