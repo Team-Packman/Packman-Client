@@ -20,7 +20,7 @@ export interface DeleteUserInfoOutput {
 }
 
 export interface UpdateUserProfileInput {
-  name: string;
+  nickname: string;
   profileImage: string;
 }
 

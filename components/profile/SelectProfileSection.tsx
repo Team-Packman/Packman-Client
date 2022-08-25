@@ -18,8 +18,8 @@ interface AddUserProfileData {
 }
 
 interface UpdateUserProfileData {
-  name: string;
-  profileImageId: string;
+  nickname: string;
+  profileImage: string;
 }
 
 interface SelectProfileSectionProps {
@@ -107,8 +107,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const editUserProfile = () => {
     if (finishEditing) {
       updateUserProfileMutate({
-        name: nickname,
-        profileImageId: profile,
+        nickname,
+        profileImage: profile,
       });
       finishEditing();
     }
