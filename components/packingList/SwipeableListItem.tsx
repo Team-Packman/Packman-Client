@@ -184,7 +184,7 @@ const StyledItemInfo = styled.div`
 
   & > p:first-child {
     ${FONT_STYLES.BODY1_REGULAR};
-    color: ${packmanColors.pmBlueGrey};
+    color: ${packmanColors.pmDeepGrey};
   }
   & > p:nth-child(2) {
     ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
