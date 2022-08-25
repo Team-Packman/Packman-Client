@@ -4,23 +4,22 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authedUser, creatingUser, kakao } from '../../utils/recoil/atom/atom';
-import axios from 'axios';
+import { authUserAtom, creatingUserAtom } from '../../utils/recoil/atom/atom';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
-  name: string; //회원가입한 유저의 카카오 프로필 네임
+  name: string;
   nickname: string; // 회원가입한 유저의 닉네임
   profileImage: string; // 회원가입한 유저의 프로필 이미지
 }
 
 interface UpdateUserProfileData {
-  name: string;
-  profileImageId: string;
+  nickname: string;
+  profileImage: string;
 }
 
 interface SelectProfileSectionProps {
@@ -28,14 +27,6 @@ interface SelectProfileSectionProps {
   oldNickname?: string;
   oldProfileImageId?: string;
   finishEditing?: () => void;
-}
-
-interface KakaoProfileInfo {
-  kakao_account: {
-    profile: {
-      nickname: string;
-    };
-  };
 }
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
@@ -46,9 +37,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState(oldNickname ? oldNickname : '');
   const [profile, setProfile] = useState(oldProfileImageId ? oldProfileImageId : '0');
   const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
-  const setUser = useSetRecoilState(authedUser);
-  const user = useRecoilValue(creatingUser);
-  const { accessToken } = useRecoilValue(kakao);
+  const creatingUser = useRecoilValue(creatingUserAtom);
+  const setUser = useSetRecoilState(authUserAtom);
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -117,41 +107,25 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const editUserProfile = () => {
     if (finishEditing) {
       updateUserProfileMutate({
-        name: nickname,
-        profileImageId: profile,
+        nickname,
+        profileImage: profile,
       });
       finishEditing();
     }
   };
 
-  // 카카오톡 사용자 프로필 닉네임 조회
-  const getKakaoProfileInfo = async () => {
-    const { data }: { data: KakaoProfileInfo } = await axios.post(
-      `https://kapi.kakao.com/v2/user/me`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    );
-    return data;
-  };
-
   // 회원가입
   const createUserAccount = async () => {
-    const data = await getKakaoProfileInfo();
-
     addUserProfileMutate(
       {
-        email: user.email,
-        name: data.kakao_account.profile.nickname,
+        email: creatingUser.email,
         nickname,
+        name: creatingUser.name,
         profileImage: profile,
       },
       {
         onSuccess: ({ data }) => {
-          setUser(data);
+          setUser((prev) => ({ ...prev, ...data }));
           router.push('/folder');
         },
       },

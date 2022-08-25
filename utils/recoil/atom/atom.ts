@@ -1,31 +1,30 @@
-import { User, From, Kakao } from './';
+import { AuthUser, CreatingUser, From, Kakao } from './';
 import { recoilPersist } from 'recoil-persist';
 import { atom } from 'recoil';
 
 const { persistAtom } = recoilPersist();
 
-export const authedUser = atom<User>({
+export const authUserAtom = atom<AuthUser>({
   key: 'USER',
   default: {
-    _id: '',
-    email: '',
-    name: '',
-    profileImageId: '',
-    accessToken: '',
     isAlreadyUser: false,
+    id: '',
+    name: '',
+    nickname: '',
+    email: '',
+    profileImage: '',
+    accessToken: '',
+    refreshToken: '',
   },
   effects_UNSTABLE: [persistAtom],
 });
 
-export const creatingUser = atom<User>({
+export const creatingUserAtom = atom<CreatingUser>({
   key: 'creatingUser',
   default: {
-    _id: '',
-    email: '',
-    name: '',
-    profileImageId: '',
-    accessToken: '',
     isAlreadyUser: false,
+    name: '',
+    email: '',
   },
 });
 

@@ -3,10 +3,10 @@ export interface GetUserInfoOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 로그인된 유저 아이디
-    name: string; // 로그인된 유저 닉네임
+    id: string; // 로그인된 유저 아이디
+    nickname: string; // 로그인된 유저 닉네임
     email: string; // 로그인된 유저 이메일
-    profileImageId: string; // 로그인된 유저의 이미지 id
+    profileImage: string; // 로그인된 유저의 이미지 id
   };
 }
 
@@ -20,8 +20,8 @@ export interface DeleteUserInfoOutput {
 }
 
 export interface UpdateUserProfileInput {
-  name: string;
-  profileImageId: string;
+  nickname: string;
+  profileImage: string;
 }
 
 export interface UpdateUserProfileOutput {
@@ -29,10 +29,10 @@ export interface UpdateUserProfileOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 수정된 유저의 id
-    name: string; // 수정된 유저의 닉네임
+    id: string; // 수정된 유저의 id
+    nickname: string; // 수정된 유저의 닉네임
     email: string; // 수정된 유저의 이메일
-    profileImageId: string; // 수정된 유저의 프로필 이미지id
+    profileImage: string; // 수정된 유저의 프로필 이미지id
   };
 }
 
@@ -47,8 +47,8 @@ export interface AddUserProfileOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 생성된 유저 id
-    name: string; // 생성된 유저 닉네임
+    id: string; // 생성된 유저 id
+    nickname: string; // 생성된 유저 닉네임
     email: string; // 생성된 유저 email
     profileImageId: string; // 생성된 유저 이미지 id
     accessToken: string; // 팩맨에서 사용하는 accessToken

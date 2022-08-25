@@ -13,10 +13,10 @@ export const fetchUserInfo = async (request: AxiosInstance): Promise<GetUserInfo
         success: true,
         message: '유저 조회 성공',
         data: {
-          _id: 'aksdflwekf',
-          name: '팩맨이',
+          id: 'aksdflwekf',
+          nickname: '팩맨이',
           email: 'una14@gmail.com',
-          profileImageId: '3',
+          profileImage: '3',
         },
       });
     }, 500),
@@ -51,10 +51,10 @@ export const fetchUpdateUserProfile = async (
         success: true,
         message: '유저 생성 성공',
         data: {
-          _id: 'sdfskdjfhdjhfk',
-          name: '김팩맨',
+          id: 'sdfskdjfhdjhfk',
+          nickname: '김팩맨',
           email: 'slkdfj@gmail.com',
-          profileImageId: '1',
+          profileImage: '1',
         },
       });
     }, 500),

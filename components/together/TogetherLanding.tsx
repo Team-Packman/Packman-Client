@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import ModalForInvitation from '../common/ModalForInvitation';
 import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRecoilValue } from 'recoil';
-import { authedUser } from '../../utils/recoil/atom/atom';
+import { authUserAtom } from '../../utils/recoil/atom/atom';
 import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 
 interface FocusInfo {
@@ -44,8 +44,8 @@ type RemainingInfoType = 'title' | 'departure' | 'save';
 function TogetherLanding() {
   const client = useQueryClient();
   const router = useRouter();
-  const { id, invite } = router.query;
-  const user = useRecoilValue(authedUser);
+  const { id } = router.query;
+  const user = useRecoilValue(authUserAtom);
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -61,7 +61,7 @@ function TogetherLanding() {
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
 
   /////////////////// api /////////////////////
-  const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDeatil);
+  const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDetail);
   const addPackingListCategory = useAPI((api) => api.packingList.together.addPackingListCategory);
   const addAlonePackingListCategory = useAPI(
     (api) => api.packingList.alone.addAlonePackingListCategory,
@@ -155,7 +155,7 @@ function TogetherLanding() {
   const modeHandler = (idx: number) => setActiveMode(idx);
   const creatingItemHandler = (categoryId: string) => setCurrentCreating(categoryId);
   const createdItemHandler = () => setCurrentCreating('');
-  const creatingCategoryHandler = () => setCurrentCreatingCategory(packingRole[activeMode]._id);
+  const creatingCategoryHandler = () => setCurrentCreatingCategory(packingRole[activeMode].id);
   const createdCategoryHandler = () => setCurrentCreatingCategory('');
   const bottomModalOpenHandler = (payload: FocusInfo) => {
     if (!currentEditing) {
@@ -186,8 +186,8 @@ function TogetherLanding() {
       if (!activeMode) {
         patchCategory(
           {
-            _id: categoryId,
-            name,
+            id: categoryId,
+            nickname: name,
             listId,
           },
           {
@@ -199,8 +199,8 @@ function TogetherLanding() {
       } else {
         patchAloneCategory(
           {
-            _id: categoryId,
-            name,
+            id: categoryId,
+            nickname: name,
             listId,
           },
           {
@@ -251,7 +251,7 @@ function TogetherLanding() {
             name,
             listId,
             isChecked,
-            _id: packId,
+            id: packId,
             categoryId,
           },
           {
@@ -266,7 +266,7 @@ function TogetherLanding() {
             name,
             listId,
             isChecked,
-            _id: packId,
+            id: packId,
             categoryId,
           },
           {
@@ -313,7 +313,7 @@ function TogetherLanding() {
             name,
             listId,
             isChecked,
-            _id: packId,
+            id: packId,
             categoryId,
           },
           {
@@ -328,7 +328,7 @@ function TogetherLanding() {
             name,
             listId,
             isChecked,
-            _id: packId,
+            id: packId,
             categoryId,
           },
           {
@@ -357,7 +357,7 @@ function TogetherLanding() {
       case 'title':
         patchTitle(
           {
-            _id: listId,
+            id: listId,
             title,
             isAloned,
           },
@@ -371,7 +371,7 @@ function TogetherLanding() {
       case 'departure':
         patchDate(
           {
-            _id: listId,
+            id: listId,
             departureDate,
             isAloned,
           },
@@ -385,7 +385,7 @@ function TogetherLanding() {
       case 'save':
         patchIsSaved(
           {
-            _id: listId,
+            id: listId,
             isSaved,
             isAloned,
           },
@@ -417,7 +417,7 @@ function TogetherLanding() {
         if (!activeMode) {
           deleteCategory(
             {
-              listId: packingRole[activeMode]._id,
+              listId: packingRole[activeMode].id,
               categoryId: currentFocus.categoryId,
             },
             {
@@ -429,7 +429,7 @@ function TogetherLanding() {
         } else {
           deleteAloneCategory(
             {
-              listId: packingRole[activeMode]._id,
+              listId: packingRole[activeMode].id,
               categoryId: currentFocus.categoryId,
             },
             {
@@ -446,7 +446,7 @@ function TogetherLanding() {
         if (!activeMode) {
           deleteItem(
             {
-              listId: packingRole[activeMode]._id,
+              listId: packingRole[activeMode].id,
               categoryId: currentFocus.categoryId,
               packId: currentFocus.packId,
             },
@@ -459,7 +459,7 @@ function TogetherLanding() {
         } else {
           deleteAloneItem(
             {
-              listId: packingRole[activeMode]._id,
+              listId: packingRole[activeMode].id,
               categoryId: currentFocus.categoryId,
               packId: currentFocus.packId,
             },
@@ -492,7 +492,7 @@ function TogetherLanding() {
       option={
         <CheckListHeader
           together
-          listId={info.togetherPackingList._id}
+          listId={info.togetherPackingList.id}
           departureDate={info.departureDate}
           title={info.title}
           activeMode={activeMode}
@@ -516,17 +516,17 @@ function TogetherLanding() {
           />
           {packingRole.map((list, i) => {
             return (
-              <SwiperSlide key={list._id} virtualIndex={i}>
+              <SwiperSlide key={list.id} virtualIndex={i}>
                 <StyledBody onScroll={ScrollEvent}>
-                  {list.category.map(({ _id: categoryId, name, pack }) => (
+                  {list.category.map(({ id: categoryId, name, pack }) => (
                     <PackagesWithCategory
                       key={categoryId}
                       packages={
                         <>
-                          {pack.map(({ _id: packId, name, isChecked, packer }) => (
+                          {pack.map(({ id: packId, name, isChecked, packer }) => (
                             <PackingItem
                               key={packId}
-                              listId={list._id}
+                              listId={list.id}
                               categoryId={categoryId}
                               packId={packId}
                               name={name}
@@ -557,7 +557,7 @@ function TogetherLanding() {
                       createHandler={() => creatingItemHandler(categoryId)}
                       creating={
                         <PackingItem
-                          listId={list._id}
+                          listId={list.id}
                           categoryId={categoryId}
                           packId={'creating'}
                           name={''}
@@ -570,7 +570,7 @@ function TogetherLanding() {
                     >
                       <PackingCategory
                         categoryId={categoryId}
-                        listId={list._id}
+                        listId={list.id}
                         name={name}
                         updateCategory={updateCategory}
                         modalHandler={() =>
@@ -585,11 +585,11 @@ function TogetherLanding() {
                       />
                     </PackagesWithCategory>
                   ))}
-                  {currentCreatingCategory === list._id && (
+                  {currentCreatingCategory === list.id && (
                     <PackagesWithCategory>
                       <PackingCategory
                         categoryId={'creating'}
-                        listId={list._id}
+                        listId={list.id}
                         name={''}
                         updateCategory={updateCategory}
                         isEditing={true}
@@ -604,7 +604,7 @@ function TogetherLanding() {
         <FunctionSection>
           <AddTemplateButton
             onClick={() =>
-              updateRemainingInfo({ listId: info.togetherPackingList._id, isSaved: true }, 'save')
+              updateRemainingInfo({ listId: info.togetherPackingList.id, isSaved: true }, 'save')
             }
           >
             나만의 템플릿으로 추가
@@ -614,10 +614,10 @@ function TogetherLanding() {
 
       {packerModalOpen && (
         <PackerModal
-          members={info.group.members}
+          member={info.group.member}
           modalHandler={packerModalCloseHandler}
           packId={currentFocus.packId}
-          listId={info.togetherPackingList._id}
+          listId={info.togetherPackingList.id}
           updatePacker={updatePacker}
         />
       )}

@@ -74,20 +74,16 @@ function AlonePackingListLanding() {
   };
 
   const closeModal = () => {
+    handleIsDragged(Array(alonePackingList.length).fill(false));
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
 
-  const onClickLeftModalButton = () => {
-    handleIsDragged(Array(alonePackingList?.length).fill(false));
-    closeModal();
-  };
-
-  const onClickRightModalButton = () => {
+  const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
       deleteAloneInventoryMutate({
-        folderId: currentFolder._id,
+        folderId: currentFolder.id,
         listId: deleteList.join(','),
       });
       if (deleteList.length === alonePackingList.length) {
@@ -96,8 +92,8 @@ function AlonePackingListLanding() {
       setDeleteList([]);
     } else {
       deleteAloneInventoryMutate({
-        folderId: currentFolder._id,
-        listId: alonePackingList[selectedIndex]._id,
+        folderId: currentFolder.id,
+        listId: alonePackingList[selectedIndex].id,
       });
     }
     closeModal();
@@ -112,7 +108,7 @@ function AlonePackingListLanding() {
   };
 
   const onClickCaptionButton = () => {
-    setIsDragged(Array(alonePackingList?.length).fill(false));
+    setIsDragged(Array(alonePackingList.length).fill(false));
     setIsDeleting((prev) => !prev);
     if (!isDeleting) {
       setDeleteList([]);
@@ -122,6 +118,13 @@ function AlonePackingListLanding() {
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
       router.push(`/alone/${id}`);
+    }
+  };
+
+  const onClickDeleteButton = () => {
+    if (alonePackingList) {
+      const payload = alonePackingList.map(({ id }) => id);
+      setDeleteList(payload);
     }
   };
 
@@ -135,17 +138,17 @@ function AlonePackingListLanding() {
             closeModal={closeModal}
             button={
               <StyledModalButtonWrapper>
-                <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                <StyledModalButton left={true} onClick={closeModal}>
                   아니요
                 </StyledModalButton>
-                <StyledModalButton onClick={onClickRightModalButton}>예</StyledModalButton>
+                <StyledModalButton onClick={deleteListItem}>예</StyledModalButton>
               </StyledModalButtonWrapper>
             }
           />
         )}
 
         <StyledFolderInfo>
-          <h1>{currentFolder.title}</h1>
+          <h1>{currentFolder.name}</h1>
           <div>
             <StyledToggleImage
               src={iShowMore}
@@ -157,75 +160,83 @@ function AlonePackingListLanding() {
               <DropBox
                 folderList={folder}
                 closeDropBox={() => setToggle(false)}
-                currentId={currentFolder._id}
+                currentId={currentFolder.id}
                 categoryName="alone"
               />
             )}
           </div>
         </StyledFolderInfo>
 
-        <StyledMain isEmpty={!alonePackingList.length}>
-          {!alonePackingList.length ? (
+        {!alonePackingList.length ? (
+          <StyledMain isEmpty={!alonePackingList.length}>
             <StyledEmpty>
               <p>&apos;+&apos; 버튼을 눌러</p>
               <p>패킹 리스트를 추가해주세요</p>
             </StyledEmpty>
-          ) : (
-            <>
-              <StyledCaptionWrapper>
-                {!isDeleting && (
-                  <StyledCaptionText>
-                    <span>{alonePackingList?.length}</span>개의 패킹 리스트
-                  </StyledCaptionText>
-                )}
-                {isDeleting && (
-                  <span onClick={() => deleteList.length > 0 && setDeleteList([])}>선택 해제</span>
-                )}
+          </StyledMain>
+        ) : (
+          <>
+            <StyledCaptionWrapper>
+              {!isDeleting && (
+                <StyledCaptionText>
+                  <span>{alonePackingList?.length}</span>개의 패킹 리스트
+                </StyledCaptionText>
+              )}
+              {isDeleting && (
+                <span onClick={() => deleteList.length && setDeleteList([])}>선택 해제</span>
+              )}
 
-                <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
-                  {isDeleting ? (
-                    <p onClick={() => handleIsDragged(Array(alonePackingList?.length).fill(false))}>
-                      취소
-                    </p>
-                  ) : (
-                    <Image
-                      src={iTrash}
-                      alt="삭제"
-                      width={24}
-                      height={24}
-                      onClick={() => handleIsDragged(Array(alonePackingList?.length).fill(false))}
-                    />
-                  )}
-                </StyledCaptionButtonWrapper>
-              </StyledCaptionWrapper>
-
-              <SwipeableList
-                packingList={alonePackingList}
-                deleteList={deleteList}
-                isDeleting={isDeleting}
-                openModal={openModal}
-                setDeleteList={(arr) => setDeleteList(arr)}
-                swipeableListItem={alonePackingList?.map((item, idx) => (
-                  <SwipeablelistItem
-                    key={item._id}
-                    idx={idx}
-                    isDragged={isDragged[idx]}
-                    handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-                    isDeleting={isDeleting}
-                    deleteList={deleteList}
-                    checkDeleteList={(id: string) => checkDeleteList(id)}
-                    onClickDeleteButton={() => {
-                      setSelectedIndex(idx);
-                      openModal();
-                    }}
-                    packingList={alonePackingList}
-                    moveToPackingList={() => moveToPackingList(item._id)}
+              <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
+                {isDeleting ? (
+                  <p onClick={() => handleIsDragged(Array(alonePackingList.length).fill(false))}>
+                    취소
+                  </p>
+                ) : (
+                  <Image
+                    src={iTrash}
+                    alt="삭제"
+                    width={24}
+                    height={24}
+                    onClick={() => handleIsDragged(Array(alonePackingList.length).fill(false))}
                   />
-                ))}
-              />
-            </>
-          )}
-        </StyledMain>
+                )}
+              </StyledCaptionButtonWrapper>
+            </StyledCaptionWrapper>
+
+            <SwipeableList
+              swipeableListItem={alonePackingList.map((item, idx) => (
+                <SwipeablelistItem
+                  key={item.id}
+                  idx={idx}
+                  isDragged={isDragged[idx]}
+                  handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                  isDeleting={isDeleting}
+                  deleteList={deleteList}
+                  checkDeleteList={(id: string) => checkDeleteList(id)}
+                  onClickDeleteButton={() => {
+                    setSelectedIndex(idx);
+                    openModal();
+                  }}
+                  packingList={alonePackingList}
+                  moveToPackingList={() => moveToPackingList(item.id)}
+                />
+              ))}
+            />
+          </>
+        )}
+        {isDeleting && (
+          <StyledButtonWrapper>
+            <StyledDeleteButton>
+              <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
+                {!deleteList.length
+                  ? ' 전체 선택'
+                  : deleteList.length === alonePackingList.length
+                  ? '전체 삭제'
+                  : '선택 삭제'}
+              </div>
+            </StyledDeleteButton>
+          </StyledButtonWrapper>
+        )}
         {!isDeleting && (
           <FloatActionButton onClick={handleFloatClick} pageName="packingList" isAloned="alone" />
         )}
@@ -334,4 +345,19 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
   ${FONT_STYLES.BODY4_SEMIBOLD};
+`;
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const StyledDeleteButton = styled.button`
+  position: fixed;
+  bottom: 1.507rem;
+  width: calc(100vw - 4rem);
+  height: 4.7rem;
+  ${FONT_STYLES.BODY4_SEMIBOLD};
+  background-color: ${packmanColors.pmPink};
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
 `;

@@ -36,7 +36,7 @@ function ListIntroLanding() {
     (api) => api.packingList.alone.addAlonePackingListFolder,
   );
   const addTogetherPackingListFolder = useAPI(
-    (api) => api.packingList.together.addTogetherPakingListFolder,
+    (api) => api.packingList.together.addTogetherPackingListFolder,
   );
   const addFolder = useAPI((api) => api.folder.addFolder);
 
