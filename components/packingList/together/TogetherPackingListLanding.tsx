@@ -75,17 +75,14 @@ function TogetherPackingListLanding() {
   };
 
   const closeModal = () => {
+    handleIsDragged(Array(togetherPackingList?.length).fill(false));
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
 
-  const onClickLeftModalButton = () => {
-    handleIsDragged(Array(togetherPackingList?.length).fill(false));
-    closeModal();
-  };
-
-  const onClickRightModalButton = () => {
+  const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
+    // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
     if (isDeleting) {
       deleteTogetherInventoryMutate({
         folderId: currentFolder.id,
@@ -95,7 +92,9 @@ function TogetherPackingListLanding() {
         setIsDeleting(false);
       }
       setDeleteList([]);
-    } else {
+    }
+    // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
+    else {
       deleteTogetherInventoryMutate({
         folderId: currentFolder.id,
         listId: togetherPackingList[selectedIndex].id,
@@ -136,10 +135,10 @@ function TogetherPackingListLanding() {
             closeModal={closeModal}
             button={
               <StyledModalButtonWrapper>
-                <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                <StyledModalButton left={true} onClick={closeModal}>
                   아니요
                 </StyledModalButton>
-                <StyledModalButton onClick={onClickRightModalButton}>예</StyledModalButton>
+                <StyledModalButton onClick={deleteListItem}>예</StyledModalButton>
               </StyledModalButtonWrapper>
             }
           />
