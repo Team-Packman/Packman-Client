@@ -5,7 +5,7 @@ import { packmanColors } from '../../styles/color';
 import HoleIc from '/public/assets/svg/hole_ic.svg';
 import SelectedHoleIc from '/public/assets/svg/hole_selected_ic.svg';
 interface PackerProps {
-  packer: { _id: string; name: string } | null;
+  packer: { id: string; nickname: string } | null;
   modalHandler?: () => void;
 }
 
@@ -22,7 +22,7 @@ function Packer(props: PackerProps) {
             <Image src={HoleIc} alt="hole_ic" layout="fill" />
           )}
         </div>
-        <span>{packer ? packer.name : '챙길사람'}</span>
+        <span>{packer ? packer.nickname : '챙길사람'}</span>
       </StyledRoot>
     </>
   );

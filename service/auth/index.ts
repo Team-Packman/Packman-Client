@@ -35,3 +35,13 @@ export interface KakaoLoginOutput {
     refreshToken?: string; // 팩맨에서 사용하는 refreshToken
   };
 }
+
+export interface Refresh {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    accessToken: string; // 팩맨에서 사용하는 accessToken
+    refreshToken: string; // 팩맨에서 사용하는 refreshToken
+  };
+}

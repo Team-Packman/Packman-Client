@@ -9,7 +9,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { authedUser, creatingUser, from, kakao } from '../utils/recoil/atom/atom';
+import { authUserAtom, creatingUserAtom, from, kakao } from '../utils/recoil/atom/atom';
 import Link from 'next/link';
 
 declare global {
@@ -22,8 +22,8 @@ function Login() {
   const router = useRouter();
 
   const [fromInfo, setFromInfo] = useRecoilState(from);
-  const setUser = useSetRecoilState(authedUser);
-  const setCreatingUser = useSetRecoilState(creatingUser);
+  const setUser = useSetRecoilState(authUserAtom);
+  const setCreatingUser = useSetRecoilState(creatingUserAtom);
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
   const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
   const setKakaoInfo = useSetRecoilState(kakao);
@@ -55,12 +55,12 @@ function Login() {
             {
               onSuccess: ({ data }) => {
                 if (data.isAlreadyUser) {
-                  setUser(data);
+                  setUser((prev) => ({ ...prev, ...data }));
                   if (fromInfo.url) {
                     // 그룹원 등록 api 추가 예정 > 성공시 아래 경로로 라우팅
                     router.replace(fromInfo.url);
                   } else {
-                    router.replace('/folder');
+                    router.replace('/together/3');
                   }
                   setFromInfo({ url: '' });
                 } else {
