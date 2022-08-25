@@ -27,7 +27,7 @@ function FolderLanding() {
   const [currentSwiperIndex, setCurrentSwiperIndex] = useState<number>(0);
   const [addNewFolder, setAddNewFolder] = useState<boolean>(false);
   const [newFolderData, setNewFolderData] = useState<AddFolderInput>({
-    title: '',
+    name: '',
     isAloned: false,
   });
   const [isOutDated, setIsOutDated] = useState<boolean>(false);
@@ -61,7 +61,7 @@ function FolderLanding() {
     return deleteFolder(id);
   });
 
-  const { mutate: addFolderMutate } = useMutation((info: { title: string; isAloned: boolean }) => {
+  const { mutate: addFolderMutate } = useMutation((info: { name: string; isAloned: boolean }) => {
     return addFolder(info);
   });
 
@@ -155,35 +155,36 @@ function FolderLanding() {
   };
 
   const handleAddFolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewFolderData({ title: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
+    setNewFolderData({ name: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
   };
 
   const handleOnBlurInAdd = () => {
     setAddNewFolder(false);
 
-    if (newFolderData.title) {
+    if (newFolderData.name) {
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
+          console.log('폴더추가 성공');
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
               data: {
-                aloneFolders:
+                aloneFolder:
                   currentSwiperIndex === 1
                     ? [
                         {
                           id: data.data.aloneFolder[0].id,
-                          name: newFolderData.title,
+                          name: newFolderData.name,
                           listNum: '0',
                         },
                       ].concat(aloneFolder)
                     : aloneFolder,
-                togetherFolders:
+                togetherFolder:
                   currentSwiperIndex === 0
                     ? [
                         {
                           id: data.data.togetherFolder[0].id,
-                          name: newFolderData.title,
+                          name: newFolderData.name,
                           listNum: '0',
                         },
                       ].concat(togetherFolder)

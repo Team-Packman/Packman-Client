@@ -32,7 +32,7 @@ function FolderList(props: FolderListProps) {
     handleStartButtonInInit,
   } = props;
 
-  const [showInitialPage, setShowIntitialPage] = useState<boolean>(list.length <= 0);
+  const [showInitialPage, setShowIntitialPage] = useState<boolean>(list?.length <= 0);
 
   const handleStartButton = () => {
     setShowIntitialPage(false);

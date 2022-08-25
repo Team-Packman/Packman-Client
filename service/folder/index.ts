@@ -19,7 +19,7 @@ export interface GetFoldersOutput {
 }
 
 export interface AddFolderInput {
-  title: string; // 폴더 이름
+  name: string; // 폴더 이름
   isAloned: boolean; // 혼자/함께 패킹 폴더 구분
 }
 
