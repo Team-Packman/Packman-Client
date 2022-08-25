@@ -3,6 +3,7 @@ import { Refresh, KakaoLoginInput, KakaoLoginOutput } from './index';
 import { GoogleLoginInput, GoogleLoginOutput } from '.';
 import { fetchGoogleLogin, fetchKakaoLogin, fetchRefresh } from '../../utils/axios/auth';
 import withAuth from '../../utils/axios/withAuth';
+import { Config } from '../../utils/axios/axios';
 
 export interface AuthAPI {
   refresh: (accessToken: string, refreshToken: string) => Promise<Refresh>;
@@ -10,10 +11,10 @@ export interface AuthAPI {
   fetchKakaoLogin: (payload: KakaoLoginInput) => Promise<KakaoLoginOutput>;
 }
 
-const createAuthAPI = (request: AxiosInstance): AuthAPI => {
+const createAuthAPI = ({ axiosBasic, axiosWithAuth: request }: Config): AuthAPI => {
   return {
-    fetchGoogleLogin: (payload: GoogleLoginInput) => fetchGoogleLogin(withAuth(request), payload),
-    fetchKakaoLogin: (payload: KakaoLoginInput) => fetchKakaoLogin(withAuth(request), payload),
+    fetchGoogleLogin: (payload: GoogleLoginInput) => fetchGoogleLogin(request, payload),
+    fetchKakaoLogin: (payload: KakaoLoginInput) => fetchKakaoLogin(request, payload),
     refresh: (accessToken, refreshToken: string) =>
       fetchRefresh(request, accessToken, refreshToken),
   };

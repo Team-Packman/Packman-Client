@@ -61,15 +61,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
-        <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-          <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
             <Hydrate state={pageProps?.dehydratedState}>
               <GlobalStyle />
               <Component {...pageProps} />
               <InstallGuide />
             </Hydrate>
-          </QueryClientProvider>
-        </APIProvider>
+          </APIProvider>
+        </QueryClientProvider>
       </RecoilRoot>
     </>
   );
