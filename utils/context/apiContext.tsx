@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { createContext, ReactNode } from 'react';
 import { APIService, createAPIService } from '../../service';
 import createAxios from '../axios/axios';

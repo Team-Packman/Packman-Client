@@ -1,9 +1,13 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-export enum AXIOS_KEY {
+enum AXIOS_KEY {
   axiosBasic = 'axiosBasic',
   axiosWithAuth = 'axiosWithAuth',
 }
+
+export type Config = {
+  [key in AXIOS_KEY]: AxiosInstance;
+};
 
 export default function createAxios(endpoint: string) {
   const axiosBasic = axios.create({

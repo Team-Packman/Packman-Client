@@ -1,6 +1,5 @@
 import createPackingListAPI, { PackingListAPI } from './packingList/index';
-import { AxiosInstance } from 'axios';
-import { AXIOS_KEY } from '../utils/axios/axios';
+import { Config } from '../utils/axios/axios';
 import createFolderAPI, { FolderAPI } from './folder/mockAPI';
 import createEctAPI, { EctAPI } from './ect/createAPI';
 import createInventoryAPI, { InventoryAPI } from './inventory';
@@ -16,14 +15,10 @@ export interface APIService {
   ect: EctAPI;
 }
 
-type Config = {
-  [key in AXIOS_KEY]: AxiosInstance;
-};
-
 export function createAPIService(config: Config): APIService {
-  const { axiosBasic, axiosWithAuth } = config;
+  const { axiosWithAuth } = config;
 
-  const auth = createAuthAPI(axiosBasic);
+  const auth = createAuthAPI(config);
   const folder = createFolderAPI(axiosWithAuth);
   const packingList = createPackingListAPI(axiosWithAuth);
   const user = createUserAPI(axiosWithAuth);
