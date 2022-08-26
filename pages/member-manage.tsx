@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { packmanColors } from '../styles/color';
 import { FONT_STYLES } from '../styles/font';
 import { setScreenSize } from '../utils/setScreenSize';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // const members = [1];
 // const members = [1, 2, 3, 4, 5];
@@ -10,6 +11,7 @@ const members = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function MemberManage() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [hasCopied, setHasCopied] = useState<boolean>(false);
 
   const EditMembers = () => {
     setIsEditing((prev) => !prev);
@@ -21,6 +23,13 @@ function MemberManage() {
 
   const ClickInvitingButton = () => {
     if (isEditing) setIsEditing(false);
+  };
+
+  const copyToClipboard = () => {
+    setHasCopied(true);
+    setTimeout(() => {
+      setHasCopied(false);
+    }, 3000);
   };
 
   return (
@@ -63,9 +72,12 @@ function MemberManage() {
         })}
       </WithMembers>
       <InviteOtherMember length={members.length}>함께 패킹할 멤버를 초대해보세요</InviteOtherMember>
-      <InvitingButton onClick={ClickInvitingButton}>
-        {isEditing ? '완료' : '멤버 초대하기'}
-      </InvitingButton>
+      <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied>
+      <CopyToClipboard text={'링크!'} onCopy={copyToClipboard}>
+        <InvitingButton onClick={ClickInvitingButton}>
+          {isEditing ? '완료' : '멤버 초대하기'}
+        </InvitingButton>
+      </CopyToClipboard>
     </StyledRoot>
   );
 }
@@ -178,6 +190,15 @@ const InviteOtherMember = styled.div<{ length: number }>`
   font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   color: ${packmanColors.pmGrey};
   white-space: nowrap;
+`;
+
+const LinkHasCopied = styled.div`
+  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  color: ${packmanColors.pmDarkGrey};
+  position: absolute;
+  bottom: 12.5rem;
+  width: calc(100vw - 4rem);
+  text-align: center;
 `;
 
 const InvitingButton = styled.div`
