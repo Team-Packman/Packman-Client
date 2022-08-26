@@ -80,33 +80,33 @@ function ListIntroLanding() {
 
   // 폴더 생성 버튼 클릭
   const handleAddFolder = () => {
-    addFolerMutate(
-      { title: folderName, isAloned },
-      {
-        onSuccess: (data) => {
-          {
-            isAloned
-              ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
-                  return {
-                    ...oldData,
-                    data: {
-                      aloneFolders: data.data.aloneFolders,
-                    },
-                  };
-                })
-              : queryClient.setQueryData('togetherFolder', (oldData: any) => {
-                  return {
-                    ...oldData,
-                    data: {
-                      togetherFolders: data.data.togetherFolders,
-                    },
-                  };
-                });
-          }
-        },
-      },
-    );
-    setFolderName('');
+    // addFolerMutate(
+    //   { title: folderName, isAloned },
+    //   {
+    //     onSuccess: (data) => {
+    //       {
+    //         isAloned
+    //           ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
+    //               return {
+    //                 ...oldData,
+    //                 data: {
+    //                   aloneFolders: data.data.aloneFolders,
+    //                 },
+    //               };
+    //             })
+    //           : queryClient.setQueryData('togetherFolder', (oldData: any) => {
+    //               return {
+    //                 ...oldData,
+    //                 data: {
+    //                   togetherFolders: data.data.togetherFolders,
+    //                 },
+    //               };
+    //             });
+    //       }
+    //     },
+    //   },
+    // );
+    // setFolderName('');
   };
 
   const handleTagClick = (id: string, index: number) => {
