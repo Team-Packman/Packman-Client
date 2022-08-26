@@ -11,11 +11,13 @@ import { authUserAtom, kakao } from '../../utils/recoil/atom/atom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
+import useAPI from '../../utils/hooks/useAPI';
+import { useMutation } from 'react-query';
 interface ProfileData {
-  _id: string;
-  name: string;
+  id: string;
+  nickname: string;
   email: string;
-  profileImageId: string;
+  profileImage: string;
 }
 
 interface SettingProfileProps {
@@ -25,19 +27,32 @@ interface SettingProfileProps {
 
 function SettingProfile(props: SettingProfileProps) {
   const { onClickEditText, profileData } = props;
-  const { name, email, profileImageId } = profileData;
+  const { nickname, email, profileImage } = profileData;
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
-  const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
+  const profileImageList = ProfileList.map((e: StaticImageData, i: number) => ({
+    id: i + '',
+    src: e,
+  })); // 프로필 이미지 캐릭터 6개 담은 배열
   const { accessToken } = useRecoilValue(kakao);
   const router = useRouter();
 
-  const onClickLeftModalButton = async () => {
-    setIsWithdrawn(true);
-  };
+  const deleteUser = useAPI((api) => api.user.deleteUser);
+  const { mutate: deleteUserMutate } = useMutation(
+    (deleteUserData: string) => {
+      setIsWithdrawn(true);
+      return deleteUser(deleteUserData);
+    },
+    {
+      onSuccess: () => {
+        resetUserState();
+        router.replace('/login');
+      },
+    },
+  );
 
-  const onClickRightModalButton = () => {
+  const closeModal = () => {
     setShowModal(false);
   };
 
@@ -59,7 +74,6 @@ function SettingProfile(props: SettingProfileProps) {
         );
       } finally {
         resetUserState();
-        router.push('/login');
       }
     })();
   };
@@ -72,13 +86,13 @@ function SettingProfile(props: SettingProfileProps) {
 
         <StyledProfile>
           <Image
-            src={profileImage[+profileImageId].src}
+            src={profileImageList[+profileImage].src}
             alt="my-profile-image"
             width={80}
             height={80}
           />
           <div>
-            <h1>{name}</h1>
+            <h1>{nickname}</h1>
             <p>{email}</p>
           </div>
         </StyledProfile>
@@ -111,14 +125,14 @@ function SettingProfile(props: SettingProfileProps) {
         {showModal && (
           <Modal
             title={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
-            closeModal={() => setShowModal(false)}
+            closeModal={closeModal}
             button={
               !isWithdrawn && (
                 <StyledModalButtonWrapper>
-                  <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                  <StyledModalButton left={true} onClick={() => deleteUserMutate(accessToken)}>
                     탈퇴하기
                   </StyledModalButton>
-                  <StyledModalButton onClick={onClickRightModalButton}>취소하기</StyledModalButton>
+                  <StyledModalButton onClick={closeModal}>취소하기</StyledModalButton>
                 </StyledModalButtonWrapper>
               )
             }
