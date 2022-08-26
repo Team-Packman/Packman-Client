@@ -137,11 +137,13 @@ function MemberManage() {
       </WithMembers>
       <InviteOtherMember length={members.length}>함께 패킹할 멤버를 초대해보세요</InviteOtherMember>
       <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied>
-      <CopyToClipboard text={'링크!'} onCopy={copyToClipboard}>
-        <InvitingButton onClick={ClickInvitingButton}>
-          {isEditing ? '완료' : '멤버 초대하기'}
-        </InvitingButton>
-      </CopyToClipboard>
+      {isEditing ? (
+        <InvitingButton onClick={ClickInvitingButton}>완료</InvitingButton>
+      ) : (
+        <CopyToClipboard text={'링크!'} onCopy={copyToClipboard}>
+          <InvitingButton onClick={ClickInvitingButton}>멤버 초대하기</InvitingButton>
+        </CopyToClipboard>
+      )}
     </StyledRoot>
   );
 }
