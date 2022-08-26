@@ -74,6 +74,7 @@ function SettingProfile(props: SettingProfileProps) {
         );
       } finally {
         resetUserState();
+        router.replace('/login');
       }
     })();
   };

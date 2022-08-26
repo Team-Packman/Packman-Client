@@ -2,6 +2,7 @@ import { AxiosInstance } from 'axios';
 import {
   AddUserProfileInput,
   AddUserProfileOutput,
+  DeleteUserInfoOutput,
   GetUserInfoOutput,
   UpdateUserProfileInput,
   UpdateUserProfileOutput,
@@ -25,5 +26,18 @@ export const fetchAddUserProfile = async (
   payload: AddUserProfileInput,
 ): Promise<AddUserProfileOutput> => {
   const { data } = await request.post(`/user/profile`, payload);
+  return data;
+};
+
+export const fetchDeleteUserInfo = async (
+  request: AxiosInstance,
+  accessToken: string,
+): Promise<DeleteUserInfoOutput> => {
+  const { data } = await request.delete('/user', {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+    },
+  });
   return data;
 };

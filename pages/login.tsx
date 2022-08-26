@@ -8,7 +8,7 @@ import useAPI from '../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { authUserAtom, creatingUserAtom, from, kakao } from '../utils/recoil/atom/atom';
 import Link from 'next/link';
 
@@ -60,7 +60,7 @@ function Login() {
                     // 그룹원 등록 api 추가 예정 > 성공시 아래 경로로 라우팅
                     router.replace(fromInfo.url);
                   } else {
-                    router.replace('/together/3');
+                    router.replace('/folder');
                   }
                   setFromInfo({ url: '' });
                 } else {
