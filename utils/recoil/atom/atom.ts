@@ -1,4 +1,4 @@
-import { AuthUser, CreatingUser, From, Kakao } from './';
+import { AuthUser, CreatingUser, Invitation, Kakao } from './';
 import { recoilPersist } from 'recoil-persist';
 import { atom } from 'recoil';
 
@@ -28,10 +28,10 @@ export const creatingUserAtom = atom<CreatingUser>({
   },
 });
 
-export const from = atom<From>({
-  key: 'from',
+export const invitationAtom = atom<Invitation>({
+  key: 'invitation',
   default: {
-    url: '',
+    listId: '',
   },
   effects_UNSTABLE: [persistAtom],
 });

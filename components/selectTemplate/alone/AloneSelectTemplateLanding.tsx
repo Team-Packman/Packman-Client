@@ -53,9 +53,10 @@ function AloneSelectTemplateLanding() {
     });
   };
 
-  const onClickConfirmButton = () => {
+  const onClickConfirmButton = () =>
     router.push(`/preview?id=${templateId}&type=${templateType}&categoryName=alone`);
-  };
+
+  const onClickSkipButton = () => router.push(`/list-intro?id=&categoryName=alone`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);
@@ -95,11 +96,7 @@ function AloneSelectTemplateLanding() {
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
-        <StyledButton
-          isTemplate={false}
-          isActivated={true}
-          onClick={() => router.push(`/list-intro?id=''&categoryName=alone`)}
-        >
+        <StyledButton isTemplate={false} isActivated={true} onClick={onClickSkipButton}>
           건너뛰기
         </StyledButton>
         <StyledButton

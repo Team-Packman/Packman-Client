@@ -24,7 +24,7 @@ interface PackerModalProps {
 
 function PackerModal(props: PackerModalProps) {
   const { member, modalHandler, packId, listId, updatePacker } = props;
-  console.log('m', member);
+
   const TICK = 30;
   const ITERATOR = Array(TICK).fill('').entries();
   const ID_LIST = member.map(({ id }) => id);
