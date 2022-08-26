@@ -57,8 +57,8 @@ function ListIntroLanding() {
 
   if (!aloneFolderData || !togetherFolderData) return null;
 
-  const { aloneFolders } = aloneFolderData.data;
-  const { togetherFolders } = togetherFolderData.data;
+  const { aloneFolder } = aloneFolderData.data;
+  const { togetherFolder } = togetherFolderData.data;
 
   const getTodayDate = () => {
     const current = new Date();
@@ -92,7 +92,7 @@ function ListIntroLanding() {
                   return {
                     ...oldData,
                     data: {
-                      aloneFolders: data.data.aloneFolders,
+                      aloneFolders: data.data.aloneFolder,
                     },
                   };
                 })
@@ -100,7 +100,7 @@ function ListIntroLanding() {
                   return {
                     ...oldData,
                     data: {
-                      togetherFolders: data.data.togetherFolders,
+                      togetherFolders: data.data.togetherFolder,
                     },
                   };
                 });
@@ -178,22 +178,22 @@ function ListIntroLanding() {
         </div>
         <StyledTagContainer>
           {isAloned
-            ? aloneFolders?.map((v, index) => (
+            ? aloneFolder?.map((v, index) => (
                 <StyledTag
-                  key={v._id}
+                  key={v.id}
                   isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v._id, index)}
+                  onClick={() => handleTagClick(v.id, index)}
                 >
-                  {v.title}
+                  {v.name}
                 </StyledTag>
               ))
-            : togetherFolders.map((v, index) => (
+            : togetherFolder.map((v, index) => (
                 <StyledTag
-                  key={v._id}
+                  key={v.id}
                   isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v._id, index)}
+                  onClick={() => handleTagClick(v.id, index)}
                 >
-                  {v.title}
+                  {v.name}
                 </StyledTag>
               ))}
         </StyledTagContainer>

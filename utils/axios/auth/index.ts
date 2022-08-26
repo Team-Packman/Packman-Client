@@ -1,4 +1,9 @@
-import { KakaoLoginInput, KakaoLoginOutput } from './../../../service/auth/index';
+import {
+  KakaoLoginInput,
+  KakaoLoginOutput,
+  RefreshInput,
+  RefreshOutput,
+} from './../../../service/auth/index';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { GoogleLoginInput, GoogleLoginOutput } from '../../../service/auth/index';
 
@@ -20,12 +25,11 @@ export const fetchKakaoLogin = async (
 
 export const fetchRefresh = async (
   request: AxiosInstance,
-  accessToken: string,
-  refreshToken: string,
-) => {
+  { accessToken, refreshToken }: RefreshInput,
+): Promise<RefreshOutput> => {
   const { data } = await request(`/auth/token`, {
+    baseURL: process.env.NEXT_PUBLIC_END,
     headers: {
-      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
