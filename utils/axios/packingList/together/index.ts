@@ -143,6 +143,6 @@ export const fetchInvited = async (
   request: AxiosInstance,
   inviteCode: string,
 ): Promise<GetInvitedOutput> => {
-  const { data } = await request(`/packingList/invite/${inviteCode}`);
+  const { data } = await request(`/list/invite/${inviteCode}`);
   return data;
 };
