@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../styles/color';
 import { FONT_STYLES } from '../styles/font';
-import { setScreenSize } from '../utils/setScreenSize';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
-// const members = [1];
-// const members = [1, 2, 3, 4, 5];
-const membersData = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 interface ImockData {
   status: number;
   success: boolean;
@@ -70,12 +65,11 @@ function MemberManage() {
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [members, setMembers] = useState<Imember[]>(mockData.data.member);
 
-  const EditMembers = () => {
+  const editMembers = () => {
     setIsEditing((prev) => !prev);
   };
 
-  const DeleteMember = (index: number) => {
-    // console.log(index);
+  const deleteMember = (index: number) => {
     setMembers(
       members.filter((member, memberIndex) => {
         return memberIndex !== index;
@@ -83,8 +77,10 @@ function MemberManage() {
     );
   };
 
-  const ClickInvitingButton = () => {
-    if (isEditing) setIsEditing(false);
+  const clickInvitingButton = () => {
+    if (isEditing) {
+      setIsEditing(false);
+    }
   };
 
   const copyToClipboard = () => {
@@ -105,7 +101,7 @@ function MemberManage() {
       </StyledHeader>
       <WithMembersLabelAndEdit>
         <WithMembersLabel>함께하는 멤버</WithMembersLabel>
-        <WithMembersEditButton onClick={EditMembers}>
+        <WithMembersEditButton onClick={editMembers}>
           {isEditing ? '취소' : '편집'}
         </WithMembersEditButton>
       </WithMembersLabelAndEdit>
@@ -126,7 +122,7 @@ function MemberManage() {
               <MemberName>{member.nickname}</MemberName>
               <RemoveButton
                 onClick={() => {
-                  DeleteMember(index);
+                  deleteMember(index);
                 }}
                 src={'/assets/png/removeMember.png'}
                 isEditing={isEditing}
@@ -138,10 +134,10 @@ function MemberManage() {
       <InviteOtherMember length={members.length}>함께 패킹할 멤버를 초대해보세요</InviteOtherMember>
       <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied>
       {isEditing ? (
-        <InvitingButton onClick={ClickInvitingButton}>완료</InvitingButton>
+        <InvitingButton onClick={clickInvitingButton}>완료</InvitingButton>
       ) : (
         <CopyToClipboard text={'링크!'} onCopy={copyToClipboard}>
-          <InvitingButton onClick={ClickInvitingButton}>멤버 초대하기</InvitingButton>
+          <InvitingButton onClick={clickInvitingButton}>멤버 초대하기</InvitingButton>
         </CopyToClipboard>
       )}
     </StyledRoot>
