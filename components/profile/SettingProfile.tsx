@@ -12,10 +12,10 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 interface ProfileData {
-  _id: string;
-  name: string;
+  id: string;
+  nickname: string;
   email: string;
-  profileImageId: string;
+  profileImage: string;
 }
 
 interface SettingProfileProps {
@@ -25,11 +25,11 @@ interface SettingProfileProps {
 
 function SettingProfile(props: SettingProfileProps) {
   const { onClickEditText, profileData } = props;
-  const { name, email, profileImageId } = profileData;
+  const { nickname, email, profileImage } = profileData;
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
-  const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
+  const profile = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const { accessToken } = useRecoilValue(kakao);
   const router = useRouter();
 
@@ -71,14 +71,9 @@ function SettingProfile(props: SettingProfileProps) {
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
-          <Image
-            src={profileImage[+profileImageId].src}
-            alt="my-profile-image"
-            width={80}
-            height={80}
-          />
+          <Image src={profile[+profileImage].src} alt="my-profile-image" width={80} height={80} />
           <div>
-            <h1>{name}</h1>
+            <h1>{nickname}</h1>
             <p>{email}</p>
           </div>
         </StyledProfile>
