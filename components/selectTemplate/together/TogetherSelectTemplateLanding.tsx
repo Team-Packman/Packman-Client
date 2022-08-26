@@ -56,7 +56,7 @@ function TogetherSelectTemplateLanding() {
   const onClickConfirmButton = () =>
     router.push(`/preview?id=${templateId}&type=${templateType}&categoryName=together`);
 
-  const onClickSkipButton = () => router.push(`/list-intro?id=''&categoryName=together`);
+  const onClickSkipButton = () => router.push(`/list-intro?id=&categoryName=together`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);
