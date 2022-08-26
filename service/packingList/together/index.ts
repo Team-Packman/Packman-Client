@@ -414,3 +414,16 @@ export interface GetInvitedOutput {
     title: string; // 함께 패킹리스트 제목
   };
 }
+
+export interface AddMemberInput {
+  listId: string;
+}
+
+export interface AddMemberOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    listId: string; // 함께-혼자 패킹리스트 연결 id
+  };
+}

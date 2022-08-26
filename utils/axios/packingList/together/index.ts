@@ -24,6 +24,8 @@ import {
   AddTogetherPackingListIntroInput,
   AddTogetherPackingListIntroOutput,
   GetInvitedOutput,
+  AddMemberInput,
+  AddMemberOutput,
 } from './../../../../service/packingList/together/index';
 import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
 import { AxiosInstance } from 'axios';
@@ -144,5 +146,13 @@ export const fetchInvited = async (
   inviteCode: string,
 ): Promise<GetInvitedOutput> => {
   const { data } = await request(`/list/invite/${inviteCode}`);
+  return data;
+};
+
+export const fetchAddMember = async (
+  request: AxiosInstance,
+  payload: AddMemberInput,
+): Promise<AddMemberOutput> => {
+  const { data } = await request.post(`/list/together/add-member`, payload);
   return data;
 };

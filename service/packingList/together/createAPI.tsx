@@ -13,6 +13,7 @@ import {
   fetchTogetherFolder,
   fetchAddTogetherPackingFolder,
   fetchInvited,
+  fetchAddMember,
 } from '../../../utils/axios/packingList/together/index';
 import { AxiosInstance } from 'axios';
 import {
@@ -42,6 +43,8 @@ import {
   AddTogetherPackingListIntroInput,
   AddTogetherPackingListIntroOutput,
   GetInvitedOutput,
+  AddMemberInput,
+  AddMemberOutput,
 } from './index';
 import withAuth from '../../../utils/axios/withAuth';
 import { fetchGroupMember } from '../../../utils/axios/packingList/together';
@@ -88,6 +91,7 @@ export interface TogetherAPI {
       payload: AddTogetherPackingListIntroInput,
     ) => Promise<AddTogetherPackingListIntroOutput>;
     getInvited: (inviteCode: string) => Promise<GetInvitedOutput>;
+    addMember: (payload: AddMemberInput) => Promise<AddMemberOutput>;
   };
 }
 
@@ -120,6 +124,7 @@ const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
       addTogetherPackingListFolder: (payload: AddTogetherPackingListIntroInput) =>
         fetchAddTogetherPackingFolder(request, payload),
       getInvited: (inviteCode: string) => fetchInvited(request, inviteCode),
+      addMember: (payload: AddMemberInput) => fetchAddMember(request, payload),
     },
   };
 };
