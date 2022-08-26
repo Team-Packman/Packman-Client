@@ -8,11 +8,67 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 // const members = [1];
 // const members = [1, 2, 3, 4, 5];
 const membersData = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+interface ImockData {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    title: string; // 함께 패킹리스트 제목
+    departureDate: string; // 함께 패킹리스트 출발 날짜
+    remainDay: string; // 함께 패킹리스트 남은 출발 날짜
+    member: {
+      // 그룹에 속한 멤버 배열
+      id: string; //  멤버 id
+      nickname: string; // 멤버 닉네임
+      profileImage: string; // 멤버 프로필 사진 id
+    }[];
+  };
+}
+
+interface Imember {
+  // 그룹에 속한 멤버 배열
+  id: string; //  멤버 id
+  nickname: string; // 멤버 닉네임
+  profileImage: string; // 멤버 프로필 사진 id
+}
+
+const mockData: ImockData = {
+  status: 200,
+  success: true,
+  message: '멤버 조회 성공',
+  data: {
+    title: '패킹이들과 캠핑',
+    departureDate: '2022.08.26',
+    remainDay: '27',
+    member: [
+      {
+        id: '1',
+        nickname: '융맨',
+        profileImage: '1',
+      },
+      {
+        id: '2',
+        nickname: '서히',
+        profileImage: '2',
+      },
+      {
+        id: '3',
+        nickname: '현지',
+        profileImage: '3',
+      },
+      {
+        id: '4',
+        nickname: '경린',
+        profileImage: '4',
+      },
+    ],
+  },
+};
 
 function MemberManage() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
-  const [members, setMembers] = useState<number[]>(membersData);
+  const [members, setMembers] = useState<Imember[]>(mockData.data.member);
 
   const EditMembers = () => {
     setIsEditing((prev) => !prev);
@@ -42,10 +98,10 @@ function MemberManage() {
     <StyledRoot>
       <StyledHeader>
         <StyledHeaderLeft>
-          <StyledListName>패킹이들과 캠핑</StyledListName>
-          <StyledListDate>2022.08.26</StyledListDate>
+          <StyledListName>{mockData.data.title}</StyledListName>
+          <StyledListDate>{mockData.data.departureDate}</StyledListDate>
         </StyledHeaderLeft>
-        <StyledDday>D-27</StyledDday>
+        <StyledDday>D-{mockData.data.remainDay}</StyledDday>
       </StyledHeader>
       <WithMembersLabelAndEdit>
         <WithMembersLabel>함께하는 멤버</WithMembersLabel>
@@ -60,14 +116,14 @@ function MemberManage() {
               <Member key={index}>
                 <Crown src={'/assets/png/crown.png'} alt="왕관" />
                 <MemberImage index={index} />
-                <MemberName>대장나심</MemberName>
+                <MemberName>{member.nickname}</MemberName>
               </Member>
             );
           }
           return (
             <Member key={index}>
               <MemberImage index={index} />
-              <MemberName>대장나심</MemberName>
+              <MemberName>{member.nickname}</MemberName>
               <RemoveButton
                 onClick={() => {
                   DeleteMember(index);
