@@ -9,7 +9,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { authUserAtom, creatingUserAtom, from, kakao } from '../utils/recoil/atom/atom';
+import { authUserAtom, creatingUserAtom, invitationAtom, kakao } from '../utils/recoil/atom/atom';
 import Link from 'next/link';
 
 declare global {
@@ -21,12 +21,15 @@ declare global {
 function Login() {
   const router = useRouter();
 
-  const [fromInfo, setFromInfo] = useRecoilState(from);
+  const [invitation, setInvitation] = useRecoilState(invitationAtom);
   const setUser = useSetRecoilState(authUserAtom);
   const setCreatingUser = useSetRecoilState(creatingUserAtom);
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
-  const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
+  const addMember = useAPI((api) => api.packingList.together.addMember);
   const setKakaoInfo = useSetRecoilState(kakao);
+
+  const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
+  const { mutate: addMemberMutate } = useMutation('addMember', addMember);
 
   useEffect(() => {
     if (router.isReady) {
@@ -56,12 +59,17 @@ function Login() {
               onSuccess: ({ data }) => {
                 if (data.isAlreadyUser) {
                   setUser((prev) => ({ ...prev, ...data }));
-                  if (fromInfo.url) {
-                    router.replace(fromInfo.url);
+                  if (invitation.listId) {
+                    addMemberMutate(
+                      { listId: invitation.listId },
+                      {
+                        onSuccess: ({ data: { listId } }) => router.replace(`/together/${listId}`),
+                      },
+                    );
                   } else {
                     router.replace('/together/3');
                   }
-                  setFromInfo({ url: '' });
+                  setInvitation({ listId: '' });
                 } else {
                   setCreatingUser(data);
                   router.replace('/profile');

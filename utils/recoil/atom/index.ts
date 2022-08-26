@@ -12,8 +12,8 @@ export interface AuthUser extends CreatingUser {
   refreshToken: string; // 팩맨에서 사용하는 refreshToken
 }
 
-export interface From {
-  url: string;
+export interface Invitation {
+  listId: string;
 }
 
 export interface Kakao {
