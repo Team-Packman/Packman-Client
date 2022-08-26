@@ -4,11 +4,11 @@ export interface GetAloneTemplateListOutput {
   message: string;
   data: {
     basicTemplate: {
-      _id: string;
+      id: string;
       title: string;
     }[];
     myTemplate: {
-      _id: string;
+      id: string;
       title: string;
     }[];
   };
@@ -20,11 +20,11 @@ export interface GetTogetherTemplateListOutput {
   message: string;
   data: {
     basicTemplate: {
-      _id: string;
+      id: string;
       title: string;
     }[];
     myTemplate: {
-      _id: string;
+      id: string;
       title: string;
     }[];
   };

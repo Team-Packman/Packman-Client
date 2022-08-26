@@ -75,30 +75,29 @@ function TogetherPackingListLanding() {
   };
 
   const closeModal = () => {
+    handleIsDragged(Array(togetherPackingList.length).fill(false));
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
 
-  const onClickLeftModalButton = () => {
-    handleIsDragged(Array(togetherPackingList?.length).fill(false));
-    closeModal();
-  };
-
-  const onClickRightModalButton = () => {
+  const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
+    // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
     if (isDeleting) {
       deleteTogetherInventoryMutate({
-        folderId: currentFolder._id,
+        folderId: currentFolder.id,
         listId: deleteList.join(','),
       });
       if (deleteList.length === togetherPackingList.length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
-    } else {
+    }
+    // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
+    else {
       deleteTogetherInventoryMutate({
-        folderId: currentFolder._id,
-        listId: togetherPackingList[selectedIndex]._id,
+        folderId: currentFolder.id,
+        listId: togetherPackingList[selectedIndex].id,
       });
     }
     closeModal();
@@ -113,7 +112,7 @@ function TogetherPackingListLanding() {
   };
 
   const onClickCaptionButton = () => {
-    setIsDragged(Array(togetherPackingList?.length).fill(false));
+    setIsDragged(Array(togetherPackingList.length).fill(false));
     setIsDeleting((prev) => !prev);
     if (!isDeleting) {
       setDeleteList([]);
@@ -126,6 +125,12 @@ function TogetherPackingListLanding() {
     }
   };
 
+  // 전체 삭제
+  const onClickDeleteButton = () => {
+    const payload = togetherPackingList.map(({ id }) => id);
+    setDeleteList(payload);
+  };
+
   return (
     <>
       <Header back title="리스트 목록" icon="profile" />
@@ -136,31 +141,29 @@ function TogetherPackingListLanding() {
             closeModal={closeModal}
             button={
               <StyledModalButtonWrapper>
-                <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                <StyledModalButton left onClick={closeModal}>
                   아니요
                 </StyledModalButton>
-                <StyledModalButton onClick={onClickRightModalButton}>예</StyledModalButton>
+                <StyledModalButton onClick={deleteListItem}>예</StyledModalButton>
               </StyledModalButtonWrapper>
             }
           />
         )}
 
         <StyledFolderInfo>
-          <h1>{currentFolder.title}</h1>
+          <h1>{currentFolder.name}</h1>
           <div>
             <StyledToggleImage
               src={iShowMore}
               alt="상세보기"
               toggle={toggle.toString()}
-              onClick={() => {
-                setToggle(true);
-              }}
+              onClick={() => setToggle(true)}
             />
             {toggle && (
               <DropBox
                 folderList={folder}
                 closeDropBox={() => setToggle(false)}
-                currentId={currentFolder._id}
+                currentId={currentFolder.id}
                 categoryName="together"
               />
             )}
@@ -179,24 +182,16 @@ function TogetherPackingListLanding() {
             <StyledCaptionWrapper>
               {!isDeleting && (
                 <StyledCaptionText>
-                  <span>{togetherPackingList?.length}</span>개의 패킹 리스트
+                  <span>{togetherPackingList.length}</span>개의 패킹 리스트
                 </StyledCaptionText>
               )}
               {isDeleting && (
-                <span
-                  onClick={() => {
-                    deleteList.length > 0 && setDeleteList([]);
-                  }}
-                >
-                  선택해제
-                </span>
+                <span onClick={() => deleteList.length && setDeleteList([])}>선택해제</span>
               )}
 
               <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                 {isDeleting ? (
-                  <p
-                    onClick={() => handleIsDragged(Array(togetherPackingList?.length).fill(false))}
-                  >
+                  <p onClick={() => handleIsDragged(Array(togetherPackingList.length).fill(false))}>
                     취소
                   </p>
                 ) : (
@@ -205,21 +200,16 @@ function TogetherPackingListLanding() {
                     alt="삭제"
                     width={24}
                     height={24}
-                    onClick={() => handleIsDragged(Array(togetherPackingList?.length).fill(false))}
+                    onClick={() => handleIsDragged(Array(togetherPackingList.length).fill(false))}
                   />
                 )}
               </StyledCaptionButtonWrapper>
             </StyledCaptionWrapper>
 
             <SwipeableList
-              packingList={togetherPackingList}
-              deleteList={deleteList}
-              isDeleting={isDeleting}
-              openModal={openModal}
-              setDeleteList={(arr) => setDeleteList(arr)}
-              swipeableListItem={togetherPackingList?.map((item, idx) => (
+              swipeableListItem={togetherPackingList.map((item, idx) => (
                 <SwipeablelistItem
-                  key={item._id}
+                  key={item.id}
                   idx={idx}
                   isDragged={isDragged[idx]}
                   handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
@@ -231,18 +221,31 @@ function TogetherPackingListLanding() {
                     openModal();
                   }}
                   packingList={togetherPackingList}
-                  moveToPackingList={() => moveToPackingList(item._id)}
+                  moveToPackingList={() => moveToPackingList(item.id)}
                 />
               ))}
             />
           </>
+        )}
+        {isDeleting && (
+          <StyledButtonWrapper>
+            <StyledDeleteButton>
+              <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
+                {!deleteList.length
+                  ? ' 전체 선택'
+                  : deleteList.length === togetherPackingList.length
+                  ? '전체 삭제'
+                  : '선택 삭제'}
+              </div>
+            </StyledDeleteButton>
+          </StyledButtonWrapper>
         )}
 
         {!isDeleting && (
           <FloatActionButton
             onClick={handleFloatClick}
             pageName="packingList"
-            isAloned={'together'}
+            isAloned="together"
           />
         )}
       </StyledRoot>
@@ -350,4 +353,19 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
   ${FONT_STYLES.BODY4_SEMIBOLD};
+`;
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const StyledDeleteButton = styled.button`
+  position: fixed;
+  bottom: 1.507rem;
+  width: calc(100vw - 4rem);
+  height: 4.7rem;
+  ${FONT_STYLES.BODY4_SEMIBOLD};
+  background-color: ${packmanColors.pmPink};
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
 `;
