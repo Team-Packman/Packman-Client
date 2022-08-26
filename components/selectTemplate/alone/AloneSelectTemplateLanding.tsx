@@ -22,7 +22,7 @@ import { FONT_STYLES } from '../../../styles/font';
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 
 interface Itemplate {
-  _id: string;
+  id: string;
   title: string;
 }
 
@@ -43,8 +43,8 @@ function AloneSelectTemplateLanding() {
   const { basicTemplate, myTemplate } = data.data;
 
   const changeTemplateImage = (template: Itemplate[], templateId: string, templateType: string) => {
-    template.forEach(({ _id }, idx) => {
-      if (_id === templateId) {
+    template.forEach(({ id }, idx) => {
+      if (id === templateId) {
         setTemplateImageIndex(idx.toString());
         setTemplateType(templateType);
         templateType === 'myTemplate' &&

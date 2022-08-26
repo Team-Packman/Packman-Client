@@ -6,7 +6,7 @@ import TemplateItem from './TemplateItem';
 import { FONT_STYLES } from '../../styles/font';
 
 interface Template {
-  _id: string;
+  id: string;
   title: string;
 }
 
@@ -48,10 +48,10 @@ function Template(props: TemplateProps) {
             <>
               {basicTemplate.map((template) => (
                 <TemplateItem
-                  key={template._id}
+                  key={template.id}
                   template={template}
                   isSelected={isSelected}
-                  handleTemplateItem={() => onClickTemplateItem(template._id)}
+                  handleTemplateItem={() => onClickTemplateItem(template.id)}
                   changeTemplateImage={changeTemplateImage}
                   basicTemplate={basicTemplate}
                   myTemplate={myTemplate}
@@ -71,15 +71,15 @@ function Template(props: TemplateProps) {
               {!myTemplate.length && (
                 <TemplateItem
                   isSelected="null"
-                  template={{ _id: '', title: '아직 저장된 템플릿이 없어요' }}
+                  template={{ id: '', title: '아직 저장된 템플릿이 없어요' }}
                 />
               )}
               {myTemplate.map((template) => (
                 <TemplateItem
-                  key={template._id}
+                  key={template.id}
                   template={template}
                   isSelected={isSelected}
-                  handleTemplateItem={() => onClickTemplateItem(template._id)}
+                  handleTemplateItem={() => onClickTemplateItem(template.id)}
                   changeTemplateImage={changeTemplateImage}
                   basicTemplate={basicTemplate}
                   myTemplate={myTemplate}

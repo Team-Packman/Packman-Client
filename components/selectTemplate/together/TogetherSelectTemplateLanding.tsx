@@ -20,7 +20,7 @@ import random4 from '/public/assets/png/random4.png';
 import { FONT_STYLES } from '../../../styles/font';
 
 interface Itemplate {
-  _id: string;
+  id: string;
   title: string;
 }
 
@@ -43,8 +43,8 @@ function TogetherSelectTemplateLanding() {
   const { basicTemplate, myTemplate } = data.data;
 
   const changeTemplateImage = (template: Itemplate[], templateId: string, templateType: string) => {
-    template.forEach(({ _id }, idx) => {
-      if (_id === templateId) {
+    template.forEach(({ id }, idx) => {
+      if (id === templateId) {
         setTemplateImageIndex(idx.toString());
         setTemplateType(templateType);
         templateType === 'myTemplate' &&
