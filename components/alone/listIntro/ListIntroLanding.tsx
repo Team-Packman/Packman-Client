@@ -17,10 +17,8 @@ function ListIntroLanding() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const [{ isAloned, templateId }] = useGlobalState<{ isAloned: boolean; templateId: string }>(
-    'template',
-    { isAloned: true, templateId: 'hihi' },
-  );
+  const isAloned = true;
+  const templateId = 'test';
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
   const [listName, setListName] = useState<string>('');
