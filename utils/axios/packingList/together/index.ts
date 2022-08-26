@@ -56,7 +56,7 @@ export const fetchUpdatePackingListPacker = async (
   request: AxiosInstance,
   payload: UpdatePackingListPackerInput,
 ): Promise<UpdatePackingListPackerOutput> => {
-  const { data } = await request.patch(`/packingList/together/packer`, payload);
+  const { data } = await request.patch(`/list/together/packer`, payload);
   return data;
 };
 

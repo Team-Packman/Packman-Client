@@ -57,17 +57,17 @@ export interface UpdatePackingListPackerOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 함께 패킹리스트 id
+    id: string; // 함께 패킹리스트 id
     category: {
-      _id: string; // 함께 패킹리스트 카테고리 id
+      id: string; // 함께 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 함께 패킹리스트 카테고리 속 짐 id
+        id: string; // 함께 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: {
-          _id: string;
-          name: string;
+          id: string;
+          nickname: string;
         } | null;
       }[];
     }[];

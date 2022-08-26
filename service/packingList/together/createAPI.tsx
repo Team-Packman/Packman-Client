@@ -92,36 +92,34 @@ export interface TogetherAPI {
 }
 
 const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
-  const authReq = request;
-
   return {
     together: {
       updatePackingListTitle: (payload: UpdatePackingListTitleInput) =>
-        fetchUpdatePackingListTitle(authReq, payload),
+        fetchUpdatePackingListTitle(request, payload),
       updatePackingListDate: (payload: UpdatePackingListDateInput) =>
-        fetchUpdatePackingListDate(authReq, payload),
+        fetchUpdatePackingListDate(request, payload),
       updatePackingListIsSaved: (payload: UpdatePackingListIsSavedInput) =>
-        fetchUpdatePackingListIsSaved(authReq, payload),
+        fetchUpdatePackingListIsSaved(request, payload),
       updatePackingListPacker: (payload: UpdatePackingListPackerInput) =>
-        fetchUpdatePackingListPacker(authReq, payload),
-      getGroupMembers: (groupId: string) => fetchGroupMember(authReq, groupId),
-      getPackingListDetail: (pacingListId: string) => fetchPackingListDetail(authReq, pacingListId),
+        fetchUpdatePackingListPacker(request, payload),
+      getGroupMembers: (groupId: string) => fetchGroupMember(request, groupId),
+      getPackingListDetail: (pacingListId: string) => fetchPackingListDetail(request, pacingListId),
       addPackingListCategory: (payload: AddTogetherPackingListCategoryInput) =>
-        fetchAddPackingListCategory(authReq, payload),
+        fetchAddPackingListCategory(request, payload),
       updatePackingListCategory: (payload: UpdateTogetherPackingListCategoryInput) =>
-        fetchUpdatePackingListCategory(authReq, payload),
+        fetchUpdatePackingListCategory(request, payload),
       deletePackingListCategory: (payload: DeleteTogetherPackingListCategoryInput) =>
-        fetchDeletePackingListCategory(authReq, payload),
+        fetchDeletePackingListCategory(request, payload),
       addPackingListItem: (payload: AddTogetherPackingListItemInput) =>
-        fetchAddPackingListItem(authReq, payload),
+        fetchAddPackingListItem(request, payload),
       updatePackingListItem: (payload: UpdateTogetherPackingListItemInput) =>
-        fetchUpdatePackingListItem(authReq, payload),
+        fetchUpdatePackingListItem(request, payload),
       deletePackingListItem: (payload: DeleteTogetherPackingListItemInput) =>
-        fetchDeletePackingListItem(authReq, payload),
-      getTogetherFolder: () => fetchTogetherFolder(authReq),
+        fetchDeletePackingListItem(request, payload),
+      getTogetherFolder: () => fetchTogetherFolder(request),
       addTogetherPackingListFolder: (payload: AddTogetherPackingListIntroInput) =>
-        fetchAddTogetherPackingFolder(authReq, payload),
-      getInvited: (inviteCode: string) => fetchInvited(authReq, inviteCode),
+        fetchAddTogetherPackingFolder(request, payload),
+      getInvited: (inviteCode: string) => fetchInvited(request, inviteCode),
     },
   };
 };
