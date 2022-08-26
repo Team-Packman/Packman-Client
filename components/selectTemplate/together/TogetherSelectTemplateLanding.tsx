@@ -53,9 +53,10 @@ function TogetherSelectTemplateLanding() {
     });
   };
 
-  const onClickConfirmButton = () => {
+  const onClickConfirmButton = () =>
     router.push(`/preview?id=${templateId}&type=${templateType}&categoryName=together`);
-  };
+
+  const onClickSkipButton = () => router.push(`/list-intro?id=''&categoryName=together`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);
@@ -95,11 +96,7 @@ function TogetherSelectTemplateLanding() {
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
-        <StyledButton
-          isTemplate={false}
-          isActivated={true}
-          onClick={() => router.push(`/list-intro?id=''&categoryName=together`)}
-        >
+        <StyledButton isTemplate={false} isActivated={true} onClick={onClickSkipButton}>
           건너뛰기
         </StyledButton>
         <StyledButton
