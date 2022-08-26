@@ -6,23 +6,18 @@ import iShowMore from '/public/assets/svg/iShowMore.svg';
 import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
-import useAPI from '../../../utils/hooks/useAPI';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
-import { useGetTogetherInventory } from '../../../utils/hooks/queries/inventory/inventory';
-interface DeleteTogetherInventoryData {
-  folderId: string;
-  listId: string;
-}
+import {
+  useDeleteTogetherInventory,
+  useGetTogetherInventory,
+} from '../../../utils/hooks/queries/inventory/inventory';
 
 function TogetherPackingListLanding() {
-  const queryClient = useQueryClient();
   const router = useRouter();
   const query = router.query.id as string;
   const [toggle, setToggle] = useState(false);
@@ -34,20 +29,12 @@ function TogetherPackingListLanding() {
   // 함께 패킹리스트 데이터 조회
   const togetherInventory = useGetTogetherInventory(query);
 
-  const deleteTogetherInventory = useAPI(
-    (api) => (params: DeleteTogetherInventoryInput) =>
-      api.inventory.together.deleteTogetherInventory(params),
-  );
-  const { mutate: deleteTogetherInventoryMutate } = useMutation(
-    (deleteTogetherInventoryData: DeleteTogetherInventoryData) => {
-      return deleteTogetherInventory(deleteTogetherInventoryData);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getTogetherInventory');
-      },
-    },
-  );
+  const deleteTogetherInventoryMutate = useDeleteTogetherInventory({
+    folderId: togetherInventory?.data.currentFolder.id as string,
+    listId: isDeleting
+      ? (deleteList.join(',') as string)
+      : (togetherInventory?.data.togetherPackingList[selectedIndex].id as string),
+  });
 
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(togetherInventory?.data.togetherPackingList.length).fill(false),
@@ -80,24 +67,15 @@ function TogetherPackingListLanding() {
 
   const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
+
     // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
     if (isDeleting) {
-      deleteTogetherInventoryMutate({
-        folderId: currentFolder.id,
-        listId: deleteList.join(','),
-      });
       if (deleteList.length === togetherPackingList.length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
     }
-    // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
-    else {
-      deleteTogetherInventoryMutate({
-        folderId: currentFolder.id,
-        listId: togetherPackingList[selectedIndex].id,
-      });
-    }
+    deleteTogetherInventoryMutate();
     closeModal();
   };
 

@@ -6,24 +6,18 @@ import iShowMore from '/public/assets/svg/iShowMore.svg';
 import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
-import useAPI from '../../../utils/hooks/useAPI';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import { DeleteAloneInventoryInput } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
-import { useGetAloneInventory } from '../../../utils/hooks/queries/inventory/inventory';
-
-interface DeleteAloneInventoryData {
-  folderId: string;
-  listId: string;
-}
+import {
+  useDeleteAloneInventory,
+  useGetAloneInventory,
+} from '../../../utils/hooks/queries/inventory/inventory';
 
 function AlonePackingListLanding() {
-  const queryClient = useQueryClient();
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -35,20 +29,13 @@ function AlonePackingListLanding() {
   // 혼자 패킹리스트 데이터 조회
   const aloneInventory = useGetAloneInventory(query);
 
-  const deleteAloneInventory = useAPI(
-    (api) => (params: DeleteAloneInventoryInput) =>
-      api.inventory.alone.deleteAloneInventory(params),
-  );
-  const { mutate: deleteAloneInventoryMutate } = useMutation(
-    (deleteTogetherInventoryData: DeleteAloneInventoryData) => {
-      return deleteAloneInventory(deleteTogetherInventoryData);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getAloneInventory');
-      },
-    },
-  );
+  const deleteAloneInventoryMutate = useDeleteAloneInventory({
+    folderId: aloneInventory?.data.currentFolder.id as string,
+    listId: isDeleting
+      ? (deleteList.join(',') as string)
+      : (aloneInventory?.data.alonePackingList[selectedIndex].id as string),
+  });
+
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(aloneInventory?.data.alonePackingList.length).fill(false),
   );
@@ -81,20 +68,12 @@ function AlonePackingListLanding() {
   const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
-      deleteAloneInventoryMutate({
-        folderId: currentFolder.id,
-        listId: deleteList.join(','),
-      });
       if (deleteList.length === alonePackingList.length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
-    } else {
-      deleteAloneInventoryMutate({
-        folderId: currentFolder.id,
-        listId: alonePackingList[selectedIndex].id,
-      });
     }
+    deleteAloneInventoryMutate();
     closeModal();
   };
 
