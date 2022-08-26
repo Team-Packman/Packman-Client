@@ -7,18 +7,24 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // const members = [1];
 // const members = [1, 2, 3, 4, 5];
-const members = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const membersData = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function MemberManage() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
+  const [members, setMembers] = useState<number[]>(membersData);
 
   const EditMembers = () => {
     setIsEditing((prev) => !prev);
   };
 
-  const DeleteMember = (e) => {
-    e.target.parentElement;
+  const DeleteMember = (index: number) => {
+    // console.log(index);
+    setMembers(
+      members.filter((member, memberIndex) => {
+        return memberIndex !== index;
+      }),
+    );
   };
 
   const ClickInvitingButton = () => {
@@ -63,7 +69,9 @@ function MemberManage() {
               <MemberImage index={index} />
               <MemberName>대장나심</MemberName>
               <RemoveButton
-                onClick={DeleteMember}
+                onClick={() => {
+                  DeleteMember(index);
+                }}
                 src={'/assets/png/removeMember.png'}
                 isEditing={isEditing}
               />
