@@ -17,9 +17,7 @@ function ModalForInvitation(props: ModalForInvitationProps) {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/together/invited/${router.query.id}?invited=${inviteCode}`,
-    );
+    navigator.clipboard.writeText(`/together/invited/${router.query.id}?invited=${inviteCode}`);
     setIsCopied(true);
   };
 

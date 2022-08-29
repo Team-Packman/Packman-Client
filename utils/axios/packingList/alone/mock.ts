@@ -16,16 +16,16 @@ export const fetchPackingListWithFolders = async (
         data: {
           currentFolder: {
             id: '62bbb80d9d5dc1aa4c3d2831',
-            title: '혼자여행가기',
+            name: '혼자여행가기',
           },
           folder: [
             {
               id: '62bbb80d9d5dc1aa4c3d2831',
-              title: '해외여행',
+              name: '해외여행',
             },
             {
               id: '62bbb80d9d5dc1aa4c3d28323',
-              title: '국내여행',
+              name: '국내여행',
             },
           ],
           listNum: 20,
@@ -34,22 +34,22 @@ export const fetchPackingListWithFolders = async (
               id: '62bbb80d9d5dc1aa4c3d28311',
               departureDate: '2021.08.15',
               title: '혼자 밀라노 여행을가자',
-              packTotalNum: 25,
-              packRemainNum: 20,
+              packTotalNum: '25',
+              packRemainNum: '20',
             },
             {
               id: '62bbb80d9d5dc1aa4c3d28322',
               departureDate: '2021.12.20',
               title: '크리스마스 여행',
-              packTotalNum: 30,
-              packRemainNum: 20,
+              packTotalNum: '30',
+              packRemainNum: '20',
             },
             {
               id: '62bbb80d9d5dc1aa4c3d28323',
               departureDate: '2022.11.06',
               title: '대만 ㄱㄱ',
-              packTotalNum: 30,
-              packRemainNum: 20,
+              packTotalNum: '30',
+              packRemainNum: '20',
             },
           ],
         },
@@ -69,16 +69,16 @@ export const fetchPackingListIntro = async (
         success: true,
         message: '혼자 패킹리스트 생성 성공',
         data: {
-          _id: '5e4d276f95e376b7976b2003',
+          id: '5e4d276f95e376b7976b2003',
           title: '홍콩 한달 살이',
           departureDate: '2022.07.11',
           category: [
             {
-              _id: '5e4d276f95e376b7976b2003',
+              id: '5e4d276f95e376b7976b2003',
               name: '기본',
               pack: [
                 {
-                  _id: '5e4d276f95e376b7976b2003',
+                  id: '5e4d276f95e376b7976b2003',
                   name: '기본',
                   isChecked: false,
                   packer: null,

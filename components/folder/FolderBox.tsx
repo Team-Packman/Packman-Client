@@ -13,9 +13,9 @@ interface AddNewFolderType {
 
 function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   const {
-    _id = '',
-    title = '',
-    listNum = 0,
+    id = '',
+    name = '',
+    listNum = '',
     editableFolderId = '',
     categoryName = '',
     isNew = false,
@@ -31,21 +31,21 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   const inputElement = useRef<HTMLInputElement>(null);
   const [activeInput, setActiveInput] = useState<boolean>(false);
 
-  const onClickIcon = (_id: string, title: string) => {
+  const onClickIcon = (id: string, title: string) => {
     if (!isNew) {
-      handleBottomModalOpen(_id, title);
+      handleBottomModalOpen(id, title);
     } else {
       handleCancleAddFolder();
     }
   };
 
-  const onClickFolder = (e: React.MouseEvent<HTMLElement>, _id: string, categoryName: string) => {
+  const onClickFolder = (e: React.MouseEvent<HTMLElement>, id: string, categoryName: string) => {
     e.preventDefault();
     if (e.target instanceof HTMLInputElement) {
       return;
     } else {
       if (!isNew) {
-        handleFolderClick(_id, categoryName);
+        handleFolderClick(id, categoryName);
       }
     }
   };
@@ -80,20 +80,20 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
       inputElement.current?.focus();
     }
 
-    if (editableFolderId === _id) {
+    if (editableFolderId === id) {
       setActiveInput(true);
     }
 
     if (isNew) {
       setActiveInput(true);
     }
-  }, [inputElement, editableFolderId, _id, isNew, activeInput]);
+  }, [inputElement, editableFolderId, id, isNew, activeInput]);
 
   return (
-    <StyledRoot key={_id}>
+    <StyledRoot key={id}>
       <StyledInfo>
         <StyledKebab>
-          <span onClick={() => onClickIcon(_id, title)}>
+          <span onClick={() => onClickIcon(id, name)}>
             {isNew ? (
               <Image src={Close} alt="Close icon" width={14} height={14} />
             ) : (
@@ -101,13 +101,13 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
             )}
           </span>
         </StyledKebab>
-        <StyledText onClick={(e) => onClickFolder(e, _id, categoryName)}>
+        <StyledText onClick={(e) => onClickFolder(e, id, categoryName)}>
           <input type="password" autoComplete="off" style={{ display: 'none' }} />
           <StyledTitle
             type="text"
             name="title"
             ref={inputElement}
-            defaultValue={isNew ? '' : title}
+            defaultValue={isNew ? '' : name}
             placeholder={isNew ? '폴더 이름 입력' : ''}
             onChange={(e) => onChange(e)}
             onKeyPress={(e) => onKeyPress(e)}

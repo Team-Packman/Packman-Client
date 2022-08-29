@@ -3,32 +3,14 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authedUser, from } from '../../utils/recoil/atom/atom';
 
 interface ModalForInvitedProps {
   title: string;
-  id: string;
+  clickHandler: () => void;
 }
 
 function ModalForInvited(props: ModalForInvitedProps) {
-  const { id, title } = props;
-  const router = useRouter();
-  const user = useRecoilValue(authedUser);
-  const setFrom = useSetRecoilState(from);
-
-  const clickHandler = () => {
-    if (router.isReady) {
-      if (user.isAlreadyUser) {
-        // 그룹원 등록 api 추가 예정 > 성공시 아래 경로로 라우팅
-        router.replace(`${process.env.NEXT_PUBLIC_DOMAIN}/together/${id}`);
-      } else {
-        setFrom({ url: `/together/${id}` });
-        router.push('/login');
-      }
-    }
-  };
+  const { title, clickHandler } = props;
 
   return (
     <>
@@ -55,7 +37,7 @@ const StyledBg = styled.div`
   left: 0;
   top: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background-color: rgba(0, 0, 0, 0.48);
   display: flex;
   flex-direction: column;

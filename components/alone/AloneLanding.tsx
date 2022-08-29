@@ -138,7 +138,7 @@ function AloneLanding() {
       case 'title':
         patchTitle(
           {
-            _id: listId,
+            id: listId,
             title,
             isAloned,
           },
@@ -152,7 +152,7 @@ function AloneLanding() {
       case 'departure':
         patchDate(
           {
-            _id: listId,
+            id: listId,
             departureDate,
             isAloned,
           },
@@ -166,7 +166,7 @@ function AloneLanding() {
       case 'save':
         patchIsSaved(
           {
-            _id: listId,
+            id: listId,
             isSaved,
             isAloned,
           },
@@ -185,9 +185,9 @@ function AloneLanding() {
     if (currentEditing) {
       patchAloneCategory(
         {
-          _id: categoryId,
+          id: categoryId,
           listId,
-          name,
+          nickname: name,
         },
         {
           onSuccess: () => {
@@ -222,7 +222,7 @@ function AloneLanding() {
       if (name !== '') {
         patchAloneItem(
           {
-            _id: packId,
+            id: packId,
             name,
             listId,
             isChecked,
@@ -249,7 +249,7 @@ function AloneLanding() {
     } else {
       patchAloneItem(
         {
-          _id: packId,
+          id: packId,
           name,
           listId,
           isChecked,

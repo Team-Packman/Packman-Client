@@ -17,37 +17,37 @@ export const fetchTemplateList = async (
         data: {
           basicTemplate: [
             {
-              _id: '1',
+              id: '1',
               title: '국내여행',
             },
             {
-              _id: '2',
+              id: '2',
               title: '해외여행',
             },
             {
-              _id: '3',
+              id: '3',
               title: '콘서트',
             },
             {
-              _id: '4',
+              id: '4',
               title: '토익시험',
             },
             {
-              _id: '5',
+              id: '5',
               title: '제주한달살이',
             },
             {
-              _id: '6',
+              id: '6',
               title: '반려동물과 함께여행',
             },
           ],
           myTemplate: [
             {
-              _id: '7',
+              id: '7',
               title: '앱잼 합숙',
             },
             {
-              _id: '8',
+              id: '8',
               title: '엠티',
             },
           ],

@@ -11,10 +11,10 @@ export interface PackerInfoPayload {
 }
 
 interface PackerModalProps {
-  members: {
-    _id: string;
-    name: string;
-    profileImageId: string;
+  member: {
+    id: string;
+    nickname: string;
+    profileImage: string;
   }[];
   packId: string;
   listId: string;
@@ -23,14 +23,15 @@ interface PackerModalProps {
 }
 
 function PackerModal(props: PackerModalProps) {
-  const { members, modalHandler, packId, listId, updatePacker } = props;
+  const { member, modalHandler, packId, listId, updatePacker } = props;
 
   const TICK = 30;
   const ITERATOR = Array(TICK).fill('').entries();
-  const ID_LIST = members.map(({ _id }) => _id);
-  const drawId = () => Math.floor(Math.random() * members.length);
+  const ID_LIST = member.map(({ id }) => id);
+  const drawId = () => Math.floor(Math.random() * member.length);
   const [selected, setSelected] = useState('');
 
+  /** @todo 랜덤 배정 로직 수정 */
   const draw = () => {
     const randomId = ID_LIST[drawId()];
     setSelected(randomId);
@@ -46,7 +47,7 @@ function PackerModal(props: PackerModalProps) {
     draw();
   }
 
-  const clickHanlder = (packerId: string) => {
+  const clickHandler = () => {
     const payload = {
       listId,
       packId,
@@ -61,16 +62,16 @@ function PackerModal(props: PackerModalProps) {
         <StyledTitle>챙길 사람을 선택해주세요</StyledTitle>
         <StyledRandomButton onClick={StartDraw}>랜덤 배정</StyledRandomButton>
         <StyledPackerWrapper>
-          {members.map(({ _id, name, profileImageId }, i) => (
-            <StyledPacker key={_id} onClick={() => setSelected(_id)}>
-              <StyledPackerImg selected={selected === _id}>
-                <Image src={ProfileList[+profileImageId]} alt="profile" layout="fill" />
+          {member.map(({ id, nickname, profileImage }) => (
+            <StyledPacker key={id} onClick={() => setSelected(id)}>
+              <StyledPackerImg selected={selected === id}>
+                <Image src={ProfileList[+profileImage]} alt="profile" layout="fill" />
               </StyledPackerImg>
-              <StyledPackerName>{name}</StyledPackerName>
+              <StyledPackerName>{nickname}</StyledPackerName>
             </StyledPacker>
           ))}
         </StyledPackerWrapper>
-        <StyledConfirmButton selected={selected !== ''} onClick={() => clickHanlder(selected)}>
+        <StyledConfirmButton selected={selected !== ''} onClick={clickHandler}>
           배정 완료
         </StyledConfirmButton>
       </StyledModal>

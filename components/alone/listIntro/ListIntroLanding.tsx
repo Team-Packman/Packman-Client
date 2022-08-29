@@ -74,7 +74,7 @@ function ListIntroLanding() {
     (api) => api.packingList.alone.addAlonePackingListFolder,
   );
   const addTogetherPackingListFolder = useAPI(
-    (api) => api.packingList.together.addTogetherPakingListFolder,
+    (api) => api.packingList.together.addTogetherPackingListFolder,
   );
   const addFolder = useAPI((api) => api.folder.addFolder);
 
@@ -102,8 +102,8 @@ function ListIntroLanding() {
 
   if (!aloneFolderData || !togetherFolderData) return null;
 
-  const { aloneFolders } = aloneFolderData.data;
-  const { togetherFolders } = togetherFolderData.data;
+  const { aloneFolder } = aloneFolderData.data;
+  const { togetherFolder } = togetherFolderData.data;
 
   const getTodayDate = () => {
     const current = new Date();
@@ -128,33 +128,33 @@ function ListIntroLanding() {
 
   // 폴더 생성 버튼 클릭
   const handleAddFolder = () => {
-    addFolerMutate(
-      { title: folderName, isAloned },
-      {
-        onSuccess: (data) => {
-          {
-            isAloned
-              ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
-                  return {
-                    ...oldData,
-                    data: {
-                      aloneFolders: data.data.aloneFolders,
-                    },
-                  };
-                })
-              : queryClient.setQueryData('togetherFolder', (oldData: any) => {
-                  return {
-                    ...oldData,
-                    data: {
-                      togetherFolders: data.data.togetherFolders,
-                    },
-                  };
-                });
-          }
-        },
-      },
-    );
-    setFolderName('');
+    // addFolerMutate(
+    //   { title: folderName, isAloned },
+    //   {
+    //     onSuccess: (data) => {
+    //       {
+    //         isAloned
+    //           ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
+    //               return {
+    //                 ...oldData,
+    //                 data: {
+    //                   aloneFolders: data.data.aloneFolders,
+    //                 },
+    //               };
+    //             })
+    //           : queryClient.setQueryData('togetherFolder', (oldData: any) => {
+    //               return {
+    //                 ...oldData,
+    //                 data: {
+    //                   togetherFolders: data.data.togetherFolders,
+    //                 },
+    //               };
+    //             });
+    //       }
+    //     },
+    //   },
+    // );
+    // setFolderName('');
   };
 
   const handleTagClick = (id: string, index: number) => {
@@ -229,22 +229,22 @@ function ListIntroLanding() {
         </div>
         <StyledTagContainer>
           {isAloned
-            ? aloneFolders?.map((v, index) => (
+            ? aloneFolder?.map((v, index) => (
                 <StyledTag
-                  key={v._id}
+                  key={v.id}
                   isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v._id, index)}
+                  onClick={() => handleTagClick(v.id, index)}
                 >
-                  {v.title}
+                  {v.name}
                 </StyledTag>
               ))
-            : togetherFolders.map((v, index) => (
+            : togetherFolder.map((v, index) => (
                 <StyledTag
-                  key={v._id}
+                  key={v.id}
                   isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v._id, index)}
+                  onClick={() => handleTagClick(v.id, index)}
                 >
-                  {v.title}
+                  {v.name}
                 </StyledTag>
               ))}
         </StyledTagContainer>

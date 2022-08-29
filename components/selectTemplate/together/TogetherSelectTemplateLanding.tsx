@@ -20,7 +20,7 @@ import random4 from '/public/assets/png/random4.png';
 import { FONT_STYLES } from '../../../styles/font';
 
 interface Itemplate {
-  _id: string;
+  id: string;
   title: string;
 }
 
@@ -44,8 +44,8 @@ function TogetherSelectTemplateLanding() {
   const { basicTemplate, myTemplate } = data.data;
 
   const changeTemplateImage = (template: Itemplate[], templateId: string, templateType: string) => {
-    template.forEach(({ _id }, idx) => {
-      if (_id === templateId) {
+    template.forEach(({ id }, idx) => {
+      if (id === templateId) {
         setTemplateImageIndex(idx.toString());
         setTemplateType(templateType);
         templateType === 'myTemplate' &&
@@ -53,12 +53,12 @@ function TogetherSelectTemplateLanding() {
       }
     });
   };
-
   const onClickConfirmButton = () => {
     router.push(
       `/preview?id=${templateId}&type=${templateType}&categoryName=together&folderId=${folderId}`,
     );
   };
+  const onClickSkipButton = () => router.push(`/list-intro?id=&categoryName=together`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);

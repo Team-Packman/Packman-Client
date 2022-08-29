@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 
 interface DropBoxProps {
-  folderList: { _id: string; title: string }[];
+  folderList: { id: string; name: string }[];
   closeDropBox: () => void;
   currentId: string;
   categoryName: string;
@@ -23,13 +23,9 @@ function DropBox(props: DropBoxProps) {
     <>
       <StyledBackground onClick={closeDropBox} />
       <StyledRoot>
-        {folderList.map(({ _id, title }) => (
-          <StyledItem
-            key={_id}
-            currentId={_id === currentId}
-            onClick={() => onClickFolderItem(_id)}
-          >
-            {title}
+        {folderList.map(({ id, name }) => (
+          <StyledItem key={id} currentId={id === currentId} onClick={() => onClickFolderItem(id)}>
+            {name}
           </StyledItem>
         ))}
       </StyledRoot>

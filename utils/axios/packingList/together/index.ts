@@ -24,6 +24,8 @@ import {
   AddTogetherPackingListIntroInput,
   AddTogetherPackingListIntroOutput,
   GetInvitedOutput,
+  AddMemberInput,
+  AddMemberOutput,
 } from './../../../../service/packingList/together/index';
 import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
 import { AxiosInstance } from 'axios';
@@ -56,7 +58,7 @@ export const fetchUpdatePackingListPacker = async (
   request: AxiosInstance,
   payload: UpdatePackingListPackerInput,
 ): Promise<UpdatePackingListPackerOutput> => {
-  const { data } = await request.patch(`/packingList/together/packer`, payload);
+  const { data } = await request.patch(`/list/together/packer`, payload);
   return data;
 };
 
@@ -71,9 +73,8 @@ export const fetchGroupMember = async (
 export const fetchPackingListDetail = async (
   request: AxiosInstance,
   listId: string,
-  inviteCode: string = '',
 ): Promise<GetTogetherPackingListDetailOutput> => {
-  const { data } = await request(`/packingList/together/${listId}?invitecCode=${inviteCode}`);
+  const { data } = await request(`/list/together/${listId}`);
   return data;
 };
 
@@ -81,7 +82,7 @@ export const fetchAddPackingListCategory = async (
   request: AxiosInstance,
   payload: AddTogetherPackingListCategoryInput,
 ): Promise<AddTogetherPackingListCategoryOutput> => {
-  const { data } = await request.post(`/packingList/together/category`, payload);
+  const { data } = await request.post(`/list/together/category`, payload);
   return data;
 };
 
@@ -89,7 +90,7 @@ export const fetchUpdatePackingListCategory = async (
   request: AxiosInstance,
   payload: UpdateTogetherPackingListCategoryInput,
 ): Promise<UpdateTogetherPackingListCategoryOutput> => {
-  const { data } = await request.patch(`/packingList/together/category`, payload);
+  const { data } = await request.patch(`/list/together/category`, payload);
   return data;
 };
 
@@ -97,7 +98,7 @@ export const fetchDeletePackingListCategory = async (
   request: AxiosInstance,
   { listId, categoryId }: DeleteTogetherPackingListCategoryInput,
 ): Promise<DeleteTogetherPackingListCategoryOutput> => {
-  const { data } = await request.delete(`/packingList/together/category/${listId}/${categoryId}`);
+  const { data } = await request.delete(`/list/together/category/${listId}/${categoryId}`);
   return data;
 };
 
@@ -105,7 +106,7 @@ export const fetchAddPackingListItem = async (
   request: AxiosInstance,
   payload: AddTogetherPackingListItemInput,
 ): Promise<AddTogetherPackingListItemOutput> => {
-  const { data } = await request.post(`/packingList/together/pack`, payload);
+  const { data } = await request.post(`/list/together/pack`, payload);
   return data;
 };
 
@@ -113,7 +114,7 @@ export const fetchUpdatePackingListItem = async (
   request: AxiosInstance,
   payload: UpdateTogetherPackingListItemInput,
 ): Promise<UpdateTogetherPackingListItemOutput> => {
-  const { data } = await request.patch(`/packingList/together/pack`, payload);
+  const { data } = await request.patch(`/list/together/pack`, payload);
   return data;
 };
 
@@ -121,9 +122,7 @@ export const fetchDeletePackingListItem = async (
   request: AxiosInstance,
   { listId, categoryId, packId }: DeleteTogetherPackingListItemInput,
 ): Promise<DeleteTogetherPackingListItemOutput> => {
-  const { data } = await request.delete(
-    `/packingList/together/pack/${listId}/${categoryId}/${packId}`,
-  );
+  const { data } = await request.delete(`/list/together/pack/${listId}/${categoryId}/${packId}`);
   return data;
 };
 
@@ -146,6 +145,14 @@ export const fetchInvited = async (
   request: AxiosInstance,
   inviteCode: string,
 ): Promise<GetInvitedOutput> => {
-  const { data } = await request(`/packingList/invite/${inviteCode}`);
+  const { data } = await request(`/list/invite/${inviteCode}`);
+  return data;
+};
+
+export const fetchAddMember = async (
+  request: AxiosInstance,
+  payload: AddMemberInput,
+): Promise<AddMemberOutput> => {
+  const { data } = await request.post(`/list/together/add-member`, payload);
   return data;
 };
