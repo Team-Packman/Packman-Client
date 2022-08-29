@@ -31,10 +31,7 @@ function SettingProfile(props: SettingProfileProps) {
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
-  const profileImageList = ProfileList.map((e: StaticImageData, i: number) => ({
-    id: i + '',
-    src: e,
-  })); // 프로필 이미지 캐릭터 6개 담은 배열
+  const profile = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const { accessToken } = useRecoilValue(kakao);
   const router = useRouter();
 
@@ -86,12 +83,7 @@ function SettingProfile(props: SettingProfileProps) {
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
-          <Image
-            src={profileImageList[+profileImage].src}
-            alt="my-profile-image"
-            width={80}
-            height={80}
-          />
+          <Image src={profile[+profileImage].src} alt="my-profile-image" width={80} height={80} />
           <div>
             <h1>{nickname}</h1>
             <p>{email}</p>

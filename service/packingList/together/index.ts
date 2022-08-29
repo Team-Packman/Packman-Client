@@ -57,17 +57,17 @@ export interface UpdatePackingListPackerOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 함께 패킹리스트 id
+    id: string; // 함께 패킹리스트 id
     category: {
-      _id: string; // 함께 패킹리스트 카테고리 id
+      id: string; // 함께 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 함께 패킹리스트 카테고리 속 짐 id
+        id: string; // 함께 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: {
-          _id: string;
-          name: string;
+          id: string;
+          nickname: string;
         } | null;
       }[];
     }[];
@@ -365,6 +365,7 @@ export interface AddTogetherPackingListIntroOutput {
   success: boolean;
   message: string;
   data: {
+    id: string; // 패킹리스트 id
     title: string; // 패킹리스트 제목
     departureDate: string; // 출발 날짜
     togetherPackingList: {
@@ -410,7 +411,20 @@ export interface GetInvitedOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 함께 패킹리스트 id
+    id: string; // 함께 패킹리스트 id
     title: string; // 함께 패킹리스트 제목
+  };
+}
+
+export interface AddMemberInput {
+  listId: string;
+}
+
+export interface AddMemberOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    listId: string; // 함께-혼자 패킹리스트 연결 id
   };
 }
