@@ -603,7 +603,12 @@ function TogetherLanding() {
         </Swiper>
         <FunctionSection>
           <AddTemplateButton
-            onClick={() => updateRemainingInfo({ listId: info.id, isSaved: true }, 'save')}
+            onClick={() =>
+              updateRemainingInfo(
+                { listId: info.id, isSaved: info.togetherPackingList.isSaved },
+                'save',
+              )
+            }
           >
             나만의 템플릿으로 추가
           </AddTemplateButton>
