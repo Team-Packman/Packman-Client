@@ -27,7 +27,7 @@ export const fetchAddAlonePackingFolder = async (
   request: AxiosInstance,
   payload: AddAlonePackingListIntroInput,
 ): Promise<AddAlonePackingListIntroOutput> => {
-  const { data } = await request.post(`/packingList/alone`, payload);
+  const { data } = await request.post(`/list/alone`, payload);
   return data;
 };
 
