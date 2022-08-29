@@ -5,8 +5,6 @@ import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import EditingProfile from '../components/profile/EditingProfile';
 import SettingProfile from '../components/profile/SettingProfile';
-import { packmanColors } from '../styles/color';
-import { FONT_STYLES } from '../styles/font';
 
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);

@@ -61,7 +61,7 @@ function Login() {
                       },
                     );
                   } else {
-                    router.replace('/together/3');
+                    router.replace('/folder');
                   }
                   setInvitation({ listId: '' });
                 } else {

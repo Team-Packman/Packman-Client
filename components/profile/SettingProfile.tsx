@@ -11,6 +11,8 @@ import { authUserAtom, kakao } from '../../utils/recoil/atom/atom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
+import useAPI from '../../utils/hooks/useAPI';
+import { useMutation } from 'react-query';
 interface ProfileData {
   id: string;
   nickname: string;
@@ -33,11 +35,21 @@ function SettingProfile(props: SettingProfileProps) {
   const { accessToken } = useRecoilValue(kakao);
   const router = useRouter();
 
-  const onClickLeftModalButton = async () => {
-    setIsWithdrawn(true);
-  };
+  const deleteUser = useAPI((api) => api.user.deleteUserInfo);
+  const { mutate: deleteUserMutate } = useMutation(
+    (deleteUserData: string) => {
+      setIsWithdrawn(true);
+      return deleteUser(deleteUserData);
+    },
+    {
+      onSuccess: () => {
+        resetUserState();
+        router.replace('/login');
+      },
+    },
+  );
 
-  const onClickRightModalButton = () => {
+  const closeModal = () => {
     setShowModal(false);
   };
 
@@ -59,7 +71,7 @@ function SettingProfile(props: SettingProfileProps) {
         );
       } finally {
         resetUserState();
-        router.push('/login');
+        router.replace('/login');
       }
     })();
   };
@@ -91,29 +103,53 @@ function SettingProfile(props: SettingProfileProps) {
         <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
           <h1>고객센터</h1>
           <StyledEtcWrapper>
-            <p>문의하기</p>
-            <p>서비스 피드백</p>
+            <p
+              onClick={() =>
+                router.push(
+                  'https://docs.google.com/forms/d/e/1FAIpQLSd1D1ptmYG5Ufu7y1SKDnSr-k8UIeRfSlTBFRQqX3bF-TwuQg/viewform',
+                )
+              }
+            >
+              문의하기
+            </p>
+            <p
+              onClick={() =>
+                router.push(
+                  'https://docs.google.com/forms/d/e/1FAIpQLSer7bKxKKcmRU5vrMT_187cERpbA5chkzM-sjrigBsmWH9a6Q/viewform',
+                )
+              }
+            >
+              서비스 피드백
+            </p>
           </StyledEtcWrapper>
         </StyledEtc>
         <StyledEtc gap={1.2} paddingTop={3.1} borderBottom={false}>
           <h1>About 팩맨</h1>
           <StyledEtcWrapper>
-            <p>함께하는 사람들</p>
-            <p>약관 및 정책</p>
+            <p
+              onClick={() => router.push('https://www.notion.so/1003579b6fd34fb0861040bb04fe235d')}
+            >
+              함께하는 사람들
+            </p>
+            <p
+              onClick={() => router.push('https://www.notion.so/99197c3491fe477ea9d69ed131cf4087')}
+            >
+              약관 및 정책
+            </p>
           </StyledEtcWrapper>
         </StyledEtc>
 
         {showModal && (
           <Modal
             title={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
-            closeModal={() => setShowModal(false)}
+            closeModal={closeModal}
             button={
               !isWithdrawn && (
                 <StyledModalButtonWrapper>
-                  <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                  <StyledModalButton left={true} onClick={() => deleteUserMutate(accessToken)}>
                     탈퇴하기
                   </StyledModalButton>
-                  <StyledModalButton onClick={onClickRightModalButton}>취소하기</StyledModalButton>
+                  <StyledModalButton onClick={closeModal}>취소하기</StyledModalButton>
                 </StyledModalButtonWrapper>
               )
             }
