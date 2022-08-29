@@ -36,7 +36,11 @@ export interface KakaoLoginOutput {
   };
 }
 
-export interface Refresh {
+export interface RefreshInput {
+  accessToken: string;
+  refreshToken: string;
+}
+export interface RefreshOutput {
   status: number;
   success: boolean;
   message: string;

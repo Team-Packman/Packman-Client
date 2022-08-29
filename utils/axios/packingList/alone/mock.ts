@@ -69,16 +69,16 @@ export const fetchPackingListIntro = async (
         success: true,
         message: '혼자 패킹리스트 생성 성공',
         data: {
-          _id: '5e4d276f95e376b7976b2003',
+          id: '5e4d276f95e376b7976b2003',
           title: '홍콩 한달 살이',
           departureDate: '2022.07.11',
           category: [
             {
-              _id: '5e4d276f95e376b7976b2003',
+              id: '5e4d276f95e376b7976b2003',
               name: '기본',
               pack: [
                 {
-                  _id: '5e4d276f95e376b7976b2003',
+                  id: '5e4d276f95e376b7976b2003',
                   name: '기본',
                   isChecked: false,
                   packer: null,

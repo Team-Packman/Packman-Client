@@ -5,23 +5,29 @@ import {
   GetUserInfoOutput,
   UpdateUserProfileInput,
   UpdateUserProfileOutput,
+  DeleteUserInfoOutput,
 } from '.';
-import { fetchAddUserProfile, fetchUpdateUserProfile, fetchUserInfo } from '../../utils/axios/user';
+import {
+  fetchAddUserProfile,
+  fetchDeleteUserInfo,
+  fetchUpdateUserProfile,
+  fetchUserInfo,
+} from '../../utils/axios/user';
 
 export interface UserAPI {
   getUserInfo: () => Promise<GetUserInfoOutput>;
   updateUserProfile: (payload: UpdateUserProfileInput) => Promise<UpdateUserProfileOutput>;
   addUserProfile: (payload: AddUserProfileInput) => Promise<AddUserProfileOutput>;
+  deleteUserInfo: (accessToken: string) => Promise<DeleteUserInfoOutput>;
 }
 
 const createUserAPI = (request: AxiosInstance): UserAPI => {
-  const authReq = request;
-
   return {
-    getUserInfo: () => fetchUserInfo(authReq),
+    getUserInfo: () => fetchUserInfo(request),
     updateUserProfile: (payload: UpdateUserProfileInput) =>
-      fetchUpdateUserProfile(authReq, payload),
+      fetchUpdateUserProfile(request, payload),
     addUserProfile: (payload: AddUserProfileInput) => fetchAddUserProfile(request, payload),
+    deleteUserInfo: (accessToken: string) => fetchDeleteUserInfo(request, accessToken),
   };
 };
 

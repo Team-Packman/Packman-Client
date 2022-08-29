@@ -57,17 +57,17 @@ export interface UpdatePackingListPackerOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 함께 패킹리스트 id
+    id: string; // 함께 패킹리스트 id
     category: {
-      _id: string; // 함께 패킹리스트 카테고리 id
+      id: string; // 함께 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 함께 패킹리스트 카테고리 속 짐 id
+        id: string; // 함께 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: {
-          _id: string;
-          name: string;
+          id: string;
+          nickname: string;
         } | null;
       }[];
     }[];
@@ -345,10 +345,10 @@ export interface GetTogetherFolderOutput {
   success: boolean;
   message: string;
   data: {
-    togetherFolders: {
+    togetherFolder: {
       // 함께 패킹 폴더 배열
-      _id: string; // 폴더 id
-      title: string; // 폴더 이름
+      id: string; // 폴더 id
+      name: string; // 폴더 이름
     }[];
   };
 }
@@ -365,37 +365,39 @@ export interface AddTogetherPackingListIntroOutput {
   success: boolean;
   message: string;
   data: {
+    id: string; //함께패킹리스트-나의 패킹리스트 연결 키(본 키로 함께 패킹리스트 구분)
     title: string; // 패킹리스트 제목
     departureDate: string; // 출발 날짜
     togetherPackingList: {
-      _id: string; // 함께 패킹리스트 id
+      id: string; // 함께 패킹리스트 id
       groupId: string; // 그룹 id
       category: {
         // 카테고리
-        _id: string; // 카테고리 id
+        id: string; // 카테고리 id
         name: string; // 카테고리 이름
         pack: {
           // 짐
-          _id: string; // 짐 id
+          id: string; // 짐 id
           name: string; // 짐 이름
           isChecked: boolean; // 짐 챙김 여부
           packer: {
-            _id: string; // 짐 챙길사람 id
-            name: string; // 짐 챙길사람 이름
+            id: string; // 짐 챙길사람 id
+            nickname: string; // 짐 챙길사람 이름
           } | null;
         }[];
       }[];
+      inviteCode: string;
       isSaved: boolean;
     };
     myPackingList: {
-      _id: string; // 혼자 패킹리스트 id
+      id: string; // 혼자 패킹리스트 id
       category: {
         // 카테고리
-        _id: string; // 카테고리 id
+        id: string; // 카테고리 id
         name: string; // 카테고리 이름
         pack: {
           // 짐
-          _id: string; // 짐 id
+          id: string; // 짐 id
           name: string; // 짐 이름
           isChecked: boolean; // 짐 체크 여부
           packer: null;
@@ -410,7 +412,20 @@ export interface GetInvitedOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 함께 패킹리스트 id
+    id: string; // 함께 패킹리스트 id
     title: string; // 함께 패킹리스트 제목
+  };
+}
+
+export interface AddMemberInput {
+  listId: string;
+}
+
+export interface AddMemberOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    listId: string; // 함께-혼자 패킹리스트 연결 id
   };
 }

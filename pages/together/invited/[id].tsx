@@ -1,22 +1,43 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
-import ModalForInvited from '../../../components/common/ModalForInvited';
+import { useMutation, useQuery } from 'react-query';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { authUserAtom, invitationAtom } from '../../../utils/recoil/atom/atom';
 import useAPI from '../../../utils/hooks/useAPI';
+import ModalForInvited from '../../../components/common/ModalForInvited';
 
 function Invited() {
   const router = useRouter();
   const { invited } = router.query;
+  const user = useRecoilValue(authUserAtom);
+  const setInvitation = useSetRecoilState(invitationAtom);
   const getInvited = useAPI((api) => api.packingList.together.getInvited);
+  const addMember = useAPI((api) => api.packingList.together.addMember);
 
   const { data } = useQuery(['invited', invited], () => getInvited(invited as string), {
     enabled: !!invited,
   });
 
+  const { mutate } = useMutation('addMember', addMember);
+
   if (!data) return null;
   const { data: info } = data;
 
-  return <ModalForInvited title={info.title} id={info._id} />;
+  const clickHandler = () => {
+    if (user.isAlreadyUser) {
+      mutate(
+        { listId: info.id },
+        {
+          onSuccess: ({ data: { listId } }) => router.replace(`/together/${listId}`),
+        },
+      );
+    } else {
+      setInvitation({ listId: info.id });
+      router.push('/login');
+    }
+  };
+
+  return <ModalForInvited title={info.title} clickHandler={clickHandler} />;
 }
 
 export default Invited;

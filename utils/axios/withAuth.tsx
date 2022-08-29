@@ -1,20 +1,17 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { useRefresh } from '../hooks/queries/auth/auth';
-import useAPI from '../hooks/useAPI';
-import { AuthUser } from '../recoil/atom';
 import { authUserAtom } from '../recoil/atom/atom';
 
 function withAuth(axiosWithAuth: AxiosInstance) {
-  // const router = useRouter();
-  const { accessToken, refreshToken } = useRecoilValue(authUserAtom);
-  const [refresh] = useRefresh({ accessToken, refreshToken });
+  const tokens = useRecoilValue(authUserAtom);
+  const refresh = useRefresh(tokens);
 
   const requestIntercept = axiosWithAuth.interceptors.request.use(
     (config: AxiosRequestConfig) => {
       if (config.headers && !config.headers['Authorization']) {
-        config.headers['Authorization'] = `${accessToken}`;
+        config.headers['Authorization'] = `${tokens.accessToken}`;
+
         return config;
       }
 
@@ -30,13 +27,19 @@ function withAuth(axiosWithAuth: AxiosInstance) {
       return config;
     },
     async (error) => {
+      const config = error.config;
+
       if (error.response.status === 401) {
-        // console.log('401!');
-        // const prev = error.config;
-        // const { data } = await refresh();
-        // console.log('re', data);
-        // router.replace('/login');
+        const tokens = await refresh();
+
+        if (tokens) {
+          config.headers['Authorization'] = `${tokens.accessToken}`;
+
+          return axiosWithAuth(config);
+        }
       }
+
+      return Promise.reject(error);
     },
   );
   return axiosWithAuth;

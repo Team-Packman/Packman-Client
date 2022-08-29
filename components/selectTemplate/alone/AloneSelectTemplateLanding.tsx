@@ -22,12 +22,13 @@ import { FONT_STYLES } from '../../../styles/font';
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
 
 interface Itemplate {
-  _id: string;
+  id: string;
   title: string;
 }
 
 function AloneSelectTemplateLanding() {
   const router = useRouter();
+  const { folderId } = router.query;
   const [activateButton, setActivateButton] = useState(false);
   const getAloneTemplateList = useAPI((api) => api.ect.getAloneTemplateList);
   const { data } = useQuery('templateList', () => getAloneTemplateList());
@@ -43,8 +44,8 @@ function AloneSelectTemplateLanding() {
   const { basicTemplate, myTemplate } = data.data;
 
   const changeTemplateImage = (template: Itemplate[], templateId: string, templateType: string) => {
-    template.forEach(({ _id }, idx) => {
-      if (_id === templateId) {
+    template.forEach(({ id }, idx) => {
+      if (id === templateId) {
         setTemplateImageIndex(idx.toString());
         setTemplateType(templateType);
         templateType === 'myTemplate' &&
@@ -54,8 +55,11 @@ function AloneSelectTemplateLanding() {
   };
 
   const onClickConfirmButton = () => {
-    router.push(`/preview?id=${templateId}&type=${templateType}&categoryName=alone`);
+    router.push(
+      `/preview?id=${templateId}&type=${templateType}&categoryName=alone&folderId=${folderId}`,
+    );
   };
+  const onClickSkipButton = () => router.push(`/list-intro?id=&categoryName=alone`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);
@@ -98,7 +102,7 @@ function AloneSelectTemplateLanding() {
         <StyledButton
           isTemplate={false}
           isActivated={true}
-          onClick={() => router.push(`/list-intro?id=''&categoryName=alone`)}
+          onClick={() => router.push(`/list-intro?id=''&categoryName=alone&folderId=${folderId}`)}
         >
           건너뛰기
         </StyledButton>

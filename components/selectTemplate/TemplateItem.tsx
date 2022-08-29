@@ -3,7 +3,7 @@ import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 
 interface Template {
-  _id: string;
+  id: string;
   title: string;
 }
 interface TemplateItemProps {
@@ -25,16 +25,16 @@ function TemplateItem(props: TemplateItemProps) {
     basicTemplate,
     myTemplate,
   } = props;
-  const { _id, title } = template;
+  const { id, title } = template;
 
   const onClickTemplateItem = (id: string) => {
     basicTemplate?.forEach((template) => {
-      if (id === template._id) {
+      if (id === template.id) {
         changeTemplateImage && changeTemplateImage(basicTemplate, id, 'basic');
       }
     });
     myTemplate?.forEach((template) => {
-      if (id === template._id) {
+      if (id === template.id) {
         changeTemplateImage && changeTemplateImage(myTemplate, id, 'myTemplate');
       }
     });
@@ -43,9 +43,9 @@ function TemplateItem(props: TemplateItemProps) {
 
   return (
     <StyledRoot
-      isSelected={isSelected === _id}
-      isListEmpty={_id === ''}
-      onClick={() => onClickTemplateItem(_id)}
+      isSelected={isSelected === id}
+      isListEmpty={id === ''}
+      onClick={() => onClickTemplateItem(id)}
     >
       {title}
     </StyledRoot>

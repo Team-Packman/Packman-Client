@@ -29,10 +29,10 @@ export interface GetAloneFolderOutput {
   success: boolean;
   message: string;
   data: {
-    aloneFolders: {
+    aloneFolder: {
       // 혼자 패킹 폴더 배열
-      _id: string; // 폴더 id
-      title: string; // 폴더 이름
+      id: string; // 폴더 id
+      name: string; // 폴더 이름
     }[];
   };
 }
@@ -48,14 +48,14 @@ export interface AddAlonePackingListIntroOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string;
+    id: string;
     title: string;
     departureDate: string;
     category: {
-      _id: string;
+      id: string;
       name: string;
       pack: {
-        _id: string;
+        id: string;
         name: string;
         isChecked: boolean;
         packer: null;
@@ -75,12 +75,12 @@ export interface AddAlonePackingListCategoryOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 패킹리스트 id
+    id: string; // 패킹리스트 id
     category: {
-      _id: string; // 패킹리스트 카테고리 id
+      id: string; // 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 패킹리스트 카테고리 속 짐 id
+        id: string; // 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: null;
@@ -91,7 +91,7 @@ export interface AddAlonePackingListCategoryOutput {
 
 export interface UpdateAlonePackingListCategoryInput {
   id: string; // 혼자 패킹리스트 카테고리 id
-  nickname: string; // 혼자 패킹리스트 카테고리 이름
+  name: string; // 혼자 패킹리스트 카테고리 이름
   listId: string; // 혼자 패킹리스크 id
 }
 
@@ -124,12 +124,12 @@ export interface DeleteAlonePackingListCategoryOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; //  패킹리스트 id
+    id: string; //  패킹리스트 id
     category: {
-      _id: string; // 패킹리스트 카테고리 id
+      id: string; // 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 패킹리스트 카테고리 속 짐 id
+        id: string; // 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: null;
@@ -149,12 +149,12 @@ export interface AddAlonePackingListItemOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 패킹리스트 id
+    id: string; // 패킹리스트 id
     category: {
-      _id: string; // 패킹리스트 카테고리 id
+      id: string; // 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 패킹리스트 카테고리 속 짐 id
+        id: string; // 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: null;
@@ -176,12 +176,12 @@ export interface UpdateAlonePackingListItemOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 패킹리스트 id
+    id: string; // 패킹리스트 id
     category: {
-      _id: string; // 패킹리스트 카테고리 id
+      id: string; // 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 패킹리스트 카테고리 속 짐 id
+        id: string; // 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: null;
@@ -201,12 +201,12 @@ export interface DeleteAlonePackingListItemOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 패킹리스트 id
+    id: string; // 패킹리스트 id
     category: {
-      _id: string; // 패킹리스트 카테고리 id
+      id: string; // 패킹리스트 카테고리 id
       name: string;
       pack: {
-        _id: string; // 패킹리스트 카테고리 속 짐 id
+        id: string; // 패킹리스트 카테고리 속 짐 id
         name: string;
         isChecked: boolean;
         packer: null;
@@ -220,14 +220,14 @@ export interface GetAlonePackingListDetailOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; // 혼자 패킹리스트 id
+    id: string; // 혼자 패킹리스트 id
     title: string; // 혼자 패킹리스트 제목
     departureDate: string; // 혼자 패킹리스트 출발 일시
     category: {
-      _id: string; // 혼자 패킹리스트 카테고리id
+      id: string; // 혼자 패킹리스트 카테고리id
       name: string; // 혼자 패킹리스트 카테고리 이름
       pack: {
-        _id: string; // 해당 카테고리에 포함된 짐id
+        id: string; // 해당 카테고리에 포함된 짐id
         name: string; // 해당 카테고리에 포함된 짐 이름
         isChecked: boolean; // 짐 챙김 여부 챙겼을 경우 true
         packer: null;

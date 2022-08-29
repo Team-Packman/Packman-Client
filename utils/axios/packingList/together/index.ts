@@ -24,6 +24,8 @@ import {
   AddTogetherPackingListIntroInput,
   AddTogetherPackingListIntroOutput,
   GetInvitedOutput,
+  AddMemberInput,
+  AddMemberOutput,
 } from './../../../../service/packingList/together/index';
 import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
 import { AxiosInstance } from 'axios';
@@ -32,7 +34,7 @@ export const fetchUpdatePackingListTitle = async (
   request: AxiosInstance,
   payload: UpdatePackingListTitleInput,
 ): Promise<UpdatePackingListTitleOutput> => {
-  const { data } = await request.patch(`/packingList/title`, payload);
+  const { data } = await request.patch(`/list/title`, payload);
   return data;
 };
 
@@ -40,7 +42,7 @@ export const fetchUpdatePackingListDate = async (
   request: AxiosInstance,
   payload: UpdatePackingListDateInput,
 ): Promise<UpdatePackingListDateOutput> => {
-  const { data } = await request.patch(`/packingList/departureDate`, payload);
+  const { data } = await request.patch(`/list/departureDate`, payload);
   return data;
 };
 
@@ -48,7 +50,7 @@ export const fetchUpdatePackingListIsSaved = async (
   request: AxiosInstance,
   payload: UpdatePackingListIsSavedInput,
 ): Promise<UpdatePackingListIsSavedOutput> => {
-  const { data } = await request.patch(`/packingList/myTemplate`, payload);
+  const { data } = await request.patch(`/list/myTemplate`, payload);
   return data;
 };
 
@@ -56,7 +58,7 @@ export const fetchUpdatePackingListPacker = async (
   request: AxiosInstance,
   payload: UpdatePackingListPackerInput,
 ): Promise<UpdatePackingListPackerOutput> => {
-  const { data } = await request.patch(`/packingList/together/packer`, payload);
+  const { data } = await request.patch(`/list/together/packer`, payload);
   return data;
 };
 
@@ -135,7 +137,7 @@ export const fetchAddTogetherPackingFolder = async (
   request: AxiosInstance,
   payload: AddTogetherPackingListIntroInput,
 ): Promise<AddTogetherPackingListIntroOutput> => {
-  const { data } = await request.post(`/packingList/together`, payload);
+  const { data } = await request.post(`/list/together`, payload);
   return data;
 };
 
@@ -143,6 +145,14 @@ export const fetchInvited = async (
   request: AxiosInstance,
   inviteCode: string,
 ): Promise<GetInvitedOutput> => {
-  const { data } = await request(`/packingList/invite/${inviteCode}`);
+  const { data } = await request(`/list/invite/${inviteCode}`);
+  return data;
+};
+
+export const fetchAddMember = async (
+  request: AxiosInstance,
+  payload: AddMemberInput,
+): Promise<AddMemberOutput> => {
+  const { data } = await request.post(`/list/together/add-member`, payload);
   return data;
 };
