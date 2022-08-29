@@ -83,7 +83,7 @@ function ListIntroLanding() {
   // 폴더 생성 버튼 클릭
   const handleAddFolder = () => {
     addFolerMutate(
-      { title: folderName, isAloned },
+      { name: folderName, isAloned },
       {
         onSuccess: (data) => {
           {

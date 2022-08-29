@@ -18,7 +18,7 @@ export interface UserAPI {
   getUserInfo: () => Promise<GetUserInfoOutput>;
   updateUserProfile: (payload: UpdateUserProfileInput) => Promise<UpdateUserProfileOutput>;
   addUserProfile: (payload: AddUserProfileInput) => Promise<AddUserProfileOutput>;
-  deleteUser: (accessToken: string) => Promise<DeleteUserInfoOutput>;
+  deleteUserInfo: (accessToken: string) => Promise<DeleteUserInfoOutput>;
 }
 
 const createUserAPI = (request: AxiosInstance): UserAPI => {
@@ -27,7 +27,7 @@ const createUserAPI = (request: AxiosInstance): UserAPI => {
     updateUserProfile: (payload: UpdateUserProfileInput) =>
       fetchUpdateUserProfile(request, payload),
     addUserProfile: (payload: AddUserProfileInput) => fetchAddUserProfile(request, payload),
-    deleteUser: (accessToken: string) => fetchDeleteUserInfo(request, accessToken),
+    deleteUserInfo: (accessToken: string) => fetchDeleteUserInfo(request, accessToken),
   };
 };
 

@@ -1,6 +1,5 @@
 import { AxiosInstance } from 'axios';
 import { DeleteAloneInventoryInput, DeleteAloneInventoryOutput, GetAloneInventoryOutput } from '.';
-import withAuth from '../../../utils/axios/withAuth';
 import { fetchAloneInventory, fetchDeleteAloneInventory } from '../../../utils/inventory/alone';
 
 export interface AloneAPI {

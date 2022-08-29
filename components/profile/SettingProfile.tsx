@@ -38,7 +38,7 @@ function SettingProfile(props: SettingProfileProps) {
   const { accessToken } = useRecoilValue(kakao);
   const router = useRouter();
 
-  const deleteUser = useAPI((api) => api.user.deleteUser);
+  const deleteUser = useAPI((api) => api.user.deleteUserInfo);
   const { mutate: deleteUserMutate } = useMutation(
     (deleteUserData: string) => {
       setIsWithdrawn(true);
