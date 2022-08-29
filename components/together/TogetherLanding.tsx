@@ -200,7 +200,7 @@ function TogetherLanding() {
         patchAloneCategory(
           {
             id: categoryId,
-            nickname: name,
+            name,
             listId,
           },
           {
@@ -492,7 +492,7 @@ function TogetherLanding() {
       option={
         <CheckListHeader
           together
-          listId={info.togetherPackingList.id}
+          listId={info.id}
           departureDate={info.departureDate}
           title={info.title}
           activeMode={activeMode}
@@ -603,9 +603,7 @@ function TogetherLanding() {
         </Swiper>
         <FunctionSection>
           <AddTemplateButton
-            onClick={() =>
-              updateRemainingInfo({ listId: info.togetherPackingList.id, isSaved: true }, 'save')
-            }
+            onClick={() => updateRemainingInfo({ listId: info.id, isSaved: true }, 'save')}
           >
             나만의 템플릿으로 추가
           </AddTemplateButton>

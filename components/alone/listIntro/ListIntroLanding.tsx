@@ -40,7 +40,7 @@ function ListIntroLanding() {
       setIsAloned(categoryName === 'alone');
       setTemplateId(id as string);
     }
-  }, [router]);
+  }, [router, categoryName, id]);
 
   useEffect(() => {
     const checkFolderAndListValidation = () => {
@@ -138,7 +138,7 @@ function ListIntroLanding() {
                   return {
                     ...oldData,
                     data: {
-                      aloneFolders: data.data.aloneFolder,
+                      aloneFolder: data.data.aloneFolder,
                     },
                   };
                 })
@@ -146,7 +146,7 @@ function ListIntroLanding() {
                   return {
                     ...oldData,
                     data: {
-                      togetherFolders: data.data.togetherFolder,
+                      togetherFolder: data.data.togetherFolder,
                     },
                   };
                 });
@@ -194,7 +194,7 @@ function ListIntroLanding() {
               departureDate: date,
               folderId: selectedTagIndex.id,
               title: listName,
-              templateId: '62db2b0478f2ebb9778289cb',
+              templateId: templateId,
               // 이전 버전 서버, templateId가 없는 경우 서버내부 오류 발생
               // Test templateId : 62db2b0478f2ebb9778289cb
             },
@@ -238,7 +238,7 @@ function ListIntroLanding() {
                   {v.name}
                 </StyledTag>
               ))
-            : togetherFolder.map((v, index) => (
+            : togetherFolder?.map((v, index) => (
                 <StyledTag
                   key={v.id}
                   isSelected={index === selectedTagIndex.index}

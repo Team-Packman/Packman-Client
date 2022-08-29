@@ -46,7 +46,6 @@ import {
   AddMemberInput,
   AddMemberOutput,
 } from './index';
-import withAuth from '../../../utils/axios/withAuth';
 import { fetchGroupMember } from '../../../utils/axios/packingList/together';
 
 export interface TogetherAPI {

@@ -365,38 +365,39 @@ export interface AddTogetherPackingListIntroOutput {
   success: boolean;
   message: string;
   data: {
-    id: string; // 패킹리스트 id
+    id: string; //함께패킹리스트-나의 패킹리스트 연결 키(본 키로 함께 패킹리스트 구분)
     title: string; // 패킹리스트 제목
     departureDate: string; // 출발 날짜
     togetherPackingList: {
-      _id: string; // 함께 패킹리스트 id
+      id: string; // 함께 패킹리스트 id
       groupId: string; // 그룹 id
       category: {
         // 카테고리
-        _id: string; // 카테고리 id
+        id: string; // 카테고리 id
         name: string; // 카테고리 이름
         pack: {
           // 짐
-          _id: string; // 짐 id
+          id: string; // 짐 id
           name: string; // 짐 이름
           isChecked: boolean; // 짐 챙김 여부
           packer: {
-            _id: string; // 짐 챙길사람 id
-            name: string; // 짐 챙길사람 이름
+            id: string; // 짐 챙길사람 id
+            nickname: string; // 짐 챙길사람 이름
           } | null;
         }[];
       }[];
+      inviteCode: string;
       isSaved: boolean;
     };
     myPackingList: {
-      _id: string; // 혼자 패킹리스트 id
+      id: string; // 혼자 패킹리스트 id
       category: {
         // 카테고리
-        _id: string; // 카테고리 id
+        id: string; // 카테고리 id
         name: string; // 카테고리 이름
         pack: {
           // 짐
-          _id: string; // 짐 id
+          id: string; // 짐 id
           name: string; // 짐 이름
           isChecked: boolean; // 짐 체크 여부
           packer: null;
