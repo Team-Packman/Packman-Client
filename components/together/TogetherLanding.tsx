@@ -492,7 +492,7 @@ function TogetherLanding() {
       option={
         <CheckListHeader
           together
-          listId={info.togetherPackingList.id}
+          listId={info.id}
           departureDate={info.departureDate}
           title={info.title}
           activeMode={activeMode}
