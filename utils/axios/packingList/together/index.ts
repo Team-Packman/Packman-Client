@@ -34,7 +34,7 @@ export const fetchUpdatePackingListTitle = async (
   request: AxiosInstance,
   payload: UpdatePackingListTitleInput,
 ): Promise<UpdatePackingListTitleOutput> => {
-  const { data } = await request.patch(`/packingList/title`, payload);
+  const { data } = await request.patch(`/list/title`, payload);
   return data;
 };
 
@@ -42,7 +42,7 @@ export const fetchUpdatePackingListDate = async (
   request: AxiosInstance,
   payload: UpdatePackingListDateInput,
 ): Promise<UpdatePackingListDateOutput> => {
-  const { data } = await request.patch(`/packingList/departureDate`, payload);
+  const { data } = await request.patch(`/list/departureDate`, payload);
   return data;
 };
 
@@ -50,7 +50,7 @@ export const fetchUpdatePackingListIsSaved = async (
   request: AxiosInstance,
   payload: UpdatePackingListIsSavedInput,
 ): Promise<UpdatePackingListIsSavedOutput> => {
-  const { data } = await request.patch(`/packingList/myTemplate`, payload);
+  const { data } = await request.patch(`/list/myTemplate`, payload);
   return data;
 };
 
