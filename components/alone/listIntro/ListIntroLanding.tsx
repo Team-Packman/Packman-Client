@@ -1,24 +1,28 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import Header from '../../common/Header';
 import { AddFolderInput } from '../../../service/folder';
-import { AddAlonePackingListIntroInput } from '../../../service/packingList/alone';
-import { AddTogetherPackingListIntroInput } from '../../../service/packingList/together';
+import {
+  AddAlonePackingListIntroInput,
+  GetAloneFolderOutput,
+} from '../../../service/packingList/alone';
+import {
+  AddTogetherPackingListIntroInput,
+  GetTogetherFolderOutput,
+} from '../../../service/packingList/together';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
-import useGlobalState from '../../../utils/hooks/useGlobalState';
+
+type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
+type folderType = DeepPartial<GetTogetherFolderOutput> & DeepPartial<GetAloneFolderOutput>;
 
 function ListIntroLanding() {
-  // Todo : param으로 넘어오는 templateId 가져오기 + isAloned 값도
-  // const { isAloned = false, templateId = '62d44cc78c2a5692567b53ae' } = props;
-
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { id, categoryName, folderId } = router.query;
 
-  const isAloned = true;
-  const templateId = 'test';
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
   const [listName, setListName] = useState<string>('');
@@ -26,6 +30,42 @@ function ListIntroLanding() {
     id: '',
     index: -1,
   });
+  const [isAloned, setIsAloned] = useState<boolean>(false);
+  const [templateId, setTemplateId] = useState<string>('');
+  const [createdListId, setCreatedListId] = useState<string>('');
+  const [isValid, setIsValid] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (router.query) {
+      setIsAloned(categoryName === 'alone');
+      setTemplateId(id as string);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    const checkFolderAndListValidation = () => {
+      if (selectedTagIndex && listName) {
+        const checkIsValidate = selectedTagIndex?.index !== -1 && listName !== '';
+        setIsValid(checkIsValidate);
+      }
+    };
+    checkFolderAndListValidation();
+  }, [selectedTagIndex, listName]);
+
+  // 폴더 내에서, 리스트 생성하기를 한 경우 자동으로 해당 폴더를 기본으로 선택하게 하는 함수
+  const initSelectedFolder = (data: folderType, category: string) => {
+    const currentFolder =
+      category === 'together' ? data?.data?.togetherFolders : data?.data?.aloneFolders;
+    const findSelectedFolder = currentFolder?.find((v) => v?._id === folderId);
+
+    if (findSelectedFolder) {
+      const findFolderIndex = currentFolder?.findIndex((v) => v === findSelectedFolder);
+      setSelectedTagIndex({
+        id: findSelectedFolder._id as string,
+        index: findFolderIndex as number,
+      });
+    }
+  };
 
   //  api call
   const getAloneFolder = useAPI((api) => api.packingList.alone.getAloneFolder);
@@ -38,15 +78,22 @@ function ListIntroLanding() {
   );
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  // react-query code
-  const { data: aloneFolderData } = useQuery('aloneFolder', () => getAloneFolder());
-  const { data: togetherFolderData } = useQuery('togetherFolder', () => getTogetherFolder());
+  const { data: aloneFolderData } = useQuery('aloneFolder', () => getAloneFolder(), {
+    onSuccess: (data) => {
+      initSelectedFolder(data, 'alone');
+    },
+  });
+  const { data: togetherFolderData } = useQuery('togetherFolder', () => getTogetherFolder(), {
+    onSuccess: (data) => {
+      initSelectedFolder(data, 'together');
+    },
+  });
 
-  const { mutate: addAloneIntroMutate, isError: aloneIsError } = useMutation(
+  const { mutate: addAloneIntroMutate } = useMutation(
     'addAloneIntroFolder',
     (info: AddAlonePackingListIntroInput) => addAlonePackingListFolder(info),
   );
-  const { mutate: addTogetherIntroMutate, isError: togetherIsError } = useMutation(
+  const { mutate: addTogetherIntroMutate } = useMutation(
     'addTogetherIntroFolder',
     (info: AddTogetherPackingListIntroInput) => addTogetherPackingListFolder(info),
   );
@@ -75,6 +122,7 @@ function ListIntroLanding() {
   };
 
   const handleListNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     setListName(e.target.value);
   };
 
@@ -134,8 +182,10 @@ function ListIntroLanding() {
               templateId: templateId,
             },
             {
-              onSuccess: () => {
-                router.push(`/packing-list/alone/category`);
+              onSuccess: (data) => {
+                // setCreatedListId(data?.data?._id);
+                // TODO: createdListId 삭제 후, data.data.id로 수정
+                router.push(`/alone/id=${createdListId}`);
               },
             },
           )
@@ -144,11 +194,14 @@ function ListIntroLanding() {
               departureDate: date,
               folderId: selectedTagIndex.id,
               title: listName,
-              templateId: templateId,
+              templateId: '62db2b0478f2ebb9778289cb',
+              // 이전 버전 서버, templateId가 없는 경우 서버내부 오류 발생
+              // Test templateId : 62db2b0478f2ebb9778289cb
             },
             {
-              onSuccess: () => {
-                router.push(`/packing-list/together/category`);
+              onSuccess: (data) => {
+                // setCreatedListId(data?.data?.id);
+                router.push(`/together/id=${createdListId}`);
               },
             },
           );
@@ -199,7 +252,6 @@ function ListIntroLanding() {
       <StyledListNameContainer>
         <h3>리스트 이름을 작성해주세요</h3>
         <div>
-          {(aloneIsError || togetherIsError) && <label>중복된 리스트 이름입니다</label>}
           <input
             type="text"
             placeholder="예시) 혼자 캐나다 여행"
@@ -209,7 +261,9 @@ function ListIntroLanding() {
         </div>
       </StyledListNameContainer>
       <StyledButtonContainer>
-        <StyledNextButton onClick={handleNextButtonClick}>다음 단계</StyledNextButton>
+        <StyledNextButton onClick={handleNextButtonClick} disabled={!isValid}>
+          다음 단계
+        </StyledNextButton>
       </StyledButtonContainer>
     </StyledRoot>
   );
@@ -348,13 +402,16 @@ export const StyledButtonContainer = styled.section`
   bottom: 3.3rem;
   left: 2rem;
   width: calc(100% - 4rem);
+  z-index: 1500;
 `;
-export const StyledNextButton = styled.button`
+export const StyledNextButton = styled.button<{ disabled: boolean }>`
   width: 100%;
   padding: 1.2rem 2.9rem;
   font-size: 1.4rem;
-  color: ${packmanColors.pmWhite};
-  background: ${packmanColors.pmPink};
+  color: ${({ disabled }) =>
+    disabled ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmWhite}`};
+  background: ${({ disabled }) =>
+    disabled ? `${packmanColors.blueGray}` : `${packmanColors.pmPink}`};
   border: none;
   border-radius: 8px;
 `;

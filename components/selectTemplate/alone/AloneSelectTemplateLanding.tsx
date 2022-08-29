@@ -28,6 +28,7 @@ interface Itemplate {
 
 function AloneSelectTemplateLanding() {
   const router = useRouter();
+  const { folderId } = router.query;
   const [activateButton, setActivateButton] = useState(false);
   const getAloneTemplateList = useAPI((api) => api.ect.getAloneTemplateList);
   const { data } = useQuery('templateList', () => getAloneTemplateList());
@@ -53,9 +54,11 @@ function AloneSelectTemplateLanding() {
     });
   };
 
-  const onClickConfirmButton = () =>
-    router.push(`/preview?id=${templateId}&type=${templateType}&categoryName=alone`);
-
+  const onClickConfirmButton = () => {
+    router.push(
+      `/preview?id=${templateId}&type=${templateType}&categoryName=alone&folderId=${folderId}`,
+    );
+  };
   const onClickSkipButton = () => router.push(`/list-intro?id=&categoryName=alone`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
@@ -96,7 +99,11 @@ function AloneSelectTemplateLanding() {
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
-        <StyledButton isTemplate={false} isActivated={true} onClick={onClickSkipButton}>
+        <StyledButton
+          isTemplate={false}
+          isActivated={true}
+          onClick={() => router.push(`/list-intro?id=''&categoryName=alone&folderId=${folderId}`)}
+        >
           건너뛰기
         </StyledButton>
         <StyledButton
