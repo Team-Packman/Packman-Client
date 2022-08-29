@@ -41,13 +41,13 @@ function FolderList(props: FolderListProps) {
 
   useEffect(() => {
     setShowIntitialPage(list.length <= 0);
-  }, [list.length]);
+  }, [list.length, addNewFolder]);
 
   useEffect(() => {
     if (addNewFolder && showInitialPage) {
       setShowIntitialPage(false);
     }
-  }, [addNewFolder]);
+  }, [addNewFolder, showInitialPage]);
 
   return (
     <StyledListRoot>

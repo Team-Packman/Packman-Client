@@ -75,8 +75,9 @@ function FolderLanding() {
         const remainDay = Number(recentPackingData?.data.remainDay);
         setIsOutDated(remainDay < 0);
         setIsRecentListExist(true);
+      } else {
+        setIsRecentListExist(false);
       }
-      setIsRecentListExist(false);
     };
     updateOutdated();
   }, [recentPackingData]);
@@ -169,7 +170,6 @@ function FolderLanding() {
     if (newFolderData.name) {
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
-          console.log('폴더추가 성공');
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
