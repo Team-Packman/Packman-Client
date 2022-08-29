@@ -6,18 +6,22 @@ import iShowMore from '/public/assets/svg/iShowMore.svg';
 import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
+import useAPI from '../../../utils/hooks/useAPI';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
+import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
-import {
-  useDeleteTogetherInventory,
-  useGetTogetherInventory,
-} from '../../../utils/hooks/queries/inventory/inventory';
+interface DeleteTogetherInventoryData {
+  folderId: string;
+  listId: string;
+}
 
 function TogetherPackingListLanding() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const query = router.query.id as string;
   const [toggle, setToggle] = useState(false);
@@ -26,23 +30,34 @@ function TogetherPackingListLanding() {
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // 함께 패킹리스트 데이터 조회
-  const togetherInventory = useGetTogetherInventory(query);
-
-  const deleteTogetherInventoryMutate = useDeleteTogetherInventory({
-    folderId: togetherInventory?.data.currentFolder.id as string,
-    listId: isDeleting
-      ? (deleteList.join(',') as string)
-      : (togetherInventory?.data.togetherPackingList[selectedIndex].id as string),
+  //패킹리스트 데이터 조회
+  const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
+  const { data } = useQuery(['getTogetherInventory', query], () => getTogetherInventory(query), {
+    enabled: !!query,
   });
 
-  const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(togetherInventory?.data.togetherPackingList.length).fill(false),
+  const deleteTogetherInventory = useAPI(
+    (api) => (params: DeleteTogetherInventoryInput) =>
+      api.inventory.together.deleteTogetherInventory(params),
+  );
+  const { mutate: deleteTogetherInventoryMutate } = useMutation(
+    (deleteTogetherInventoryData: DeleteTogetherInventoryData) => {
+      return deleteTogetherInventory(deleteTogetherInventoryData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getTogetherInventory');
+      },
+    },
   );
 
-  if (!togetherInventory) return null;
+  const [isDragged, setIsDragged] = useState<boolean[]>(
+    Array(data?.data.togetherPackingList.length).fill(false),
+  );
 
-  const { togetherPackingList, folder, currentFolder } = togetherInventory.data;
+  if (!data) return null;
+
+  const { togetherPackingList, folder, currentFolder } = data.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -67,23 +82,32 @@ function TogetherPackingListLanding() {
 
   const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-
     // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
     if (isDeleting) {
+      deleteTogetherInventoryMutate({
+        folderId: currentFolder.id,
+        listId: deleteList.join(','),
+      });
       if (deleteList.length === togetherPackingList.length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
     }
-    deleteTogetherInventoryMutate();
+    // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
+    else {
+      deleteTogetherInventoryMutate({
+        folderId: currentFolder.id,
+        listId: togetherPackingList[selectedIndex].id,
+      });
+    }
     closeModal();
   };
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/select-template/together');
+      router.push(`/select-template/together?folderId=${currentFolder.id}`);
     } else if (index === 1) {
-      router.push('/select-template/alone');
+      router.push(`/select-template/alone?folderId=${currentFolder.id}`);
     }
   };
 
@@ -105,6 +129,11 @@ function TogetherPackingListLanding() {
   const onClickDeleteButton = () => {
     const payload = togetherPackingList.map(({ id }) => id);
     setDeleteList(payload);
+  };
+
+  const onClickDropBoxItem = (id: string) => {
+    router.replace(`/packing-list/together/${id}`);
+    setToggle((prev) => !prev);
   };
 
   return (
@@ -133,15 +162,21 @@ function TogetherPackingListLanding() {
               src={iShowMore}
               alt="상세보기"
               toggle={toggle.toString()}
-              onClick={() => setToggle(true)}
+              onClick={() => setToggle((prev) => !prev)}
             />
             {toggle && (
-              <DropBox
-                folderList={folder}
-                closeDropBox={() => setToggle(false)}
-                currentId={currentFolder.id}
-                categoryName="together"
-              />
+              <DropBox>
+                <StyledBackground onClick={() => setToggle((prev) => !prev)} />
+                {folder.map(({ id, name }) => (
+                  <StyledItem
+                    key={id}
+                    currentId={id === currentFolder.id}
+                    onClick={() => onClickDropBoxItem(id)}
+                  >
+                    {name}
+                  </StyledItem>
+                ))}
+              </DropBox>
             )}
           </div>
         </StyledFolderInfo>
@@ -256,6 +291,26 @@ const StyledFolderInfo = styled.div`
     flex-direction: column;
     align-items: center;
   }
+`;
+const StyledBackground = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: none;
+  z-index: 100;
+`;
+
+const StyledItem = styled.div<{ currentId: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 4.8rem;
+  font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
+  font-size: 1.5rem;
+  color: ${packmanColors.pmDarkGrey};
+  border-bottom: 1px solid ${packmanColors.pmGrey};
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
   width: 2.4rem;

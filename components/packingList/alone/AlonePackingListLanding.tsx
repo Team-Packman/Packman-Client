@@ -6,18 +6,23 @@ import iShowMore from '/public/assets/svg/iShowMore.svg';
 import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
+import useAPI from '../../../utils/hooks/useAPI';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
+import { DeleteAloneInventoryInput } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
-import {
-  useDeleteAloneInventory,
-  useGetAloneInventory,
-} from '../../../utils/hooks/queries/inventory/inventory';
+
+interface DeleteAloneInventoryData {
+  folderId: string;
+  listId: string;
+}
 
 function AlonePackingListLanding() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -26,23 +31,32 @@ function AlonePackingListLanding() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const query = router.query.id as string;
 
-  // 혼자 패킹리스트 데이터 조회
-  const aloneInventory = useGetAloneInventory(query);
-
-  const deleteAloneInventoryMutate = useDeleteAloneInventory({
-    folderId: aloneInventory?.data.currentFolder.id as string,
-    listId: isDeleting
-      ? (deleteList.join(',') as string)
-      : (aloneInventory?.data.alonePackingList[selectedIndex].id as string),
+  const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
+  const { data } = useQuery(['getAloneInventory', query], () => getAloneInventory(query), {
+    enabled: !!query,
   });
 
+  const deleteAloneInventory = useAPI(
+    (api) => (params: DeleteAloneInventoryInput) =>
+      api.inventory.alone.deleteAloneInventory(params),
+  );
+  const { mutate: deleteAloneInventoryMutate } = useMutation(
+    (deleteTogetherInventoryData: DeleteAloneInventoryData) => {
+      return deleteAloneInventory(deleteTogetherInventoryData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getAloneInventory');
+      },
+    },
+  );
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(aloneInventory?.data.alonePackingList.length).fill(false),
+    Array(data?.data.alonePackingList.length).fill(false),
   );
 
-  if (!aloneInventory) return null;
+  if (!data) return null;
 
-  const { alonePackingList, folder, currentFolder } = aloneInventory.data;
+  const { alonePackingList, folder, currentFolder } = data.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -68,20 +82,28 @@ function AlonePackingListLanding() {
   const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
+      deleteAloneInventoryMutate({
+        folderId: currentFolder.id,
+        listId: deleteList.join(','),
+      });
       if (deleteList.length === alonePackingList.length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
+    } else {
+      deleteAloneInventoryMutate({
+        folderId: currentFolder.id,
+        listId: alonePackingList[selectedIndex].id,
+      });
     }
-    deleteAloneInventoryMutate();
     closeModal();
   };
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/select-template/together');
+      router.push(`/select-template/together?folderId=${currentFolder.id}`);
     } else if (index === 1) {
-      router.push('/select-template/alone');
+      router.push(`/select-template/alone?folderId=${currentFolder.id}`);
     }
   };
 
@@ -104,6 +126,11 @@ function AlonePackingListLanding() {
       const payload = alonePackingList.map(({ id }) => id);
       setDeleteList(payload);
     }
+  };
+
+  const onClickDropBoxItem = (id: string) => {
+    router.replace(`/packing-list/alone/${id}`);
+    setToggle((prev) => !prev);
   };
 
   return (
@@ -132,15 +159,21 @@ function AlonePackingListLanding() {
               src={iShowMore}
               alt="상세보기"
               toggle={toggle.toString()}
-              onClick={() => setToggle(true)}
+              onClick={() => setToggle((prev) => !prev)}
             />
             {toggle && (
-              <DropBox
-                folderList={folder}
-                closeDropBox={() => setToggle(false)}
-                currentId={currentFolder.id}
-                categoryName="alone"
-              />
+              <DropBox>
+                <StyledBackground onClick={() => setToggle((prev) => !prev)} />
+                {folder.map(({ id, name }) => (
+                  <StyledItem
+                    key={id}
+                    currentId={id === currentFolder.id}
+                    onClick={() => onClickDropBoxItem(id)}
+                  >
+                    {name}
+                  </StyledItem>
+                ))}
+              </DropBox>
             )}
           </div>
         </StyledFolderInfo>
@@ -250,6 +283,26 @@ const StyledFolderInfo = styled.div`
     flex-direction: column;
     align-items: center;
   }
+`;
+const StyledBackground = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: none;
+  z-index: 10;
+`;
+
+const StyledItem = styled.div<{ currentId: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 4.8rem;
+  font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
+  font-size: 1.5rem;
+  color: ${packmanColors.pmDarkGrey};
+  border-bottom: 1px solid ${packmanColors.pmGrey};
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
   width: 2.4rem;
