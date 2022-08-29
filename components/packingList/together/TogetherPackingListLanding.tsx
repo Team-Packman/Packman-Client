@@ -105,9 +105,9 @@ function TogetherPackingListLanding() {
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push(`/select-template/together?folderId=${currentFolder._id}`);
+      router.push(`/select-template/together?folderId=${currentFolder.id}`);
     } else if (index === 1) {
-      router.push('/select-template/alone?folderId=${currentFolder._id}');
+      router.push(`/select-template/alone?folderId=${currentFolder.id}`);
     }
   };
 
