@@ -103,15 +103,39 @@ function SettingProfile(props: SettingProfileProps) {
         <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
           <h1>고객센터</h1>
           <StyledEtcWrapper>
-            <p>문의하기</p>
-            <p>서비스 피드백</p>
+            <p
+              onClick={() =>
+                router.push(
+                  'https://docs.google.com/forms/d/e/1FAIpQLSd1D1ptmYG5Ufu7y1SKDnSr-k8UIeRfSlTBFRQqX3bF-TwuQg/viewform',
+                )
+              }
+            >
+              문의하기
+            </p>
+            <p
+              onClick={() =>
+                router.push(
+                  'https://docs.google.com/forms/d/e/1FAIpQLSer7bKxKKcmRU5vrMT_187cERpbA5chkzM-sjrigBsmWH9a6Q/viewform',
+                )
+              }
+            >
+              서비스 피드백
+            </p>
           </StyledEtcWrapper>
         </StyledEtc>
         <StyledEtc gap={1.2} paddingTop={3.1} borderBottom={false}>
           <h1>About 팩맨</h1>
           <StyledEtcWrapper>
-            <p>함께하는 사람들</p>
-            <p>약관 및 정책</p>
+            <p
+              onClick={() => router.push('https://www.notion.so/1003579b6fd34fb0861040bb04fe235d')}
+            >
+              함께하는 사람들
+            </p>
+            <p
+              onClick={() => router.push('https://www.notion.so/99197c3491fe477ea9d69ed131cf4087')}
+            >
+              약관 및 정책
+            </p>
           </StyledEtcWrapper>
         </StyledEtc>
 
