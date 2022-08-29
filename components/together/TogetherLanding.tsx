@@ -200,7 +200,7 @@ function TogetherLanding() {
         patchAloneCategory(
           {
             id: categoryId,
-            nickname: name,
+            name,
             listId,
           },
           {

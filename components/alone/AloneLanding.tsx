@@ -187,7 +187,7 @@ function AloneLanding() {
         {
           id: categoryId,
           listId,
-          nickname: name,
+          name,
         },
         {
           onSuccess: () => {
