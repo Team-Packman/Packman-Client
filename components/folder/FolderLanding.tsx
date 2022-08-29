@@ -69,11 +69,14 @@ function FolderLanding() {
 
   useEffect(() => {
     const updateOutdated = () => {
-      if (recentPackingData) {
+      const currentRecentPackingData = recentPackingData?.data ?? {};
+
+      if (Object.keys(currentRecentPackingData).length !== 0) {
         const remainDay = Number(recentPackingData?.data.remainDay);
         setIsOutDated(remainDay < 0);
         setIsRecentListExist(true);
       }
+      setIsRecentListExist(false);
     };
     updateOutdated();
   }, [recentPackingData]);
