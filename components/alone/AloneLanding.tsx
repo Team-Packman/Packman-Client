@@ -414,7 +414,7 @@ function AloneLanding() {
         </StyledBody>
         <FunctionSection>
           <AddTemplateButton
-            onClick={() => updateRemainingInfo({ listId: list.id, isSaved: true }, 'save')}
+            onClick={() => updateRemainingInfo({ listId: list.id, isSaved: list.isSaved }, 'save')}
           >
             나만의 템플릿으로 추가
           </AddTemplateButton>
