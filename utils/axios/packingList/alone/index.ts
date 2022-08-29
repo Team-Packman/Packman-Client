@@ -85,6 +85,6 @@ export const fetchAlonePackingListDetail = async (
   request: AxiosInstance,
   listId: string,
 ): Promise<GetAlonePackingListDetailOutput> => {
-  const { data } = await request(`/packingList/alone/${listId}`);
+  const { data } = await request(`/list/alone/${listId}`);
   return data;
 };

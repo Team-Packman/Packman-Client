@@ -59,25 +59,24 @@ export interface AloneAPI {
 }
 
 const createAloneAPI = (request: AxiosInstance): AloneAPI => {
-  const authReq = request;
   return {
     alone: {
-      getAloneFolder: () => fetchAloneFolder(authReq),
-      getAlonePackingListDetail: (listId: string) => fetchAlonePackingListDetail(authReq, listId),
+      getAloneFolder: () => fetchAloneFolder(request),
+      getAlonePackingListDetail: (listId: string) => fetchAlonePackingListDetail(request, listId),
       addAlonePackingListFolder: (payload: AddAlonePackingListIntroInput) =>
-        fetchAddAlonePackingFolder(authReq, payload),
+        fetchAddAlonePackingFolder(request, payload),
       addAlonePackingListCategory: (payload: AddAlonePackingListCategoryInput) =>
-        fetchAddAlonePackingCategory(authReq, payload),
+        fetchAddAlonePackingCategory(request, payload),
       updateAlonePackingListCategory: (payload: UpdateAlonePackingListCategoryInput) =>
-        fetchUpdateAlonePackingCategory(authReq, payload),
+        fetchUpdateAlonePackingCategory(request, payload),
       deleteAlonePackingListCategory: (payload: DeleteAlonePackingListCategoryInput) =>
-        fetchDeleteAlonePackingCategory(authReq, payload),
+        fetchDeleteAlonePackingCategory(request, payload),
       addAlonePackingListItem: (payload: AddAlonePackingListItemInput) =>
-        fetchAddAlonePackingItem(authReq, payload),
+        fetchAddAlonePackingItem(request, payload),
       updateAlonePackingListItem: (payload: UpdateAlonePackingListItemInput) =>
-        fetchUpdateAlonePackingItem(authReq, payload),
+        fetchUpdateAlonePackingItem(request, payload),
       deleteAlonePackingListItem: (payload: DeleteAlonePackingListItemInput) =>
-        fetchDeleteAlonePackingItem(authReq, payload),
+        fetchDeleteAlonePackingItem(request, payload),
     },
   };
 };
