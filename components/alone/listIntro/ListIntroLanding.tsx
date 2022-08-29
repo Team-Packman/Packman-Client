@@ -183,8 +183,7 @@ function ListIntroLanding() {
             },
             {
               onSuccess: (data) => {
-                // setCreatedListId(data?.data?._id);
-                // TODO: createdListId 삭제 후, data.data.id로 수정
+                setCreatedListId(data?.data?.id);
                 router.push(`/alone/id=${createdListId}`);
               },
             },
@@ -200,7 +199,7 @@ function ListIntroLanding() {
             },
             {
               onSuccess: (data) => {
-                // setCreatedListId(data?.data?.id);
+                setCreatedListId(data?.data?.id);
                 router.push(`/together/id=${createdListId}`);
               },
             },
