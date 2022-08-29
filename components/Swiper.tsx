@@ -66,15 +66,7 @@ export const StyledSwiper = styled(Swiper)`
   display: flex;
   justify-content: center;
   width: 100%;
-
-  .swiper-wrapper {
-    overflow-y: auto; /* 브라우저별 스크롤바 숨김 설정 */
-    -ms-overflow-style: none; // Edge
-    scrollbar-width: none; // Firefox
-    &::-webkit-scrollbar {
-      display: none; // Chrome, Safari, Opera
-    }
-  }
+  padding-top: 4.8rem;
 
   .swiper-pagination {
     display: flex;
@@ -107,12 +99,17 @@ export const StyledSwiper = styled(Swiper)`
     background: ${packmanColors.pmBlack};
   }
   .swiper-slide {
-    padding-top: 4.8rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* justify-content: flex-start; */
+
     align-items: center;
+    overflow-y: auto; /* 브라우저별 스크롤바 숨김 설정 */
+    -ms-overflow-style: none; // Edge
+    scrollbar-width: none; // Firefox
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari, Opera
+    }
   }
 `;
 
