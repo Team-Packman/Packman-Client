@@ -62,7 +62,7 @@ function AloneLanding() {
 
   const creatingHandler = (id: string) => setCurrentCreating(id);
   const createdHandler = () => setCurrentCreating('');
-  const creatingCategoryHandler = () => setCurrentCreatingCategory(list._id);
+  const creatingCategoryHandler = () => setCurrentCreatingCategory(list.id);
   const createdCategoryHandler = () => setCurrentCreatingCategory('');
 
   const addAlonePackingListCategory = useAPI(
@@ -284,7 +284,7 @@ function AloneLanding() {
       case 'category': {
         deleteAloneCategory(
           {
-            listId: list._id,
+            listId: list.id,
             categoryId: currentFocus.categoryId,
           },
           {
@@ -299,7 +299,7 @@ function AloneLanding() {
       case 'item': {
         deleteAloneItem(
           {
-            listId: list._id,
+            listId: list.id,
             categoryId: currentFocus.categoryId,
             packId: currentFocus.packId,
           },
@@ -331,7 +331,7 @@ function AloneLanding() {
       title="템플릿 미리보기"
       option={
         <CheckListHeader
-          listId={list._id}
+          listId={list.id}
           departureDate={list.departureDate}
           title={list.title}
           updateRemainingInfo={updateRemainingInfo}
@@ -341,15 +341,15 @@ function AloneLanding() {
       <StyledAloneLanding>
         <CheckListSubHeader categoryHandler={creatingCategoryHandler} />
         <StyledBody onScroll={ScrollEvent}>
-          {list.category.map(({ _id: categoryId, name, pack }) => (
+          {list.category.map(({ id: categoryId, name, pack }) => (
             <PackagesWithCategory
               key={categoryId}
               packages={
                 <>
-                  {pack.map(({ _id: packId, name, isChecked }) => (
+                  {pack.map(({ id: packId, name, isChecked }) => (
                     <PackingItem
                       key={packId}
-                      listId={list._id}
+                      listId={list.id}
                       categoryId={categoryId}
                       packId={packId}
                       name={name}
@@ -373,7 +373,7 @@ function AloneLanding() {
               createHandler={() => creatingHandler(categoryId)}
               creating={
                 <PackingItem
-                  listId={list._id}
+                  listId={list.id}
                   categoryId={categoryId}
                   packId={'creating'}
                   name={''}
@@ -385,7 +385,7 @@ function AloneLanding() {
             >
               <PackingCategory
                 categoryId={categoryId}
-                listId={list._id}
+                listId={list.id}
                 name={name}
                 updateCategory={updateCategory}
                 modalHandler={() =>
@@ -400,11 +400,11 @@ function AloneLanding() {
               />
             </PackagesWithCategory>
           ))}
-          {currentCreatingCategory === list._id && (
+          {currentCreatingCategory === list.id && (
             <PackagesWithCategory>
               <PackingCategory
                 categoryId={'creating'}
-                listId={list._id}
+                listId={list.id}
                 name={''}
                 updateCategory={updateCategory}
                 isEditing={true}
@@ -414,7 +414,7 @@ function AloneLanding() {
         </StyledBody>
         <FunctionSection>
           <AddTemplateButton
-            onClick={() => updateRemainingInfo({ listId: list._id, isSaved: true }, 'save')}
+            onClick={() => updateRemainingInfo({ listId: list.id, isSaved: true }, 'save')}
           >
             나만의 템플릿으로 추가
           </AddTemplateButton>
