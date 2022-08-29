@@ -44,10 +44,8 @@ function ListIntroLanding() {
 
   useEffect(() => {
     const checkFolderAndListValidation = () => {
-      if (selectedTagIndex && listName) {
-        const checkIsValidate = selectedTagIndex?.index !== -1 && listName !== '';
-        setIsValid(checkIsValidate);
-      }
+      const checkIsValidate = selectedTagIndex?.index !== -1 && listName !== '';
+      setIsValid(checkIsValidate);
     };
     checkFolderAndListValidation();
   }, [selectedTagIndex, listName]);
