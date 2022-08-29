@@ -137,7 +137,7 @@ export const fetchAddTogetherPackingFolder = async (
   request: AxiosInstance,
   payload: AddTogetherPackingListIntroInput,
 ): Promise<AddTogetherPackingListIntroOutput> => {
-  const { data } = await request.post(`/packingList/together`, payload);
+  const { data } = await request.post(`/list/together`, payload);
   return data;
 };
 

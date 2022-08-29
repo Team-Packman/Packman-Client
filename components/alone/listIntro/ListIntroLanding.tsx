@@ -40,7 +40,7 @@ function ListIntroLanding() {
       setIsAloned(categoryName === 'alone');
       setTemplateId(id as string);
     }
-  }, [router]);
+  }, [router, categoryName, id]);
 
   useEffect(() => {
     const checkFolderAndListValidation = () => {
@@ -55,13 +55,13 @@ function ListIntroLanding() {
   // 폴더 내에서, 리스트 생성하기를 한 경우 자동으로 해당 폴더를 기본으로 선택하게 하는 함수
   const initSelectedFolder = (data: folderType, category: string) => {
     const currentFolder =
-      category === 'together' ? data?.data?.togetherFolders : data?.data?.aloneFolders;
-    const findSelectedFolder = currentFolder?.find((v) => v?._id === folderId);
+      category === 'together' ? data?.data?.togetherFolder : data?.data?.aloneFolder;
+    const findSelectedFolder = currentFolder?.find((v) => v?.id === folderId);
 
     if (findSelectedFolder) {
       const findFolderIndex = currentFolder?.findIndex((v) => v === findSelectedFolder);
       setSelectedTagIndex({
-        id: findSelectedFolder._id as string,
+        id: findSelectedFolder.id as string,
         index: findFolderIndex as number,
       });
     }
@@ -128,33 +128,33 @@ function ListIntroLanding() {
 
   // 폴더 생성 버튼 클릭
   const handleAddFolder = () => {
-    // addFolerMutate(
-    //   { title: folderName, isAloned },
-    //   {
-    //     onSuccess: (data) => {
-    //       {
-    //         isAloned
-    //           ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
-    //               return {
-    //                 ...oldData,
-    //                 data: {
-    //                   aloneFolders: data.data.aloneFolders,
-    //                 },
-    //               };
-    //             })
-    //           : queryClient.setQueryData('togetherFolder', (oldData: any) => {
-    //               return {
-    //                 ...oldData,
-    //                 data: {
-    //                   togetherFolders: data.data.togetherFolders,
-    //                 },
-    //               };
-    //             });
-    //       }
-    //     },
-    //   },
-    // );
-    // setFolderName('');
+    addFolerMutate(
+      { name: folderName, isAloned },
+      {
+        onSuccess: (data) => {
+          {
+            isAloned
+              ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
+                  return {
+                    ...oldData,
+                    data: {
+                      aloneFolder: data.data.aloneFolder,
+                    },
+                  };
+                })
+              : queryClient.setQueryData('togetherFolder', (oldData: any) => {
+                  return {
+                    ...oldData,
+                    data: {
+                      togetherFolder: data.data.togetherFolder,
+                    },
+                  };
+                });
+          }
+        },
+      },
+    );
+    setFolderName('');
   };
 
   const handleTagClick = (id: string, index: number) => {
@@ -194,7 +194,7 @@ function ListIntroLanding() {
               departureDate: date,
               folderId: selectedTagIndex.id,
               title: listName,
-              templateId: '62db2b0478f2ebb9778289cb',
+              templateId: templateId,
               // 이전 버전 서버, templateId가 없는 경우 서버내부 오류 발생
               // Test templateId : 62db2b0478f2ebb9778289cb
             },
@@ -238,7 +238,7 @@ function ListIntroLanding() {
                   {v.name}
                 </StyledTag>
               ))
-            : togetherFolder.map((v, index) => (
+            : togetherFolder?.map((v, index) => (
                 <StyledTag
                   key={v.id}
                   isSelected={index === selectedTagIndex.index}
