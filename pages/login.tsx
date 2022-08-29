@@ -12,12 +12,6 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authUserAtom, creatingUserAtom, invitationAtom, kakao } from '../utils/recoil/atom/atom';
 import Link from 'next/link';
 
-declare global {
-  interface Window {
-    Kakao?: any;
-  }
-}
-
 function Login() {
   const router = useRouter();
 
