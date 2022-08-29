@@ -1,4 +1,4 @@
-import { ReactNode, Suspense, useState } from 'react';
+import { PropsWithChildren, ReactNode, Suspense, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from 'react-query';
 import Lottie from 'lottie-react';
@@ -8,7 +8,6 @@ import Layout from '../components/common/Layout';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
-  children: ReactNode;
 }
 
 const isExpectedError = <Error extends unknown>(res: Error): res is Error => {
@@ -41,7 +40,10 @@ const errorFallback = ({ resetErrorBoundary }: FallbackProps) => {
   );
 };
 
-export function AsyncBoundary({ children, loadingFallback }: AsyncBoundaryProps) {
+export function AsyncBoundary({
+  children,
+  loadingFallback,
+}: PropsWithChildren<AsyncBoundaryProps>) {
   const { reset } = useQueryErrorResetBoundary();
   return (
     <ErrorBoundary
