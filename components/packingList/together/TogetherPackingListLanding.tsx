@@ -27,27 +27,22 @@ function TogetherPackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const data = useGetTogetherInventory(query); // 함께 패킹리스트 데이터 조회
+  const togetherInventory = useGetTogetherInventory(query); // 함께 패킹리스트 데이터 조회
 
-  const deleteTogetherInventory = useDeleteTogetherInventory(); // 함께 리스트 삭제
-  const { mutate: deleteTogetherInventoryMutate } = useMutation(
-    (payload: { folderId: string; listId: string }) => {
-      return deleteTogetherInventory(payload);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getTogetherInventory');
-      },
-    },
-  );
+  const deleteTogetherInventoryMutate = useDeleteTogetherInventory({
+    folderId: togetherInventory?.data.currentFolder.id as string,
+    listId: isDeleting
+      ? (deleteList.join(',') as string)
+      : (togetherInventory?.data.togetherPackingList[selectedIndex].id as string),
+  });
 
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data?.data.togetherPackingList.length).fill(false),
+    Array(togetherInventory?.data.togetherPackingList.length).fill(false),
   );
 
-  if (!data) return null;
+  if (!togetherInventory) return null;
 
-  const { togetherPackingList, folder, currentFolder } = data.data;
+  const { togetherPackingList, folder, currentFolder } = togetherInventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -74,22 +69,12 @@ function TogetherPackingListLanding() {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
     if (isDeleting) {
-      deleteTogetherInventoryMutate({
-        folderId: currentFolder.id,
-        listId: deleteList.join(','),
-      });
       if (deleteList.length === togetherPackingList.length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
     }
-    // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
-    else {
-      deleteTogetherInventoryMutate({
-        folderId: currentFolder.id,
-        listId: togetherPackingList[selectedIndex].id,
-      });
-    }
+    deleteTogetherInventoryMutate();
     closeModal();
   };
 

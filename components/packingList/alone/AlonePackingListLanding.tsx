@@ -34,26 +34,21 @@ function AlonePackingListLanding() {
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const query = router.query.id as string;
-  const data = useGetAloneInventory(query); // 혼자 패킹리스트 데이터 조회
+  const aloneInventory = useGetAloneInventory(query); // 혼자 패킹리스트 데이터 조회
 
-  const deleteAloneInventory = useDeleteAloneInventory(); // 혼자 리스트 삭제
-  const { mutate: deleteAloneInventoryMutate } = useMutation(
-    (deleteTogetherInventoryData: DeleteAloneInventoryData) => {
-      return deleteAloneInventory(deleteTogetherInventoryData);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getAloneInventory');
-      },
-    },
-  );
+  const deleteAloneInventoryMutate = useDeleteAloneInventory({
+    folderId: aloneInventory?.data.currentFolder.id as string,
+    listId: isDeleting
+      ? (deleteList.join(',') as string)
+      : (aloneInventory?.data.alonePackingList[selectedIndex].id as string),
+  });
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data?.data.alonePackingList.length).fill(false),
+    Array(aloneInventory?.data.alonePackingList.length).fill(false),
   );
 
-  if (!data) return null;
+  if (!aloneInventory) return null;
 
-  const { alonePackingList, folder, currentFolder } = data.data;
+  const { alonePackingList, folder, currentFolder } = aloneInventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -79,20 +74,12 @@ function AlonePackingListLanding() {
   const deleteListItem = () => {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     if (isDeleting) {
-      deleteAloneInventoryMutate({
-        folderId: currentFolder.id,
-        listId: deleteList.join(','),
-      });
       if (deleteList.length === alonePackingList.length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
-    } else {
-      deleteAloneInventoryMutate({
-        folderId: currentFolder.id,
-        listId: alonePackingList[selectedIndex].id,
-      });
     }
+    deleteAloneInventoryMutate();
     closeModal();
   };
 
