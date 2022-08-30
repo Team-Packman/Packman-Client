@@ -11,18 +11,25 @@ import SharePackingListButton from '../common/SharePackingListButton';
 import PackagesWithCategory from '../common/PackagesWithCategory';
 import PackingCategory from '../common/PackingCategory';
 import PackingItem from '../common/PackingItem';
+import Loading from '../common/Loading';
 
 function PreviewLanding() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, type, folderId } = router.query;
 
   const getTemplate = useAPI((api) => api.ect.getTemplate);
   const { data } = useQuery(['getTemplate', id], () => getTemplate(id as string), {
     enabled: !!id,
   });
 
-  if (!data) return null;
+  if (!data) return <Loading />;
   const { data: info } = data;
+
+  const importTemplate = () =>
+    router.push(`/list-intro?id=${id}&folderId=${folderId ?? ''}&type=${type}`);
+
+  const addSelf = () => router.push(`/list-intro?id=&folderId=${folderId ?? ''}&type=${type}`);
+
   return (
     <Layout
       back
@@ -47,15 +54,8 @@ function PreviewLanding() {
         ))}
       </StyledBody>
       <FunctionSection>
-        {/* 추후 템플릿 작성 뷰 완성되면 버튼 로직 추가 */}
-        <AddTemplateButton
-          onClick={() => {
-            //
-          }}
-        >
-          직접 작성하기
-        </AddTemplateButton>
-        <SharePackingListButton>템플릿 불러오기</SharePackingListButton>
+        <AddTemplateButton onClick={addSelf}>직접 작성하기</AddTemplateButton>
+        <SharePackingListButton onClick={importTemplate}>템플릿 불러오기</SharePackingListButton>
       </FunctionSection>
     </Layout>
   );

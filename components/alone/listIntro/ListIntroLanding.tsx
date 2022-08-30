@@ -21,7 +21,7 @@ type folderType = DeepPartial<GetTogetherFolderOutput> & DeepPartial<GetAloneFol
 function ListIntroLanding() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { id, categoryName, folderId } = router.query;
+  const { id, type, folderId } = router.query;
 
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
@@ -32,15 +32,23 @@ function ListIntroLanding() {
   });
   const [isAloned, setIsAloned] = useState<boolean>(false);
   const [templateId, setTemplateId] = useState<string>('');
-  const [createdListId, setCreatedListId] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(false);
 
   useEffect(() => {
-    if (router.query) {
-      setIsAloned(categoryName === 'alone');
+    if (router.isReady) {
       setTemplateId(id as string);
+
+      switch (type) {
+        case 'alone':
+        case 'together': {
+          setIsAloned(type === 'alone');
+          return;
+        }
+        default:
+          throw new Error();
+      }
     }
-  }, [router, categoryName, id]);
+  }, [router.isReady]);
 
   useEffect(() => {
     const checkFolderAndListValidation = () => {
@@ -78,16 +86,20 @@ function ListIntroLanding() {
   );
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  const { data: aloneFolderData } = useQuery('aloneFolder', () => getAloneFolder(), {
-    onSuccess: (data) => {
-      initSelectedFolder(data, 'alone');
-    },
-  });
-  const { data: togetherFolderData } = useQuery('togetherFolder', () => getTogetherFolder(), {
-    onSuccess: (data) => {
-      initSelectedFolder(data, 'together');
-    },
-  });
+  const { data: aloneFolderData } = useQuery('aloneFolder', () => getAloneFolder());
+  const { data: togetherFolderData } = useQuery('togetherFolder', () => getTogetherFolder());
+
+  useEffect(() => {
+    if (aloneFolderData) {
+      initSelectedFolder(aloneFolderData, 'alone');
+    }
+  }, [aloneFolderData]);
+
+  useEffect(() => {
+    if (togetherFolderData) {
+      initSelectedFolder(togetherFolderData, 'together');
+    }
+  }, [togetherFolderData]);
 
   const { mutate: addAloneIntroMutate } = useMutation(
     'addAloneIntroFolder',
@@ -185,7 +197,7 @@ function ListIntroLanding() {
               onSuccess: (data) => {
                 // setCreatedListId(data?.data?._id);
                 // TODO: createdListId 삭제 후, data.data.id로 수정
-                router.push(`/alone/id=${createdListId}`);
+                router.push(`/alone/${data.data.id}`);
               },
             },
           )
@@ -201,7 +213,7 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 // setCreatedListId(data?.data?.id);
-                router.push(`/together/id=${createdListId}`);
+                router.push(`/together/${data.data.id}`);
               },
             },
           );

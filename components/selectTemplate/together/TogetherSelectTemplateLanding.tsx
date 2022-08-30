@@ -54,11 +54,10 @@ function TogetherSelectTemplateLanding() {
     });
   };
   const onClickConfirmButton = () => {
-    router.push(
-      `/preview?id=${templateId}&type=${templateType}&categoryName=together&folderId=${folderId}`,
-    );
+    router.push(`/preview?id=${templateId}&folderId=${folderId ?? ''}&type=together`);
   };
-  const onClickSkipButton = () => router.push(`/list-intro?id=&categoryName=together`);
+  const onClickSkipButton = () =>
+    router.push(`/list-intro?id=&folderId=${folderId ?? ''}&type=together`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);
@@ -98,13 +97,7 @@ function TogetherSelectTemplateLanding() {
         />
       </StyledTemplateWrapper>
       <StyledButtonWrapper>
-        <StyledButton
-          isTemplate={false}
-          isActivated={true}
-          onClick={() =>
-            router.push(`/list-intro?id=''&categoryName=together&folderId=${folderId}`)
-          }
-        >
+        <StyledButton isTemplate={false} isActivated={true} onClick={onClickSkipButton}>
           건너뛰기
         </StyledButton>
         <StyledButton
