@@ -30,13 +30,13 @@ function PreviewLanding() {
       option={<StyledPreviewHeader>{info.title}</StyledPreviewHeader>}
     >
       <StyledBody>
-        {info.category.map(({ _id, name, pack }) => (
+        {info.category.map(({ id, name, pack }) => (
           <PackagesWithCategory
-            key={_id}
+            key={id}
             packages={
               <>
-                {pack.map(({ _id, name }) => (
-                  <PackingItem key={_id} name={name} example />
+                {pack.map(({ id, name }) => (
+                  <PackingItem key={id} name={name} example />
                 ))}
               </>
             }

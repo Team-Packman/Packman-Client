@@ -35,13 +35,13 @@ export interface GetTemplateOutput {
   success: boolean;
   message: string;
   data: {
-    _id: string; //템플릿 id
+    id: string; //템플릿 id
     title: string; //템플릿 제목
     category: {
-      _id: string; //템플릿 카테고리id
+      id: string; //템플릿 카테고리id
       name: string; //템플릿 카테고리 이름
       pack: {
-        _id: string; //해당 카테고리에 포함된 짐id
+        id: string; //해당 카테고리에 포함된 짐id
         name: string; //해당 카테고리에 포함된 짐 이름
       }[];
     }[];
