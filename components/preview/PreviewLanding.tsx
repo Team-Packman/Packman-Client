@@ -12,25 +12,14 @@ import PackagesWithCategory from '../common/PackagesWithCategory';
 import PackingCategory from '../common/PackingCategory';
 import PackingItem from '../common/PackingItem';
 
-type CategoryName = 'alone' | 'together';
-type TemplateType = 'basic' | 'alone' | 'together';
-
 function PreviewLanding() {
   const router = useRouter();
-  const { id, type } = router.query;
+  const { id } = router.query;
 
   const getTemplate = useAPI((api) => api.ect.getTemplate);
-  const { data } = useQuery(
-    'getTemplate',
-    () =>
-      getTemplate({
-        templateId: id as string,
-        type: type as TemplateType,
-      }),
-    {
-      enabled: !!id && !!type,
-    },
-  );
+  const { data } = useQuery(['getTemplate', id], () => getTemplate(id as string), {
+    enabled: !!id,
+  });
 
   if (!data) return null;
   const { data: info } = data;
