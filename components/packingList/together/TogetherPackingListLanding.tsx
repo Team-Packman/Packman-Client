@@ -6,20 +6,17 @@ import iShowMore from '/public/assets/svg/iShowMore.svg';
 import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
-import useAPI from '../../../utils/hooks/useAPI';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
 import FloatActionButton from '../../folder/FloatActionButton';
-import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
-import { useGetTogetherInventory } from '../../../utils/hooks/queries/inventory/inventory';
-interface DeleteTogetherInventoryData {
-  folderId: string;
-  listId: string;
-}
+import {
+  useDeleteTogetherInventory,
+  useGetTogetherInventory,
+} from '../../../utils/hooks/queries/inventory/inventory';
 
 function TogetherPackingListLanding() {
   const queryClient = useQueryClient();
@@ -30,15 +27,12 @@ function TogetherPackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const data = useGetTogetherInventory(query);
+  const data = useGetTogetherInventory(query); // 함께 패킹리스트 데이터 조회
 
-  const deleteTogetherInventory = useAPI(
-    (api) => (params: DeleteTogetherInventoryInput) =>
-      api.inventory.together.deleteTogetherInventory(params),
-  );
+  const deleteTogetherInventory = useDeleteTogetherInventory(); // 함께 리스트 삭제
   const { mutate: deleteTogetherInventoryMutate } = useMutation(
-    (deleteTogetherInventoryData: DeleteTogetherInventoryData) => {
-      return deleteTogetherInventory(deleteTogetherInventoryData);
+    (payload: { folderId: string; listId: string }) => {
+      return deleteTogetherInventory(payload);
     },
     {
       onSuccess: () => {

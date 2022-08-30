@@ -7,7 +7,7 @@ import iTrash from '/public/assets/svg/iTrash.svg';
 import Header from '../../common/Header';
 import DropBox from '../DropBox';
 import useAPI from '../../../utils/hooks/useAPI';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Modal from '../../common/Modal';
 import { packmanColors } from '../../../styles/color';
@@ -15,7 +15,10 @@ import FloatActionButton from '../../folder/FloatActionButton';
 import { DeleteAloneInventoryInput } from '../../../service/inventory/alone';
 import { FONT_STYLES } from '../../../styles/font';
 import SwipeablelistItem from '../SwipeableListItem';
-import { useGetAloneInventory } from '../../../utils/hooks/queries/inventory/inventory';
+import {
+  useDeleteAloneInventory,
+  useGetAloneInventory,
+} from '../../../utils/hooks/queries/inventory/inventory';
 
 interface DeleteAloneInventoryData {
   folderId: string;
@@ -31,12 +34,9 @@ function AlonePackingListLanding() {
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const query = router.query.id as string;
-  const data = useGetAloneInventory(query);
+  const data = useGetAloneInventory(query); // 혼자 패킹리스트 데이터 조회
 
-  const deleteAloneInventory = useAPI(
-    (api) => (params: DeleteAloneInventoryInput) =>
-      api.inventory.alone.deleteAloneInventory(params),
-  );
+  const deleteAloneInventory = useDeleteAloneInventory(); // 혼자 리스트 삭제
   const { mutate: deleteAloneInventoryMutate } = useMutation(
     (deleteTogetherInventoryData: DeleteAloneInventoryData) => {
       return deleteAloneInventory(deleteTogetherInventoryData);

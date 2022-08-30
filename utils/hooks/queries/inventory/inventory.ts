@@ -21,44 +21,20 @@ export const useGetAloneInventory = (id: string) => {
   return data;
 };
 
-export const useDeleteTogetherInventory = (payload: { folderId: string; listId: string }) => {
-  const queryClient = useQueryClient();
-
+export const useDeleteTogetherInventory = () => {
   const deleteTogetherInventory = useAPI(
     (api) => (params: DeleteTogetherInventoryInput) =>
       api.inventory.together.deleteTogetherInventory(params),
   );
-  const { mutate: deleteTogetherInventoryMutate } = useMutation(
-    () => {
-      return deleteTogetherInventory(payload);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getTogetherInventory');
-      },
-    },
-  );
 
-  return deleteTogetherInventoryMutate;
+  return deleteTogetherInventory;
 };
 
-export const useDeleteAloneInventory = (payload: { folderId: string; listId: string }) => {
-  const queryClient = useQueryClient();
-
+export const useDeleteAloneInventory = () => {
   const deleteAloneInventory = useAPI(
     (api) => (params: DeleteAloneInventoryInput) =>
       api.inventory.alone.deleteAloneInventory(params),
   );
-  const { mutate: deleteAloneInventoryMutate } = useMutation(
-    () => {
-      return deleteAloneInventory(payload);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getAloneInventory');
-      },
-    },
-  );
 
-  return deleteAloneInventoryMutate;
+  return deleteAloneInventory;
 };
