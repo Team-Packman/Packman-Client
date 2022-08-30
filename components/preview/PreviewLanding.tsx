@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import useAPI from '../../utils/hooks/useAPI';
 import Layout from '../common/Layout';
@@ -33,6 +33,7 @@ function PreviewLanding() {
         {info.category.map(({ id, name, pack }) => (
           <PackagesWithCategory
             key={id}
+            preview
             packages={
               <>
                 {pack.map(({ id, name }) => (
