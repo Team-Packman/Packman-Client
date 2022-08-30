@@ -17,6 +17,7 @@ interface LayoutProps {
 
 function Layout(props: LayoutProps) {
   const { children, back, title, icon, option, padding, noHeader } = props;
+
   return (
     <StyledRoot>
       {!noHeader && <Header back={back} title={title} icon={icon} />}
