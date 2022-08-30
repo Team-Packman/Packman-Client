@@ -17,6 +17,7 @@ import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRouter } from 'next/router';
 import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 import ModalForShare from '../common/ModalForShare';
+import Loading from '../common/Loading';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -114,7 +115,7 @@ function AloneLanding() {
     'deleteAlonePackingListItem',
     deleteAlonePackingListItem,
   );
-  if (!data) return null;
+  if (!data) return <Loading />;
   const { data: list } = data;
   const addTemplateModalOpenHandler = () => setAddTemplateModalOpen(true);
   const addTemplateModalCloseHandler = () => setAddTemplateModalOpen(false);
