@@ -14,10 +14,14 @@ import SwipeablelistItem from './SwipeableListItem';
 import FloatActionButton from '../folder/FloatActionButton';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
+import { GetAloneInventoryOutput } from '../../service/inventory/alone';
+import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 interface DeleteInventoryData {
   folderId: string;
   listId: string;
 }
+
+type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
 function PackingListLanding() {
   const queryClient = useQueryClient();
@@ -38,16 +42,20 @@ function PackingListLanding() {
     (api) => (params: DeleteInventoryData) => api.inventory.alone.deleteAloneInventory(params),
   );
   const deleteTogetherInventory = useAPI((api) => api.inventory.together.deleteTogetherInventory);
-  const { data } = useQuery(['getTogetherInventory', id], () => getTogetherInventory(id), {
-    enabled: !!id,
-  });
-  //   const { data: aloneInventory } = useQuery(
-  //     ['getAloneInventory', id],
-  //     () => getAloneInventory(id),
-  //     {
-  //       enabled: !!id,
-  //     },
-  //   );
+  const { data: togetherInventory } = useQuery(
+    ['getTogetherInventory', id],
+    () => getTogetherInventory(id),
+    {
+      enabled: type === 'together' && !!id,
+    },
+  );
+  const { data: aloneInventory } = useQuery(
+    ['getAloneInventory', id],
+    () => getAloneInventory(id),
+    {
+      enabled: type === 'alone' && !!id,
+    },
+  );
 
   const { mutate: deleteTogetherInventoryMutate } = useMutation(
     (deleteTogetherInventoryData: DeleteInventoryData) => {
@@ -70,13 +78,18 @@ function PackingListLanding() {
     },
   );
 
+  const inventory = (aloneInventory ?? togetherInventory) as GetInventoryOutput;
+
   const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(data?.data.togetherPackingList.length).fill(false),
+    Array(
+      type === 'together'
+        ? inventory?.data.togetherPackingList.length
+        : inventory?.data.alonePackingList.length,
+    ).fill(false),
   );
+  if (!inventory) return null;
 
-  if (!data) return null;
-
-  const { togetherPackingList, folder, currentFolder } = data.data;
+  const { togetherPackingList, alonePackingList, folder, currentFolder } = inventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -94,7 +107,9 @@ function PackingListLanding() {
   };
 
   const closeModal = () => {
-    handleIsDragged(Array(togetherPackingList.length).fill(false));
+    handleIsDragged(
+      Array(type === 'together' ? togetherPackingList.length : alonePackingList.length).fill(false),
+    );
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
@@ -107,7 +122,10 @@ function PackingListLanding() {
         folderId: currentFolder.id,
         listId: deleteList.join(','),
       });
-      if (deleteList.length === togetherPackingList.length) {
+      if (
+        deleteList.length ===
+        (type === 'together' ? togetherPackingList.length : alonePackingList.length)
+      ) {
         setIsDeleting(false);
       }
       setDeleteList([]);
@@ -116,7 +134,10 @@ function PackingListLanding() {
     else {
       deleteTogetherInventoryMutate({
         folderId: currentFolder.id,
-        listId: togetherPackingList[selectedIndex].id,
+        listId:
+          type === 'together'
+            ? togetherPackingList[selectedIndex].id
+            : alonePackingList[selectedIndex].id,
       });
     }
     closeModal();
@@ -131,7 +152,9 @@ function PackingListLanding() {
   };
 
   const onClickCaptionButton = () => {
-    setIsDragged(Array(togetherPackingList.length).fill(false));
+    setIsDragged(
+      Array((type === 'together' ? togetherPackingList : alonePackingList).length).fill(false),
+    );
     setIsDeleting((prev) => !prev);
     if (!isDeleting) {
       setDeleteList([]);
@@ -146,7 +169,9 @@ function PackingListLanding() {
 
   // 전체 삭제
   const onClickDeleteButton = () => {
-    const payload = togetherPackingList.map(({ id }) => id);
+    const payload = (type === 'together' ? togetherPackingList : alonePackingList).map(
+      ({ id }) => id,
+    );
     setDeleteList(payload);
   };
 
@@ -188,8 +213,10 @@ function PackingListLanding() {
           </div>
         </StyledFolderInfo>
 
-        {!togetherPackingList.length ? (
-          <StyledMain isEmpty={!togetherPackingList.length}>
+        {!(type === 'together' ? togetherPackingList : alonePackingList).length ? (
+          <StyledMain
+            isEmpty={!(type === 'together' ? togetherPackingList : alonePackingList).length}
+          >
             <StyledEmpty>
               <p>&apos;+&apos; 버튼을 눌러</p>
               <p>패킹 리스트를 추가해주세요</p>
@@ -200,7 +227,10 @@ function PackingListLanding() {
             <StyledCaptionWrapper>
               {!isDeleting && (
                 <StyledCaptionText>
-                  <span>{togetherPackingList.length}</span>개의 패킹 리스트
+                  <span>
+                    {(type === 'together' ? togetherPackingList : alonePackingList).length}
+                  </span>
+                  개의 패킹 리스트
                 </StyledCaptionText>
               )}
               {isDeleting && (
@@ -209,7 +239,15 @@ function PackingListLanding() {
 
               <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
                 {isDeleting ? (
-                  <p onClick={() => handleIsDragged(Array(togetherPackingList.length).fill(false))}>
+                  <p
+                    onClick={() =>
+                      handleIsDragged(
+                        Array(
+                          (type === 'together' ? togetherPackingList : alonePackingList).length,
+                        ).fill(false),
+                      )
+                    }
+                  >
                     취소
                   </p>
                 ) : (
@@ -218,30 +256,38 @@ function PackingListLanding() {
                     alt="삭제"
                     width={24}
                     height={24}
-                    onClick={() => handleIsDragged(Array(togetherPackingList.length).fill(false))}
+                    onClick={() =>
+                      handleIsDragged(
+                        Array(
+                          (type === 'together' ? togetherPackingList : alonePackingList).length,
+                        ).fill(false),
+                      )
+                    }
                   />
                 )}
               </StyledCaptionButtonWrapper>
             </StyledCaptionWrapper>
 
             <SwipeableList
-              swipeableListItem={togetherPackingList.map((item, idx) => (
-                <SwipeablelistItem
-                  key={item.id}
-                  idx={idx}
-                  isDragged={isDragged}
-                  handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-                  isDeleting={isDeleting}
-                  deleteList={deleteList}
-                  checkDeleteList={(id: string) => checkDeleteList(id)}
-                  onClickDeleteButton={() => {
-                    setSelectedIndex(idx);
-                    openModal();
-                  }}
-                  packingList={togetherPackingList}
-                  moveToPackingList={() => moveToPackingList(item.id)}
-                />
-              ))}
+              swipeableListItem={(type === 'together' ? togetherPackingList : alonePackingList).map(
+                (item, idx) => (
+                  <SwipeablelistItem
+                    key={item.id}
+                    idx={idx}
+                    isDragged={isDragged}
+                    handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                    isDeleting={isDeleting}
+                    deleteList={deleteList}
+                    checkDeleteList={(id: string) => checkDeleteList(id)}
+                    onClickDeleteButton={() => {
+                      setSelectedIndex(idx);
+                      openModal();
+                    }}
+                    packingList={type === 'together' ? togetherPackingList : alonePackingList}
+                    moveToPackingList={() => moveToPackingList(item.id)}
+                  />
+                ),
+              )}
             />
           </>
         )}
@@ -251,7 +297,8 @@ function PackingListLanding() {
               <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
                 {!deleteList.length
                   ? ' 전체 선택'
-                  : deleteList.length === togetherPackingList.length
+                  : deleteList.length ===
+                    (type === 'together' ? togetherPackingList : alonePackingList).length
                   ? '전체 삭제'
                   : '선택 삭제'}
               </div>
