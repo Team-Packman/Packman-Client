@@ -140,7 +140,7 @@ function PackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/${type}&${id}`);
+      router.push(`/${type}?id=${id}`);
     }
   };
 
