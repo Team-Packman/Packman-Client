@@ -52,10 +52,8 @@ function ListIntroLanding() {
 
   useEffect(() => {
     const checkFolderAndListValidation = () => {
-      if (selectedTagIndex && listName) {
-        const checkIsValidate = selectedTagIndex?.index !== -1 && listName !== '';
-        setIsValid(checkIsValidate);
-      }
+      const checkIsValidate = selectedTagIndex?.index !== -1 && listName !== '';
+      setIsValid(checkIsValidate);
     };
     checkFolderAndListValidation();
   }, [selectedTagIndex, listName]);
@@ -195,9 +193,8 @@ function ListIntroLanding() {
             },
             {
               onSuccess: (data) => {
-                // setCreatedListId(data?.data?._id);
-                // TODO: createdListId 삭제 후, data.data.id로 수정
-                router.push(`/alone/${data.data.id}`);
+                setCreatedListId(data?.data?.id);
+                router.push(`/alone/id=${createdListId}`);
               },
             },
           )
@@ -212,8 +209,8 @@ function ListIntroLanding() {
             },
             {
               onSuccess: (data) => {
-                // setCreatedListId(data?.data?.id);
-                router.push(`/together/${data.data.id}`);
+                setCreatedListId(data?.data?.id);
+                router.push(`/together/id=${createdListId}`);
               },
             },
           );
