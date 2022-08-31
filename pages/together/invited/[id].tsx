@@ -37,12 +37,12 @@ function Invited() {
         },
       );
     } else {
-      setInvitation({ listId: info.id });
+      setInvitation({ listId: info.id, isMember: info.isMember });
       router.push('/login');
     }
   };
 
-  return info.isMember ? <ModalForInvited title={info.title} clickHandler={clickHandler} /> : null;
+  return !info.isMember ? <ModalForInvited title={info.title} clickHandler={clickHandler} /> : null;
 }
 
 export default Invited;

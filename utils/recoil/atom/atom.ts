@@ -32,6 +32,7 @@ export const invitationAtom = atom<Invitation>({
   key: 'invitation',
   default: {
     listId: '',
+    isMember: false,
   },
   effects_UNSTABLE: [persistAtom],
 });
