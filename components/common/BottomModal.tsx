@@ -41,20 +41,20 @@ function BottomModal(props: BottomModalProps) {
       <StyledBackground onClick={closeModal} />
       <StyledRoot>
         <Image src={iSwipeBar} alt="스와이프바" />
-        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : modalData?.title}</h1>
+        <h1>{isClickDelete ? '정말 삭제하시겠어요?' : modalData?.name}</h1>
         <StyledButtonWrapper>
           {isClickDelete ? (
             <>
               <button onClick={() => setIsClickDelete(false)}>
                 <p>아니요</p>
               </button>
-              <button onClick={() => onDelete(modalData?._id)}>
+              <button onClick={() => onDelete(modalData?.id)}>
                 <p>네</p>
               </button>
             </>
           ) : (
             <>
-              <button onClick={() => onEdit(modalData?._id)}>
+              <button onClick={() => onEdit(modalData?.id)}>
                 <Image src={iEdit} alt="수정" />
                 수정하기
               </button>
