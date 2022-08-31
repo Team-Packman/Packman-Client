@@ -57,7 +57,8 @@ function Login() {
                     addMemberMutate(
                       { listId: invitation.listId },
                       {
-                        onSuccess: ({ data: { listId } }) => router.replace(`/together/${listId}`),
+                        onSuccess: ({ data: { listId } }) =>
+                          router.replace(`/together?id=${listId}`),
                       },
                     );
                   } else {
