@@ -24,6 +24,7 @@ import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
 import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
+import Loading from '../common/Loading';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -149,7 +150,7 @@ function TogetherLanding() {
     setInvitationModalOpen(true);
   }, []);
 
-  if (!packingListData) return null;
+  if (!packingListData) return <Loading />;
   const { data: info } = packingListData;
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
@@ -603,7 +604,12 @@ function TogetherLanding() {
         </Swiper>
         <FunctionSection>
           <AddTemplateButton
-            onClick={() => updateRemainingInfo({ listId: info.id, isSaved: true }, 'save')}
+            onClick={() =>
+              updateRemainingInfo(
+                { listId: info.id, isSaved: info.togetherPackingList.isSaved },
+                'save',
+              )
+            }
           >
             나만의 템플릿으로 추가
           </AddTemplateButton>

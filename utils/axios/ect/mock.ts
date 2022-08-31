@@ -65,33 +65,33 @@ export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplate
         success: true,
         message: '템플릿 상세조회 성공',
         data: {
-          _id: '62bbb80d9d5dc1aa4c3d28391231',
+          id: '62bbb80d9d5dc1aa4c3d28391231',
           title: '앱잼 합숙',
           category: [
             {
-              _id: '62bbb80d9d5dc1aa4c3d28131232139',
+              id: '62bbb80d9d5dc1aa4c3d28131232139',
               name: '필수',
               pack: [
                 {
-                  _id: '62bbb80d9d5dc1aa3454354c3d2839',
+                  id: '62bbb80d9d5dc1aa3454354c3d2839',
                   name: '여권',
                 },
                 {
-                  _id: '62bbb80d9d5dc1aa354234c3d2839',
+                  id: '62bbb80d9d5dc1aa354234c3d2839',
                   name: '가방',
                 },
               ],
             },
             {
-              _id: '62bbb80d9d5dc1aa4545435c3d2839',
+              id: '62bbb80d9d5dc1aa4545435c3d2839',
               name: '의류',
               pack: [
                 {
-                  _id: '62bbb80d9d5dc1aa4c35435565d2839',
+                  id: '62bbb80d9d5dc1aa4c35435565d2839',
                   name: '모자',
                 },
                 {
-                  _id: '62bbb80d9d5dc1aa4c331283210d2839',
+                  id: '62bbb80d9d5dc1aa4c331283210d2839',
                   name: '수영복',
                 },
               ],
