@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -16,6 +16,11 @@ function Invited() {
 
   const { data } = useQuery(['invited', invited], () => getInvited(invited as string), {
     enabled: !!invited,
+    onSuccess: ({ data }) => {
+      if (user.isAlreadyUser && data.isMember) {
+        router.replace(`/together?id=${data.id}`);
+      }
+    },
   });
 
   const { mutate } = useMutation('addMember', addMember);
@@ -28,7 +33,7 @@ function Invited() {
       mutate(
         { listId: info.id },
         {
-          onSuccess: ({ data: { listId } }) => router.replace(`/together/${listId}`),
+          onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
         },
       );
     } else {
@@ -37,7 +42,7 @@ function Invited() {
     }
   };
 
-  return <ModalForInvited title={info.title} clickHandler={clickHandler} />;
+  return info.isMember ? <ModalForInvited title={info.title} clickHandler={clickHandler} /> : null;
 }
 
 export default Invited;
