@@ -22,7 +22,7 @@ interface DeleteInventoryData {
 function TogetherPackingListLanding() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const id = Object.keys(router.query)[0] as unknown as string;
+  const id = router.query.id as string;
 
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);

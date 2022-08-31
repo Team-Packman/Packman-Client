@@ -209,7 +209,7 @@ function FolderLanding() {
   };
 
   const handleFolderClick = (id: string, categoryName: string) => {
-    router.push(`/packing-list/${categoryName}?${id}`);
+    router.push(`/packing-list/${categoryName}?id=${id}`);
   };
 
   const getSwiperIndex = (index: number) => {

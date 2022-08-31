@@ -24,12 +24,13 @@ interface DeleteAloneInventoryData {
 function AlonePackingListLanding() {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const id = router.query.id as string;
+
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const id = router.query as unknown as string;
 
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
   const deleteAloneInventory = useAPI(
