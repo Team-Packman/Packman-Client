@@ -29,11 +29,11 @@ function AlonePackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const query = router.query.id as string;
+  const id = router.query as unknown as string;
 
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-  const { data } = useQuery(['getAloneInventory', query], () => getAloneInventory(query), {
-    enabled: !!query,
+  const { data } = useQuery(['getAloneInventory', id], () => getAloneInventory(id), {
+    enabled: !!id,
   });
 
   const deleteAloneInventory = useAPI(

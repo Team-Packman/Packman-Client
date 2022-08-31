@@ -18,6 +18,10 @@ export const useHeaderRouter = () => {
         case '/together':
           setRoute(() => registerURL('replace', '/folder'));
           return;
+        case '/packing-list/alone':
+        case '/packing-list/together':
+          setRoute(() => registerURL('back'));
+          return;
       }
     }
   }, [router]);
