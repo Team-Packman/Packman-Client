@@ -19,24 +19,20 @@ function EditProfile() {
   return (
     <>
       {isEditing ? <Header /> : <Header back title="MY" />}
-      <StyledRoot>
+      <StyledRoot isEditing={isEditing}>
         {isEditing ? (
-          <>
-            <EditingProfile
-              comment={
-                <h1>
-                  <b>프로필 수정</b>을 완료해주세요!
-                </h1>
-              }
-              oldNickname={nickname}
-              oldProfileImageId={profileImage}
-              finishEditing={finishEditingProfileHandler}
-            />
-          </>
+          <EditingProfile
+            comment={
+              <h1>
+                <b>프로필 수정</b>을 완료해주세요!
+              </h1>
+            }
+            oldNickname={nickname}
+            oldProfileImageId={profileImage}
+            finishEditing={finishEditingProfileHandler}
+          />
         ) : (
-          <>
-            <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
-          </>
+          <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
         )}
       </StyledRoot>
     </>
@@ -45,11 +41,11 @@ function EditProfile() {
 
 export default EditProfile;
 
-const StyledRoot = styled.div`
+const StyledRoot = styled.div<{ isEditing: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: ${({ isEditing }) => isEditing && 'center'};
   padding: 0 2rem;
   width: 100vw;
   height: calc(var(--vh, 1vh) * 100 - 8rem);

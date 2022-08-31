@@ -16,7 +16,7 @@ interface PackingList {
 interface ItemProps {
   idx: number;
   handleIsDragged: (tmpArr: boolean[]) => void;
-  isDragged: boolean;
+  isDragged: boolean[];
   isDeleting: boolean;
   deleteList: string[];
   checkDeleteList: (id: string) => void;
@@ -52,8 +52,12 @@ export default function SwipeablelistItem(props: ItemProps) {
 
       if (startX - endX > 100) {
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
+        handleIsDragged(tmpArr);
+      } else {
+        if (isDragged[idx]) {
+          handleIsDragged(tmpArr);
+        }
       }
-      handleIsDragged(tmpArr);
 
       document.removeEventListener('touchmove', Move);
       document.removeEventListener('touchend', End);
@@ -76,7 +80,7 @@ export default function SwipeablelistItem(props: ItemProps) {
       )}
       <StyledItemWrapper
         onTouchStart={onTouchStart}
-        isDragged={isDragged}
+        isDragged={isDragged[idx]}
         isDeleting={isDeleting}
         onClick={moveToPackingList}
       >
@@ -101,7 +105,7 @@ export default function SwipeablelistItem(props: ItemProps) {
 
       {!isDeleting && (
         <StyledDeleteButton
-          isDragged={isDragged}
+          isDragged={isDragged[idx]}
           onClick={() => {
             // 아이템 삭제
             onClickDeleteButton(idx);

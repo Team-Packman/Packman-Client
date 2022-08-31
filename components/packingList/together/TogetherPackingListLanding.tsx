@@ -1,21 +1,20 @@
 import { useState } from 'react';
-import SwipeableList from '../SwipeableList';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '/public/assets/svg/iShowMore.svg';
 import iTrash from '/public/assets/svg/iTrash.svg';
-import Header from '../../common/Header';
-import DropBox from '../DropBox';
-import useAPI from '../../../utils/hooks/useAPI';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
+import useAPI from '../../../utils/hooks/useAPI';
+import Header from '../../common/Header';
 import Modal from '../../common/Modal';
-import { packmanColors } from '../../../styles/color';
-import FloatActionButton from '../../folder/FloatActionButton';
-import { DeleteTogetherInventoryInput } from '../../../service/inventory/together';
-import { FONT_STYLES } from '../../../styles/font';
+import DropBox from '../DropBox';
+import SwipeableList from '../SwipeableList';
 import SwipeablelistItem from '../SwipeableListItem';
-interface DeleteTogetherInventoryData {
+import FloatActionButton from '../../folder/FloatActionButton';
+import { FONT_STYLES } from '../../../styles/font';
+import { packmanColors } from '../../../styles/color';
+interface DeleteInventoryData {
   folderId: string;
   listId: string;
 }
@@ -23,25 +22,23 @@ interface DeleteTogetherInventoryData {
 function TogetherPackingListLanding() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const query = router.query.id as string;
+  const id = router.query.id as string;
+
   const [toggle, setToggle] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  //패킹리스트 데이터 조회
+  // api 호출
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  const { data } = useQuery(['getTogetherInventory', query], () => getTogetherInventory(query), {
-    enabled: !!query,
+  const deleteTogetherInventory = useAPI((api) => api.inventory.together.deleteTogetherInventory);
+  const { data } = useQuery(['getTogetherInventory', id], () => getTogetherInventory(id), {
+    enabled: !!id,
   });
 
-  const deleteTogetherInventory = useAPI(
-    (api) => (params: DeleteTogetherInventoryInput) =>
-      api.inventory.together.deleteTogetherInventory(params),
-  );
   const { mutate: deleteTogetherInventoryMutate } = useMutation(
-    (deleteTogetherInventoryData: DeleteTogetherInventoryData) => {
+    (deleteTogetherInventoryData: DeleteInventoryData) => {
       return deleteTogetherInventory(deleteTogetherInventoryData);
     },
     {
@@ -121,7 +118,7 @@ function TogetherPackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/together/${id}`);
+      router.push(`/together?${id}`);
     }
   };
 
@@ -211,7 +208,7 @@ function TogetherPackingListLanding() {
                 <SwipeablelistItem
                   key={item.id}
                   idx={idx}
-                  isDragged={isDragged[idx]}
+                  isDragged={isDragged}
                   handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
                   isDeleting={isDeleting}
                   deleteList={deleteList}
@@ -369,3 +366,8 @@ const StyledDeleteButton = styled.button`
   border: none;
   border-radius: 0.5rem;
 `;
+function deleteTogetherInventory(
+  deleteTogetherInventoryData: DeleteInventoryData,
+): Promise<unknown> {
+  throw new Error('Function not implemented.');
+}

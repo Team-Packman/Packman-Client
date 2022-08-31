@@ -18,6 +18,8 @@ export const useHeaderRouter = () => {
         case '/together':
           setRoute(() => registerURL('replace', '/folder'));
           return;
+        default:
+          setRoute(() => registerURL('back'));
       }
     }
   }, [router]);
