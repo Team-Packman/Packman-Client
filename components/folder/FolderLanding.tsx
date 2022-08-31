@@ -12,8 +12,8 @@ import Header from '../common/Header';
 import FloatActionButton from './FloatActionButton';
 
 export interface ModalDataProps {
-  _id: string;
-  title: string;
+  id: string;
+  name: string;
 }
 
 function FolderLanding() {
@@ -21,9 +21,9 @@ function FolderLanding() {
   const queryClient = useQueryClient();
 
   const [showBottomModal, setShowBottomModal] = useState(false);
-  const [modalData, setModalData] = useState<ModalDataProps>({ _id: '', title: '' });
+  const [modalData, setModalData] = useState<ModalDataProps>({ id: '', name: '' });
   const [editableFolderId, setEditableFolderId] = useState<string>('');
-  const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ _id: '', title: '' });
+  const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ id: '', name: '' });
   const [currentSwiperIndex, setCurrentSwiperIndex] = useState<number>(0);
   const [addNewFolder, setAddNewFolder] = useState<boolean>(false);
   const [newFolderData, setNewFolderData] = useState<AddFolderInput>({
@@ -89,15 +89,15 @@ function FolderLanding() {
   const { aloneFolder, togetherFolder } = folderList.data;
 
   // Bottom modal handler
-  const handleBottomModalOpen = (_id: string, title: string) => {
+  const handleBottomModalOpen = (id: string, name: string) => {
     setShowBottomModal(true);
     setEditableFolderId('');
-    setModalData({ _id, title });
+    setModalData({ id, name });
   };
 
   // bottom modal edit click handler
-  const onEdit = (_id: string) => {
-    setEditableFolderId(_id);
+  const onEdit = (id: string) => {
+    setEditableFolderId(id);
     setShowBottomModal(false);
   };
 
@@ -111,8 +111,8 @@ function FolderLanding() {
           return {
             ...oldData,
             data: {
-              aloneFolders: aloneFolder.filter((v) => v.id !== id),
-              togetherFolders: togetherFolder.filter((v) => v.id !== id),
+              aloneFolder: aloneFolder.filter((v) => v.id !== id),
+              togetherFolder: togetherFolder.filter((v) => v.id !== id),
             },
           };
         });
@@ -122,28 +122,28 @@ function FolderLanding() {
 
   // 폴더 수정 관련 핸들러
   const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedFolerData({ _id: modalData._id, title: e.target.value });
+    setEditedFolerData({ id: modalData.id, name: e.target.value });
   };
 
   const handleOnBlurInEdit = () => {
     setEditableFolderId('');
 
-    if (editedFolderData.title) {
+    if (editedFolderData.name) {
       editFolderMutate(editedFolderData, {
         onSuccess: () => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
               data: {
-                aloneFolders: aloneFolder.map((v) => {
-                  if (v.id === editedFolderData._id) {
-                    return { ...v, title: editedFolderData.title };
+                aloneFolder: aloneFolder.map((v) => {
+                  if (v.id === editedFolderData.id) {
+                    return { ...v, name: editedFolderData.name };
                   }
                   return v;
                 }),
-                togetherFolders: togetherFolder.map((v) => {
-                  if (v.id === editedFolderData._id) {
-                    return { ...v, title: editedFolderData.title };
+                togetherFolder: togetherFolder.map((v) => {
+                  if (v.id === editedFolderData.id) {
+                    return { ...v, name: editedFolderData.name };
                   }
                   return v;
                 }),

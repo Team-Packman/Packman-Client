@@ -44,8 +44,8 @@ export interface AddFolderOutput {
 }
 
 export interface UpdateFolderNameInput {
-  _id: string; // 수정할 폴더 id
-  title: string; // 수정한 폴더 이름
+  id: string; // 수정할 폴더 id
+  name: string; // 수정한 폴더 이름
 }
 
 export interface UpdateFolderNameOutput {
@@ -53,17 +53,17 @@ export interface UpdateFolderNameOutput {
   success: boolean;
   message: string;
   data: {
-    aloneFolders: {
+    aloneFolder: {
       // 혼자 패킹 폴더 배열
-      _id: string; // 폴더 id
-      title: string; // 폴더 이름
-      listNum: number; // 폴더가 가지고 있는 리스트의 개수
+      id: string; // 폴더 id
+      name: string; // 폴더 이름
+      listNum: string; // 폴더가 가지고 있는 리스트의 개수
     }[];
-    togetherFolders: {
+    togetherFolder: {
       // 함께 패킹 폴더 배열
-      _id: string; // 폴더 id
-      title: string; // 폴더 이름
-      listNum: number; // 폴더가 가지고 있는 리스트의 개수
+      id: string; // 폴더 id
+      name: string; // 폴더 이름
+      listNum: string; // 폴더가 가지고 있는 리스트의 개수
     }[];
   };
 }
@@ -73,17 +73,17 @@ export interface DeleteFolderOutput {
   success: boolean;
   message: string;
   data: {
-    aloneFolders: {
+    aloneFolder: {
       // 혼자 패킹 폴더 배열
-      _id: string; // 폴더 id
-      title: string; // 폴더 이름
-      listNum: number; // 폴더가 가지고 있는 리스트의 개수
+      id: string; // 폴더 id
+      name: string; // 폴더 이름
+      listNum: string; // 폴더가 가지고 있는 리스트의 개수
     }[];
-    togetherFolders: {
+    togetherFolder: {
       // 함께 패킹 폴더 배열
-      _id: string; // 폴더 id
-      title: string; // 폴더 이름
-      listNum: number; // 폴더가 가지고 있는 리스트의 개수
+      id: string; // 폴더 id
+      name: string; // 폴더 이름
+      listNum: string; // 폴더가 가지고 있는 리스트의 개수
     }[];
   };
 }

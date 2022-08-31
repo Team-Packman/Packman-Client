@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import Header from '../../common/Header';
@@ -48,7 +48,7 @@ function ListIntroLanding() {
           throw new Error();
       }
     }
-  }, [router.isReady]);
+  }, [router.isReady, id, type]);
 
   useEffect(() => {
     const checkFolderAndListValidation = () => {
@@ -59,19 +59,22 @@ function ListIntroLanding() {
   }, [selectedTagIndex, listName]);
 
   // 폴더 내에서, 리스트 생성하기를 한 경우 자동으로 해당 폴더를 기본으로 선택하게 하는 함수
-  const initSelectedFolder = (data: folderType, category: string) => {
-    const currentFolder =
-      category === 'together' ? data?.data?.togetherFolder : data?.data?.aloneFolder;
-    const findSelectedFolder = currentFolder?.find((v) => v?.id === folderId);
+  const initSelectedFolder = useCallback(
+    (data: folderType, category: string) => {
+      const currentFolder =
+        category === 'together' ? data?.data?.togetherFolder : data?.data?.aloneFolder;
+      const findSelectedFolder = currentFolder?.find((v) => v?.id === folderId);
 
-    if (findSelectedFolder) {
-      const findFolderIndex = currentFolder?.findIndex((v) => v === findSelectedFolder);
-      setSelectedTagIndex({
-        id: findSelectedFolder.id as string,
-        index: findFolderIndex as number,
-      });
-    }
-  };
+      if (findSelectedFolder) {
+        const findFolderIndex = currentFolder?.findIndex((v) => v === findSelectedFolder);
+        setSelectedTagIndex({
+          id: findSelectedFolder.id as string,
+          index: findFolderIndex as number,
+        });
+      }
+    },
+    [folderId],
+  );
 
   //  api call
   const getAloneFolder = useAPI((api) => api.packingList.alone.getAloneFolder);
@@ -91,13 +94,13 @@ function ListIntroLanding() {
     if (aloneFolderData) {
       initSelectedFolder(aloneFolderData, 'alone');
     }
-  }, [aloneFolderData]);
+  }, [aloneFolderData, initSelectedFolder]);
 
   useEffect(() => {
     if (togetherFolderData) {
       initSelectedFolder(togetherFolderData, 'together');
     }
-  }, [togetherFolderData]);
+  }, [togetherFolderData, initSelectedFolder]);
 
   const { mutate: addAloneIntroMutate } = useMutation(
     'addAloneIntroFolder',
@@ -193,8 +196,7 @@ function ListIntroLanding() {
             },
             {
               onSuccess: (data) => {
-                setCreatedListId(data?.data?.id);
-                router.push(`/alone/id=${createdListId}`);
+                router.push(`/alone?id=${data?.data?.id}`);
               },
             },
           )
@@ -204,13 +206,10 @@ function ListIntroLanding() {
               folderId: selectedTagIndex.id,
               title: listName,
               templateId: templateId,
-              // 이전 버전 서버, templateId가 없는 경우 서버내부 오류 발생
-              // Test templateId : 62db2b0478f2ebb9778289cb
             },
             {
               onSuccess: (data) => {
-                setCreatedListId(data?.data?.id);
-                router.push(`/together/id=${createdListId}`);
+                router.push(`/together?id=${data?.data?.id}`);
               },
             },
           );
