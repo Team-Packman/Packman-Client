@@ -15,8 +15,8 @@ import Link from 'next/link';
 function Login() {
   const router = useRouter();
 
-  const [invitation, setInvitation] = useRecoilState(invitationAtom);
-  const setUser = useSetRecoilState(authUserAtom);
+  const [{ listId, isMember }, setInvitation] = useRecoilState(invitationAtom);
+  const [user, setUser] = useRecoilState(authUserAtom);
   const setCreatingUser = useSetRecoilState(creatingUserAtom);
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
   const addMember = useAPI((api) => api.packingList.together.addMember);
@@ -53,18 +53,6 @@ function Login() {
               onSuccess: ({ data }) => {
                 if (data.isAlreadyUser) {
                   setUser((prev) => ({ ...prev, ...data }));
-                  if (invitation.listId) {
-                    addMemberMutate(
-                      { listId: invitation.listId },
-                      {
-                        onSuccess: ({ data: { listId } }) =>
-                          router.replace(`/together?id=${listId}`),
-                      },
-                    );
-                  } else {
-                    router.replace('/folder');
-                  }
-                  setInvitation({ listId: '' });
                 } else {
                   setCreatingUser(data);
                   router.replace('/profile');
@@ -82,6 +70,27 @@ function Login() {
       }
     }
   }, [router.isReady]);
+
+  useEffect(() => {
+    if (!user.isAlreadyUser) return;
+
+    if (listId && isMember) {
+      router.replace(`/together?id=${listId}`);
+    } else if (listId) {
+      addMemberMutate(
+        { listId },
+        {
+          onSuccess: ({ data: { listId } }) => {
+            router.replace(`/together?id=${listId}`);
+            setInvitation({ listId: '', isMember: false });
+          },
+        },
+      );
+    } else {
+      router.replace('/folder');
+      setInvitation({ listId: '', isMember: false });
+    }
+  }, [user]);
 
   return (
     <StyledRoot>
