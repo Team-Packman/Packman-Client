@@ -14,7 +14,7 @@ function DropBox(props: DropBoxProps) {
   const router = useRouter();
 
   const onClickFolderItem = (id: string) => {
-    router.replace(`/packing-list/${categoryName}/${id}`);
+    router.replace(`/packing-list/${categoryName}?${id}`);
 
     closeDropBox();
   };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '/public/assets/svg/iShowMore.svg';
@@ -32,7 +32,7 @@ function TogetherPackingListLanding() {
 
   // api 호출
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-
+  const deleteTogetherInventory = useAPI((api) => api.inventory.together.deleteTogetherInventory);
   const { data } = useQuery(['getTogetherInventory', id], () => getTogetherInventory(id), {
     enabled: !!id,
   });
@@ -118,7 +118,7 @@ function TogetherPackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/together/?${id}`);
+      router.push(`/together?${id}`);
     }
   };
 
@@ -208,7 +208,7 @@ function TogetherPackingListLanding() {
                 <SwipeablelistItem
                   key={item.id}
                   idx={idx}
-                  isDragged={isDragged[idx]}
+                  isDragged={isDragged}
                   handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
                   isDeleting={isDeleting}
                   deleteList={deleteList}

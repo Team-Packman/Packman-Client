@@ -32,14 +32,15 @@ function AlonePackingListLanding() {
   const id = router.query as unknown as string;
 
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-  const { data } = useQuery(['getAloneInventory', id], () => getAloneInventory(id), {
-    enabled: !!id,
-  });
-
   const deleteAloneInventory = useAPI(
     (api) => (params: DeleteAloneInventoryInput) =>
       api.inventory.alone.deleteAloneInventory(params),
   );
+
+  const { data } = useQuery(['getAloneInventory', id], () => getAloneInventory(id), {
+    enabled: !!id,
+  });
+
   const { mutate: deleteAloneInventoryMutate } = useMutation(
     (deleteTogetherInventoryData: DeleteAloneInventoryData) => {
       return deleteAloneInventory(deleteTogetherInventoryData);
@@ -117,7 +118,7 @@ function AlonePackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/alone/${id}`);
+      router.push(`/alone?${id}`);
     }
   };
 
@@ -208,7 +209,7 @@ function AlonePackingListLanding() {
                 <SwipeablelistItem
                   key={item.id}
                   idx={idx}
-                  isDragged={isDragged[idx]}
+                  isDragged={isDragged}
                   handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
                   isDeleting={isDeleting}
                   deleteList={deleteList}
