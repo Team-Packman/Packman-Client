@@ -1,4 +1,3 @@
-import { GetTemplateInput } from './../../../service/ect/index';
 import { AxiosInstance } from 'axios';
 import {
   GetAloneTemplateListOutput,
@@ -8,9 +7,9 @@ import {
 
 export const fetchTemplate = async (
   request: AxiosInstance,
-  { templateId, type }: GetTemplateInput,
+  templateId: string,
 ): Promise<GetTemplateOutput> => {
-  const { data } = await request(`/template/${templateId}/${type}`);
+  const { data } = await request(`/template/${templateId}`);
   return data;
 };
 

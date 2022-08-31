@@ -1,17 +1,17 @@
 import Image from 'next/image';
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren, ReactNode } from 'react';
 import styled from 'styled-components';
 import AddItem from '/public/assets/svg/add_item_ic.svg';
 
 interface PackagesWithCategoryProps {
-  children?: ReactNode;
   creating?: ReactNode;
   packages?: ReactNode;
+  preview?: boolean;
   isCreating?: boolean;
   createHandler?: () => void;
 }
-function PackagesWithCategory(props: PackagesWithCategoryProps) {
-  const { children, packages, isCreating, creating, createHandler } = props;
+function PackagesWithCategory(props: PropsWithChildren<PackagesWithCategoryProps>) {
+  const { children, packages, isCreating, creating, preview, createHandler } = props;
 
   return (
     <StyledRoot>
@@ -19,11 +19,13 @@ function PackagesWithCategory(props: PackagesWithCategoryProps) {
       <ul>
         {packages}
         {isCreating && creating}
-        <li>
-          <StyledAddButton onClick={createHandler}>
-            <Image src={AddItem} alt="addItem_ic" layout="responsive" />
-          </StyledAddButton>
-        </li>
+        {!preview && (
+          <li>
+            <StyledAddButton onClick={createHandler}>
+              <Image src={AddItem} alt="addItem_ic" layout="responsive" />
+            </StyledAddButton>
+          </li>
+        )}
       </ul>
     </StyledRoot>
   );
