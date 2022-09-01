@@ -613,7 +613,7 @@ function TogetherLanding() {
               )
             }
           >
-            나만의 템플릿으로 추가
+            {info.togetherPackingList.isSaved ? '템플릿 업데이트' : '나만의 템플릿으로 추가'}
           </AddTemplateButton>
         </FunctionSection>
       </StyledTogetherLanding>
