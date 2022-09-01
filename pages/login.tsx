@@ -8,19 +8,20 @@ import useAPI from '../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { authUserAtom, creatingUserAtom, invitationAtom, kakao } from '../utils/recoil/atom/atom';
 import Link from 'next/link';
 
 function Login() {
   const router = useRouter();
 
-  const [{ listId, isMember }, setInvitation] = useRecoilState(invitationAtom);
+  const { listId, isMember } = useRecoilValue(invitationAtom);
+  const resetInvitation = useResetRecoilState(invitationAtom);
   const [user, setUser] = useRecoilState(authUserAtom);
   const setCreatingUser = useSetRecoilState(creatingUserAtom);
+  const setKakaoInfo = useSetRecoilState(kakao);
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
   const addMember = useAPI((api) => api.packingList.together.addMember);
-  const setKakaoInfo = useSetRecoilState(kakao);
 
   const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
   const { mutate: addMemberMutate } = useMutation('addMember', addMember);
@@ -82,13 +83,13 @@ function Login() {
         {
           onSuccess: ({ data: { listId } }) => {
             router.replace(`/together?id=${listId}`);
-            setInvitation({ listId: '', isMember: false });
+            resetInvitation();
           },
         },
       );
     } else {
       router.replace('/folder');
-      setInvitation({ listId: '', isMember: false });
+      resetInvitation();
     }
   }, [user]);
 
