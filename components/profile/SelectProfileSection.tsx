@@ -159,6 +159,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
             selected={profile === id}
             onClick={() => onClickProfileImage(id)}
           >
+            <StyledBackground selected={profile === id} />
             <StyledImage
               key={id}
               src={src}
@@ -190,7 +191,6 @@ const StyledRoot = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: fit-content;
   margin-top: 4.84rem;
 `;
 const StyledInputWrapper = styled.div`
@@ -231,20 +231,29 @@ const StyledSelectProfileWrapper = styled.div`
   margin: 1.5rem 0 5.57rem 0;
 `;
 const StyledImageWrapper = styled.div<{ selected: boolean }>`
+  position: relative;
   width: 8.6rem;
   height: 8.6rem;
-  background: url('assets/svg/iSelected.svg') no-repeat center;
-  background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};
   border: ${({ selected }) =>
     selected ? `3px solid ${packmanColors.pmPink}` : '3px solid transparent'};
   border-radius: 0.8rem;
 `;
+const StyledBackground = styled.div<{ selected: boolean }>`
+  position: absolute;
+  transform: translate(-0.1rem, -0.1rem);
+  width: 8.2rem;
+  height: 8.2rem;
+  border-radius: 0.7rem;
+  background: url('assets/svg/iSelected.svg') no-repeat center;
+  background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};
+  z-index: ${({ selected }) => selected && '1'};
+`;
 const StyledImage = styled(Image)<{ selected: boolean }>`
-  z-index: ${({ selected }) => selected && '-1'};
+  z-index: ${({ selected }) => selected && '0'};
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
   position: absolute;
-  bottom: 3.4rem;
+  bottom: 8.6rem;
   width: calc(100vw - 4rem);
   height: 4.1rem;
   border: none;
