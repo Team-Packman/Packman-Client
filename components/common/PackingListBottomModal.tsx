@@ -141,5 +141,6 @@ const StyledButtonWrapper = styled.div`
     border-radius: 0.8rem;
     font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
     background: ${packmanColors.pmBlueGrey};
+    -webkit-text-fill-color: ${packmanColors.pmDarkGrey};
   }
 `;
