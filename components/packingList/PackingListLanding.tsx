@@ -166,7 +166,7 @@ function PackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/${type}?${id}`);
+      router.push(`/${type}?id=${id}`);
     }
   };
 
@@ -176,9 +176,20 @@ function PackingListLanding() {
     setDeleteList(payload);
   };
 
+  const onClickDropBoxItem = (id: string) => {
+    router.replace(`/packing-list?type=${type}&id=${id}`);
+    setIsDeleting(false);
+  };
+
   return (
     <Layout back title="리스트 목록" icon="profile">
-      <StyledRoot onTouchMove={() => setToggle(false)}>
+      <StyledRoot
+        onClick={() => {
+          if (toggle) {
+            setToggle(false);
+          }
+        }}
+      >
         {showModal && (
           <Modal
             title="정말 삭제하시겠어요?"
@@ -194,22 +205,22 @@ function PackingListLanding() {
           />
         )}
 
-        <StyledFolderInfo>
+        <StyledFolderInfo onClick={() => setToggle((prev) => !prev)}>
           <h1>{currentFolder.name}</h1>
           <div>
-            <StyledToggleImage
-              src={iShowMore}
-              alt="상세보기"
-              toggle={toggle.toString()}
-              onClick={() => setToggle(true)}
-            />
+            <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
             {toggle && (
-              <DropBox
-                folderList={folder}
-                closeDropBox={() => setToggle(false)}
-                currentId={currentFolder.id}
-                categoryName={type}
-              />
+              <DropBox>
+                {folder.map(({ id, name }) => (
+                  <StyledItem
+                    key={id}
+                    currentId={id === currentFolder.id}
+                    onClick={() => onClickDropBoxItem(id)}
+                  >
+                    {name}
+                  </StyledItem>
+                ))}
+              </DropBox>
             )}
           </div>
         </StyledFolderInfo>
@@ -302,6 +313,18 @@ const StyledFolderInfo = styled.div`
     flex-direction: column;
     align-items: center;
   }
+`;
+
+const StyledItem = styled.div<{ currentId: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 4.8rem;
+  font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
+  font-size: 1.5rem;
+  color: ${packmanColors.pmDarkGrey};
+  border-bottom: 1px solid ${packmanColors.pmGrey};
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
   width: 2.4rem;

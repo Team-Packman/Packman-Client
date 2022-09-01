@@ -24,26 +24,7 @@ function EditProfile() {
 
   const { nickname, profileImage } = data.data;
 
-  return isEditing ? (
-    <Layout>
-      <StyledRoot isEditing={isEditing}>
-        {isEditing ? (
-          <EditingProfile
-            comment={
-              <h1>
-                <b>프로필 수정</b>을 완료해주세요!
-              </h1>
-            }
-            oldNickname={nickname}
-            oldProfileImageId={profileImage}
-            finishEditing={finishEditingProfileHandler}
-          />
-        ) : (
-          <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
-        )}
-      </StyledRoot>
-    </Layout>
-  ) : (
+  return (
     <Layout {...layoutProps}>
       <StyledRoot isEditing={isEditing}>
         {isEditing ? (
