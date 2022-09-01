@@ -119,7 +119,7 @@ function AlonePackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/alone?${id}`);
+      router.push(`/alone?id=${id}`);
     }
   };
 

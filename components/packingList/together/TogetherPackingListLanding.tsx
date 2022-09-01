@@ -118,7 +118,7 @@ function TogetherPackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/together?${id}`);
+      router.push(`/together?id=${id}`);
     }
   };
 
