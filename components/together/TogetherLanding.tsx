@@ -489,7 +489,8 @@ function TogetherLanding() {
   return (
     <Layout
       back
-      title="템플릿 미리보기"
+      title="패킹리스트"
+      icon="member"
       option={
         <CheckListHeader
           together
@@ -597,6 +598,7 @@ function TogetherLanding() {
                       />
                     </PackagesWithCategory>
                   )}
+                  <StyledScrollBlock />
                 </StyledBody>
               </SwiperSlide>
             );
@@ -611,7 +613,7 @@ function TogetherLanding() {
               )
             }
           >
-            나만의 템플릿으로 추가
+            {info.togetherPackingList.isSaved ? '템플릿 업데이트' : '나만의 템플릿으로 추가'}
           </AddTemplateButton>
         </FunctionSection>
       </StyledTogetherLanding>
@@ -655,13 +657,19 @@ const StyledTogetherLanding = styled.div`
 `;
 
 const StyledBody = styled.div`
+  //100% - subheader
+  height: calc(100% - 11rem);
+
   display: flex;
-  //100% - subheader - device
-  height: calc(100% - 11rem - 10rem);
   flex-direction: column;
   justify-content: flex-start;
+
   overflow-y: scroll;
-  margin-bottom: 24.4rem;
+
   padding: 0 2rem;
   padding-top: 1.6rem;
+`;
+const StyledScrollBlock = styled.div`
+  width: 100%;
+  min-height: 8rem;
 `;
