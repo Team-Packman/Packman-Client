@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRefresh } from '../hooks/queries/auth/auth';
 import { authUserAtom } from '../recoil/atom/atom';
@@ -24,7 +24,9 @@ function withAuth(axiosWithAuth: AxiosInstance) {
     (config: AxiosRequestConfig) => config,
     async (error) => {
       const config = error.config;
-
+      if (error instanceof AxiosError) {
+        alert(JSON.stringify(error.status));
+      }
       if (error.response.status === 401) {
         const tokens = await refresh();
 
