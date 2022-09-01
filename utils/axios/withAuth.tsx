@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRefresh } from '../hooks/queries/auth/auth';
 import { authUserAtom } from '../recoil/atom/atom';

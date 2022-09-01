@@ -53,7 +53,7 @@ function Login() {
             {
               onSuccess: ({ data }) => {
                 if (data.isAlreadyUser) {
-                  setUser((prev) => ({ ...prev, ...data }));
+                  setUser(data as typeof user);
                 } else {
                   setCreatingUser(data);
                   router.replace('/profile');
