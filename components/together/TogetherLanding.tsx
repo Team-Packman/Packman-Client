@@ -489,7 +489,8 @@ function TogetherLanding() {
   return (
     <Layout
       back
-      title="템플릿 미리보기"
+      title="패킹리스트"
+      icon="member"
       option={
         <CheckListHeader
           together
