@@ -100,7 +100,7 @@ const StyledRoot = styled.div`
   bottom: 0;
   width: 100%;
   height: 14.1rem;
-  background-color: #fff;
+  background-color: ${packmanColors.pmWhite};
   border-radius: 2.4rem 2.4rem 0 0;
   gap: 0.8rem;
   padding: 0.8rem 0;

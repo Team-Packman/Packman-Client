@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import React, { PropsWithChildren, ReactNode } from 'react';
 import styled from 'styled-components';
-import AddItem from '/public/assets/svg/add_item_ic.svg';
+import { packmanColors } from '../../styles/color';
+import Plus from '/public/assets/svg/plus_ic.svg';
 
 interface PackagesWithCategoryProps {
   creating?: ReactNode;
@@ -22,7 +23,7 @@ function PackagesWithCategory(props: PropsWithChildren<PackagesWithCategoryProps
         {!preview && (
           <li>
             <StyledAddButton onClick={createHandler}>
-              <Image src={AddItem} alt="addItem_ic" layout="responsive" />
+              <Image src={Plus} alt="plus_ic" />
             </StyledAddButton>
           </li>
         )}
@@ -45,12 +46,20 @@ const StyledRoot = styled.ul`
 `;
 
 const StyledAddButton = styled.button`
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
-  padding: 0;
+  height: 3.2rem;
+
   background-color: transparent;
-  border: none;
+
+  border: 1px dashed ${packmanColors.pmDashGrey};
   border-radius: 0.8rem;
+
   margin-top: 0.4rem;
+  padding: 0;
+
   cursor: pointer;
 `;
