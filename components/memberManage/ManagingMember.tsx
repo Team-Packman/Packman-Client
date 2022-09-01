@@ -66,11 +66,16 @@ function ManagingMember() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [members, setMembers] = useState<Imember[]>(mockData.data.member);
-  const [oldMembers, setOldMembers] = useState(members);
+  const [oldMembers, setOldMembers] = useState([...members]);
 
   const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const editMembers = () => {
+    if (isEditing) {
+      setMembers([...oldMembers]);
+    } else {
+      setOldMembers([...members]);
+    }
     setIsEditing((prev) => !prev);
   };
 
