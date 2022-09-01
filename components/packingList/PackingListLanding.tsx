@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '/public/assets/svg/iShowMore.svg';
-import iTrash from '/public/assets/svg/iTrash.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
@@ -16,6 +15,7 @@ import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
+import CaptionSection from './CaptionSection';
 interface DeleteInventoryData {
   folderId: string;
   listId: string;
@@ -78,16 +78,19 @@ function PackingListLanding() {
     },
   );
 
-  const inventory = (aloneInventory ?? togetherInventory) as GetInventoryOutput;
+  const isInventory = (inventory: unknown): inventory is GetInventoryOutput => {
+    if (inventory === undefined || inventory === null) return false;
+    return inventory !== undefined;
+  };
+  const inventory = aloneInventory ?? togetherInventory;
 
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(
-      type === 'together'
-        ? inventory?.data.togetherPackingList.length
-        : inventory?.data.alonePackingList.length,
+      aloneInventory?.data.alonePackingList.length ??
+        togetherInventory?.data.togetherPackingList.length,
     ).fill(false),
   );
-  if (!inventory) return null;
+  if (!inventory || !isInventory(inventory)) return null;
 
   const { togetherPackingList, alonePackingList, folder, currentFolder } = inventory.data;
 
@@ -107,9 +110,7 @@ function PackingListLanding() {
   };
 
   const closeModal = () => {
-    handleIsDragged(
-      Array(type === 'together' ? togetherPackingList.length : alonePackingList.length).fill(false),
-    );
+    handleIsDragged(Array(togetherPackingList.length ?? alonePackingList.length).fill(false));
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
@@ -118,27 +119,31 @@ function PackingListLanding() {
     setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
     // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
     if (isDeleting) {
-      deleteTogetherInventoryMutate({
-        folderId: currentFolder.id,
-        listId: deleteList.join(','),
-      });
-      if (
-        deleteList.length ===
-        (type === 'together' ? togetherPackingList.length : alonePackingList.length)
-      ) {
+      type === 'together'
+        ? deleteTogetherInventoryMutate({
+            folderId: currentFolder.id,
+            listId: deleteList.join(','),
+          })
+        : deleteAloneInventoryMutate({
+            folderId: currentFolder.id,
+            listId: deleteList.join(','),
+          });
+      if (deleteList.length === (togetherPackingList.length ?? alonePackingList.length)) {
         setIsDeleting(false);
       }
       setDeleteList([]);
     }
     // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
     else {
-      deleteTogetherInventoryMutate({
-        folderId: currentFolder.id,
-        listId:
-          type === 'together'
-            ? togetherPackingList[selectedIndex].id
-            : alonePackingList[selectedIndex].id,
-      });
+      type === 'together'
+        ? deleteTogetherInventoryMutate({
+            folderId: currentFolder.id,
+            listId: togetherPackingList[selectedIndex].id,
+          })
+        : deleteAloneInventoryMutate({
+            folderId: currentFolder.id,
+            listId: alonePackingList[selectedIndex].id,
+          });
     }
     closeModal();
   };
@@ -152,9 +157,7 @@ function PackingListLanding() {
   };
 
   const onClickCaptionButton = () => {
-    setIsDragged(
-      Array((type === 'together' ? togetherPackingList : alonePackingList).length).fill(false),
-    );
+    setIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
     setIsDeleting((prev) => !prev);
     if (!isDeleting) {
       setDeleteList([]);
@@ -169,9 +172,7 @@ function PackingListLanding() {
 
   // 전체 삭제
   const onClickDeleteButton = () => {
-    const payload = (type === 'together' ? togetherPackingList : alonePackingList).map(
-      ({ id }) => id,
-    );
+    const payload = (togetherPackingList ?? alonePackingList).map(({ id }) => id);
     setDeleteList(payload);
   };
 
@@ -213,10 +214,8 @@ function PackingListLanding() {
           </div>
         </StyledFolderInfo>
 
-        {!(type === 'together' ? togetherPackingList : alonePackingList).length ? (
-          <StyledMain
-            isEmpty={!(type === 'together' ? togetherPackingList : alonePackingList).length}
-          >
+        {!(togetherPackingList ?? alonePackingList).length ? (
+          <StyledMain isEmpty={!(togetherPackingList ?? alonePackingList).length}>
             <StyledEmpty>
               <p>&apos;+&apos; 버튼을 눌러</p>
               <p>패킹 리스트를 추가해주세요</p>
@@ -224,70 +223,33 @@ function PackingListLanding() {
           </StyledMain>
         ) : (
           <>
-            <StyledCaptionWrapper>
-              {!isDeleting && (
-                <StyledCaptionText>
-                  <span>
-                    {(type === 'together' ? togetherPackingList : alonePackingList).length}
-                  </span>
-                  개의 패킹 리스트
-                </StyledCaptionText>
-              )}
-              {isDeleting && (
-                <span onClick={() => deleteList.length && setDeleteList([])}>선택해제</span>
-              )}
-
-              <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
-                {isDeleting ? (
-                  <p
-                    onClick={() =>
-                      handleIsDragged(
-                        Array(
-                          (type === 'together' ? togetherPackingList : alonePackingList).length,
-                        ).fill(false),
-                      )
-                    }
-                  >
-                    취소
-                  </p>
-                ) : (
-                  <Image
-                    src={iTrash}
-                    alt="삭제"
-                    width={24}
-                    height={24}
-                    onClick={() =>
-                      handleIsDragged(
-                        Array(
-                          (type === 'together' ? togetherPackingList : alonePackingList).length,
-                        ).fill(false),
-                      )
-                    }
-                  />
-                )}
-              </StyledCaptionButtonWrapper>
-            </StyledCaptionWrapper>
+            <CaptionSection
+              packingList={togetherPackingList ?? alonePackingList}
+              isDeleting={isDeleting}
+              deleteList={deleteList}
+              onClickCaptionButton={onClickCaptionButton}
+              handleIsDragged={handleIsDragged}
+              resetDeleteList={() => deleteList.length && setDeleteList([])}
+            />
 
             <SwipeableList
-              swipeableListItem={(type === 'together' ? togetherPackingList : alonePackingList).map(
-                (item, idx) => (
-                  <SwipeablelistItem
-                    key={item.id}
-                    idx={idx}
-                    isDragged={isDragged}
-                    handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-                    isDeleting={isDeleting}
-                    deleteList={deleteList}
-                    checkDeleteList={(id: string) => checkDeleteList(id)}
-                    onClickDeleteButton={() => {
-                      setSelectedIndex(idx);
-                      openModal();
-                    }}
-                    packingList={type === 'together' ? togetherPackingList : alonePackingList}
-                    moveToPackingList={() => moveToPackingList(item.id)}
-                  />
-                ),
-              )}
+              swipeableListItem={(togetherPackingList ?? alonePackingList).map((item, idx) => (
+                <SwipeablelistItem
+                  key={item.id}
+                  idx={idx}
+                  isDragged={isDragged}
+                  handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
+                  isDeleting={isDeleting}
+                  deleteList={deleteList}
+                  checkDeleteList={(id: string) => checkDeleteList(id)}
+                  onClickDeleteButton={() => {
+                    setSelectedIndex(idx);
+                    openModal();
+                  }}
+                  packingList={togetherPackingList ?? alonePackingList}
+                  moveToPackingList={() => moveToPackingList(item.id)}
+                />
+              ))}
             />
           </>
         )}
@@ -297,8 +259,7 @@ function PackingListLanding() {
               <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
                 {!deleteList.length
                   ? ' 전체 선택'
-                  : deleteList.length ===
-                    (type === 'together' ? togetherPackingList : alonePackingList).length
+                  : deleteList.length === (togetherPackingList ?? alonePackingList).length
                   ? '전체 삭제'
                   : '선택 삭제'}
               </div>
@@ -364,42 +325,7 @@ const StyledEmpty = styled.div`
   color: ${packmanColors.pmGrey};
   ${FONT_STYLES.HEADLINE1_MEDIUM};
 `;
-const StyledCaptionWrapper = styled.div`
-  position: relative;
-  display: flex;
-  width: 100%;
-  height: 6.9rem;
 
-  & > span {
-    position: absolute;
-    left: 2.6rem;
-    bottom: 0.8rem;
-    ${FONT_STYLES.BODY2_SEMIBOLD};
-    color: ${packmanColors.pmDeepGrey};
-  }
-`;
-const StyledCaptionText = styled.p`
-  display: flex;
-  justify-content: start;
-  padding: 1.8rem 0 0 2.4rem;
-  margin: 0;
-  ${FONT_STYLES.BODY1_REGULAR};
-  color: ${packmanColors.pmDeepGrey};
-  & > span {
-    ${FONT_STYLES.BODY2_SEMIBOLD};
-    color: ${packmanColors.pmPink};
-  }
-`;
-const StyledCaptionButtonWrapper = styled.div`
-  position: absolute;
-  display: flex;
-  right: 2rem;
-  bottom: 0.8rem;
-  & > p {
-    ${FONT_STYLES.BODY2_SEMIBOLD};
-    color: ${packmanColors.pmDeepGrey};
-  }
-`;
 const StyledModalButtonWrapper = styled.div`
   display: flex;
   justify-content: center;

@@ -35,6 +35,7 @@ function SettingProfile(props: SettingProfileProps) {
   const { accessToken } = useRecoilValue(kakao);
   const router = useRouter();
 
+  // 탈퇴하기
   const deleteUser = useAPI((api) => api.user.deleteUserInfo);
   const { mutate: deleteUserMutate } = useMutation(
     (deleteUserData: string) => {
@@ -43,8 +44,7 @@ function SettingProfile(props: SettingProfileProps) {
     },
     {
       onSuccess: () => {
-        resetUserState();
-        router.replace('/login');
+        handleWithdrawn();
       },
     },
   );
@@ -54,8 +54,9 @@ function SettingProfile(props: SettingProfileProps) {
   };
 
   const resetUserState = useResetRecoilState(authUserAtom); //유저 전역변수 초기화
+  const resetKakaoToken = useResetRecoilState(kakao); // 카카오 액세스 토큰 초기화
 
-  //로그아웃
+  //로그아웃 및 recoil 초기화
   const onClickLogout = () => {
     (async () => {
       try {
@@ -71,6 +72,28 @@ function SettingProfile(props: SettingProfileProps) {
         );
       } finally {
         resetUserState();
+        resetKakaoToken();
+        router.replace('/login');
+      }
+    })();
+  };
+
+  const handleWithdrawn = () => {
+    (async () => {
+      try {
+        await axios.post(
+          'https://kapi.kakao.com/v1/user/unlink',
+          {},
+          // {
+          //   headers: {
+          //     'Content-Type': 'application/x-www-form-urlencoded',
+          //     Authorization: `Bearer ${accessToken}`,
+          //   },
+          // },
+        );
+      } finally {
+        resetUserState();
+        resetKakaoToken();
         router.replace('/login');
       }
     })();
