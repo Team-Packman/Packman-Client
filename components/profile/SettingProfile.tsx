@@ -32,7 +32,10 @@ function SettingProfile(props: SettingProfileProps) {
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profile = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
-  const { accessToken } = useRecoilValue(kakao);
+  const [isLogoutClicked, setIsLogoutClicked] = useState(true);
+  const { accessToken: kakaoAccessToken } = useRecoilValue(kakao);
+  const accessToken = useRecoilValue(authUserAtom).accessToken;
+
   const router = useRouter();
 
   // 탈퇴하기
@@ -44,7 +47,7 @@ function SettingProfile(props: SettingProfileProps) {
     },
     {
       onSuccess: () => {
-        handleWithdrawn();
+        onClickLogout();
       },
     },
   );
@@ -61,35 +64,16 @@ function SettingProfile(props: SettingProfileProps) {
     (async () => {
       try {
         await axios.post(
-          'https://kapi.kakao.com/v1/user/logout',
+          isLogoutClicked
+            ? 'https://kapi.kakao.com/v1/user/logout'
+            : 'https://kapi.kakao.com/v1/user/unlink',
           {},
           {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${kakaoAccessToken}`,
             },
           },
-        );
-      } finally {
-        resetUserState();
-        resetKakaoToken();
-        router.replace('/login');
-      }
-    })();
-  };
-
-  const handleWithdrawn = () => {
-    (async () => {
-      try {
-        await axios.post(
-          'https://kapi.kakao.com/v1/user/unlink',
-          {},
-          // {
-          //   headers: {
-          //     'Content-Type': 'application/x-www-form-urlencoded',
-          //     Authorization: `Bearer ${accessToken}`,
-          //   },
-          // },
         );
       } finally {
         resetUserState();
@@ -182,7 +166,14 @@ function SettingProfile(props: SettingProfileProps) {
       <StyledFooter>
         <Footer />
       </StyledFooter>
-      <p onClick={() => setShowModal(true)}>탈퇴하기</p>
+      <p
+        onClick={() => {
+          setShowModal(true);
+          setIsLogoutClicked(false);
+        }}
+      >
+        탈퇴하기
+      </p>
     </StyledRoot>
   );
 }
