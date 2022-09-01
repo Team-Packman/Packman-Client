@@ -24,7 +24,8 @@ export const useRefresh = (tokens: RefreshInput) => {
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
         resetUser();
-        alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
+        // alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
+        alert('re' + JSON.stringify(error) + '//' + localStorage.getItem('recoil-persist'));
         router.replace('/login');
       } else {
         throw new Error();
