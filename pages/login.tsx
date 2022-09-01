@@ -8,19 +8,20 @@ import useAPI from '../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { authUserAtom, creatingUserAtom, invitationAtom, kakao } from '../utils/recoil/atom/atom';
 import Link from 'next/link';
 
 function Login() {
   const router = useRouter();
 
-  const [invitation, setInvitation] = useRecoilState(invitationAtom);
-  const setUser = useSetRecoilState(authUserAtom);
+  const { listId, isMember } = useRecoilValue(invitationAtom);
+  const resetInvitation = useResetRecoilState(invitationAtom);
+  const [user, setUser] = useRecoilState(authUserAtom);
   const setCreatingUser = useSetRecoilState(creatingUserAtom);
+  const setKakaoInfo = useSetRecoilState(kakao);
   const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
   const addMember = useAPI((api) => api.packingList.together.addMember);
-  const setKakaoInfo = useSetRecoilState(kakao);
 
   const { mutate: kakaoLogin } = useMutation('fetchKakaoLogin', fetchKakaoLogin);
   const { mutate: addMemberMutate } = useMutation('addMember', addMember);
@@ -53,17 +54,6 @@ function Login() {
               onSuccess: ({ data }) => {
                 if (data.isAlreadyUser) {
                   setUser((prev) => ({ ...prev, ...data }));
-                  if (invitation.listId) {
-                    addMemberMutate(
-                      { listId: invitation.listId },
-                      {
-                        onSuccess: ({ data: { listId } }) => router.replace(`/together/${listId}`),
-                      },
-                    );
-                  } else {
-                    router.replace('/folder');
-                  }
-                  setInvitation({ listId: '' });
                 } else {
                   setCreatingUser(data);
                   router.replace('/profile');
@@ -81,6 +71,27 @@ function Login() {
       }
     }
   }, [router.isReady]);
+
+  useEffect(() => {
+    if (!user.isAlreadyUser) return;
+
+    if (listId && isMember) {
+      router.replace(`/together?id=${listId}`);
+    } else if (listId) {
+      addMemberMutate(
+        { listId },
+        {
+          onSuccess: ({ data: { listId } }) => {
+            router.replace(`/together?id=${listId}`);
+            resetInvitation();
+          },
+        },
+      );
+    } else {
+      router.replace('/folder');
+      resetInvitation();
+    }
+  }, [user]);
 
   return (
     <StyledRoot>
