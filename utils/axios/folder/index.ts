@@ -8,7 +8,6 @@ import {
   UpdateFolderNameOutput,
 } from './../../../service/folder/index';
 import { AxiosInstance } from 'axios';
-import { request } from 'http';
 
 export const fetchFolders = async (request: AxiosInstance): Promise<GetFoldersOutput> => {
   const { data } = await request(`/folder`);

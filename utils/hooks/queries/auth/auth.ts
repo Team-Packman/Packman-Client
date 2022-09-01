@@ -22,15 +22,18 @@ export const useRefresh = (tokens: RefreshInput) => {
 
       return data;
     } catch (error) {
-      if (error instanceof AxiosError)
-        alert('g' + JSON.stringify(error.response?.status) + JSON.stringify(error.response));
-      if (error instanceof AxiosError && error.response?.status === 401) {
-        resetUser();
-        // alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
-        alert('re' + JSON.stringify(error) + '//' + localStorage.getItem('recoil-persist'));
-        router.replace('/login');
-      } else {
-        throw new Error();
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 400:
+          case 401: {
+            resetUser();
+            alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
+            router.replace('/login');
+            return;
+          }
+          default:
+            throw new Error();
+        }
       }
     }
   };

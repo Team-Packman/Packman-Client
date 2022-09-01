@@ -125,7 +125,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       },
       {
         onSuccess: ({ data }) => {
-          setUser((prev) => ({ ...prev, ...data }));
+          /**@todo 스키마 통합 후 data로 변경 */
+          setUser({ ...creatingUser, ...data });
           router.push('/folder');
         },
       },
