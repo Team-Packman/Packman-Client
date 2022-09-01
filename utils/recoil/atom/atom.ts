@@ -4,18 +4,20 @@ import { atom } from 'recoil';
 
 const { persistAtom } = recoilPersist();
 
+export const initialAuthUser = {
+  isAlreadyUser: false,
+  id: '',
+  name: '',
+  nickname: '',
+  email: '',
+  profileImage: '',
+  accessToken: '',
+  refreshToken: '',
+};
+
 export const authUserAtom = atom<AuthUser>({
   key: 'USER',
-  default: {
-    isAlreadyUser: false,
-    id: '',
-    name: '',
-    nickname: '',
-    email: '',
-    profileImage: '',
-    accessToken: '',
-    refreshToken: '',
-  },
+  default: initialAuthUser,
   effects_UNSTABLE: [persistAtom],
 });
 
@@ -28,12 +30,14 @@ export const creatingUserAtom = atom<CreatingUser>({
   },
 });
 
+export const initialInvitation = {
+  listId: '',
+  isMember: false,
+};
+
 export const invitationAtom = atom<Invitation>({
   key: 'invitation',
-  default: {
-    listId: '',
-    isMember: false,
-  },
+  default: initialInvitation,
   effects_UNSTABLE: [persistAtom],
 });
 

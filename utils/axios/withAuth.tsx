@@ -17,15 +17,11 @@ function withAuth(axiosWithAuth: AxiosInstance) {
 
       return config;
     },
-    (error) => {
-      return Promise.reject(error);
-    },
+    (error) => Promise.reject(error),
   );
 
   const responseIntercept = axiosWithAuth.interceptors.response.use(
-    (config: AxiosRequestConfig) => {
-      return config;
-    },
+    (config: AxiosRequestConfig) => config,
     async (error) => {
       const config = error.config;
 
