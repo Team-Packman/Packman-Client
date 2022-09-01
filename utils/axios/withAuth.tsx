@@ -24,9 +24,7 @@ function withAuth(axiosWithAuth: AxiosInstance) {
     (config: AxiosRequestConfig) => config,
     async (error) => {
       const config = error.config;
-      if (error instanceof AxiosError) {
-        alert(JSON.stringify(error.status));
-      }
+
       if (error.response.status === 401) {
         const tokens = await refresh();
 
