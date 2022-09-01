@@ -33,6 +33,7 @@ function FolderLanding() {
   });
   const [isOutDated, setIsOutDated] = useState<boolean>(false);
   const [isRecentListExist, setIsRecentListExist] = useState<boolean>(false);
+  const [isFolderExist, setIsFolderExist] = useState<boolean>(false);
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
@@ -82,6 +83,18 @@ function FolderLanding() {
     };
     updateOutdated();
   }, [recentPackingData]);
+
+  useEffect(() => {
+    if (folderList?.data) {
+      const { aloneFolder, togetherFolder } = folderList?.data ?? {};
+
+      if (aloneFolder?.length > 0 || togetherFolder?.length > 0) {
+        setIsFolderExist(true);
+      } else {
+        setIsFolderExist(false);
+      }
+    }
+  }, [folderList?.data]);
 
   if (!folderListData || !folderList) {
     return null;
@@ -282,7 +295,7 @@ function FolderLanding() {
                 addNewFolder={addNewFolder && currentSwiperIndex === 0}
                 handleCancleAddFolder={handleCancleAddFolder}
                 handleStartButtonInInit={handleStartButtonInInit}
-                isRecentListExist={isRecentListExist}
+                isFolderExist={isFolderExist}
               />
             }
             <FolderList
@@ -299,10 +312,10 @@ function FolderLanding() {
               addNewFolder={addNewFolder && currentSwiperIndex === 1}
               handleCancleAddFolder={handleCancleAddFolder}
               handleStartButtonInInit={handleStartButtonInInit}
-              isRecentListExist={isRecentListExist}
+              isFolderExist={isFolderExist}
             />
           </SwiperContainer>
-          {isRecentListExist && !showBottomModal && (
+          {isFolderExist && !showBottomModal && (
             <FloatActionButton onClick={handleFloatClick} pageName="folder" />
           )}
           {showBottomModal && (
@@ -328,7 +341,7 @@ export const StyledBody = styled.article`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
   background-color: ${packmanColors.pmWhite};
