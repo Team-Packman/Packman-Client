@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
@@ -66,6 +66,9 @@ function ManagingMember() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [members, setMembers] = useState<Imember[]>(mockData.data.member);
+  const [oldMembers, setOldMembers] = useState(members);
+
+  const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const editMembers = () => {
     setIsEditing((prev) => !prev);
@@ -87,10 +90,18 @@ function ManagingMember() {
 
   const copyToClipboard = () => {
     setHasCopied(true);
-    setTimeout(() => {
+    hasCopiedTimeoutRef.current = setTimeout(() => {
       setHasCopied(false);
     }, 3000);
   };
+
+  useEffect(() => {
+    return () => {
+      if (hasCopiedTimeoutRef.current) {
+        clearTimeout(hasCopiedTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Layout back title="멤버 관리">
