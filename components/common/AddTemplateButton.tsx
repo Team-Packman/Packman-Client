@@ -22,4 +22,5 @@ const StyledRoot = styled.button`
   font-weight: 600;
   font-size: 1.5rem;
   color: ${packmanColors.black};
+  -webkit-text-fill-color: ${packmanColors.black};
 `;

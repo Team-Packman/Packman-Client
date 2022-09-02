@@ -84,7 +84,8 @@ const StyledRoot = styled.div<{
   justify-content: flex-end;
   background-color: ${packmanColors.pmWhite};
   width: 100%;
-  height: 8.4rem;
+  /* height: 8.4rem; */
+  height: 6.5rem;
   padding: 0 2rem;
   transition: height 0.3s ease, opacity 0.3s ease;
   ${({ scroll }) =>
@@ -100,10 +101,10 @@ const StyledTitle = styled.div`
   justify-content: flex-start;
   text-align: start;
   align-items: center;
-  max-height: 3.1rem;
+  height: 3.4rem;
   font-size: 2.8rem;
   font-weight: 700;
-  line-height: 3.1rem;
+  line-height: 3.4rem;
   overflow: hidden;
   white-space: nowrap;
   color: ${packmanColors.black};

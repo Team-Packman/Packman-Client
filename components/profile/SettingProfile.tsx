@@ -32,9 +32,13 @@ function SettingProfile(props: SettingProfileProps) {
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
   const profile = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
-  const { accessToken } = useRecoilValue(kakao);
+  const [isLogoutClicked, setIsLogoutClicked] = useState(true);
+  const { accessToken: kakaoAccessToken } = useRecoilValue(kakao);
+  const accessToken = useRecoilValue(authUserAtom).accessToken;
+
   const router = useRouter();
 
+  // 탈퇴하기
   const deleteUser = useAPI((api) => api.user.deleteUserInfo);
   const { mutate: deleteUserMutate } = useMutation(
     (deleteUserData: string) => {
@@ -43,8 +47,7 @@ function SettingProfile(props: SettingProfileProps) {
     },
     {
       onSuccess: () => {
-        resetUserState();
-        router.replace('/login');
+        onClickLogout();
       },
     },
   );
@@ -54,26 +57,36 @@ function SettingProfile(props: SettingProfileProps) {
   };
 
   const resetUserState = useResetRecoilState(authUserAtom); //유저 전역변수 초기화
+  const resetKakaoToken = useResetRecoilState(kakao); // 카카오 액세스 토큰 초기화
 
-  //로그아웃
+  //로그아웃 및 recoil 초기화
   const onClickLogout = () => {
     (async () => {
       try {
         await axios.post(
-          'https://kapi.kakao.com/v1/user/logout',
+          isLogoutClicked
+            ? 'https://kapi.kakao.com/v1/user/logout'
+            : 'https://kapi.kakao.com/v1/user/unlink',
           {},
           {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${kakaoAccessToken}`,
             },
           },
         );
       } finally {
         resetUserState();
+        resetKakaoToken();
         router.replace('/login');
       }
     })();
+  };
+
+  // 탈퇴하기 텍스트 클릭한 경우
+  const onClickWithdrawn = () => {
+    setShowModal(true);
+    setIsLogoutClicked(false);
   };
 
   return (
@@ -159,7 +172,7 @@ function SettingProfile(props: SettingProfileProps) {
       <StyledFooter>
         <Footer />
       </StyledFooter>
-      <p onClick={() => setShowModal(true)}>탈퇴하기</p>
+      <p onClick={onClickWithdrawn}>탈퇴하기</p>
     </StyledRoot>
   );
 }
