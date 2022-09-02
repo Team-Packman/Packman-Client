@@ -55,7 +55,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
   }, [isEditing]);
 
   return (
-    <StyledRoot scroll={scroll}>
+    <StyledRoot scroll={scroll} className="layout_option">
       {isEditing ? (
         <StyledInput
           ref={ref}

@@ -18,7 +18,7 @@ const StyledRoot = styled.section`
   flex-direction: column;
 
   width: 100%;
-  height: 8rem;
+  min-height: 8rem;
 
   position: fixed;
   bottom: 0;
