@@ -172,8 +172,10 @@ const StyledCalender = styled.div`
   input[type='date']::-webkit-datetime-edit-month-field,
   input[type='date']::-webkit-datetime-edit-day-field,
   input[type='date']::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
     color: ${packmanColors.pmBlack};
   }
+
   input[type='date']::-webkit-inner-spin-button,
   input[type='date']::-webkit-calendar-picker-indicator {
     display: none;
