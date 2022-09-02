@@ -135,7 +135,6 @@ const StyledButtonWrapper = styled.div`
   height: 4rem;
 
   background-color: #fff;
-  z-index: 1;
 `;
 const StyledButton = styled.button<{ isMyTemplate?: boolean; isActivated: boolean }>`
   width: 100%;
