@@ -5,10 +5,18 @@ import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import EditingProfile from '../components/profile/EditingProfile';
 import SettingProfile from '../components/profile/SettingProfile';
+import Layout from '../components/common/Layout';
 
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const finishEditingProfileHandler = () => setIsEditing(false);
+  const layoutProps = isEditing
+    ? {}
+    : {
+        back: true,
+        title: 'MY',
+      };
+
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
 
@@ -17,8 +25,7 @@ function EditProfile() {
   const { nickname, profileImage } = data.data;
 
   return (
-    <>
-      {isEditing ? <Header /> : <Header back title="MY" />}
+    <Layout {...layoutProps}>
       <StyledRoot isEditing={isEditing}>
         {isEditing ? (
           <EditingProfile
@@ -35,7 +42,7 @@ function EditProfile() {
           <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
         )}
       </StyledRoot>
-    </>
+    </Layout>
   );
 }
 
