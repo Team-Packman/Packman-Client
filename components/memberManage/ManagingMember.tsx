@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Image from 'next/image';
 
 interface ImockData {
   status: number;
@@ -129,7 +130,9 @@ function ManagingMember() {
             if (index === 0) {
               return (
                 <Member key={index}>
-                  <Crown src={'/assets/png/crown.png'} alt="왕관" />
+                  <Crown>
+                    <Image src={'/assets/png/crown.png'} alt="왕관" layout="fill" />
+                  </Crown>
                   <MemberImage index={index} />
                   <MemberName>{member.nickname}</MemberName>
                 </Member>
@@ -143,9 +146,10 @@ function ManagingMember() {
                   onClick={() => {
                     deleteMember(index);
                   }}
-                  src={'/assets/png/removeMember.png'}
                   isEditing={isEditing}
-                />
+                >
+                  <Image src={'/assets/png/removeMember.png'} alt="삭제" layout="fill" />
+                </RemoveButton>
               </Member>
             );
           })}
@@ -236,7 +240,7 @@ const Member = styled.div`
   align-items: center;
 `;
 
-const RemoveButton = styled.img<{ isEditing: boolean }>`
+const RemoveButton = styled.div<{ isEditing: boolean }>`
   display: ${({ isEditing }) => (isEditing ? 'block' : 'none')};
   width: 2.4rem;
   height: 2.4rem;
@@ -245,7 +249,7 @@ const RemoveButton = styled.img<{ isEditing: boolean }>`
   right: -1rem;
 `;
 
-const Crown = styled.img`
+const Crown = styled.div`
   position: absolute;
   width: 2rem;
   height: 2rem;
