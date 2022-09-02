@@ -38,12 +38,12 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
 
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('installed');
+          // installed
         }
         setDeferredPrompt(undefined);
       });
     } else {
-      console.log('already installed or not android');
+      //  'already installed or not android'
     }
   };
 
@@ -51,7 +51,6 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
 
   useEffect(() => {
     if (!isRunningStandalone()) {
-      console.log(isIos());
       if (isIos()) {
         setInstallGuide((prev) => ({ ...prev, agent: 'ios', open: true }));
       } else {

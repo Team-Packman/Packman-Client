@@ -6,7 +6,7 @@ import TemplateItem from './TemplateItem';
 import { FONT_STYLES } from '../../styles/font';
 
 interface Template {
-  _id: string;
+  id: string;
   title: string;
 }
 
@@ -15,23 +15,13 @@ interface TemplateProps {
   basicTemplate: Template[];
   myTemplate: Template[];
   activate: (isSelected: string) => void;
-  changeTemplateImage: (templateId: string) => void;
-  changeUserOwnTemplateImage: (templateId: string) => void;
-  checkIsTemplate: (isTemplate: boolean) => void;
+  changeTemplateImage: (template: Template[], templateId: string, templateType: string) => void;
   setTemplateId: (templateId: string) => void;
 }
 
 function Template(props: TemplateProps) {
-  const {
-    isAloned,
-    basicTemplate,
-    myTemplate,
-    activate,
-    changeTemplateImage,
-    changeUserOwnTemplateImage,
-    checkIsTemplate,
-    setTemplateId,
-  } = props;
+  const { isAloned, basicTemplate, myTemplate, activate, changeTemplateImage, setTemplateId } =
+    props;
   const [isSelected, setIsSelected] = useState('');
 
   const onClickTemplateItem = (id: string) => {
@@ -40,11 +30,7 @@ function Template(props: TemplateProps) {
     } else {
       setIsSelected(id);
     }
-  };
-
-  const handleTemplateItem = (template: Template) => {
-    onClickTemplateItem(template._id);
-    setTemplateId(template._id);
+    setTemplateId(id);
   };
 
   useEffect(() => {
@@ -62,12 +48,11 @@ function Template(props: TemplateProps) {
             <>
               {basicTemplate.map((template) => (
                 <TemplateItem
-                  key={template._id}
+                  key={template.id}
                   template={template}
                   isSelected={isSelected}
-                  onClick={() => handleTemplateItem(template)}
+                  handleTemplateItem={() => onClickTemplateItem(template.id)}
                   changeTemplateImage={changeTemplateImage}
-                  checkIsTemplate={checkIsTemplate}
                   basicTemplate={basicTemplate}
                   myTemplate={myTemplate}
                 />
@@ -86,19 +71,18 @@ function Template(props: TemplateProps) {
               {!myTemplate.length && (
                 <TemplateItem
                   isSelected="null"
-                  template={{ _id: '', title: '아직 저장된 템플릿이 없어요' }}
+                  template={{ id: '', title: '아직 저장된 템플릿이 없어요' }}
                 />
               )}
               {myTemplate.map((template) => (
                 <TemplateItem
-                  key={template._id}
+                  key={template.id}
                   template={template}
                   isSelected={isSelected}
-                  onClick={() => handleTemplateItem(template)}
-                  changeUserOwnTemplateImage={() => {
-                    changeUserOwnTemplateImage(template._id);
-                  }}
-                  checkIsTemplate={checkIsTemplate}
+                  handleTemplateItem={() => onClickTemplateItem(template.id)}
+                  changeTemplateImage={changeTemplateImage}
+                  basicTemplate={basicTemplate}
+                  myTemplate={myTemplate}
                 />
               ))}
             </>

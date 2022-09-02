@@ -5,20 +5,13 @@ import ErrorImage from '/public/assets/png/ErrorImage.png';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 
-interface ErrorProps {
-  error?: Error;
-}
-
-function Error({ error }: ErrorProps) {
+function Error() {
   return (
     <StyledRoot>
       <Image src={ErrorImage} alt="error" width="182" height="165" />
       <ErrorTitle>앗차차..!</ErrorTitle>
       <ErrorSubTitle>오류가 났어요</ErrorSubTitle>
       <ErrorSubTitle>다시 시도해 주세요</ErrorSubTitle>
-      <>
-        {error?.message} , {error?.name}
-      </>
     </StyledRoot>
   );
 }

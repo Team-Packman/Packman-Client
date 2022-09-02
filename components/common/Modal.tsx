@@ -45,7 +45,7 @@ const StyledRoot = styled.div`
   position: absolute;
   top: calc(var(--vh, 1vh) * 100 / 2);
   left: 50%;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, -50%);
   width: 31.5rem;
   height: 17.6rem;
   background-color: #fff;

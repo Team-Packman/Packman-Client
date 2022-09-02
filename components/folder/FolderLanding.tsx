@@ -12,8 +12,8 @@ import Header from '../common/Header';
 import FloatActionButton from './FloatActionButton';
 
 export interface ModalDataProps {
-  _id: string;
-  title: string;
+  id: string;
+  name: string;
 }
 
 function FolderLanding() {
@@ -21,13 +21,13 @@ function FolderLanding() {
   const queryClient = useQueryClient();
 
   const [showBottomModal, setShowBottomModal] = useState(false);
-  const [modalData, setModalData] = useState<ModalDataProps>({ _id: '', title: '' });
+  const [modalData, setModalData] = useState<ModalDataProps>({ id: '', name: '' });
   const [editableFolderId, setEditableFolderId] = useState<string>('');
-  const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ _id: '', title: '' });
+  const [editedFolderData, setEditedFolerData] = useState<ModalDataProps>({ id: '', name: '' });
   const [currentSwiperIndex, setCurrentSwiperIndex] = useState<number>(0);
   const [addNewFolder, setAddNewFolder] = useState<boolean>(false);
   const [newFolderData, setNewFolderData] = useState<AddFolderInput>({
-    title: '',
+    name: '',
     isAloned: false,
   });
   const [isOutDated, setIsOutDated] = useState<boolean>(false);
@@ -48,7 +48,7 @@ function FolderLanding() {
     onSuccess: (data) => {
       if (data.data) {
         const { remainDay } = data.data;
-        setIsOutDated(remainDay < 0);
+        setIsOutDated(Number(remainDay) < 0);
       }
     },
   });
@@ -61,7 +61,7 @@ function FolderLanding() {
     return deleteFolder(id);
   });
 
-  const { mutate: addFolderMutate } = useMutation((info: { title: string; isAloned: boolean }) => {
+  const { mutate: addFolderMutate } = useMutation((info: { name: string; isAloned: boolean }) => {
     return addFolder(info);
   });
 
@@ -69,9 +69,14 @@ function FolderLanding() {
 
   useEffect(() => {
     const updateOutdated = () => {
-      if (recentPackingData) {
-        setIsOutDated(recentPackingData?.data.remainDay < 0);
+      const currentRecentPackingData = recentPackingData?.data ?? {};
+
+      if (Object.keys(currentRecentPackingData).length !== 0) {
+        const remainDay = Number(recentPackingData?.data.remainDay);
+        setIsOutDated(remainDay < 0);
         setIsRecentListExist(true);
+      } else {
+        setIsRecentListExist(false);
       }
     };
     updateOutdated();
@@ -81,31 +86,33 @@ function FolderLanding() {
     return null;
   }
 
-  const { aloneFolders, togetherFolders } = folderList.data;
+  const { aloneFolder, togetherFolder } = folderList.data;
 
   // Bottom modal handler
-  const handleBottomModalOpen = (_id: string, title: string) => {
+  const handleBottomModalOpen = (id: string, name: string) => {
     setShowBottomModal(true);
     setEditableFolderId('');
-    setModalData({ _id, title });
+    setModalData({ id, name });
   };
 
   // bottom modal edit click handler
-  const onEdit = (_id: string) => {
-    setEditableFolderId(_id);
+  const onEdit = (id: string) => {
+    setEditableFolderId(id);
     setShowBottomModal(false);
   };
 
   const handleModalDeleteButtonClick = (id: string) => {
     setShowBottomModal(false);
+    setNewFolderData({ name: '', isAloned: false });
+
     deletFolderMutate(id, {
       onSuccess: () => {
         queryClient.setQueryData('folderListKey', (oldData: any) => {
           return {
             ...oldData,
             data: {
-              aloneFolders: aloneFolders.filter((v) => v._id !== id),
-              togetherFolders: togetherFolders.filter((v) => v._id !== id),
+              aloneFolder: aloneFolder.filter((v) => v.id !== id),
+              togetherFolder: togetherFolder.filter((v) => v.id !== id),
             },
           };
         });
@@ -115,28 +122,28 @@ function FolderLanding() {
 
   // 폴더 수정 관련 핸들러
   const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedFolerData({ _id: modalData._id, title: e.target.value });
+    setEditedFolerData({ id: modalData.id, name: e.target.value });
   };
 
   const handleOnBlurInEdit = () => {
     setEditableFolderId('');
 
-    if (editedFolderData.title) {
+    if (editedFolderData.name) {
       editFolderMutate(editedFolderData, {
         onSuccess: () => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
               data: {
-                aloneFolders: aloneFolders.map((v) => {
-                  if (v._id === editedFolderData._id) {
-                    return { ...v, title: editedFolderData.title };
+                aloneFolder: aloneFolder.map((v) => {
+                  if (v.id === editedFolderData.id) {
+                    return { ...v, name: editedFolderData.name };
                   }
                   return v;
                 }),
-                togetherFolders: togetherFolders.map((v) => {
-                  if (v._id === editedFolderData._id) {
-                    return { ...v, title: editedFolderData.title };
+                togetherFolder: togetherFolder.map((v) => {
+                  if (v.id === editedFolderData.id) {
+                    return { ...v, name: editedFolderData.name };
                   }
                   return v;
                 }),
@@ -154,39 +161,39 @@ function FolderLanding() {
   };
 
   const handleAddFolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewFolderData({ title: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
+    setNewFolderData({ name: e.target.value, isAloned: currentSwiperIndex === 1 ? true : false });
   };
 
   const handleOnBlurInAdd = () => {
     setAddNewFolder(false);
 
-    if (newFolderData.title) {
+    if (newFolderData.name) {
       addFolderMutate(newFolderData, {
         onSuccess: (data) => {
           queryClient.setQueryData('folderListKey', (oldData: any) => {
             return {
               ...oldData,
               data: {
-                aloneFolders:
+                aloneFolder:
                   currentSwiperIndex === 1
                     ? [
                         {
-                          _id: data.data.aloneFolders[0]._id,
-                          title: newFolderData.title,
-                          listNum: 0,
+                          id: data.data.aloneFolder[0].id,
+                          name: newFolderData.name,
+                          listNum: '0',
                         },
-                      ].concat(aloneFolders)
-                    : aloneFolders,
-                togetherFolders:
+                      ].concat(aloneFolder)
+                    : aloneFolder,
+                togetherFolder:
                   currentSwiperIndex === 0
                     ? [
                         {
-                          _id: data.data.togetherFolders[0]._id,
-                          title: newFolderData.title,
-                          listNum: 0,
+                          id: data.data.togetherFolder[0].id,
+                          name: newFolderData.name,
+                          listNum: '0',
                         },
-                      ].concat(togetherFolders)
-                    : togetherFolders,
+                      ].concat(togetherFolder)
+                    : togetherFolder,
               },
             };
           });
@@ -205,7 +212,7 @@ function FolderLanding() {
   };
 
   const handleFolderClick = (id: string, categoryName: string) => {
-    router.push(`/packing-list/${categoryName}/${id}`);
+    router.push(`/packing-list?type=${categoryName}&id=${id}`);
   };
 
   const getSwiperIndex = (index: number) => {
@@ -240,7 +247,7 @@ function FolderLanding() {
                 {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
               </StyledRemainDay>
               <StyledLeftMessage>
-                {!isOutDated && recentPackingData?.data?.packRemainNum !== 0 ? (
+                {!isOutDated && recentPackingData?.data?.packRemainNum !== '0' ? (
                   <span>
                     <em> {'패킹'}</em>이 완료되었어요!
                   </span>
@@ -260,7 +267,7 @@ function FolderLanding() {
             <FolderList
               key="1"
               categoryName="together"
-              list={togetherFolders}
+              list={togetherFolder}
               editableFolderId={editableFolderId}
               onClick={handleBottomModalOpen}
               onChange={handleFolderNameChange}
@@ -277,7 +284,7 @@ function FolderLanding() {
           <FolderList
             key="2"
             categoryName="alone"
-            list={aloneFolders}
+            list={aloneFolder}
             editableFolderId={editableFolderId}
             onClick={handleBottomModalOpen}
             onChange={handleFolderNameChange}

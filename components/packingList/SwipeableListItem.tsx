@@ -5,20 +5,18 @@ import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
-import { useRouter } from 'next/router';
-
 interface PackingList {
-  _id: string;
+  id: string;
   departureDate: string;
   title: string;
-  packTotalNum: number;
-  packRemainNum: number;
+  packTotalNum: string;
+  packRemainNum: string;
 }
 
 interface ItemProps {
   idx: number;
   handleIsDragged: (tmpArr: boolean[]) => void;
-  isDragged: boolean;
+  isDragged: boolean[];
   isDeleting: boolean;
   deleteList: string[];
   checkDeleteList: (id: string) => void;
@@ -28,7 +26,6 @@ interface ItemProps {
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
-  const router = useRouter();
   const {
     idx,
     handleIsDragged,
@@ -41,7 +38,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     moveToPackingList,
   } = props;
 
-  const { _id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
@@ -54,11 +51,13 @@ export default function SwipeablelistItem(props: ItemProps) {
       let tmpArr = Array(packingList?.length).fill(false);
 
       if (startX - endX > 100) {
-        tmpArr = tmpArr.map((x, index) => (idx === index ? true : false));
-      } else if (startX < endX) {
-        tmpArr = Array(packingList?.length).fill(false);
+        tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
+        handleIsDragged(tmpArr);
+      } else {
+        if (isDragged[idx]) {
+          handleIsDragged(tmpArr);
+        }
       }
-      handleIsDragged(tmpArr);
 
       document.removeEventListener('touchmove', Move);
       document.removeEventListener('touchend', End);
@@ -72,18 +71,16 @@ export default function SwipeablelistItem(props: ItemProps) {
       {isDeleting && (
         <StyledSelectDelete>
           <Image
-            src={deleteList.includes(_id) ? iCheckPink : iCheck}
-            alt="체크"
-            onClick={() => checkDeleteList(_id)}
-            width={24}
-            height={24}
-            layout="fixed"
+            src={deleteList.includes(id) ? iCheckPink : iCheck}
+            alt="check"
+            onClick={() => checkDeleteList(id)}
+            layout="fill"
           />
         </StyledSelectDelete>
       )}
       <StyledItemWrapper
         onTouchStart={onTouchStart}
-        isDragged={isDragged}
+        isDragged={isDragged[idx]}
         isDeleting={isDeleting}
         onClick={moveToPackingList}
       >
@@ -103,12 +100,12 @@ export default function SwipeablelistItem(props: ItemProps) {
             )}
           </StyledPackInfo>
         </StyledItemInfo>
-        <Image src={iRightArrow} alt="열기" width={24} height={24} />
+        <Image src={iRightArrow} alt="right-arrow" width={24} height={24} />
       </StyledItemWrapper>
 
       {!isDeleting && (
         <StyledDeleteButton
-          isDragged={isDragged}
+          isDragged={isDragged[idx]}
           onClick={() => {
             // 아이템 삭제
             onClickDeleteButton(idx);
@@ -129,12 +126,15 @@ const StyledRoot = styled.div<{ isDeleting: boolean }>`
   width: 100%;
   height: 10.8rem;
   gap: 2.7rem;
+  padding: 0 2rem;
   overflow: hidden;
 `;
 
 const StyledSelectDelete = styled.div`
   position: absolute;
   left: 3.288rem;
+  width: 2.4rem;
+  height: 2.4rem;
 `;
 
 const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
@@ -172,24 +172,11 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
             `;
       default:
         return css`
-          animation: 0.4s ease-in-out slide;
-          -webkit-animation: 0.4s ease-in-out slide;
-          transform: translateX(8.388rem);
-          -webkit-transform: 0.4s translateX(0, 0, 0) translateX(8.388rem); // Safari 대응
+          transform: translateX(6.388rem);
+          -webkit-transform: translateX(6.388rem); // Safari 대응
         `;
     }
   }};
-
-  @keyframes slide {
-    from {
-      transform: translateX(2rem);
-      -webkit-transform: translateX(2rem);
-    }
-    to {
-      transform: translateX(8.388rem);
-      -webkit-transform: translateX(8.388rem);
-    }
-  }
 `;
 
 const StyledItemInfo = styled.div`
@@ -201,7 +188,7 @@ const StyledItemInfo = styled.div`
 
   & > p:first-child {
     ${FONT_STYLES.BODY1_REGULAR};
-    color: ${packmanColors.pmBlueGrey};
+    color: ${packmanColors.pmDeepGrey};
   }
   & > p:nth-child(2) {
     ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
@@ -243,11 +230,14 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${({ isDragged }) => (isDragged ? '5.6rem' : '0rem')};
+  width: 5.6rem;
   height: 11.4rem;
   background-color: #ff0000;
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
+  -webkit-transition: 0.4s ease-in-out;
+  transform: ${({ isDragged }) => (isDragged ? 'translateX(0rem)' : 'translateX(5.6rem)')};
+  -webkit-transform: ${({ isDragged }) => (isDragged ? 'translateX(0rem)' : 'translateX(5.6rem)')};
   opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
 
   & > div {

@@ -9,10 +9,10 @@ function InstallGuide() {
     return <Slide {...props} direction="up" />;
   };
 
-  return (
+  return installGuide.open ? (
     <Snackbar
       open={installGuide.open}
-      autoHideDuration={110000}
+      autoHideDuration={6000}
       onClose={closeGuide}
       TransitionComponent={TransitionLeft}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
@@ -68,7 +68,7 @@ function InstallGuide() {
         )}
       </Alert>
     </Snackbar>
-  );
+  ) : null;
 }
 
 export default InstallGuide;

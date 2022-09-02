@@ -12,13 +12,15 @@ interface LayoutProps {
   title?: string;
   icon?: Icon;
   option?: ReactNode;
+  noHeader?: boolean;
 }
 
 function Layout(props: LayoutProps) {
-  const { children, back, title, icon, option, padding } = props;
+  const { children, back, title, icon, option, padding, noHeader } = props;
+
   return (
     <StyledRoot>
-      <Header back={back} title={title} icon={icon} />
+      {!noHeader && <Header back={back} title={title} icon={icon} />}
       {option}
       <StyledMain hasOption={option !== undefined} padding={padding ? true : false}>
         {children}
@@ -31,7 +33,7 @@ export default Layout;
 
 const StyledRoot = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100);
   display: flex;
   flex-direction: column;
   background-color: ${packmanColors.pmWhite};
@@ -46,6 +48,6 @@ const StyledMain = styled.main<{
   padding: ${({ padding }) => (padding ? `0 2rem` : `0`)};
   padding-bottom: 1.6rem;
   background-color: ${packmanColors.pmWhite};
-  height: ${({ hasOption }) =>
-    hasOption ? `calc(var(--vh, 1vh) * 100 - 5.2rem)` : `calc(var(--vh, 1vh) * 100)`};
+  // height : hasOption ? viewport - (option + header) : viewport - header
+  height: ${({ hasOption }) => (hasOption ? 'calc(100% - 11.7rem)' : 'calc(100% - 5.2rem)')};
 `;

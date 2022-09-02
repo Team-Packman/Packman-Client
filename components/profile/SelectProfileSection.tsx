@@ -1,6 +1,6 @@
 import Image, { StaticImageData } from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
@@ -8,17 +8,18 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authedUser, creatingUser } from '../../utils/recoil/atom/atom';
+import { authUserAtom, creatingUserAtom } from '../../utils/recoil/atom/atom';
 
 interface AddUserProfileData {
   email: string; // 회원가입한 유저의 이메일
-  name: string; // 회원가입한 유저의 닉네임
-  profileImageId: string; // 회원가입한 유저의 프로필 이미지
+  name: string;
+  nickname: string; // 회원가입한 유저의 닉네임
+  profileImage: string; // 회원가입한 유저의 프로필 이미지
 }
 
 interface UpdateUserProfileData {
-  name: string;
-  profileImageId: string;
+  nickname: string;
+  profileImage: string;
 }
 
 interface SelectProfileSectionProps {
@@ -36,8 +37,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [nickname, setNickname] = useState(oldNickname ? oldNickname : '');
   const [profile, setProfile] = useState(oldProfileImageId ? oldProfileImageId : '0');
   const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
-  const setUser = useSetRecoilState(authedUser);
-  const user = useRecoilValue(creatingUser);
+  const creatingUser = useRecoilValue(creatingUserAtom);
+  const setUser = useSetRecoilState(authUserAtom);
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -106,24 +107,26 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const editUserProfile = () => {
     if (finishEditing) {
       updateUserProfileMutate({
-        name: nickname,
-        profileImageId: profile,
+        nickname,
+        profileImage: profile,
       });
       finishEditing();
     }
   };
 
   // 회원가입
-  const createUserAccount = () => {
+  const createUserAccount = async () => {
     addUserProfileMutate(
       {
-        email: user.email,
-        name: nickname,
-        profileImageId: profile,
+        email: creatingUser.email,
+        nickname,
+        name: creatingUser.name,
+        profileImage: profile,
       },
       {
         onSuccess: ({ data }) => {
-          setUser(data);
+          /**@todo 스키마 통합 후 data로 변경 */
+          setUser({ ...creatingUser, ...data });
           router.push('/folder');
         },
       },
@@ -157,10 +160,11 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
             selected={profile === id}
             onClick={() => onClickProfileImage(id)}
           >
+            <StyledBackground selected={profile === id} />
             <StyledImage
               key={id}
               src={src}
-              alt="profile-images"
+              alt="profile-image"
               width={80}
               height={80}
               selected={profile === id}
@@ -188,7 +192,6 @@ const StyledRoot = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
   margin-top: 4.84rem;
 `;
 const StyledInputWrapper = styled.div`
@@ -229,21 +232,30 @@ const StyledSelectProfileWrapper = styled.div`
   margin: 1.5rem 0 5.57rem 0;
 `;
 const StyledImageWrapper = styled.div<{ selected: boolean }>`
+  position: relative;
   width: 8.6rem;
   height: 8.6rem;
-  background: url('assets/svg/iSelected.svg') no-repeat center;
-  background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};
   border: ${({ selected }) =>
     selected ? `3px solid ${packmanColors.pmPink}` : '3px solid transparent'};
   border-radius: 0.8rem;
 `;
+const StyledBackground = styled.div<{ selected: boolean }>`
+  position: absolute;
+  transform: translate(-0.1rem, -0.1rem);
+  width: 8.2rem;
+  height: 8.2rem;
+  border-radius: 0.7rem;
+  background: url('assets/svg/iSelected.svg') no-repeat center;
+  background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};
+  z-index: ${({ selected }) => selected && '1'};
+`;
 const StyledImage = styled(Image)<{ selected: boolean }>`
-  z-index: ${({ selected }) => selected && '-1'};
+  z-index: ${({ selected }) => selected && '0'};
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
   position: absolute;
-  bottom: 1.5rem;
-  width: 33.6rem;
+  bottom: 8.6rem;
+  width: calc(100vw - 4rem);
   height: 4.1rem;
   border: none;
   border-radius: 0.8rem;

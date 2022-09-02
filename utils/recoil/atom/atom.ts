@@ -1,44 +1,44 @@
-import { User, From, Kakao } from './';
+import { AuthUser, CreatingUser, Invitation, Kakao } from './';
 import { recoilPersist } from 'recoil-persist';
 import { atom } from 'recoil';
 
 const { persistAtom } = recoilPersist();
 
-export const authedUser = atom<User>({
+export const authUserAtom = atom<AuthUser>({
   key: 'USER',
   default: {
-    _id: '',
-    email: '',
-    name: '',
-    profileImageId: '',
-    accessToken: '',
     isAlreadyUser: false,
+    id: '',
+    name: '',
+    nickname: '',
+    email: '',
+    profileImage: '',
+    accessToken: '',
+    refreshToken: '',
   },
   effects_UNSTABLE: [persistAtom],
 });
 
-export const creatingUser = atom<User>({
+export const creatingUserAtom = atom<CreatingUser>({
   key: 'creatingUser',
   default: {
-    _id: '',
-    email: '',
-    name: '',
-    profileImageId: '',
-    accessToken: '',
     isAlreadyUser: false,
+    name: '',
+    email: '',
   },
 });
 
-export const from = atom<From>({
-  key: 'from',
+export const invitationAtom = atom<Invitation>({
+  key: 'invitation',
   default: {
-    url: '',
+    listId: '',
+    isMember: false,
   },
   effects_UNSTABLE: [persistAtom],
 });
 
-export const kakaoAccessToken = atom<Kakao>({
-  key: 'kakaoAccessToken',
+export const kakao = atom<Kakao>({
+  key: 'kakao',
   default: {
     accessToken: '',
   },

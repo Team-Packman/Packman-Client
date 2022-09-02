@@ -57,7 +57,8 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   flex-direction: column;
   align-items: center;
   width: calc(100% - 4rem);
-  height: calc(var(--vh, 1vh) * 100);
+  height: calc(var(--vh, 1vh) * 100 - 20.5rem);
+  overflow-y: auto;
   margin-top: ${({ isRecentListExist }) => (isRecentListExist ? '0' : '4.2rem')};
 `;
 
@@ -65,7 +66,7 @@ export const StyledSwiper = styled(Swiper)`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  padding-top: 4.8rem;
 
   .swiper-pagination {
     display: flex;
@@ -98,12 +99,17 @@ export const StyledSwiper = styled(Swiper)`
     background: ${packmanColors.pmBlack};
   }
   .swiper-slide {
-    padding-top: 4.8rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* justify-content: flex-start; */
+
     align-items: center;
+    overflow-y: auto; /* 브라우저별 스크롤바 숨김 설정 */
+    -ms-overflow-style: none; // Edge
+    scrollbar-width: none; // Firefox
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari, Opera
+    }
   }
 `;
 

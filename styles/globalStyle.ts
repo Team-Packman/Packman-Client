@@ -25,14 +25,17 @@ export const GlobalStyle = createGlobalStyle`
 
     * {
         box-sizing: border-box;
+        -moz-box-sizing:border-box; /* Firefox */
+        -webkit-box-sizing:border-box; /* Safari */
         transition: ${createTransitionQuery()};
+        -webkit-tap-highlight-color:rgba(0,0,0,0); // 아이폰 버튼 클릭 깜박임 해제
     }
     
-    input, 
+    input,
     button,
-    select, 
-    textarea, 
-    optgroup, 
+    select,
+    textarea,
+    optgroup,
     option {
         font-family: inherit;
         font-size: inherit;

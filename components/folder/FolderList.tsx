@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import FolderBox from './FolderBox';
 import FolderInitial from './FolderInitial';
 export interface FolderProps {
-  _id?: string;
-  title?: string;
-  listNum?: number;
+  id?: string;
+  name?: string;
+  listNum?: string;
 }
 export interface FolderListProps {
   list: FolderProps[];
@@ -32,7 +32,7 @@ function FolderList(props: FolderListProps) {
     handleStartButtonInInit,
   } = props;
 
-  const [showInitialPage, setShowIntitialPage] = useState<boolean>(list.length <= 0);
+  const [showInitialPage, setShowIntitialPage] = useState<boolean>(list?.length <= 0);
 
   const handleStartButton = () => {
     setShowIntitialPage(false);
@@ -41,7 +41,13 @@ function FolderList(props: FolderListProps) {
 
   useEffect(() => {
     setShowIntitialPage(list.length <= 0);
-  }, [list.length]);
+  }, [list.length, addNewFolder]);
+
+  useEffect(() => {
+    if (addNewFolder && showInitialPage) {
+      setShowIntitialPage(false);
+    }
+  }, [addNewFolder, showInitialPage]);
 
   return (
     <StyledListRoot>
@@ -50,7 +56,7 @@ function FolderList(props: FolderListProps) {
           <>
             {addNewFolder && <FolderBox key={0} isNew={addNewFolder} {...props} />}
             {list?.map((v) => (
-              <FolderBox key={v._id} isNew={false} {...v} {...props} />
+              <FolderBox key={v.id} isNew={false} {...v} {...props} />
             ))}
           </>
         ) : (

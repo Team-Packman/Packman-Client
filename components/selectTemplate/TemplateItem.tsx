@@ -1,20 +1,17 @@
-import { useQueryClient } from 'react-query';
 import styled, { css } from 'styled-components';
-import { GetAloneTemplateListOutput } from '../../service/ect/index';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 
 interface Template {
-  _id: string;
+  id: string;
   title: string;
 }
 interface TemplateItemProps {
   template: Template;
   isSelected: string;
-  onClick?: () => void;
-  changeTemplateImage?: (templateId: string) => void;
-  changeUserOwnTemplateImage?: () => void;
-  checkIsTemplate?: (isTemplate: boolean) => void;
+  handleTemplateItem?: () => void;
+  changeTemplateImage?: (template: Template[], templateId: string, templateType: string) => void;
+  checkIsTemplate?: (templateType: string) => void;
   basicTemplate?: Template[];
   myTemplate?: Template[];
 }
@@ -23,37 +20,32 @@ function TemplateItem(props: TemplateItemProps) {
   const {
     template,
     isSelected,
-    onClick,
+    handleTemplateItem,
     changeTemplateImage,
-    changeUserOwnTemplateImage,
-    checkIsTemplate,
     basicTemplate,
     myTemplate,
   } = props;
-  const { _id, title } = template;
+  const { id, title } = template;
 
   const onClickTemplateItem = (id: string) => {
     basicTemplate?.forEach((template) => {
-      if (id === template._id) {
-        checkIsTemplate && checkIsTemplate(true);
+      if (id === template.id) {
+        changeTemplateImage && changeTemplateImage(basicTemplate, id, 'basic');
       }
     });
     myTemplate?.forEach((template) => {
-      if (id === template._id) {
-        checkIsTemplate && checkIsTemplate(false);
+      if (id === template.id) {
+        changeTemplateImage && changeTemplateImage(myTemplate, id, 'myTemplate');
       }
     });
-
-    onClick && onClick();
-    changeTemplateImage && changeTemplateImage(id);
-    changeUserOwnTemplateImage && changeUserOwnTemplateImage();
+    handleTemplateItem && handleTemplateItem();
   };
 
   return (
     <StyledRoot
-      isSelected={isSelected === _id}
-      isListEmpty={_id === ''}
-      onClick={() => onClickTemplateItem(_id)}
+      isSelected={isSelected === id}
+      isListEmpty={id === ''}
+      onClick={() => onClickTemplateItem(id)}
     >
       {title}
     </StyledRoot>

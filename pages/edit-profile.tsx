@@ -5,52 +5,54 @@ import useAPI from '../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import EditingProfile from '../components/profile/EditingProfile';
 import SettingProfile from '../components/profile/SettingProfile';
-import { packmanColors } from '../styles/color';
-import { FONT_STYLES } from '../styles/font';
+import Layout from '../components/common/Layout';
 
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const finishEditingProfileHandler = () => setIsEditing(false);
+  const layoutProps = isEditing
+    ? {}
+    : {
+        back: true,
+        title: 'MY',
+      };
+
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
 
   if (!data) return null;
 
-  const { name, profileImageId } = data.data;
+  const { nickname, profileImage } = data.data;
 
   return (
-    <>
-      {isEditing ? <Header /> : <Header back title="MY" />}
-      <StyledRoot>
+    <Layout {...layoutProps}>
+      <StyledRoot isEditing={isEditing}>
         {isEditing ? (
-          <>
-            <EditingProfile
-              comment={
-                <h1>
-                  <b>프로필 수정</b>을 완료해주세요!
-                </h1>
-              }
-              oldNickname={name}
-              oldProfileImageId={profileImageId}
-              finishEditing={finishEditingProfileHandler}
-            />
-          </>
+          <EditingProfile
+            comment={
+              <h1>
+                <b>프로필 수정</b>을 완료해주세요!
+              </h1>
+            }
+            oldNickname={nickname}
+            oldProfileImageId={profileImage}
+            finishEditing={finishEditingProfileHandler}
+          />
         ) : (
-          <>
-            <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
-          </>
+          <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
         )}
       </StyledRoot>
-    </>
+    </Layout>
   );
 }
 
 export default EditProfile;
 
-const StyledRoot = styled.div`
+const StyledRoot = styled.div<{ isEditing: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: ${({ isEditing }) => isEditing && 'center'};
   padding: 0 2rem;
   width: 100vw;
   height: calc(var(--vh, 1vh) * 100 - 8rem);

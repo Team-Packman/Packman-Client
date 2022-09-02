@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useState } from 'react';
-import { APIProvider, AuthProvider } from '../utils/context/apiContext';
+import { APIProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
@@ -61,17 +61,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
-        <APIProvider>
-          <AuthProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-            <QueryClientProvider client={queryClient}>
-              <Hydrate state={pageProps?.dehydratedState}>
-                <GlobalStyle />
-                <Component {...pageProps} />
-                <InstallGuide />
-              </Hydrate>
-            </QueryClientProvider>
-          </AuthProvider>
-        </APIProvider>
+        <QueryClientProvider client={queryClient}>
+          <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
+            <Hydrate state={pageProps?.dehydratedState}>
+              <GlobalStyle />
+              <Component {...pageProps} />
+              <InstallGuide />
+            </Hydrate>
+          </APIProvider>
+        </QueryClientProvider>
       </RecoilRoot>
     </>
   );

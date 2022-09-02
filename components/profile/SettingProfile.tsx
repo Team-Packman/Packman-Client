@@ -7,15 +7,17 @@ import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useResetRecoilState } from 'recoil';
-import { authedUser, kakaoAccessToken } from '../../utils/recoil/atom/atom';
+import { authUserAtom, kakao } from '../../utils/recoil/atom/atom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
+import useAPI from '../../utils/hooks/useAPI';
+import { useMutation } from 'react-query';
 interface ProfileData {
-  _id: string;
-  name: string;
+  id: string;
+  nickname: string;
   email: string;
-  profileImageId: string;
+  profileImage: string;
 }
 
 interface SettingProfileProps {
@@ -25,43 +27,66 @@ interface SettingProfileProps {
 
 function SettingProfile(props: SettingProfileProps) {
   const { onClickEditText, profileData } = props;
-  const { name, email, profileImageId } = profileData;
+  const { nickname, email, profileImage } = profileData;
   const [toggle, setToggle] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isWithdrawn, setIsWithdrawn] = useState(false);
-  const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
-  const accessToken = useRecoilValue(kakaoAccessToken).accessToken;
+  const profile = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
+  const [isLogoutClicked, setIsLogoutClicked] = useState(true);
+  const { accessToken: kakaoAccessToken } = useRecoilValue(kakao);
+  const accessToken = useRecoilValue(authUserAtom).accessToken;
+
   const router = useRouter();
 
-  const onClickLeftModalButton = async () => {
-    setIsWithdrawn(true);
-  };
+  // 탈퇴하기
+  const deleteUser = useAPI((api) => api.user.deleteUserInfo);
+  const { mutate: deleteUserMutate } = useMutation(
+    (deleteUserData: string) => {
+      setIsWithdrawn(true);
+      return deleteUser(deleteUserData);
+    },
+    {
+      onSuccess: () => {
+        onClickLogout();
+      },
+    },
+  );
 
-  const onClickRightModalButton = () => {
+  const closeModal = () => {
     setShowModal(false);
   };
 
-  const resetUserState = useResetRecoilState(authedUser); //유저 전역변수 초기화
+  const resetUserState = useResetRecoilState(authUserAtom); //유저 전역변수 초기화
+  const resetKakaoToken = useResetRecoilState(kakao); // 카카오 액세스 토큰 초기화
 
-  //로그아웃
+  //로그아웃 및 recoil 초기화
   const onClickLogout = () => {
     (async () => {
       try {
         await axios.post(
-          'https://kapi.kakao.com/v1/user/logout',
+          isLogoutClicked
+            ? 'https://kapi.kakao.com/v1/user/logout'
+            : 'https://kapi.kakao.com/v1/user/unlink',
           {},
           {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${kakaoAccessToken}`,
             },
           },
         );
       } finally {
         resetUserState();
-        router.push('/login');
+        resetKakaoToken();
+        router.replace('/login');
       }
     })();
+  };
+
+  // 탈퇴하기 텍스트 클릭한 경우
+  const onClickWithdrawn = () => {
+    setShowModal(true);
+    setIsLogoutClicked(false);
   };
 
   return (
@@ -71,14 +96,9 @@ function SettingProfile(props: SettingProfileProps) {
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
-          <Image
-            src={profileImage[+profileImageId].src}
-            alt="my-profile-image"
-            width={80}
-            height={80}
-          />
+          <Image src={profile[+profileImage].src} alt="my-profile-image" width={80} height={80} />
           <div>
-            <h1>{name}</h1>
+            <h1>{nickname}</h1>
             <p>{email}</p>
           </div>
         </StyledProfile>
@@ -96,29 +116,53 @@ function SettingProfile(props: SettingProfileProps) {
         <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
           <h1>고객센터</h1>
           <StyledEtcWrapper>
-            <p>문의하기</p>
-            <p>서비스 피드백</p>
+            <p
+              onClick={() =>
+                router.push(
+                  'https://docs.google.com/forms/d/e/1FAIpQLSd1D1ptmYG5Ufu7y1SKDnSr-k8UIeRfSlTBFRQqX3bF-TwuQg/viewform',
+                )
+              }
+            >
+              문의하기
+            </p>
+            <p
+              onClick={() =>
+                router.push(
+                  'https://docs.google.com/forms/d/e/1FAIpQLSer7bKxKKcmRU5vrMT_187cERpbA5chkzM-sjrigBsmWH9a6Q/viewform',
+                )
+              }
+            >
+              서비스 피드백
+            </p>
           </StyledEtcWrapper>
         </StyledEtc>
         <StyledEtc gap={1.2} paddingTop={3.1} borderBottom={false}>
           <h1>About 팩맨</h1>
           <StyledEtcWrapper>
-            <p>함께하는 사람들</p>
-            <p>약관 및 정책</p>
+            <p
+              onClick={() => router.push('https://www.notion.so/1003579b6fd34fb0861040bb04fe235d')}
+            >
+              함께하는 사람들
+            </p>
+            <p
+              onClick={() => router.push('https://www.notion.so/99197c3491fe477ea9d69ed131cf4087')}
+            >
+              약관 및 정책
+            </p>
           </StyledEtcWrapper>
         </StyledEtc>
 
         {showModal && (
           <Modal
             title={isWithdrawn ? '탈퇴되었습니다.' : '정말 탈퇴하시겠어요? 😭'}
-            closeModal={() => setShowModal(false)}
+            closeModal={closeModal}
             button={
               !isWithdrawn && (
                 <StyledModalButtonWrapper>
-                  <StyledModalButton left={true} onClick={onClickLeftModalButton}>
+                  <StyledModalButton left={true} onClick={() => deleteUserMutate(accessToken)}>
                     탈퇴하기
                   </StyledModalButton>
-                  <StyledModalButton onClick={onClickRightModalButton}>취소하기</StyledModalButton>
+                  <StyledModalButton onClick={closeModal}>취소하기</StyledModalButton>
                 </StyledModalButtonWrapper>
               )
             }
@@ -128,7 +172,7 @@ function SettingProfile(props: SettingProfileProps) {
       <StyledFooter>
         <Footer />
       </StyledFooter>
-      <p onClick={() => setShowModal(true)}>탈퇴하기</p>
+      <p onClick={onClickWithdrawn}>탈퇴하기</p>
     </StyledRoot>
   );
 }
@@ -140,7 +184,6 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: fit-content;
   overflow-y: visible;
 
   & > p {

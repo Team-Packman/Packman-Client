@@ -17,37 +17,37 @@ export const fetchTemplateList = async (
         data: {
           basicTemplate: [
             {
-              _id: '1',
+              id: '1',
               title: '국내여행',
             },
             {
-              _id: '2',
+              id: '2',
               title: '해외여행',
             },
             {
-              _id: '3',
+              id: '3',
               title: '콘서트',
             },
             {
-              _id: '4',
+              id: '4',
               title: '토익시험',
             },
             {
-              _id: '5',
+              id: '5',
               title: '제주한달살이',
             },
             {
-              _id: '6',
+              id: '6',
               title: '반려동물과 함께여행',
             },
           ],
           myTemplate: [
             {
-              _id: '7',
+              id: '7',
               title: '앱잼 합숙',
             },
             {
-              _id: '8',
+              id: '8',
               title: '엠티',
             },
           ],
@@ -65,33 +65,33 @@ export const fetchTemplate = async (request: AxiosInstance): Promise<GetTemplate
         success: true,
         message: '템플릿 상세조회 성공',
         data: {
-          _id: '62bbb80d9d5dc1aa4c3d28391231',
+          id: '62bbb80d9d5dc1aa4c3d28391231',
           title: '앱잼 합숙',
           category: [
             {
-              _id: '62bbb80d9d5dc1aa4c3d28131232139',
+              id: '62bbb80d9d5dc1aa4c3d28131232139',
               name: '필수',
               pack: [
                 {
-                  _id: '62bbb80d9d5dc1aa3454354c3d2839',
+                  id: '62bbb80d9d5dc1aa3454354c3d2839',
                   name: '여권',
                 },
                 {
-                  _id: '62bbb80d9d5dc1aa354234c3d2839',
+                  id: '62bbb80d9d5dc1aa354234c3d2839',
                   name: '가방',
                 },
               ],
             },
             {
-              _id: '62bbb80d9d5dc1aa4545435c3d2839',
+              id: '62bbb80d9d5dc1aa4545435c3d2839',
               name: '의류',
               pack: [
                 {
-                  _id: '62bbb80d9d5dc1aa4c35435565d2839',
+                  id: '62bbb80d9d5dc1aa4c35435565d2839',
                   name: '모자',
                 },
                 {
-                  _id: '62bbb80d9d5dc1aa4c331283210d2839',
+                  id: '62bbb80d9d5dc1aa4c331283210d2839',
                   name: '수영복',
                 },
               ],

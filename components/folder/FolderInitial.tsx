@@ -2,8 +2,8 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import InitLogo from '/public/assets/svg/home_init.svg';
-import InitAloneLogo from '/public/assets/svg/home_init_alone.svg';
+import InitLogo from '/public/assets/png/home_together.png';
+import InitAloneLogo from '/public/assets/png/home_alone.png';
 
 export interface FolderInitialProps {
   categoryName: string;
@@ -45,17 +45,27 @@ const StyledRoot = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   padding-top: 5rem;
   overflow-x: hidden;
+
+  // Smaller than 370px (ex. iPhone SE)
+  @media only screen and (max-width: 370px) {
+    padding-top: 0;
+  }
 `;
 
 export const StyledInitialWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 8rem;
+  margin-top: 5rem;
   width: 100%;
+
+  @media only screen and (max-width: 370px) {
+    margin-top: 0;
+  }
 `;
 
 export const StyledLabel = styled.p`
@@ -65,7 +75,7 @@ export const StyledLabel = styled.p`
 `;
 
 export const StyledStratButton = styled.button`
-  width: 100%;
+  width: calc(100% - 6rem);
   padding: 1.2rem 2.9rem;
   font-size: 1.4rem;
   color: ${packmanColors.pmWhite};
