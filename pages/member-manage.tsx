@@ -1,11 +1,11 @@
 import React from 'react';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
-import ManagingMember from '../components/memberManage/ManagingMember';
+import ManagingMemberLanding from '../components/memberManage/ManagingMemberLanding';
 
 function Folder() {
   return (
     <AsyncBoundary>
-      <ManagingMember />
+      <ManagingMemberLanding />
     </AsyncBoundary>
   );
 }

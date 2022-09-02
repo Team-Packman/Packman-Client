@@ -63,7 +63,7 @@ const mockData: ImockData = {
   },
 };
 
-function ManagingMember() {
+function ManagingMemberLanding() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [members, setMembers] = useState<Imember[]>(mockData.data.member);
@@ -170,10 +170,10 @@ function ManagingMember() {
   );
 }
 
-export default ManagingMember;
+export default ManagingMemberLanding;
 
 const StyledRoot = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100%;
   padding: 0 2rem;
   overflow-y: scroll;
