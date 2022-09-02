@@ -13,7 +13,6 @@ import random1 from '/public/assets/png/random1.png';
 import random2 from '/public/assets/png/random2.png';
 import random3 from '/public/assets/png/random3.png';
 import random4 from '/public/assets/png/random4.png';
-import Header from '../common/Header';
 import useAPI from '../../utils/hooks/useAPI';
 import Template from './Template';
 import { FONT_STYLES } from '../../styles/font';
@@ -40,10 +39,8 @@ function SelectTemplateLanding() {
   // api call
   const getTogetherTemplateList = useAPI((api) => api.ect.getTogetherTemplateList);
   const getAloneTemplateList = useAPI((api) => api.ect.getAloneTemplateList);
-  const { data: togetherTemplateList } = useQuery('togetherTemplateList', () =>
-    getTogetherTemplateList(),
-  );
-  const { data: aloneTemplateList } = useQuery('aloneTemplateList', () => getAloneTemplateList());
+  const { data: togetherTemplateList } = useQuery('togetherTemplateList', getTogetherTemplateList);
+  const { data: aloneTemplateList } = useQuery('aloneTemplateList', getAloneTemplateList);
 
   const templateList = togetherTemplateList ?? aloneTemplateList;
   if (!templateList) return null;
@@ -71,7 +68,7 @@ function SelectTemplateLanding() {
   const setTemplateIdHandler = (templateId: string) => setTemplateId(templateId);
 
   return (
-    <Layout back title="템플릿 선택하기">
+    <Layout back title="템플릿 선택하기" padding>
       <StyledTemplateWrapper>
         <picture>
           {(basicTemplateImageList[+templateImageIndex] ||
@@ -124,8 +121,6 @@ const StyledTemplateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  padding: 0 2rem;
   & > picture {
     margin: 0rem 0 3.3rem 0;
   }
@@ -133,12 +128,14 @@ const StyledTemplateWrapper = styled.div`
 const StyledButtonWrapper = styled.div`
   position: absolute;
   bottom: 1.656rem;
-  display: flex;
   gap: 1.1rem;
-  width: 100%;
+  display: flex;
+
+  width: calc(100vw - 4rem);
   height: 4rem;
+
   background-color: #fff;
-  padding: 0 2rem;
+  z-index: 1;
 `;
 const StyledButton = styled.button<{ isMyTemplate?: boolean; isActivated: boolean }>`
   width: 100%;
