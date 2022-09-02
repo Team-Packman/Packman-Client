@@ -10,18 +10,6 @@ import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authUserAtom, creatingUserAtom } from '../../utils/recoil/atom/atom';
 
-interface AddUserProfileData {
-  email: string; // 회원가입한 유저의 이메일
-  name: string;
-  nickname: string; // 회원가입한 유저의 닉네임
-  profileImage: string; // 회원가입한 유저의 프로필 이미지
-}
-
-interface UpdateUserProfileData {
-  nickname: string;
-  profileImage: string;
-}
-
 interface SelectProfileSectionProps {
   isEditing?: boolean;
   oldNickname?: string;
