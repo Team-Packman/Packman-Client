@@ -42,7 +42,6 @@ export default FolderInitial;
 
 const StyledRoot = styled.div`
   width: calc(100vw - 4rem);
-  /* height: calc(var(--vh, 1vh) * 100); */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

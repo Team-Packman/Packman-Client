@@ -246,7 +246,7 @@ function FolderLanding() {
 
   return (
     <>
-      <Layout noHeader option={<Header title="logo" icon="profile" />}>
+      <Layout title="logo" icon="profile">
         <StyledBody>
           <StyledRecentBanner
             isRecentListExist={isRecentListExist}
