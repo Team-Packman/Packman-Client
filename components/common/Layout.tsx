@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useGlobalState from '../../utils/hooks/useGlobalState';
@@ -20,12 +20,17 @@ function Layout(props: LayoutProps) {
   const { children, back, title, icon, option, padding, noHeader } = props;
 
   const [scroll] = useGlobalState<boolean>('scroll');
+  const optionEl = document.querySelector('.layout_option');
+
+  if (optionEl) {
+    console.log(getComputedStyle(optionEl).height);
+  }
 
   return (
     <StyledRoot>
       {!noHeader && <Header back={back} title={title} icon={icon} />}
       {option}
-      <StyledMain hasOption={option !== undefined} padding={padding ? true : false} scroll={scroll}>
+      <StyledMain optionEl={optionEl} padding={padding ? true : false} scroll={scroll}>
         {children}
       </StyledMain>
     </StyledRoot>
@@ -44,15 +49,19 @@ const StyledRoot = styled.div`
 `;
 
 const StyledMain = styled.main<{
-  hasOption: boolean;
   padding: boolean;
   scroll: boolean;
+  optionEl: Element | null;
 }>`
   position: relative;
   padding: ${({ padding }) => (padding ? `0 2rem` : `0`)};
   padding-bottom: 1.6rem;
   background-color: ${packmanColors.pmWhite};
   // height : hasOption ? viewport - (option + header) : viewport - header
-  height: ${({ scroll, hasOption }) =>
-    hasOption ? (scroll ? 'calc(100%)' : 'calc(100% - 11.7rem)') : 'calc(100% - 5.2rem)'};
+  height: ${({ scroll, optionEl }) =>
+    optionEl
+      ? scroll
+        ? 'calc(100%)'
+        : `calc(100% - ${getComputedStyle(optionEl).height} - 5.2rem)`
+      : 'calc(100% - 5.2rem)'};
 `;
