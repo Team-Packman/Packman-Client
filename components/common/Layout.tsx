@@ -53,7 +53,6 @@ const StyledMain = styled.main<{
   padding-bottom: 1.6rem;
   background-color: ${packmanColors.pmWhite};
   // height : hasOption ? viewport - (option + header) : viewport - header
-  /* height: ${({ hasOption }) => (hasOption ? 'calc(100% - 11.7rem)' : 'calc(100% - 5.2rem)')}; */
   height: ${({ scroll, hasOption }) =>
     hasOption ? (scroll ? 'calc(100%)' : 'calc(100% - 11.7rem)') : 'calc(100% - 5.2rem)'};
 `;
