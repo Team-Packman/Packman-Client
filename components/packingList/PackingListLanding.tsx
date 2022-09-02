@@ -38,9 +38,7 @@ function PackingListLanding() {
   // api 호출
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
   const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  const deleteAloneInventory = useAPI(
-    (api) => (params: DeleteInventoryData) => api.inventory.alone.deleteAloneInventory(params),
-  );
+  const deleteAloneInventory = useAPI((api) => api.inventory.alone.deleteAloneInventory);
   const deleteTogetherInventory = useAPI((api) => api.inventory.together.deleteTogetherInventory);
   const { data: togetherInventory } = useQuery(
     ['getTogetherInventory', id],
@@ -57,26 +55,16 @@ function PackingListLanding() {
     },
   );
 
-  const { mutate: deleteTogetherInventoryMutate } = useMutation(
-    (deleteTogetherInventoryData: DeleteInventoryData) => {
-      return deleteTogetherInventory(deleteTogetherInventoryData);
+  const { mutate: deleteTogetherInventoryMutate } = useMutation(deleteTogetherInventory, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getTogetherInventory');
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getTogetherInventory');
-      },
+  });
+  const { mutate: deleteAloneInventoryMutate } = useMutation(deleteAloneInventory, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getAloneInventory');
     },
-  );
-  const { mutate: deleteAloneInventoryMutate } = useMutation(
-    (deleteTogetherInventoryData: DeleteInventoryData) => {
-      return deleteAloneInventory(deleteTogetherInventoryData);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getAloneInventory');
-      },
-    },
-  );
+  });
 
   const isInventory = (inventory: unknown): inventory is GetInventoryOutput => {
     if (inventory === undefined || inventory === null) return false;
