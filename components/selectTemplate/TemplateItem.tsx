@@ -35,6 +35,7 @@ function TemplateItem(props: TemplateItemProps) {
     });
     myTemplate?.forEach((template) => {
       if (id === template.id) {
+        const randomId = Math.floor(Math.random() * 6 - 1).toString();
         changeTemplateImage && changeTemplateImage(myTemplate, id, 'myTemplate');
       }
     });

@@ -26,6 +26,7 @@ interface Itemplate {
 }
 
 const basicTemplateImageList = [korea_travel, oversea_travel, concert, toeic, jeju, pet];
+const randomImageList = [random1, random2, random3, random4];
 
 function SelectTemplateLanding() {
   const router = useRouter();
@@ -35,7 +36,6 @@ function SelectTemplateLanding() {
   const [templateImageIndex, setTemplateImageIndex] = useState('');
   const [templateType, setTemplateType] = useState('');
   const [templateId, setTemplateId] = useState('');
-  const [randomImageList, setRandomImageList] = useState([random1, random2, random3, random4]);
 
   // api call
   const getTogetherTemplateList = useAPI((api) => api.ect.getTogetherTemplateList);
@@ -56,7 +56,7 @@ function SelectTemplateLanding() {
         setTemplateImageIndex(idx.toString());
         setTemplateType(templateType);
         templateType === 'myTemplate' &&
-          setRandomImageList((prev) => prev.sort(() => Math.random() - 0.5));
+          setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
       }
     });
   };
