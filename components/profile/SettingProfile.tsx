@@ -83,6 +83,12 @@ function SettingProfile(props: SettingProfileProps) {
     })();
   };
 
+  // 탈퇴하기 텍스트 클릭한 경우
+  const onClickWithdrawn = () => {
+    setShowModal(true);
+    setIsLogoutClicked(false);
+  };
+
   return (
     <StyledRoot>
       <StyledSettingWrapper>
@@ -166,14 +172,7 @@ function SettingProfile(props: SettingProfileProps) {
       <StyledFooter>
         <Footer />
       </StyledFooter>
-      <p
-        onClick={() => {
-          setShowModal(true);
-          setIsLogoutClicked(false);
-        }}
-      >
-        탈퇴하기
-      </p>
+      <p onClick={onClickWithdrawn}>탈퇴하기</p>
     </StyledRoot>
   );
 }
