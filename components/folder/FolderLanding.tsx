@@ -40,8 +40,7 @@ function FolderLanding() {
   const addFolder = useAPI((api) => api.folder.addFolder);
 
   const { data: folderListData } = useQuery('folderListKey', () => getFolders(), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
