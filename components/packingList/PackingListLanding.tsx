@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import iShowMore from '/public/assets/svg/iShowMore.svg';
+import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
@@ -16,10 +16,6 @@ import { packmanColors } from '../../styles/color';
 import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
-interface DeleteInventoryData {
-  folderId: string;
-  listId: string;
-}
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 

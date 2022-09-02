@@ -50,7 +50,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     function End() {
       let tmpArr = Array(packingList?.length).fill(false);
 
-      if (startX - endX > 100) {
+      if (startX - endX > 50) {
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
         handleIsDragged(tmpArr);
       } else {
@@ -128,6 +128,7 @@ const StyledRoot = styled.div<{ isDeleting: boolean }>`
   gap: 2.7rem;
   padding: 0 2rem;
   overflow: hidden;
+  touch-action: pan-x;
 `;
 
 const StyledSelectDelete = styled.div`
