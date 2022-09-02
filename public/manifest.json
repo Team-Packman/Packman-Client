@@ -17,7 +17,7 @@
       "icons": [{ "src": "/assets/pwa/manifest-icon-192.maskable.png", "sizes": "192x192" }]
     }
   ],
-  "theme_color": "#FF307B",
+  "theme_color": "#fff",
   "icons": [
     {
       "src": "/assets/pwa/manifest-icon-192.maskable.png",
