@@ -42,29 +42,19 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
-  const { mutate: addUserProfileMutate } = useMutation(
-    (addUserProfileData: AddUserProfileData) => {
-      return addUserProfile(addUserProfileData);
+  const { mutate: addUserProfileMutate } = useMutation(addUserProfile, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getUserInfo');
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getUserInfo');
-      },
-    },
-  );
+  });
 
   //프로필 수정
   const updateUserProfile = useAPI((api) => api.user.updateUserProfile);
-  const { mutate: updateUserProfileMutate } = useMutation(
-    (updateUserProfileData: UpdateUserProfileData) => {
-      return updateUserProfile(updateUserProfileData);
+  const { mutate: updateUserProfileMutate } = useMutation(updateUserProfile, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getUserInfo');
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getUserInfo');
-      },
-    },
-  );
+  });
 
   //버튼 활성화 여부
   const setIsActivate = () => {
@@ -125,8 +115,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       },
       {
         onSuccess: ({ data }) => {
-          /**@todo 스키마 통합 후 data로 변경 */
-          setUser({ ...creatingUser, ...data });
+          setUser(data);
           router.push('/folder');
         },
       },
