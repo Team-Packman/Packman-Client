@@ -4,16 +4,18 @@ import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useResetRecoilState } from 'recoil';
+import { listState } from '../../utils/recoil/atom/atom';
 
 interface ModalForInvitationProps {
   inviteCode: string;
-  modalHandler: () => void;
 }
 
 function ModalForInvitation(props: ModalForInvitationProps) {
-  const { inviteCode, modalHandler } = props;
+  const { inviteCode } = props;
 
   const router = useRouter();
+  const closeModal = useResetRecoilState(listState);
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = () => {
@@ -25,10 +27,10 @@ function ModalForInvitation(props: ModalForInvitationProps) {
 
   return (
     <>
-      <StyledBg onClick={modalHandler} />
+      <StyledBg onClick={closeModal} />
       <StyledModal>
         <ButtonContainer>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" onClick={modalHandler} />
+          <Image src={ButtonX} alt="closeModal" width="24" height="24" onClick={closeModal} />
         </ButtonContainer>
         <Description>함께 패킹할 멤버를 초대해보세요!</Description>
         <CopyLinkButton onClick={copyToClipboard} isCopied={isCopied}>

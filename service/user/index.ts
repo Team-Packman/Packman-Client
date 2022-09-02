@@ -47,11 +47,13 @@ export interface AddUserProfileOutput {
   success: boolean;
   message: string;
   data: {
+    isAlreadyUser: boolean; // 이미 존재하는 유저 확인
     id: string; // 생성된 유저 id
+    name: string; //생성된 유저 네임
     nickname: string; // 생성된 유저 닉네임
     email: string; // 생성된 유저 email
     profileImage: string; // 생성된 유저 이미지 id
     accessToken: string; // 팩맨에서 사용하는 accessToken
-    refreshToken: string;
+    refreshToken: string; // 팩맨에서 사용하는 refreshToken
   };
 }

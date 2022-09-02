@@ -8,7 +8,6 @@ import useAPI from '../../utils/hooks/useAPI';
 import BottomModal from '../common/BottomModal';
 import FolderList from './FolderList';
 import SwiperContainer from '../Swiper';
-import Header from '../common/Header';
 import FloatActionButton from './FloatActionButton';
 import Layout from '../common/Layout';
 
@@ -41,10 +40,7 @@ function FolderLanding() {
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  const { data: folderListData } = useQuery('folderListKey', () => getFolders(), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
+  const { data: folderListData } = useQuery('folderListKey', () => getFolders());
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
     onSuccess: (data) => {

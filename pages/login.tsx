@@ -59,6 +59,7 @@ function Login() {
                   router.replace('/profile');
                 }
               },
+              onError: () => router.replace('/login'),
             },
           );
         })();
@@ -77,6 +78,7 @@ function Login() {
 
     if (listId && isMember) {
       router.replace(`/together?id=${listId}`);
+      resetInvitation();
     } else if (listId) {
       addMemberMutate(
         { listId },

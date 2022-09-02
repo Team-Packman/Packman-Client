@@ -1,4 +1,4 @@
-import React, { useState, UIEvent, useEffect } from 'react';
+import React, { useState, UIEvent } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
@@ -8,8 +8,6 @@ import PackingCategory, { UpdateCategoryPayload } from '../common/PackingCategor
 import CheckListHeader from './CheckListHeader';
 import { Pagination, Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/bundle';
 import CheckListSubHeader from './CheckListSubHeader';
 import PackingItem, { UpdateItemPayload } from '../common/PackingItem';
 import useGlobalState from '../../utils/hooks/useGlobalState';
@@ -22,9 +20,11 @@ import { useRouter } from 'next/router';
 import ModalForInvitation from '../common/ModalForInvitation';
 import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRecoilValue } from 'recoil';
-import { authUserAtom } from '../../utils/recoil/atom/atom';
+import { listState } from '../../utils/recoil/atom/atom';
 import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 import Loading from '../common/Loading';
+import 'swiper/css';
+import 'swiper/css/bundle';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -46,13 +46,12 @@ function TogetherLanding() {
   const client = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
-  const user = useRecoilValue(authUserAtom);
+  const { isFresh } = useRecoilValue(listState);
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
-  const [invitationModalOpen, setInvitationModalOpen] = useState(false);
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState(0);
 
@@ -145,11 +144,6 @@ function TogetherLanding() {
   );
   ////////////////////////////////////////////
 
-  useEffect(() => {
-    // from 체크 후 최초 진입시만 초대 모달 띄우기
-    setInvitationModalOpen(true);
-  }, []);
-
   if (!packingListData) return <Loading />;
   const { data: info } = packingListData;
   const packingRole = [info.togetherPackingList, info.myPackingList];
@@ -176,8 +170,7 @@ function TogetherLanding() {
     setCurrentFocus(initialFocus);
     setPackerModalOpen(false);
   };
-  const invitationModalOpenHandler = () => setInvitationModalOpen(true);
-  const invitationModalCloseHandler = () => setInvitationModalOpen(false);
+
   const addTemplateModalOpenHandler = () => setAddTemplateModalOpen(true);
   const addTemplateModalCloseHandler = () => setAddTemplateModalOpen(false);
 
@@ -627,12 +620,8 @@ function TogetherLanding() {
           updatePacker={updatePacker}
         />
       )}
-      {invitationModalOpen && (
-        <ModalForInvitation
-          inviteCode={info.togetherPackingList.inviteCode}
-          modalHandler={invitationModalCloseHandler}
-        />
-      )}
+      {isFresh && <ModalForInvitation inviteCode={info.togetherPackingList.inviteCode} />}
+
       {bottomModalOpen && (
         <PackingListBottomModal
           onEdit={onEdit}

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import Header from '../../common/Header';
 import { AddFolderInput } from '../../../service/folder';
 import {
   AddAlonePackingListIntroInput,
@@ -14,6 +14,7 @@ import {
 } from '../../../service/packingList/together';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
+import { listState } from '../../../utils/recoil/atom/atom';
 import Layout from '../../common/Layout';
 
 type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
@@ -24,6 +25,7 @@ function ListIntroLanding() {
   const router = useRouter();
   const { id, type, folderId } = router.query;
 
+  const setIsFresh = useSetRecoilState(listState);
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
   const [listName, setListName] = useState<string>('');
@@ -198,6 +200,7 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 router.push(`/alone?id=${data?.data?.id}`);
+                setIsFresh({ isFresh: true });
               },
             },
           )
@@ -211,6 +214,7 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 router.push(`/together?id=${data?.data?.id}`);
+                setIsFresh({ isFresh: true });
               },
             },
           );
