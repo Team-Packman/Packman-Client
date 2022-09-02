@@ -672,4 +672,5 @@ const StyledBody = styled.div`
 const StyledScrollBlock = styled.div`
   width: 100%;
   min-height: 8rem;
+  background-color: transparent;
 `;
