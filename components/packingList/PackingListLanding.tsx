@@ -134,9 +134,9 @@ function PackingListLanding() {
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push(`/select-template/together?folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
     } else if (index === 1) {
-      router.push(`/select-template/alone?folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
     }
   };
 
@@ -183,7 +183,7 @@ function PackingListLanding() {
                 <StyledModalButton left onClick={closeModal}>
                   아니요
                 </StyledModalButton>
-                <StyledModalButton onClick={deleteListItem}>예</StyledModalButton>
+                <StyledModalButton onClick={deleteListItem}>네</StyledModalButton>
               </StyledModalButtonWrapper>
             }
           />

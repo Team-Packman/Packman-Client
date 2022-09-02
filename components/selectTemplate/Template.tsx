@@ -98,13 +98,14 @@ export default Template;
 const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
+
+  width: 100%;
   gap: 2.5rem;
 `;
 const StyledTemplateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
   gap: 1rem;
   & > h1 {
     ${FONT_STYLES.SUBHEAD1_SEMIBOLD};

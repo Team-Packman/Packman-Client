@@ -222,9 +222,9 @@ function FolderLanding() {
   // Floating modal onClick handler
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/select-template/together');
+      router.push('/select-template?type=together');
     } else if (index === 1) {
-      router.push('/select-template/alone');
+      router.push('/select-template?type=alone');
     } else if (index === 2) {
       setAddNewFolder(true);
     }
