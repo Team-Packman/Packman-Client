@@ -195,9 +195,10 @@ function PackingListLanding() {
             <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
             {toggle && (
               <DropBox>
-                {folder.map(({ id, name }) => (
+                {folder.map(({ id, name }, idx) => (
                   <StyledItem
                     key={id}
+                    isLastItem={idx === folder.length - 1}
                     currentId={id === currentFolder.id}
                     onClick={() => onClickDropBoxItem(id)}
                   >
@@ -299,7 +300,7 @@ const StyledFolderInfo = styled.div`
   }
 `;
 
-const StyledItem = styled.div<{ currentId: boolean }>`
+const StyledItem = styled.div<{ currentId: boolean; isLastItem: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -308,7 +309,7 @@ const StyledItem = styled.div<{ currentId: boolean }>`
   font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
   font-size: 1.5rem;
   color: ${packmanColors.pmDarkGrey};
-  border-bottom: 1px solid ${packmanColors.pmGrey};
+  border-bottom: ${({ isLastItem }) => !isLastItem && `1px solid ${packmanColors.pmGrey}`};
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
   width: 2.4rem;
