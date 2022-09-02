@@ -22,10 +22,6 @@ function Layout(props: LayoutProps) {
   const [scroll] = useGlobalState<boolean>('scroll');
   const optionEl = document.querySelector('.layout_option');
 
-  if (optionEl) {
-    console.log(getComputedStyle(optionEl).height);
-  }
-
   return (
     <StyledRoot>
       {!noHeader && <Header back={back} title={title} icon={icon} />}
