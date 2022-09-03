@@ -59,7 +59,6 @@ export const StyledInitialWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5rem;
   width: 100%;
 
   @media only screen and (max-width: 370px) {
