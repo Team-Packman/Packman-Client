@@ -20,3 +20,7 @@ export interface Invitation {
 export interface Kakao {
   accessToken: string;
 }
+
+export interface ListState {
+  isFresh: boolean;
+}

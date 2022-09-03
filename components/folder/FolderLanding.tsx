@@ -8,8 +8,8 @@ import useAPI from '../../utils/hooks/useAPI';
 import BottomModal from '../common/BottomModal';
 import FolderList from './FolderList';
 import SwiperContainer from '../Swiper';
-import Header from '../common/Header';
 import FloatActionButton from './FloatActionButton';
+import Layout from '../common/Layout';
 
 export interface ModalDataProps {
   id: string;
@@ -32,6 +32,7 @@ function FolderLanding() {
   });
   const [isOutDated, setIsOutDated] = useState<boolean>(false);
   const [isRecentListExist, setIsRecentListExist] = useState<boolean>(false);
+  const [isFolderExist, setIsFolderExist] = useState<boolean>(false);
 
   const getFolders = useAPI((api) => api.folder.getFolders);
   const getRecentPackingList = useAPI((api) => api.folder.getRecentPackingList);
@@ -80,6 +81,18 @@ function FolderLanding() {
     };
     updateOutdated();
   }, [recentPackingData]);
+
+  useEffect(() => {
+    if (folderList?.data) {
+      const { aloneFolder, togetherFolder } = folderList?.data ?? {};
+
+      if (aloneFolder?.length > 0 || togetherFolder?.length > 0) {
+        setIsFolderExist(true);
+      } else {
+        setIsFolderExist(false);
+      }
+    }
+  }, [folderList?.data]);
 
   if (!folderListData || !folderList) {
     return null;
@@ -231,42 +244,62 @@ function FolderLanding() {
 
   return (
     <>
-      <StyledRoot>
-        <Header title="logo" icon="profile" />
-        <StyledRecentBanner isRecentListExist={isRecentListExist} onClick={handleRecentBannerClick}>
-          <>
-            <StyledLabel>
-              <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
-              <StyledPackTotalNum>
-                총{recentPackingData?.data?.packTotalNum}개의 짐
-              </StyledPackTotalNum>
-            </StyledLabel>
-            <StyledDday>
-              <StyledRemainDay>
-                {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
-              </StyledRemainDay>
-              <StyledLeftMessage>
-                {!isOutDated && recentPackingData?.data?.packRemainNum !== '0' ? (
-                  <span>
-                    <em> {'패킹'}</em>이 완료되었어요!
-                  </span>
-                ) : (
-                  !isOutDated && (
+      <Layout title="logo" icon="profile">
+        <StyledBody>
+          <StyledRecentBanner
+            isRecentListExist={isRecentListExist}
+            onClick={handleRecentBannerClick}
+          >
+            <>
+              <StyledLabel>
+                <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
+                <StyledPackTotalNum>
+                  총{recentPackingData?.data?.packTotalNum}개의 짐
+                </StyledPackTotalNum>
+              </StyledLabel>
+              <StyledDday>
+                <StyledRemainDay>
+                  {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
+                </StyledRemainDay>
+                <StyledLeftMessage>
+                  {!isOutDated && recentPackingData?.data?.packRemainNum !== '0' ? (
                     <span>
-                      아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
+                      <em> {'패킹'}</em>이 완료되었어요!
                     </span>
-                  )
-                )}
-              </StyledLeftMessage>
-            </StyledDday>
-          </>
-        </StyledRecentBanner>
-        <SwiperContainer isRecentListExist={isRecentListExist} getSwiperIndex={getSwiperIndex}>
-          {
+                  ) : (
+                    !isOutDated && (
+                      <span>
+                        아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
+                      </span>
+                    )
+                  )}
+                </StyledLeftMessage>
+              </StyledDday>
+            </>
+          </StyledRecentBanner>
+          <SwiperContainer isRecentListExist={isRecentListExist} getSwiperIndex={getSwiperIndex}>
+            {
+              <FolderList
+                key="1"
+                categoryName="together"
+                list={togetherFolder}
+                editableFolderId={editableFolderId}
+                onClick={handleBottomModalOpen}
+                onChange={handleFolderNameChange}
+                onFolderClick={handleFolderClick}
+                handleAddFolderChange={handleAddFolderChange}
+                handleOnBlurInAdd={handleOnBlurInAdd}
+                handleOnBlurInEdit={handleOnBlurInEdit}
+                addNewFolder={addNewFolder && currentSwiperIndex === 0}
+                handleCancleAddFolder={handleCancleAddFolder}
+                handleStartButtonInInit={handleStartButtonInInit}
+                isFolderExist={isFolderExist}
+              />
+            }
             <FolderList
-              key="1"
-              categoryName="together"
-              list={togetherFolder}
+              key="2"
+              categoryName="alone"
+              list={aloneFolder}
               editableFolderId={editableFolderId}
               onClick={handleBottomModalOpen}
               onChange={handleFolderNameChange}
@@ -274,55 +307,39 @@ function FolderLanding() {
               handleAddFolderChange={handleAddFolderChange}
               handleOnBlurInAdd={handleOnBlurInAdd}
               handleOnBlurInEdit={handleOnBlurInEdit}
-              addNewFolder={addNewFolder && currentSwiperIndex === 0}
+              addNewFolder={addNewFolder && currentSwiperIndex === 1}
               handleCancleAddFolder={handleCancleAddFolder}
               handleStartButtonInInit={handleStartButtonInInit}
-              isRecentListExist={isRecentListExist}
+              isFolderExist={isFolderExist}
             />
-          }
-          <FolderList
-            key="2"
-            categoryName="alone"
-            list={aloneFolder}
-            editableFolderId={editableFolderId}
-            onClick={handleBottomModalOpen}
-            onChange={handleFolderNameChange}
-            onFolderClick={handleFolderClick}
-            handleAddFolderChange={handleAddFolderChange}
-            handleOnBlurInAdd={handleOnBlurInAdd}
-            handleOnBlurInEdit={handleOnBlurInEdit}
-            addNewFolder={addNewFolder && currentSwiperIndex === 1}
-            handleCancleAddFolder={handleCancleAddFolder}
-            handleStartButtonInInit={handleStartButtonInInit}
-            isRecentListExist={isRecentListExist}
-          />
-        </SwiperContainer>
-        {isRecentListExist && !showBottomModal && (
-          <FloatActionButton onClick={handleFloatClick} pageName="folder" />
-        )}
-        {showBottomModal && (
-          <BottomModal
-            closeModal={() => {
-              document.body.style.overflow = 'unset';
-              setShowBottomModal(false);
-            }}
-            modalData={modalData}
-            onEdit={onEdit}
-            onDelete={handleModalDeleteButtonClick}
-          />
-        )}
-      </StyledRoot>
+          </SwiperContainer>
+          {isFolderExist && !showBottomModal && (
+            <FloatActionButton onClick={handleFloatClick} pageName="folder" />
+          )}
+          {showBottomModal && (
+            <BottomModal
+              closeModal={() => {
+                document.body.style.overflow = 'unset';
+                setShowBottomModal(false);
+              }}
+              modalData={modalData}
+              onEdit={onEdit}
+              onDelete={handleModalDeleteButtonClick}
+            />
+          )}
+        </StyledBody>
+      </Layout>
     </>
   );
 }
 
 export default FolderLanding;
 
-export const StyledRoot = styled.article`
+export const StyledBody = styled.article`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
   background-color: ${packmanColors.pmWhite};

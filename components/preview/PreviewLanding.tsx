@@ -34,7 +34,7 @@ function PreviewLanding() {
     <Layout
       back
       title="템플릿 미리보기"
-      option={<StyledPreviewHeader>{info.title}</StyledPreviewHeader>}
+      option={<StyledPreviewHeader className="layout_option">{info.title}</StyledPreviewHeader>}
     >
       <StyledBody>
         {info.category.map(({ id, name, pack }) => (
@@ -52,6 +52,7 @@ function PreviewLanding() {
             <PackingCategory example name={name} />
           </PackagesWithCategory>
         ))}
+        <StyledScrollBlock />
       </StyledBody>
       <FunctionSection>
         <AddTemplateButton onClick={addSelf}>직접 작성하기</AddTemplateButton>
@@ -72,17 +73,23 @@ const StyledPreviewHeader = styled.div`
   color: ${packmanColors.black};
   background-color: ${packmanColors.pmWhite};
   box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.05);
-  z-index: 90;
+  z-index: 1;
 `;
 
 const StyledBody = styled.div`
   display: flex;
   //100% - subheader - device
-  height: calc(100% - 11rem - 10rem);
+  height: 100%;
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: scroll;
   margin-bottom: 24.4rem;
   padding: 0 2rem;
   padding-top: 1.6rem;
+`;
+
+const StyledScrollBlock = styled.div`
+  width: 100%;
+  min-height: 12.1rem;
+  background-color: transparent;
 `;

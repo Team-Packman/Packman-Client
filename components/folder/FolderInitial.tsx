@@ -7,12 +7,12 @@ import InitAloneLogo from '/public/assets/png/home_alone.png';
 
 export interface FolderInitialProps {
   categoryName: string;
-  isRecentListExist: boolean;
+  isFolderExist: boolean;
   onClick(): void;
 }
 
 function FolderInitial(props: FolderInitialProps) {
-  const { categoryName, isRecentListExist, onClick } = props;
+  const { categoryName, isFolderExist, onClick } = props;
   const currentIndex = categoryName === 'together' ? 0 : 1;
 
   const [initialLables] = useState<string[]>([
@@ -30,7 +30,7 @@ function FolderInitial(props: FolderInitialProps) {
       )}
       <StyledInitialWrapper>
         <StyledLabel>{initialLables[currentIndex]}</StyledLabel>
-        {!isRecentListExist && (
+        {!isFolderExist && (
           <StyledStratButton onClick={onClick}>{initialButtons[currentIndex]}</StyledStratButton>
         )}
       </StyledInitialWrapper>
@@ -42,7 +42,6 @@ export default FolderInitial;
 
 const StyledRoot = styled.div`
   width: calc(100vw - 4rem);
-  height: calc(var(--vh, 1vh) * 100);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

@@ -1,4 +1,4 @@
-import { AuthUser, CreatingUser, Invitation, Kakao } from './';
+import { AuthUser, CreatingUser, Invitation, ListState, Kakao } from './';
 import { recoilPersist } from 'recoil-persist';
 import { atom } from 'recoil';
 
@@ -43,4 +43,11 @@ export const kakao = atom<Kakao>({
     accessToken: '',
   },
   effects_UNSTABLE: [persistAtom],
+});
+
+export const listState = atom<ListState>({
+  key: 'listState',
+  default: {
+    isFresh: false,
+  },
 });
