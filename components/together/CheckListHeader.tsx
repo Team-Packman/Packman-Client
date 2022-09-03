@@ -71,6 +71,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
 
       <StyledCalender>
         <input type="date" value={departureDate} onChange={saveDate} />
+        <StyledDate>{departureDate.replaceAll('-', '. ')}</StyledDate>
         <StyledEdit>
           <Image src={Edit} layout="fill" alt="edit_ic" />
         </StyledEdit>
@@ -133,20 +134,25 @@ const StyledCalender = styled.div`
   height: 3.1rem;
   background-color: ${packmanColors.pmWhite};
   z-index: 2;
+  position: relative;
 
+  input {
+    position: absolute;
+    z-index: 3;
+    opacity: 0;
+  }
   input[type='date'] {
     display: flex;
     align-items: flex-end;
-    position: relative;
     height: 100%;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     outline: none;
     padding: 0;
     background-color: ${packmanColors.pmWhite};
     -webkit-appearance: none;
   }
-
+  /*
   input[type='date']::-webkit-date {
     display: flex;
     align-items: flex-end;
@@ -159,11 +165,7 @@ const StyledCalender = styled.div`
     background-color: ${packmanColors.pmWhite};
     -webkit-appearance: none;
   }
-
-  input[type='date']::-webkit-clear-button,
-  input[type='date']::-webkit-inner-spin-button {
-    display: none;
-  }
+  */
   input[type='date']::-webkit-calendar-picker-indicator {
     z-index: 1;
   }
@@ -175,15 +177,18 @@ const StyledCalender = styled.div`
     -webkit-appearance: none;
     color: ${packmanColors.pmBlack};
   }
+`;
 
-  input[type='date']::-webkit-inner-spin-button,
-  input[type='date']::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-  }
+const StyledDate = styled.span`
+  font-size: 1.5rem;
+  font-weight: 400;
+  z-index: 2;
 `;
 const StyledEdit = styled.span`
   width: 2.4rem;
   height: 2.4rem;
+
   position: relative;
+
+  margin-left: 1rem;
 `;
