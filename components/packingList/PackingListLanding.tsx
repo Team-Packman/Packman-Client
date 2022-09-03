@@ -94,7 +94,7 @@ function PackingListLanding() {
   };
 
   const closeModal = () => {
-    handleIsDragged(Array(togetherPackingList.length ?? alonePackingList.length).fill(false));
+    handleIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
@@ -112,7 +112,7 @@ function PackingListLanding() {
             folderId: currentFolder.id,
             listId: deleteList.join(','),
           });
-      if (deleteList.length === (togetherPackingList.length ?? alonePackingList.length)) {
+      if (deleteList.length === (togetherPackingList ?? alonePackingList).length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
@@ -195,10 +195,9 @@ function PackingListLanding() {
             <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
             {toggle && (
               <DropBox>
-                {folder.map(({ id, name }, idx) => (
+                {folder.map(({ id, name }) => (
                   <StyledItem
                     key={id}
-                    isLastItem={idx === folder.length - 1}
                     currentId={id === currentFolder.id}
                     onClick={() => onClickDropBoxItem(id)}
                   >
@@ -300,7 +299,7 @@ const StyledFolderInfo = styled.div`
   }
 `;
 
-const StyledItem = styled.div<{ currentId: boolean; isLastItem: boolean }>`
+const StyledItem = styled.div<{ currentId: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -309,7 +308,9 @@ const StyledItem = styled.div<{ currentId: boolean; isLastItem: boolean }>`
   font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
   font-size: 1.5rem;
   color: ${packmanColors.pmDarkGrey};
-  border-bottom: ${({ isLastItem }) => !isLastItem && `1px solid ${packmanColors.pmGrey}`};
+  &:not(:last-child) {
+    border-bottom: 1px solid ${packmanColors.pmGrey};
+  }
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
   width: 2.4rem;
