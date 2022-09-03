@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import iShowMore from '/public/assets/svg/iShowMore.svg';
+import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
@@ -16,10 +16,6 @@ import { packmanColors } from '../../styles/color';
 import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
-interface DeleteInventoryData {
-  folderId: string;
-  listId: string;
-}
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
@@ -98,7 +94,7 @@ function PackingListLanding() {
   };
 
   const closeModal = () => {
-    handleIsDragged(Array(togetherPackingList.length ?? alonePackingList.length).fill(false));
+    handleIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
@@ -116,7 +112,7 @@ function PackingListLanding() {
             folderId: currentFolder.id,
             listId: deleteList.join(','),
           });
-      if (deleteList.length === (togetherPackingList.length ?? alonePackingList.length)) {
+      if (deleteList.length === (togetherPackingList ?? alonePackingList).length) {
         setIsDeleting(false);
       }
       setDeleteList([]);
@@ -138,9 +134,9 @@ function PackingListLanding() {
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push(`/select-template/together?folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
     } else if (index === 1) {
-      router.push(`/select-template/alone?folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
     }
   };
 
@@ -187,7 +183,7 @@ function PackingListLanding() {
                 <StyledModalButton left onClick={closeModal}>
                   아니요
                 </StyledModalButton>
-                <StyledModalButton onClick={deleteListItem}>예</StyledModalButton>
+                <StyledModalButton onClick={deleteListItem}>네</StyledModalButton>
               </StyledModalButtonWrapper>
             }
           />
@@ -290,7 +286,6 @@ const StyledFolderInfo = styled.div`
   padding-left: 2.4rem;
   width: 100%;
   height: 5.4rem;
-  gap: 0.4rem;
   margin-top: 0.842rem;
 
   & > h1 {
@@ -300,6 +295,7 @@ const StyledFolderInfo = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-left: 0.4rem;
   }
 `;
 
@@ -312,7 +308,9 @@ const StyledItem = styled.div<{ currentId: boolean }>`
   font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
   font-size: 1.5rem;
   color: ${packmanColors.pmDarkGrey};
-  border-bottom: 1px solid ${packmanColors.pmGrey};
+  &:not(:last-child) {
+    border-bottom: 1px solid ${packmanColors.pmGrey};
+  }
 `;
 const StyledToggleImage = styled(Image)<{ toggle: string }>`
   width: 2.4rem;
@@ -339,9 +337,10 @@ const StyledEmpty = styled.div`
 
 const StyledModalButtonWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.8rem;
+  width: 100%;
+  padding: 0 2.1rem;
 `;
 const StyledModalButton = styled.button<{ left?: boolean }>`
   width: 13.5rem;

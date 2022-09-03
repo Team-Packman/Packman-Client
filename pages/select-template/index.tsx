@@ -1,10 +1,10 @@
+import SelectTemplateLanding from '../../components/selectTemplate/SelectTemplateLanding';
 import { AsyncBoundary } from '../../utils/AsyncBoundary';
-import AloneSelectTemplateLanding from '../../components/selectTemplate/alone/AloneSelectTemplateLanding';
 
 function index() {
   return (
     <AsyncBoundary>
-      <AloneSelectTemplateLanding />
+      <SelectTemplateLanding />
     </AsyncBoundary>
   );
 }
