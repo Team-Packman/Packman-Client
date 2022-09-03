@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import Header from '../../common/Header';
 import { AddFolderInput } from '../../../service/folder';
 import {
   AddAlonePackingListIntroInput,
@@ -14,6 +14,8 @@ import {
 } from '../../../service/packingList/together';
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
+import { listState } from '../../../utils/recoil/atom/atom';
+import Layout from '../../common/Layout';
 
 type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
 type folderType = DeepPartial<GetTogetherFolderOutput> & DeepPartial<GetAloneFolderOutput>;
@@ -23,6 +25,7 @@ function ListIntroLanding() {
   const router = useRouter();
   const { id, type, folderId } = router.query;
 
+  const setIsFresh = useSetRecoilState(listState);
   const [date, setDate] = useState<string>('2022-07-16');
   const [folderName, setFolderName] = useState<string>('');
   const [listName, setListName] = useState<string>('');
@@ -197,6 +200,7 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 router.push(`/alone?id=${data?.data?.id}`);
+                setIsFresh({ isFresh: true });
               },
             },
           )
@@ -210,6 +214,7 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 router.push(`/together?id=${data?.data?.id}`);
+                setIsFresh({ isFresh: true });
               },
             },
           );
@@ -217,69 +222,70 @@ function ListIntroLanding() {
   };
 
   return (
-    <StyledRoot>
-      <Header back title="리스트 작성하기" />
-      <StyledDataContainer>
-        <h3>언제 출발하시나요?</h3>
-        <input type="date" onChange={handleDateChange} defaultValue={getTodayDate()} />
-      </StyledDataContainer>
-      <StyledFolderContainer>
-        <h3>폴더를 선택해주세요</h3>
-        <div>
-          <input
-            type="text"
-            onChange={(e) => handleFolderNameChange(e)}
-            value={folderName}
-            placeholder="폴더 이름을 입력하세요"
-            maxLength={10}
-          />
-          <button onClick={handleAddFolder}>생성</button>
-        </div>
-        <StyledTagContainer>
-          {isAloned
-            ? aloneFolder?.map((v, index) => (
-                <StyledTag
-                  key={v.id}
-                  isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v.id, index)}
-                >
-                  {v.name}
-                </StyledTag>
-              ))
-            : togetherFolder?.map((v, index) => (
-                <StyledTag
-                  key={v.id}
-                  isSelected={index === selectedTagIndex.index}
-                  onClick={() => handleTagClick(v.id, index)}
-                >
-                  {v.name}
-                </StyledTag>
-              ))}
-        </StyledTagContainer>
-      </StyledFolderContainer>
-      <StyledListNameContainer>
-        <h3>리스트 이름을 작성해주세요</h3>
-        <div>
-          <input
-            type="text"
-            placeholder="예시) 혼자 캐나다 여행"
-            maxLength={12}
-            onChange={handleListNameChange}
-          />
-        </div>
-      </StyledListNameContainer>
-      <StyledButtonContainer>
-        <StyledNextButton onClick={handleNextButtonClick} disabled={!isValid}>
-          다음 단계
-        </StyledNextButton>
-      </StyledButtonContainer>
-    </StyledRoot>
+    <Layout back title="리스트 작성하기">
+      <StyledBody>
+        <StyledDataContainer>
+          <h3>언제 출발하시나요?</h3>
+          <input type="date" onChange={handleDateChange} defaultValue={getTodayDate()} />
+        </StyledDataContainer>
+        <StyledFolderContainer>
+          <h3>폴더를 선택해주세요</h3>
+          <div>
+            <input
+              type="text"
+              onChange={(e) => handleFolderNameChange(e)}
+              value={folderName}
+              placeholder="폴더 이름을 입력하세요"
+              maxLength={10}
+            />
+            <button onClick={handleAddFolder}>생성</button>
+          </div>
+          <StyledTagContainer>
+            {isAloned
+              ? aloneFolder?.map((v, index) => (
+                  <StyledTag
+                    key={v.id}
+                    isSelected={index === selectedTagIndex.index}
+                    onClick={() => handleTagClick(v.id, index)}
+                  >
+                    {v.name}
+                  </StyledTag>
+                ))
+              : togetherFolder?.map((v, index) => (
+                  <StyledTag
+                    key={v.id}
+                    isSelected={index === selectedTagIndex.index}
+                    onClick={() => handleTagClick(v.id, index)}
+                  >
+                    {v.name}
+                  </StyledTag>
+                ))}
+          </StyledTagContainer>
+        </StyledFolderContainer>
+        <StyledListNameContainer>
+          <h3>리스트 이름을 작성해주세요</h3>
+          <div>
+            <input
+              type="text"
+              placeholder="예시) 혼자 캐나다 여행"
+              maxLength={12}
+              onChange={handleListNameChange}
+            />
+          </div>
+        </StyledListNameContainer>
+        <StyledButtonContainer>
+          <StyledNextButton onClick={handleNextButtonClick} disabled={!isValid}>
+            다음 단계
+          </StyledNextButton>
+        </StyledButtonContainer>
+      </StyledBody>
+    </Layout>
   );
 }
 
 export default ListIntroLanding;
 
-export const StyledRoot = styled.article`
+export const StyledBody = styled.article`
   width: 100%;
   height: 100%;
 

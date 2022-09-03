@@ -53,7 +53,7 @@ class MyDocument extends Document {
           <meta property="og:image" content="/assets/pwa/apple-splash-1136-640.jpg" />
           <meta property="og:url" content="https://www.packman.kr" />
           {/* pwa */}
-          <meta name="theme-color" content="#FF307B" />
+          <meta name="theme-color" content="#fff" />
           <link rel="manifest" href="/manifest.json" />
           <meta name="apple-mobile-web-app-title" content="Packman" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />

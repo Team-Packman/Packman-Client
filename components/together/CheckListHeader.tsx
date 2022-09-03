@@ -1,8 +1,10 @@
+import Image from 'next/image';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { editHandler } from '../../utils/editHandler';
 import useGlobalState from '../../utils/hooks/useGlobalState';
+import Edit from '/public/assets/svg/edit_color_ic.svg';
 
 interface RemainingInfoPayload {
   listId: string;
@@ -69,6 +71,9 @@ function CheckListHeader(props: CheckListHeaderProps) {
 
       <StyledCalender>
         <input type="date" value={departureDate} onChange={saveDate} />
+        <StyledEdit>
+          <Image src={Edit} layout="fill" alt="edit_ic" />
+        </StyledEdit>
       </StyledCalender>
     </StyledRoot>
   );
@@ -84,7 +89,6 @@ const StyledRoot = styled.div<{
   justify-content: flex-end;
   background-color: ${packmanColors.pmWhite};
   width: 100%;
-  /* height: 8.4rem; */
   height: 6.5rem;
   padding: 0 2rem;
   transition: height 0.3s ease, opacity 0.3s ease;
@@ -114,9 +118,9 @@ const StyledInput = styled.input`
   display: flex;
   align-items: center;
   width: 100%;
-  max-height: 3.25rem;
+  max-height: 3.4rem;
   font-size: 2.8rem;
-  line-height: 3.1rem;
+  line-height: 3.4rem;
   font-weight: 700;
   outline: none;
   padding: 0;
@@ -127,7 +131,6 @@ const StyledCalender = styled.div`
   display: flex;
   align-items: flex-end;
   height: 3.1rem;
-  /* padding: 0 2rem; */
   background-color: ${packmanColors.pmWhite};
   z-index: 2;
 
@@ -140,6 +143,7 @@ const StyledCalender = styled.div`
     font-size: 1.5rem;
     outline: none;
     padding: 0;
+    background-color: ${packmanColors.pmWhite};
     -webkit-appearance: none;
   }
 
@@ -152,7 +156,8 @@ const StyledCalender = styled.div`
     font-size: 1.5rem;
     outline: none;
     padding: 0;
-    /* -webkit-appearance: none; */
+    background-color: ${packmanColors.pmWhite};
+    -webkit-appearance: none;
   }
 
   input[type='date']::-webkit-clear-button,
@@ -162,4 +167,23 @@ const StyledCalender = styled.div`
   input[type='date']::-webkit-calendar-picker-indicator {
     z-index: 1;
   }
+  /* placeholder text style */
+  input[type='date']::-webkit-datetime-edit-text,
+  input[type='date']::-webkit-datetime-edit-month-field,
+  input[type='date']::-webkit-datetime-edit-day-field,
+  input[type='date']::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
+    color: ${packmanColors.pmBlack};
+  }
+
+  input[type='date']::-webkit-inner-spin-button,
+  input[type='date']::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
+`;
+const StyledEdit = styled.span`
+  width: 2.4rem;
+  height: 2.4rem;
+  position: relative;
 `;

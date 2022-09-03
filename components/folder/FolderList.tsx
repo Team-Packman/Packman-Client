@@ -12,7 +12,7 @@ export interface FolderListProps {
   categoryName: string;
   editableFolderId?: string;
   addNewFolder: boolean;
-  isRecentListExist: boolean;
+  isFolderExist: boolean;
   onClick(id: string, title: string): void;
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
   onFolderClick(id: string, categoryName: string): void;
@@ -28,7 +28,7 @@ function FolderList(props: FolderListProps) {
     list,
     addNewFolder,
     categoryName = '',
-    isRecentListExist = false,
+    isFolderExist = false,
     handleStartButtonInInit,
   } = props;
 
@@ -62,7 +62,7 @@ function FolderList(props: FolderListProps) {
         ) : (
           <FolderInitial
             categoryName={categoryName}
-            isRecentListExist={isRecentListExist}
+            isFolderExist={isFolderExist}
             onClick={handleStartButton}
           />
         )}
