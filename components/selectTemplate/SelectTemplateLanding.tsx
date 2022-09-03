@@ -42,7 +42,7 @@ function SelectTemplateLanding() {
   const { data: togetherTemplateList } = useQuery('togetherTemplateList', getTogetherTemplateList);
   const { data: aloneTemplateList } = useQuery('aloneTemplateList', getAloneTemplateList);
 
-  const templateList = togetherTemplateList ?? aloneTemplateList;
+  const templateList = type === 'alone' ? aloneTemplateList : togetherTemplateList;
   if (!templateList) return null;
 
   const { basicTemplate, myTemplate } = templateList.data;
