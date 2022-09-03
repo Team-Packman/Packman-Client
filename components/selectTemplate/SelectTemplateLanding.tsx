@@ -52,8 +52,7 @@ function SelectTemplateLanding() {
       if (id === templateId) {
         setTemplateImageIndex(idx + '');
         setTemplateType(templateType);
-        templateType === 'myTemplate' &&
-          setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
+        templateType === 'myTemplate' && setTemplateImageIndex(Math.floor(Math.random() * 4) + '');
       }
     });
   };
