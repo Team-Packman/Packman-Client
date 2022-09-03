@@ -28,18 +28,19 @@ const StyledRoot = styled.footer`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.776rem;
 `;
 const StyledInfo = styled.div`
   display: flex;
-  gap: 0.3rem 1.5rem;
+  margin-top: 0.776rem;
 
   & > div {
     display: flex;
     flex-direction: column;
+    margin-right: 1.4rem;
     & > p {
       color: ${packmanColors.pmDarkGrey};
       ${FONT_STYLES.CAPTION2_SEMIBOLD};
+      margin: 0.3rem 0;
     }
   }
   & > div:first-child {

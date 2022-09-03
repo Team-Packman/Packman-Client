@@ -104,7 +104,7 @@ function SettingProfile(props: SettingProfileProps) {
         </StyledProfile>
         <div style={{ borderBottom: `1px solid ${packmanColors.pmGrey}`, width: '100%' }}></div>
 
-        <StyledEtc gap={0.72} paddingTop={2.95} borderBottom={true}>
+        <StyledEtc paddingTop={2.95} borderBottom={true}>
           <h1>설정</h1>
           <StyledToggleWrapper>
             <p>알림 설정</p>
@@ -113,7 +113,7 @@ function SettingProfile(props: SettingProfileProps) {
             </StyledToggle>
           </StyledToggleWrapper>
         </StyledEtc>
-        <StyledEtc gap={1.2} paddingTop={2.95} borderBottom={true}>
+        <StyledEtc paddingTop={2.95} borderBottom={true}>
           <h1>고객센터</h1>
           <StyledEtcWrapper>
             <p
@@ -136,7 +136,7 @@ function SettingProfile(props: SettingProfileProps) {
             </p>
           </StyledEtcWrapper>
         </StyledEtc>
-        <StyledEtc gap={1.2} paddingTop={3.1} borderBottom={false}>
+        <StyledEtc paddingTop={3.1} borderBottom={false}>
           <h1>About 팩맨</h1>
           <StyledEtcWrapper>
             <p
@@ -222,7 +222,6 @@ const StyledProfile = styled.div`
   display: flex;
   align-items: center;
   padding: 1.6rem;
-  gap: 2.4rem;
   background-color: ${packmanColors.pmBlueGrey};
   width: 100%;
   height: 11.2rem;
@@ -235,6 +234,7 @@ const StyledProfile = styled.div`
     align-items: flex-start;
     justify-content: space-between;
     height: 6.5rem;
+    padding-left: 2.4rem;
     color: ${packmanColors.pmBlack};
     & > h1 {
       ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
@@ -274,28 +274,29 @@ const StyledToggleCircle = styled.div<{ isToggled: boolean }>`
   transition: 0.4s ease-in-out;
 `;
 
-const StyledEtc = styled.div<{ gap: number; paddingTop: number; borderBottom: boolean }>`
+const StyledEtc = styled.div<{ paddingTop: number; borderBottom: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   padding: ${({ paddingTop }) => paddingTop}rem 0.75rem 1.9rem 1.6rem;
   border-bottom: ${({ borderBottom }) => borderBottom && `1px solid ${packmanColors.pmGrey}`};
 
-  gap: ${({ gap }) => `${gap}rem`};
-
   & > h1 {
-    color: ${packmanColors.pmBlack};
     ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+    color: ${packmanColors.pmBlack};
+    margin-bottom: 1.2rem;
   }
 `;
 const StyledEtcWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-content: space-between;
-  gap: 0.8rem;
   & > p {
     ${FONT_STYLES.BODY3_REGULAR};
     letter-spacing: 4%;
+    &:not(:last-child) {
+      padding-bottom: 0.8rem;
+    }
   }
 `;
 const StyledFooter = styled.div`
@@ -307,16 +308,16 @@ const StyledFooter = styled.div`
 `;
 const StyledModalButtonWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.8rem;
+  padding: 0 2rem;
 `;
 const StyledModalButton = styled.button<{ left?: boolean }>`
+  ${FONT_STYLES.BODY4_SEMIBOLD};
   width: 13.5rem;
   height: 3.4rem;
   border: ${({ left }) => (left ? `1px solid ${packmanColors.pmDeepGrey}` : 'none')};
   color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
 `;

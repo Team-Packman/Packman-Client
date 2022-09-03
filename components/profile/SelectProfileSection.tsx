@@ -205,7 +205,6 @@ const StyledSelectProfileWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   width: 28rem;
-  gap: 0.8rem;
   margin: 1.5rem 0 5.57rem 0;
 `;
 const StyledImageWrapper = styled.div<{ selected: boolean }>`
@@ -215,6 +214,7 @@ const StyledImageWrapper = styled.div<{ selected: boolean }>`
   border: ${({ selected }) =>
     selected ? `3px solid ${packmanColors.pmPink}` : '3px solid transparent'};
   border-radius: 0.8rem;
+  margin-right: 0.4rem;
 `;
 const StyledBackground = styled.div<{ selected: boolean }>`
   position: absolute;

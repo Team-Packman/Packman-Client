@@ -287,7 +287,6 @@ const StyledFolderInfo = styled.div`
   padding-left: 2.4rem;
   width: 100%;
   height: 5.4rem;
-  gap: 0.4rem;
   margin-top: 0.842rem;
 
   & > h1 {
@@ -297,6 +296,7 @@ const StyledFolderInfo = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-left: 0.4rem;
   }
 `;
 
@@ -336,9 +336,10 @@ const StyledEmpty = styled.div`
 
 const StyledModalButtonWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.8rem;
+  width: 100%;
+  padding: 0 2.1rem;
 `;
 const StyledModalButton = styled.button<{ left?: boolean }>`
   width: 13.5rem;

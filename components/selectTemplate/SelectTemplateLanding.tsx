@@ -50,7 +50,7 @@ function SelectTemplateLanding() {
   const changeTemplateImage = (template: Itemplate[], templateId: string, templateType: string) => {
     template.forEach(({ id }, idx) => {
       if (id === templateId) {
-        setTemplateImageIndex(idx.toString());
+        setTemplateImageIndex(idx + '');
         setTemplateType(templateType);
         templateType === 'myTemplate' &&
           setTemplateImageIndex(Math.floor(Math.random() * 4).toString());
@@ -126,10 +126,10 @@ const StyledTemplateWrapper = styled.div`
   }
 `;
 const StyledButtonWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 1.656rem;
-  gap: 1.1rem;
   display: flex;
+  justify-content: space-between;
 
   width: calc(100vw - 4rem);
   height: 4rem;
@@ -137,10 +137,10 @@ const StyledButtonWrapper = styled.div`
   background-color: #fff;
 `;
 const StyledButton = styled.button<{ isMyTemplate?: boolean; isActivated: boolean }>`
-  width: 100%;
+  ${FONT_STYLES.BODY4_SEMIBOLD};
+  width: calc((100vw - 4rem) / 2 - 0.6rem);
   height: 100%;
   border-radius: 0.8rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
 
   ${({ isMyTemplate }) =>
     isMyTemplate
