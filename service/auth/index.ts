@@ -16,6 +16,10 @@ export interface GoogleLoginOutput {
   };
 }
 
+export interface KakaoAuthOutput {
+  access_token: string;
+}
+
 export interface KakaoLoginInput {
   accessToken: string;
 }

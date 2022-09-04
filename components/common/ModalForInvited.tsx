@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface ModalForInvitedProps {
   title: string;
-  clickHandler: () => void;
 }
 
 function ModalForInvited(props: ModalForInvitedProps) {
-  const { title, clickHandler } = props;
+  const { title } = props;
 
   return (
     <>
@@ -24,7 +24,9 @@ function ModalForInvited(props: ModalForInvitedProps) {
         <Description>
           <Packman>팩맨</Packman>과 함께 패킹을 시작해보세요!
         </Description>
-        <SeeListButton onClick={clickHandler}>3초만에 로그인하고 리스트 보기</SeeListButton>
+        <Link href={'/login'}>
+          <SeeListButton>3초만에 로그인하고 리스트 보기</SeeListButton>
+        </Link>
       </StyledModal>
     </>
   );

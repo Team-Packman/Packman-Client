@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { RefreshInput, RefreshOutput } from '../../../../service/auth';
 import { authUserAtom } from '../../../recoil/atom/atom';
@@ -39,4 +39,39 @@ export const useRefresh = (tokens: RefreshInput) => {
   };
 
   return refresh;
+};
+
+export const useKaKaoFlow = (): [typeof kakaoAuth, typeof kakaoLogin] => {
+  const fetchKakaoAuth = useAPI((api) => api.auth.fetchKakaoAuth);
+  const fetchKakaoLogin = useAPI((api) => api.auth.fetchKakaoLogin);
+
+  const kakaoAuth = useMutation('fetchKakaoAuth', fetchKakaoAuth);
+  const kakaoLogin = useMutation('fetchKakaoLogin', fetchKakaoLogin);
+
+  return [kakaoAuth, kakaoLogin];
+};
+
+export const useAddMemberMutation = () => {
+  const addMember = useAPI((api) => api.packingList.together.addMember);
+  const { mutate: addMemberMutate } = useMutation('addMember', addMember);
+
+  return addMemberMutate;
+};
+
+export const useCheckInvitation = (inviteCode: string) => {
+  const client = useQueryClient();
+  const getInvited = useAPI((api) => api.packingList.together.getInvited);
+
+  const checkInvitation = async () => {
+    try {
+      const { data } = await client.fetchQuery(['invited', inviteCode], () =>
+        getInvited(inviteCode),
+      );
+      return data;
+    } catch {
+      throw new Error();
+    }
+  };
+
+  return checkInvitation;
 };

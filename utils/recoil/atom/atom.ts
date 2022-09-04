@@ -31,8 +31,7 @@ export const creatingUserAtom = atom<CreatingUser>({
 export const invitationAtom = atom<Invitation>({
   key: 'invitation',
   default: {
-    listId: '',
-    isMember: false,
+    inviteCode: '',
   },
   effects_UNSTABLE: [persistAtom],
 });
