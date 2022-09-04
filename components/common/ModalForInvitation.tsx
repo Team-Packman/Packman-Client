@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { useResetRecoilState } from 'recoil';
 import { listState } from '../../utils/recoil/atom/atom';
 
@@ -14,13 +13,12 @@ interface ModalForInvitationProps {
 function ModalForInvitation(props: ModalForInvitationProps) {
   const { inviteCode } = props;
 
-  const router = useRouter();
   const closeModal = useResetRecoilState(listState);
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/together/invited/${router.query.id}?invited=${inviteCode}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/together/invited?inviteCode=${inviteCode}`,
     );
     setIsCopied(true);
   };
