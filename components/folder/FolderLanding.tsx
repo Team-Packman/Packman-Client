@@ -40,7 +40,9 @@ function FolderLanding() {
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  const { data: folderListData } = useQuery('folderListKey', () => getFolders());
+  const { data: folderListData } = useQuery('folderListKey', () => getFolders(), {
+    refetchOnMount: true,
+  });
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
     onSuccess: (data) => {
@@ -232,9 +234,9 @@ function FolderLanding() {
   // Floating modal onClick handler
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push('/select-template/together');
+      router.push('/select-template?type=together');
     } else if (index === 1) {
-      router.push('/select-template/alone');
+      router.push('/select-template?type=alone');
     } else if (index === 2) {
       setAddNewFolder(true);
     }
@@ -260,7 +262,7 @@ function FolderLanding() {
                   {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
                 </StyledRemainDay>
                 <StyledLeftMessage>
-                  {!isOutDated && recentPackingData?.data?.packRemainNum !== '0' ? (
+                  {!isOutDated && recentPackingData?.data?.packRemainNum === '0' ? (
                     <span>
                       <em> {'패킹'}</em>이 완료되었어요!
                     </span>

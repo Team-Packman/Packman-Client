@@ -11,10 +11,10 @@ function Footer() {
       <StyledInfo>
         <div>
           <p>Contact</p>
-          <p>teampackman123@gmail.com</p>
+          <p>Copyright</p>
         </div>
         <div>
-          <p>Copyright</p>
+          <p>teampackman123@gmail.com</p>
           <p>Packman. All rights reserved</p>
         </div>
       </StyledInfo>
@@ -28,22 +28,27 @@ const StyledRoot = styled.footer`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.776rem;
 `;
 const StyledInfo = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  margin-top: 0.776rem;
+
   & > div {
     display: flex;
-    gap: 1.718rem;
+    flex-direction: column;
+    margin-right: 1.4rem;
     & > p {
       color: ${packmanColors.pmDarkGrey};
-    }
-    & > p:first-child {
       ${FONT_STYLES.CAPTION2_SEMIBOLD};
+      margin: 0.3rem 0;
     }
-    & > p:nth-child(2) {
+  }
+  & > div:first-child {
+    align-items: flex-end;
+  }
+  & > div:nth-child(2) {
+    align-items: flex-start;
+    & > p {
       ${FONT_STYLES.CAPTION1_REGULAR};
     }
   }

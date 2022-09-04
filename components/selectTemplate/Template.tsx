@@ -98,17 +98,19 @@ export default Template;
 const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  width: 100%;
 `;
 const StyledTemplateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
-  gap: 1rem;
+  &:not(:last-child) {
+    margin-bottom: 2.5rem;
+  }
   & > h1 {
     ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     color: ${packmanColors.pmBlack};
+    padding-bottom: 1rem;
   }
   & > p {
     ${FONT_STYLES.CAPTION1_REGULAR};

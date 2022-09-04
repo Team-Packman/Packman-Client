@@ -55,13 +55,16 @@ function TemplateItem(props: TemplateItemProps) {
 export default TemplateItem;
 
 const StyledRoot = styled.div<{ isListEmpty: boolean; isSelected: boolean }>`
+  ${FONT_STYLES.BODY4_SEMIBOLD};
   display: flex;
   justify-content: center;
   align-items: center;
   height: 3.4rem;
   padding: 0.7rem 1.1rem;
   border-radius: 0.8rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
+  &:not(:last-child) {
+    margin-right: 1rem;
+  }
 
   ${({ isSelected }) =>
     isSelected

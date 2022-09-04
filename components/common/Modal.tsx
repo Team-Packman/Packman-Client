@@ -46,7 +46,7 @@ const StyledRoot = styled.div`
   top: calc(var(--vh, 1vh) * 100 / 2);
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 31.5rem;
+  width: 32rem;
   height: 17.6rem;
   background-color: #fff;
   border-radius: 1.34rem;
@@ -67,9 +67,9 @@ const StyledImageWrapper = styled.div`
 const StyledModalInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2.95rem;
   & > p {
     ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     color: #282828;
+    margin-bottom: 2.95rem;
   }
 `;

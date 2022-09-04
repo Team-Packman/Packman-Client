@@ -50,7 +50,7 @@ export default function SwipeablelistItem(props: ItemProps) {
     function End() {
       let tmpArr = Array(packingList?.length).fill(false);
 
-      if (startX - endX > 100) {
+      if (startX - endX > 50) {
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
         handleIsDragged(tmpArr);
       } else {
@@ -125,9 +125,12 @@ const StyledRoot = styled.div<{ isDeleting: boolean }>`
   align-items: center;
   width: 100%;
   height: 10.8rem;
-  gap: 2.7rem;
   padding: 0 2rem;
   overflow: hidden;
+  touch-action: pan-x;
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const StyledSelectDelete = styled.div`
@@ -184,7 +187,11 @@ const StyledItemInfo = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  gap: 0.6rem;
+  & > p {
+    &:not(:last-child) {
+      padding-bottom: 0.6rem;
+    }
+  }
 
   & > p:first-child {
     ${FONT_STYLES.BODY1_REGULAR};

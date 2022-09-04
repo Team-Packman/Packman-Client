@@ -95,7 +95,6 @@ const StyledRoot = styled.div`
   height: 14.1rem;
   background-color: ${packmanColors.pmWhite};
   border-radius: 2.4rem 2.4rem 0 0;
-  gap: 0.8rem;
   padding: 0.8rem 0;
   z-index: 10000;
 
@@ -107,18 +106,17 @@ const StyledRoot = styled.div`
 
 const StyledButtonWrapper = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 0.8rem;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 2.35rem;
 
   & > button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
     justify-content: center;
-    width: 16rem;
+    width: 100%;
     height: 8rem;
-    padding: 0;
     border: none;
     border-radius: 0.8rem;
     font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
@@ -127,5 +125,8 @@ const StyledButtonWrapper = styled.div`
     /* Safari에서 font color 무시되는 경우를 위한 코드 */
     -webkit-text-fill-color: ${packmanColors.pmDarkGrey};
     opacity: 1;
+  }
+  & > button:first-child {
+    margin-right: 0.8rem;
   }
 `;
