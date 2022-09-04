@@ -28,8 +28,9 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
     handleOnBlurInEdit,
   } = props;
 
-  const inputElement = useRef<HTMLInputElement>(null);
-  const [activeInput, setActiveInput] = useState<boolean>(false);
+  const ref = useRef<HTMLInputElement | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(name);
 
   const onClickIcon = (id: string, title: string) => {
     if (!isNew) {
@@ -52,6 +53,8 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    setTitle(e.target.value);
+
     if (!isNew) {
       handleFolderNameChange(e);
     } else {
@@ -59,15 +62,8 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
     }
   };
 
-  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (e.key === 'Enter') {
-      onBlur();
-    }
-  };
-
   const onBlur = () => {
-    setActiveInput(false);
+    setIsEditing(false);
     if (!isNew) {
       handleOnBlurInEdit();
     } else {
@@ -76,18 +72,18 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   };
 
   useEffect(() => {
-    if (inputElement.current || activeInput) {
-      inputElement.current?.focus();
+    if (isEditing) {
+      ref.current && ref.current?.focus();
     }
 
     if (editableFolderId === id) {
-      setActiveInput(true);
+      setIsEditing(true);
     }
 
     if (isNew) {
-      setActiveInput(true);
+      setIsEditing(true);
     }
-  }, [inputElement, editableFolderId, id, isNew, activeInput]);
+  }, [ref, editableFolderId, id, isNew, isEditing]);
 
   return (
     <StyledRoot key={id}>
@@ -103,16 +99,14 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
         </StyledKebab>
         <StyledText onClick={(e) => onClickFolder(e, id, categoryName)}>
           <input type="password" autoComplete="off" style={{ display: 'none' }} />
-          <StyledTitle
+          <StyledInput
             type="text"
-            name="title"
-            ref={inputElement}
-            defaultValue={isNew ? '' : name}
+            ref={ref}
+            value={title}
             placeholder={isNew ? '폴더 이름 입력' : ''}
             onChange={(e) => onChange(e)}
-            onKeyPress={(e) => onKeyPress(e)}
             onBlur={onBlur}
-            disabled={!activeInput}
+            disabled={!isEditing}
             autoFocus
             isNew={isNew}
             maxLength={8}
@@ -164,7 +158,7 @@ export const StyledText = styled.div`
   height: 100%;
 `;
 
-export const StyledTitle = styled.input<{ isNew: boolean }>`
+export const StyledInput = styled.input<{ isNew: boolean }>`
   font-size: 1.4rem;
   font-weight: 600;
   background: ${packmanColors.pmBlueGrey};
