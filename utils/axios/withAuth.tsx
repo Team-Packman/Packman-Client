@@ -4,13 +4,13 @@ import { useRefresh } from '../hooks/queries/auth/auth';
 import { authUserAtom } from '../recoil/atom/atom';
 
 function withAuth(axiosWithAuth: AxiosInstance) {
-  const tokens = useRecoilValue(authUserAtom);
-  const refresh = useRefresh(tokens);
+  const { accessToken, refreshToken } = useRecoilValue(authUserAtom);
+  const refresh = useRefresh({ accessToken, refreshToken });
 
   const requestIntercept = axiosWithAuth.interceptors.request.use(
     (config: AxiosRequestConfig) => {
       if (config.headers && !config.headers['Authorization']) {
-        config.headers['Authorization'] = `${tokens.accessToken}`;
+        config.headers['Authorization'] = `${accessToken}`;
 
         return config;
       }

@@ -413,7 +413,6 @@ export interface GetInvitedOutput {
   message: string;
   data: {
     id: string; // 함께 패킹리스트 id
-    title: string; // 함께 패킹리스트 제목
     isMember: boolean;
   };
 }

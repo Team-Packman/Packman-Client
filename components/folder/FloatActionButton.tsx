@@ -15,7 +15,7 @@ interface FloatModalProps {
 }
 const useStyles = makeStyles(() => ({
   backdrop: {
-    zIndex: 1,
+    zIndex: 2,
     color: 'rgba(0, 0, 0, 0.47)',
   },
 }));

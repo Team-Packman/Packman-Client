@@ -29,7 +29,8 @@ export const useErrorBubbling = () => {
     },
   };
 };
-const errorFallback = ({ resetErrorBoundary }: FallbackProps) => {
+const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+  console.error(error);
   return (
     <div>
       <Error />
