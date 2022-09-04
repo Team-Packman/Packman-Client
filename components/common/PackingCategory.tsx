@@ -26,7 +26,7 @@ const MAX_LENGTH = 12;
 function PackingCategory(props: PackingCategoryProps) {
   const {
     example,
-    name: nameProps,
+    name,
     categoryId = '',
     listId = '',
     updateCategory,
@@ -34,18 +34,18 @@ function PackingCategory(props: PackingCategoryProps) {
     isEditing,
   } = props;
   const [isEntered, setIsEntered] = useState(false);
-  const [name, setName] = useState(nameProps);
   const ref = useRef<HTMLSpanElement | null>(null);
 
   const saveResult = () => {
-    const payload = {
-      name: name === '' ? nameProps : name,
-      categoryId,
-      listId,
-    };
+    if (ref.current) {
+      const payload = {
+        name: ref.current.innerText === '' ? name : ref.current.innerText,
+        categoryId,
+        listId,
+      };
 
-    name === '' && setName(nameProps);
-    updateCategory && updateCategory(payload);
+      updateCategory && updateCategory(payload);
+    }
   };
 
   useEffect(() => {
@@ -56,13 +56,9 @@ function PackingCategory(props: PackingCategoryProps) {
   }, [isEditing]);
 
   const handleChange = ({ currentTarget: { innerText } }: FormEvent<HTMLSpanElement>) => {
-    if (innerText.length <= MAX_LENGTH) {
-      setName(innerText);
-    } else {
-      if (ref.current) {
-        ref.current.innerText = name;
-        setCaret(ref.current);
-      }
+    if (ref.current && innerText.length > MAX_LENGTH) {
+      ref.current.innerText = name;
+      setCaret(ref.current);
     }
   };
 
@@ -77,7 +73,7 @@ function PackingCategory(props: PackingCategoryProps) {
           onInput={handleChange}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
         >
-          {nameProps}
+          {name}
         </StyledCategory>
       ) : (
         <StyledCategory>{name}</StyledCategory>

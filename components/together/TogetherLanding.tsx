@@ -181,7 +181,7 @@ function TogetherLanding() {
         patchCategory(
           {
             id: categoryId,
-            nickname: name,
+            name,
             listId,
           },
           {
