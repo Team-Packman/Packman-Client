@@ -34,7 +34,7 @@ function Invited() {
   );
 
   useQuery(['invited', inviteCode], () => getInvited(inviteCode as string), {
-    enabled: !!inviteCode && !!info && user.isAlreadyUser && !!user.accessToken,
+    enabled: !!inviteCode && user.isAlreadyUser,
     onSuccess: ({ data: { id: listId, isMember } }) =>
       isMember
         ? router.replace(`/together?id=${listId}`)
