@@ -51,20 +51,22 @@ export const useInvitation = () => {
   const checkInvitation = useCheckInvitation(inviteCode);
 
   const receiveGuest = async () => {
-    const { id: listId, isMember } = await checkInvitation();
-
     if (!inviteCode) {
       router.replace('/folder');
-    } else if (isMember) {
-      router.replace(`/together?id=${listId}`);
     } else {
-      addMember(
-        { listId },
-        {
-          onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
-          onError: () => router.replace('/folder'),
-        },
-      );
+      const { id: listId, isMember } = await checkInvitation();
+
+      if (isMember) {
+        router.replace(`/together?id=${listId}`);
+      } else {
+        addMember(
+          { listId },
+          {
+            onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
+            onError: () => router.replace('/folder'),
+          },
+        );
+      }
     }
 
     resetInvitation();
