@@ -29,7 +29,7 @@ function withAuth(axiosWithAuth: AxiosInstance) {
         alert(
           '1' +
             JSON.stringify(error.status) +
-            JSON.stringify(error.message) +
+            JSON.stringify(error) +
             JSON.stringify(localStorage.getItem('recoil-persist')),
         );
       }
