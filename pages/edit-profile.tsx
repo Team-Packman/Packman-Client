@@ -48,7 +48,7 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: ${({ isEditing }) => (isEditing ? '100% ' : '100% ')};
+  height: 100%;
   margin-top: ${({ isEditing }) => isEditing && '6rem'};
   overflow-y: auto;
 
