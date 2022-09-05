@@ -55,10 +55,10 @@ export default function SwipeablelistItem(props: ItemProps) {
 
       let tmpArr = Array(packingList?.length).fill(false);
 
-      if (startX - endX > 50) {
+      if (startX - endX > 20) {
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
         handleIsDragged(tmpArr);
-      } else if (endX - startX > 50) {
+      } else if (endX - startX > 20) {
         if (isDragged[idx]) {
           handleIsDragged(tmpArr);
         }
