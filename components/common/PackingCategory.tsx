@@ -38,12 +38,15 @@ function PackingCategory(props: PackingCategoryProps) {
 
   const saveResult = () => {
     if (ref.current) {
+      const text = ref.current.innerText;
+
       const payload = {
-        name: ref.current.innerText === '' ? name : ref.current.innerText,
+        name: text === '' ? name : text,
         categoryId,
         listId,
       };
 
+      if (text === '') ref.current.innerText = name;
       updateCategory && updateCategory(payload);
     }
   };
@@ -79,7 +82,7 @@ function PackingCategory(props: PackingCategoryProps) {
         <StyledCategory>{name}</StyledCategory>
       )}
 
-      <StyledKebab>{!isEditing && <Image src={Kebab} alt="kebeb" layout="fill" />}</StyledKebab>
+      <StyledKebab>{!isEditing && <Image src={Kebab} alt="kebab_ic" layout="fill" />}</StyledKebab>
     </StyledRoot>
   );
 }
