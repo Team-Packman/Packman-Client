@@ -1,4 +1,3 @@
-import Header from '../components/common/Header';
 import styled from 'styled-components';
 import { useState } from 'react';
 import useAPI from '../utils/hooks/useAPI';
@@ -10,12 +9,9 @@ import Layout from '../components/common/Layout';
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const finishEditingProfileHandler = () => setIsEditing(false);
-  const layoutProps = isEditing
-    ? {}
-    : {
-        back: true,
-        title: 'MY',
-      };
+  const layoutProps = {
+    ...(!isEditing ? { back: true, title: 'MY' } : { noHeader: true }),
+  };
 
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
