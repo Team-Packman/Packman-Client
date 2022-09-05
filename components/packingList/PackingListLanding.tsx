@@ -276,7 +276,9 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
+
+  height: 100%;
 `;
 const StyledFolderInfo = styled.div`
   position: relative;
@@ -287,6 +289,7 @@ const StyledFolderInfo = styled.div`
   width: 100%;
   height: 5.4rem;
   margin-top: 0.842rem;
+  flex-shrink: 0;
 
   & > h1 {
     ${FONT_STYLES.HEADLINE2_SEMIBOLD};
