@@ -25,6 +25,14 @@ function withAuth(axiosWithAuth: AxiosInstance) {
     async (error) => {
       const config = error.config;
 
+      if (error instanceof AxiosError) {
+        alert(
+          '1' +
+            JSON.stringify(error.status) +
+            JSON.stringify(error.message) +
+            JSON.stringify(localStorage.getItem('recoil-persist')),
+        );
+      }
       if (error.response.status === 401) {
         const tokens = await refresh();
 
