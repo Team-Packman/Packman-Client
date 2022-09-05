@@ -53,7 +53,7 @@ function Header(props: HeaderProps) {
               </StyledIcon>
             </Link>
           ) : (
-            <Link href={'/member'}>
+            <Link href={'/member-manage'}>
               <StyledIcon width={6} height={2.4}>
                 <Image src={MemberIC} layout="fill" alt="member_icon" />
               </StyledIcon>
