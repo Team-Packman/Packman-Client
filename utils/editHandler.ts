@@ -1,6 +1,10 @@
-import { FocusEvent, KeyboardEvent } from 'react';
+import { Dispatch, FocusEvent, KeyboardEvent, SetStateAction } from 'react';
 
-export const editHandler = (state: boolean, setter: (state: boolean) => void, fn: () => void) => {
+export const editHandler = (
+  state: boolean,
+  setter: Dispatch<SetStateAction<boolean>>,
+  fn: () => void,
+) => {
   return {
     onBlur: (e: FocusEvent<HTMLInputElement>) => {
       if (!state) {

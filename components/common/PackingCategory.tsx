@@ -74,7 +74,7 @@ function PackingCategory(props: PackingCategoryProps) {
           ref={ref}
           defaultValue={name}
           onInput={handleChange}
-          {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
+          {...editHandler(isEntered, setIsEntered, saveResult)}
         >
           {name}
         </StyledCategory>
