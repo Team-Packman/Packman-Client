@@ -26,7 +26,15 @@ function ListIntroLanding() {
   const { id, type, folderId } = router.query;
 
   const setIsFresh = useSetRecoilState(listState);
-  const [date, setDate] = useState<string>('2022-07-16');
+
+  const getTodayDate = () => {
+    const current = new Date();
+    current.setDate(current.getDate() + 1);
+    const date = current.toISOString().substring(0, 10);
+    return date;
+  };
+
+  const [date, setDate] = useState<string>(getTodayDate());
   const [folderName, setFolderName] = useState<string>('');
   const [listName, setListName] = useState<string>('');
   const [selectedTagIndex, setSelectedTagIndex] = useState<{ id: string; index: number }>({
@@ -120,13 +128,6 @@ function ListIntroLanding() {
 
   const { aloneFolder } = aloneFolderData.data;
   const { togetherFolder } = togetherFolderData.data;
-
-  const getTodayDate = () => {
-    const current = new Date();
-    current.setDate(current.getDate() + 1);
-    const date = current.toISOString().substring(0, 10);
-    return date;
-  };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);
