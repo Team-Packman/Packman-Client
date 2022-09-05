@@ -29,7 +29,7 @@ function ListIntroLanding() {
 
   const getTodayDate = () => {
     const current = new Date();
-    current.setDate(current.getDate() + 1);
+    current.setDate(current.getDate());
     const date = current.toISOString().substring(0, 10);
     return date;
   };
