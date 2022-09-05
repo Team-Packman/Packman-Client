@@ -126,7 +126,7 @@ const StyledTemplateWrapper = styled.div`
 `;
 const StyledButtonWrapper = styled.div`
   position: fixed;
-  bottom: 1.656rem;
+  bottom: 3.3rem;
   display: flex;
   justify-content: space-between;
 
