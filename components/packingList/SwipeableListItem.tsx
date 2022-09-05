@@ -94,14 +94,17 @@ export default function SwipeablelistItem(props: ItemProps) {
           <p>{title}</p>
           <StyledPackInfo>
             <span>총 {packTotalNum}개의 짐</span>
-            {packRemainNum ? (
+            {packRemainNum !== '0' ? (
               <StyledPackRemainText>
                 아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
               </StyledPackRemainText>
             ) : (
-              <StyledPackRemainText>
-                <span>패킹</span>이 완료되었어요!
-              </StyledPackRemainText>
+              packTotalNum !== '0' &&
+              packRemainNum === '0' && (
+                <StyledPackRemainText>
+                  <span>패킹</span>이 완료되었어요!
+                </StyledPackRemainText>
+              )
             )}
           </StyledPackInfo>
         </StyledItemInfo>
