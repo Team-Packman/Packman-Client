@@ -56,6 +56,7 @@ const StyledRoot = styled.section`
   display: flex;
   width: 100%;
   height: 6.9rem;
+  flex-shrink: 0;
 
   & > span {
     position: absolute;

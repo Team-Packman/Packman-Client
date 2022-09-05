@@ -15,7 +15,7 @@ export default function SwipeableList(props: SwipeableListProps) {
 }
 
 const StyledRoot = styled.div`
-  height: calc(var(--vh, 1vh) * 100 - 20.5rem);
+  flex-grow: 1;
   background-color: #fff;
   overflow-y: auto;
 
