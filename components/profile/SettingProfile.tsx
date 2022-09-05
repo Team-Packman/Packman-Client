@@ -205,14 +205,14 @@ const StyledSettingWrapper = styled.main`
 
   & > p:first-child {
     position: absolute;
-    top: -1.9rem;
+    top: -2.5rem;
     right: 0.5rem;
     color: ${packmanColors.pmDarkGrey};
     ${FONT_STYLES.BODY2_SEMIBOLD};
   }
   & > p:nth-child(2) {
     position: absolute;
-    top: 0.5rem;
+    top: 1rem;
     right: 1.5rem;
     color: ${packmanColors.pmDeepGrey};
     ${FONT_STYLES.CAPTION2_SEMIBOLD};
