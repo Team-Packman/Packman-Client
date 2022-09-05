@@ -76,6 +76,10 @@ function PackingItem(props: PackingItemProps) {
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    setName(nameProps);
+  }, [nameProps]);
+
   return (
     <StyledRoot>
       <label>
