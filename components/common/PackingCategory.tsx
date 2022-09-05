@@ -26,7 +26,7 @@ const MAX_LENGTH = 12;
 function PackingCategory(props: PackingCategoryProps) {
   const {
     example,
-    name: nameProps,
+    name,
     categoryId = '',
     listId = '',
     updateCategory,
@@ -34,18 +34,21 @@ function PackingCategory(props: PackingCategoryProps) {
     isEditing,
   } = props;
   const [isEntered, setIsEntered] = useState(false);
-  const [name, setName] = useState(nameProps);
   const ref = useRef<HTMLSpanElement | null>(null);
 
   const saveResult = () => {
-    const payload = {
-      name: name === '' ? nameProps : name,
-      categoryId,
-      listId,
-    };
+    if (ref.current) {
+      const text = ref.current.innerText;
 
-    name === '' && setName(nameProps);
-    updateCategory && updateCategory(payload);
+      const payload = {
+        name: text === '' ? name : text,
+        categoryId,
+        listId,
+      };
+
+      if (text === '') ref.current.innerText = name;
+      updateCategory && updateCategory(payload);
+    }
   };
 
   useEffect(() => {
@@ -56,13 +59,9 @@ function PackingCategory(props: PackingCategoryProps) {
   }, [isEditing]);
 
   const handleChange = ({ currentTarget: { innerText } }: FormEvent<HTMLSpanElement>) => {
-    if (innerText.length <= MAX_LENGTH) {
-      setName(innerText);
-    } else {
-      if (ref.current) {
-        ref.current.innerText = name;
-        setCaret(ref.current);
-      }
+    if (ref.current && innerText.length > MAX_LENGTH) {
+      ref.current.innerText = name;
+      setCaret(ref.current);
     }
   };
 
@@ -75,15 +74,15 @@ function PackingCategory(props: PackingCategoryProps) {
           ref={ref}
           defaultValue={name}
           onInput={handleChange}
-          {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
+          {...editHandler(isEntered, setIsEntered, saveResult)}
         >
-          {nameProps}
+          {name}
         </StyledCategory>
       ) : (
         <StyledCategory>{name}</StyledCategory>
       )}
 
-      <StyledKebab>{!isEditing && <Image src={Kebab} alt="kebeb" layout="fill" />}</StyledKebab>
+      <StyledKebab>{!isEditing && <Image src={Kebab} alt="kebab_ic" layout="fill" />}</StyledKebab>
     </StyledRoot>
   );
 }
