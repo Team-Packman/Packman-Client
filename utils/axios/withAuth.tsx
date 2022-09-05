@@ -1,11 +1,10 @@
 import { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { useRefresh } from '../hooks/queries/auth/auth';
 import { authUserAtom } from '../recoil/atom/atom';
 
 function withAuth(axiosWithAuth: AxiosInstance) {
   const { accessToken, refreshToken } = useRecoilValue(authUserAtom);
-  const resetUser = useResetRecoilState(authUserAtom);
   const refresh = useRefresh({ accessToken, refreshToken });
 
   const requestIntercept = axiosWithAuth.interceptors.request.use(
@@ -27,8 +26,9 @@ function withAuth(axiosWithAuth: AxiosInstance) {
       const config = error.config;
 
       if (error instanceof AxiosError) {
-        alert('1' + JSON.stringify(config) + JSON.stringify(error.response?.status));
-        resetUser();
+        alert(
+          JSON.stringify(error.response?.status) + '^^^' + JSON.stringify(error.response?.data),
+        );
       }
       if (error.response.status === 401) {
         const tokens = await refresh();
