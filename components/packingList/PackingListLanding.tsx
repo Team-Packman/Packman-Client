@@ -165,6 +165,12 @@ function PackingListLanding() {
     setIsDeleting(false);
   };
 
+  // 개별 삭제
+  const onClickDeleteListItem = (idx: number) => {
+    setSelectedIndex(idx);
+    openModal();
+  };
+
   return (
     <Layout back title="리스트 목록" icon="profile">
       <StyledRoot
@@ -237,10 +243,7 @@ function PackingListLanding() {
                   isDeleting={isDeleting}
                   deleteList={deleteList}
                   checkDeleteList={(id: string) => checkDeleteList(id)}
-                  onClickDeleteButton={() => {
-                    setSelectedIndex(idx);
-                    openModal();
-                  }}
+                  onClickDeleteButton={() => onClickDeleteListItem(idx)}
                   packingList={togetherPackingList ?? alonePackingList}
                   moveToPackingList={() => moveToPackingList(item.id)}
                 />
