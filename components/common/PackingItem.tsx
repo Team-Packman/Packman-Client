@@ -124,6 +124,7 @@ const StyledRoot = styled.li`
 const StyledCheckBox = styled.input`
   width: 1.8rem;
   height: 1.8rem;
+  flex-shrink: 0;
 `;
 
 const StyledContent = styled.div`
