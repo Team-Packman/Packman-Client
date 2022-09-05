@@ -1,5 +1,5 @@
-import React, { ReactElement, ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { ReactNode } from 'react';
+import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useGlobalState from '../../utils/hooks/useGlobalState';
 import Header from './Header';
@@ -26,7 +26,12 @@ function Layout(props: LayoutProps) {
     <StyledRoot>
       {!noHeader && <Header back={back} title={title} icon={icon} />}
       {option}
-      <StyledMain noHeader optionEl={optionEl} padding={padding ? true : false} scroll={scroll}>
+      <StyledMain
+        scroll={scroll}
+        optionEl={optionEl}
+        noHeader={noHeader ?? false}
+        padding={padding ?? false}
+      >
         {children}
       </StyledMain>
     </StyledRoot>
@@ -52,7 +57,6 @@ const StyledMain = styled.main<{
 }>`
   position: relative;
   padding: ${({ padding }) => (padding ? `0 2rem` : `0`)};
-  padding-bottom: 1.6rem;
   background-color: ${packmanColors.pmWhite};
   // height : hasOption ? viewport - (option + header) : viewport - header
   height: ${({ scroll, optionEl }) =>
@@ -61,5 +65,11 @@ const StyledMain = styled.main<{
         ? 'calc(100%)'
         : `calc(100% - ${getComputedStyle(optionEl).height} - 5.2rem)`
       : 'calc(100% - 5.2rem)'};
-  height: ${({ noHeader }) => noHeader && `calc(100%)`};
+
+  // header가 없는 특정 뷰를 위한 레이아웃
+  ${({ noHeader }) =>
+    noHeader &&
+    css`
+      height: calc(100%);
+    `}
 `;
