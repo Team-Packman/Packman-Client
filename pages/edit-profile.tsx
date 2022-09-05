@@ -21,7 +21,7 @@ function EditProfile() {
   const { nickname, profileImage } = data.data;
 
   return (
-    <Layout {...layoutProps}>
+    <Layout {...layoutProps} padding>
       <StyledRoot isEditing={isEditing}>
         {isEditing ? (
           <EditingProfile
@@ -48,11 +48,9 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  height: ${({ isEditing }) =>
-    isEditing ? 'calc(var(--vh, 1vh) * 100 )' : 'calc(var(--vh, 1vh) * 100 - 8rem)'};
+  height: ${({ isEditing }) => (isEditing ? '100% ' : '100% ')};
+  margin-top: ${({ isEditing }) => isEditing && '6rem'};
   overflow-y: auto;
-  padding: 0 2rem;
 
   /* 브라우저별 스크롤바 숨김 설정 */
   -ms-overflow-style: none; // Edge
