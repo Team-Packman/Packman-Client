@@ -19,8 +19,6 @@ const StyledRoot = styled.div`
   background-color: #fff;
   overflow-y: auto;
 
-  touch-action: pan-x;
-
   /* 브라우저별 스크롤바 숨김 설정 */
   -ms-overflow-style: none; // Edge
   scrollbar-width: none; // Firefox
