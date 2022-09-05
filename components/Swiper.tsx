@@ -54,6 +54,7 @@ export default SwiperContainer;
 
 export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   width: calc(100% - 4rem);
@@ -63,6 +64,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
 
 export const StyledSwiper = styled(Swiper)`
   display: flex;
+  flex: 1;
   justify-content: center;
   width: 100%;
   padding-top: 4.8rem;

@@ -86,4 +86,5 @@ export const StyledWrapper = styled.div`
   grid-gap: 1rem;
   justify-items: stretch;
   margin-top: 2.4rem;
+  padding-bottom: 5rem;
 `;
