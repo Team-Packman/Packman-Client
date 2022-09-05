@@ -48,11 +48,12 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: ${({ isEditing }) => isEditing && 'center'};
-  padding: 0 2rem;
   width: 100vw;
-  height: calc(var(--vh, 1vh) * 100 - 8rem);
+  height: ${({ isEditing }) =>
+    isEditing ? 'calc(var(--vh, 1vh) * 100 )' : 'calc(var(--vh, 1vh) * 100 - 8rem)'};
   overflow-y: auto;
+  padding: 0 2rem;
+
   /* 브라우저별 스크롤바 숨김 설정 */
   -ms-overflow-style: none; // Edge
   scrollbar-width: none; // Firefox

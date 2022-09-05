@@ -24,6 +24,6 @@ const StyledDropBox = styled.div`
   width: 16rem;
   background-color: ${packmanColors.pmWhite};
   border-radius: 0.8rem;
-  filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.1));
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 `;
