@@ -36,6 +36,7 @@ export const useKaKaoLogin = () => {
           accessToken,
         });
       },
+      onError: () => router.replace('/login'),
     });
   };
 
