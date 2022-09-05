@@ -40,9 +40,7 @@ function FolderLanding() {
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  const { data: folderListData } = useQuery('folderListKey', () => getFolders(), {
-    refetchOnMount: true,
-  });
+  const { data: folderListData } = useQuery('folderListKey', () => getFolders());
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
     onSuccess: (data) => {

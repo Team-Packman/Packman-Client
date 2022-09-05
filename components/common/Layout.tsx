@@ -26,7 +26,7 @@ function Layout(props: LayoutProps) {
     <StyledRoot>
       {!noHeader && <Header back={back} title={title} icon={icon} />}
       {option}
-      <StyledMain optionEl={optionEl} padding={padding ? true : false} scroll={scroll}>
+      <StyledMain noHeader optionEl={optionEl} padding={padding ? true : false} scroll={scroll}>
         {children}
       </StyledMain>
     </StyledRoot>
@@ -47,6 +47,7 @@ const StyledRoot = styled.div`
 const StyledMain = styled.main<{
   padding: boolean;
   scroll: boolean;
+  noHeader: boolean;
   optionEl: Element | null;
 }>`
   position: relative;
@@ -60,4 +61,5 @@ const StyledMain = styled.main<{
         ? 'calc(100%)'
         : `calc(100% - ${getComputedStyle(optionEl).height} - 5.2rem)`
       : 'calc(100% - 5.2rem)'};
+  height: ${({ noHeader }) => noHeader && `calc(100%)`};
 `;

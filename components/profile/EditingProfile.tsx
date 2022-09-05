@@ -29,10 +29,12 @@ function EditingProfile(props: CreateProfileProps) {
 export default EditingProfile;
 
 const StyledCommentWrapper = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  height: 8.7rem;
 
   & > h1 {
     ${FONT_STYLES.DISPLAY1_LIGHT};
