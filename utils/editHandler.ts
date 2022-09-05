@@ -14,6 +14,7 @@ export const editHandler = (
     },
     onKeyDown: (e: KeyboardEvent<HTMLInputElement | HTMLSpanElement>) => {
       if (e.key === 'Enter') {
+        e.preventDefault();
         fn();
         setter(true);
       }
