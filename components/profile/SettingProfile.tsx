@@ -249,7 +249,7 @@ const StyledToggleWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   & > p {
-    ${FONT_STYLES.BODY1_REGULAR};
+    ${FONT_STYLES.BODY3_REGULAR};
   }
 `;
 const StyledToggle = styled.div<{ isToggled: boolean }>`

@@ -42,18 +42,23 @@ export default function SwipeablelistItem(props: ItemProps) {
 
   const onTouchStart = (e: React.TouchEvent) => {
     const startX = e.targetTouches[0].clientX;
+    const startY = e.targetTouches[0].clientY;
     let endX = e.targetTouches[0].clientX;
+    let endY = e.targetTouches[0].clientY;
 
     function Move(e: TouchEvent) {
       endX = e.targetTouches[0].clientX;
+      endY = e.targetTouches[0].clientY;
     }
     function End() {
+      if (Math.abs(startY - endY) > 10) return;
+
       let tmpArr = Array(packingList?.length).fill(false);
 
       if (startX - endX > 50) {
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
         handleIsDragged(tmpArr);
-      } else {
+      } else if (endX - startX > 50) {
         if (isDragged[idx]) {
           handleIsDragged(tmpArr);
         }
