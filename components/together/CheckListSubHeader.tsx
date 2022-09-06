@@ -15,7 +15,6 @@ interface CheckListSubHeaderProps {
 function CheckListSubHeader(props: CheckListSubHeaderProps) {
   const { together, activeMode, modeHandler, categoryHandler } = props;
   const swiper = useSwiper();
-  const [scroll] = useGlobalState<boolean>('scroll');
 
   const handleClick = (idx: number) => {
     modeHandler && modeHandler(idx);
