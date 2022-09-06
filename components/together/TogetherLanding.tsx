@@ -61,6 +61,9 @@ function TogetherLanding() {
 
   const [isScrolling, setIsScrolling] = useState(false);
   const isSufficient = useRef<boolean>(false);
+  const aloneSection = useRef<HTMLDivElement | null>(null);
+  const togetherSection = useRef<HTMLDivElement | null>(null);
+  const [refArr] = useState([aloneSection, togetherSection]);
 
   useEffect(() => {
     return () => {
@@ -68,6 +71,12 @@ function TogetherLanding() {
     };
   }, []);
 
+  useEffect(() => {
+    const el = refArr[activeMode].current;
+    if (el) {
+      isSufficient.current = el.scrollHeight - el.clientHeight > 180;
+    }
+  }, [activeMode]);
   /////////////////// api /////////////////////
   const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDetail);
   const addPackingListCategory = useAPI((api) => api.packingList.together.addPackingListCategory);
@@ -479,14 +488,10 @@ function TogetherLanding() {
   };
 
   const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
-    const height = e.currentTarget.clientHeight;
-    const scrollHeight = e.currentTarget.scrollHeight;
-
-    if (scrollHeight - height > 180) isSufficient.current = true;
-
+    if (!isSufficient.current) return;
     if (e.currentTarget.scrollTop < 10) {
       scroll && setScroll(false);
-    } else if (!isScrolling && isSufficient.current) {
+    } else if (!isScrolling) {
       setIsScrolling(true);
       !scroll && setScroll(true);
       setTimeout(() => setIsScrolling(false), 300);
@@ -526,7 +531,7 @@ function TogetherLanding() {
           {packingRole.map((list, i) => {
             return (
               <SwiperSlide key={list.id} virtualIndex={i}>
-                <StyledBody onScroll={ScrollEvent}>
+                <StyledBody onScroll={ScrollEvent} ref={refArr[i]}>
                   {list.category.map(({ id: categoryId, name, pack }) => (
                     <PackagesWithCategory
                       key={categoryId}
