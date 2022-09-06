@@ -109,7 +109,11 @@ export default function SwipeablelistItem(props: ItemProps) {
         onTouchStart={onTouchStart}
         isDragged={isDragged[idx]}
         isDeleting={isDeleting}
-        onClick={moveToPackingList}
+        onClick={() => {
+          isDragged.every((item) => !item)
+            ? moveToPackingList()
+            : handleIsDragged(Array(packingList?.length).fill(false));
+        }}
       >
         <StyledItemInfo>
           <p>{departureDate}</p>

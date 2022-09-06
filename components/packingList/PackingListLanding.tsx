@@ -138,6 +138,16 @@ function PackingListLanding() {
     closeModal();
   };
 
+  // StyledFolderInfo 클릭한 경우
+  const onClickFolderInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    // 스와이프 아이템 하나라도 열려있다면 초기화
+    resetSwipableListItem();
+
+    // 폴더 이름과 삼각형 아이콘을 클릭했을 때만 toggle되도록 함
+    if (e.target instanceof HTMLDivElement) return;
+    setToggle((prev) => !prev);
+  };
+
   const handleFloatClick = (index: number) => {
     if (index === 0) {
       router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
@@ -208,17 +218,10 @@ function PackingListLanding() {
       )}
       <StyledRoot
         onClick={() => {
-          if (toggle) {
-            setToggle(false);
-          }
+          toggle && setToggle(false);
         }}
       >
-        <StyledFolderInfo
-          onClick={() => {
-            resetSwipableListItem();
-            setToggle((prev) => !prev);
-          }}
-        >
+        <StyledFolderInfo onClick={onClickFolderInfo}>
           <h1>{currentFolder.name}</h1>
           <div>
             <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
