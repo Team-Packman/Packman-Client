@@ -43,7 +43,6 @@ export default function SwipeablelistItem(props: ItemProps) {
 
   const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
-  document.body.style.overflow = 'hidden';
   const onTouchStart = (e: React.TouchEvent) => {
     let isSwiping = false;
 
@@ -87,8 +86,6 @@ export default function SwipeablelistItem(props: ItemProps) {
     }
     document.addEventListener('touchmove', Move);
     document.addEventListener('touchend', End);
-
-    document.body.style.overflow = 'auto';
   };
 
   return (
