@@ -2,22 +2,23 @@ import styled from 'styled-components';
 
 interface SwipeableListProps {
   swipeableListItem: React.ReactNode;
+  isSwiped: boolean;
 }
 
 export default function SwipeableList(props: SwipeableListProps) {
-  const { swipeableListItem } = props;
+  const { swipeableListItem, isSwiped } = props;
 
   return (
-    <StyledRoot>
+    <StyledRoot isSwiped={isSwiped}>
       <StyledSwipeableListWrapper>{swipeableListItem}</StyledSwipeableListWrapper>
     </StyledRoot>
   );
 }
 
-const StyledRoot = styled.div`
+const StyledRoot = styled.div<{ isSwiped: boolean }>`
   flex-grow: 1;
   background-color: #fff;
-  overflow-y: auto;
+  overflow-y: ${({ isSwiped }) => (isSwiped ? 'hidden' : 'auto')};
 
   /* 브라우저별 스크롤바 숨김 설정 */
   -ms-overflow-style: none; // Edge
