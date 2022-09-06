@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useSwiper } from 'swiper/react';
 import { packmanColors } from '../../styles/color';
 import useGlobalState from '../../utils/hooks/useGlobalState';
@@ -23,7 +23,7 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
   };
 
   return (
-    <StyledRoot>
+    <StyledRoot scroll={scroll}>
       {together && (
         <StyledModeBlock>
           <StyledModeWrapper index={activeMode}>
@@ -36,7 +36,7 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
           </StyledModeWrapper>
         </StyledModeBlock>
       )}
-      <StyledOptions scroll={scroll}>
+      <StyledOptions>
         <StyledButtonWrapper>
           <StyledButton>엿보기</StyledButton>
           <StyledLine />
@@ -49,16 +49,16 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
 
 export default CheckListSubHeader;
 
-const StyledRoot = styled.div`
+const StyledRoot = styled.div<{
+  scroll: boolean;
+}>`
   position: relative;
   width: 100vw;
   z-index: 55;
   background-color: ${packmanColors.pmWhite};
 `;
 
-const StyledOptions = styled.div<{
-  scroll: boolean;
-}>`
+const StyledOptions = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
@@ -68,9 +68,6 @@ const StyledOptions = styled.div<{
   background-color: ${packmanColors.pmWhite};
   box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.05);
   z-index: 1;
-
-  transition: top 0.1s ease;
-  top: ${({ scroll }) => scroll && '7rem'};
 `;
 
 const StyledButtonWrapper = styled.div`

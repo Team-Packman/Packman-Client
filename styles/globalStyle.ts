@@ -24,9 +24,9 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     * {
-        box-sizing: border-box;
-        -moz-box-sizing:border-box; /* Firefox */
-        -webkit-box-sizing:border-box; /* Safari */
+        box-sizing: border-box !important;
+        -moz-box-sizing:border-box !important; /* Firefox */
+        -webkit-box-sizing:border-box !important; /* Safari */
         transition: ${createTransitionQuery()};
         -webkit-tap-highlight-color:rgba(0,0,0,0); // 아이폰 버튼 클릭 깜박임 해제
     }
