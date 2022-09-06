@@ -40,9 +40,7 @@ function FolderLanding() {
   const deleteFolder = useAPI((api) => api.folder.deleteFolder);
   const addFolder = useAPI((api) => api.folder.addFolder);
 
-  const { data: folderListData } = useQuery('folderListKey', () => getFolders(), {
-    refetchOnMount: true,
-  });
+  const { data: folderListData } = useQuery('folderListKey', () => getFolders());
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
     onSuccess: (data) => {
@@ -51,6 +49,7 @@ function FolderLanding() {
         setIsOutDated(Number(remainDay) < 0);
       }
     },
+    refetchOnMount: true,
   });
 
   const { mutate: editFolderMutate } = useMutation((editedFolderData: ModalDataProps) => {
@@ -119,6 +118,7 @@ function FolderLanding() {
 
     deletFolderMutate(id, {
       onSuccess: () => {
+        queryClient.invalidateQueries('recentPacking');
         queryClient.setQueryData('folderListKey', (oldData: any) => {
           return {
             ...oldData,
@@ -259,7 +259,11 @@ function FolderLanding() {
               </StyledLabel>
               <StyledDday>
                 <StyledRemainDay>
-                  {isOutDated ? 'Done!' : `D-${recentPackingData?.data?.remainDay}`}
+                  {isOutDated
+                    ? 'Done!'
+                    : recentPackingData?.data?.remainDay === '0'
+                    ? 'D-day'
+                    : `D-${recentPackingData?.data?.remainDay}`}
                 </StyledRemainDay>
                 <StyledLeftMessage>
                   {!isOutDated && recentPackingData?.data?.packRemainNum === '0' ? (
@@ -337,6 +341,7 @@ export default FolderLanding;
 
 export const StyledBody = styled.article`
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;

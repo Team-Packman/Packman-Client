@@ -15,11 +15,9 @@ export default function SwipeableList(props: SwipeableListProps) {
 }
 
 const StyledRoot = styled.div`
-  height: calc(var(--vh, 1vh) * 100 - 20.5rem);
+  flex-grow: 1;
   background-color: #fff;
   overflow-y: auto;
-
-  touch-action: pan-x;
 
   /* 브라우저별 스크롤바 숨김 설정 */
   -ms-overflow-style: none; // Edge

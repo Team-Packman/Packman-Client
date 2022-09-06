@@ -177,9 +177,9 @@ const StyledInputWrapper = styled.div`
   align-items: center;
 `;
 const StyledInput = styled.input`
+  ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   width: 12rem;
   text-align: center;
-  ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   color: ${packmanColors.pmBlack};
   border: none;
   border-bottom: 1px solid ${packmanColors.pmDeepGrey};
@@ -194,10 +194,10 @@ const StyledInput = styled.input`
   }
 `;
 const StyledText = styled.div<{ nickname: boolean }>`
+  ${FONT_STYLES.BODY1_REGULAR};
   opacity: ${({ nickname }) => nickname && '0'};
   padding-top: 0.77rem;
   color: ${packmanColors.pmDeepGrey};
-  ${FONT_STYLES.BODY1_REGULAR};
 `;
 
 const StyledSelectProfileWrapper = styled.div`
@@ -209,6 +209,7 @@ const StyledSelectProfileWrapper = styled.div`
 `;
 const StyledImageWrapper = styled.div<{ selected: boolean }>`
   position: relative;
+
   width: 8.6rem;
   height: 8.6rem;
   border: ${({ selected }) =>
@@ -219,6 +220,7 @@ const StyledImageWrapper = styled.div<{ selected: boolean }>`
 const StyledBackground = styled.div<{ selected: boolean }>`
   position: absolute;
   transform: translate(-0.1rem, -0.1rem);
+
   width: 8.2rem;
   height: 8.2rem;
   border-radius: 0.7rem;
@@ -230,14 +232,16 @@ const StyledImage = styled(Image)<{ selected: boolean }>`
   z-index: ${({ selected }) => selected && '0'};
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
+  ${FONT_STYLES.BODY4_SEMIBOLD};
   position: absolute;
-  bottom: 8.6rem;
+  bottom: 3.4rem;
+
   width: calc(100vw - 4rem);
   height: 4.1rem;
+
   border: none;
   border-radius: 0.8rem;
   padding: 1.2rem 6.4rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
   color: ${packmanColors.pmWhite};
   background-color: ${({ isActivate }) =>
     isActivate ? packmanColors.pmPink : packmanColors.pmGrey};

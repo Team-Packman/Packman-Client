@@ -63,7 +63,7 @@ const StyledRoot = styled.div<{ isListEmpty: boolean; isSelected: boolean }>`
   padding: 0.7rem 1.1rem;
   border-radius: 0.8rem;
   &:not(:last-child) {
-    margin-right: 1rem;
+    margin: 0 1rem 1rem 0;
   }
 
   ${({ isSelected }) =>

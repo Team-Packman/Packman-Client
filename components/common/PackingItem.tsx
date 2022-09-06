@@ -76,6 +76,10 @@ function PackingItem(props: PackingItemProps) {
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    setName(nameProps);
+  }, [nameProps]);
+
   return (
     <StyledRoot>
       <label>
@@ -124,6 +128,7 @@ const StyledRoot = styled.li`
 const StyledCheckBox = styled.input`
   width: 1.8rem;
   height: 1.8rem;
+  flex-shrink: 0;
 `;
 
 const StyledContent = styled.div`

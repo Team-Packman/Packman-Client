@@ -1,4 +1,3 @@
-import Header from '../components/common/Header';
 import styled from 'styled-components';
 import { useState } from 'react';
 import useAPI from '../utils/hooks/useAPI';
@@ -10,12 +9,9 @@ import Layout from '../components/common/Layout';
 function EditProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const finishEditingProfileHandler = () => setIsEditing(false);
-  const layoutProps = isEditing
-    ? {}
-    : {
-        back: true,
-        title: 'MY',
-      };
+  const layoutProps = {
+    ...(!isEditing ? { back: true, title: 'MY' } : { noHeader: true }),
+  };
 
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
@@ -25,7 +21,7 @@ function EditProfile() {
   const { nickname, profileImage } = data.data;
 
   return (
-    <Layout {...layoutProps}>
+    <Layout {...layoutProps} padding>
       <StyledRoot isEditing={isEditing}>
         {isEditing ? (
           <EditingProfile
@@ -52,11 +48,10 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: ${({ isEditing }) => isEditing && 'center'};
-  padding: 0 2rem;
-  width: 100vw;
-  height: calc(var(--vh, 1vh) * 100 - 8rem);
+  height: 100%;
+  margin-top: ${({ isEditing }) => isEditing && '6rem'};
   overflow-y: auto;
+
   /* 브라우저별 스크롤바 숨김 설정 */
   -ms-overflow-style: none; // Edge
   scrollbar-width: none; // Firefox

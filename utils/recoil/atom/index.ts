@@ -13,8 +13,7 @@ export interface AuthUser extends CreatingUser {
 }
 
 export interface Invitation {
-  listId: string;
-  isMember: boolean;
+  inviteCode: string;
 }
 
 export interface Kakao {

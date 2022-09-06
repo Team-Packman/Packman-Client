@@ -165,6 +165,12 @@ function PackingListLanding() {
     setIsDeleting(false);
   };
 
+  // 개별 삭제
+  const onClickDeleteListItem = (idx: number) => {
+    setSelectedIndex(idx);
+    openModal();
+  };
+
   return (
     <Layout back title="리스트 목록" icon="profile">
       <StyledRoot
@@ -237,10 +243,7 @@ function PackingListLanding() {
                   isDeleting={isDeleting}
                   deleteList={deleteList}
                   checkDeleteList={(id: string) => checkDeleteList(id)}
-                  onClickDeleteButton={() => {
-                    setSelectedIndex(idx);
-                    openModal();
-                  }}
+                  onClickDeleteButton={() => onClickDeleteListItem(idx)}
                   packingList={togetherPackingList ?? alonePackingList}
                   moveToPackingList={() => moveToPackingList(item.id)}
                 />
@@ -276,7 +279,8 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
+  height: 100%;
 `;
 const StyledFolderInfo = styled.div`
   position: relative;
@@ -287,6 +291,7 @@ const StyledFolderInfo = styled.div`
   width: 100%;
   height: 5.4rem;
   margin-top: 0.842rem;
+  flex-shrink: 0;
 
   & > h1 {
     ${FONT_STYLES.HEADLINE2_SEMIBOLD};

@@ -28,7 +28,6 @@ import {
   fetchUpdateAlonePackingCategory,
   fetchUpdateAlonePackingItem,
 } from '../../../utils/axios/packingList/alone';
-import withAuth from '../../../utils/axios/withAuth';
 
 export interface AloneAPI {
   alone: {

@@ -202,7 +202,7 @@ export interface AddTogetherPackingListCategoryOutput {
 
 export interface UpdateTogetherPackingListCategoryInput {
   id: string; // 수정한 카테고리 id
-  nickname: string; // 수정한 카테고리 이름
+  name: string; // 수정한 카테고리 이름
   listId: string; // 함께 패킹 리스트 id
 }
 
@@ -413,7 +413,6 @@ export interface GetInvitedOutput {
   message: string;
   data: {
     id: string; // 함께 패킹리스트 id
-    title: string; // 함께 패킹리스트 제목
     isMember: boolean;
   };
 }

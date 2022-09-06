@@ -41,19 +41,26 @@ export default function SwipeablelistItem(props: ItemProps) {
   const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
   const onTouchStart = (e: React.TouchEvent) => {
+    document.body.style.overflow = 'hidden';
+
     const startX = e.targetTouches[0].clientX;
+    const startY = e.targetTouches[0].clientY;
     let endX = e.targetTouches[0].clientX;
+    let endY = e.targetTouches[0].clientY;
 
     function Move(e: TouchEvent) {
       endX = e.targetTouches[0].clientX;
+      endY = e.targetTouches[0].clientY;
     }
     function End() {
+      if (Math.abs(startY - endY) > 10) return;
+
       let tmpArr = Array(packingList?.length).fill(false);
 
-      if (startX - endX > 50) {
+      if (startX - endX > 20) {
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
         handleIsDragged(tmpArr);
-      } else {
+      } else if (endX - startX > 20) {
         if (isDragged[idx]) {
           handleIsDragged(tmpArr);
         }
@@ -64,6 +71,8 @@ export default function SwipeablelistItem(props: ItemProps) {
     }
     document.addEventListener('touchmove', Move);
     document.addEventListener('touchend', End);
+
+    document.body.style.overflow = 'auto';
   };
 
   return (
@@ -89,14 +98,17 @@ export default function SwipeablelistItem(props: ItemProps) {
           <p>{title}</p>
           <StyledPackInfo>
             <span>총 {packTotalNum}개의 짐</span>
-            {packRemainNum ? (
+            {packRemainNum !== '0' ? (
               <StyledPackRemainText>
                 아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
               </StyledPackRemainText>
             ) : (
-              <StyledPackRemainText>
-                <span>패킹</span>이 완료되었어요!
-              </StyledPackRemainText>
+              packTotalNum !== '0' &&
+              packRemainNum === '0' && (
+                <StyledPackRemainText>
+                  <span>패킹</span>이 완료되었어요!
+                </StyledPackRemainText>
+              )
             )}
           </StyledPackInfo>
         </StyledItemInfo>

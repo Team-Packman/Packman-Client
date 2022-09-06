@@ -1,4 +1,5 @@
 import {
+  KakaoAuthOutput,
   KakaoLoginInput,
   KakaoLoginOutput,
   RefreshInput,
@@ -12,6 +13,22 @@ export const fetchGoogleLogin = async (
   payload: GoogleLoginInput,
 ): Promise<GoogleLoginOutput> => {
   const { data } = await request.post(`/auth/google`, payload);
+  return data;
+};
+
+export const fetchKakaoAuth = async (
+  request: AxiosInstance,
+  code: string,
+): Promise<KakaoAuthOutput> => {
+  const url = encodeURI(process.env.NEXT_PUBLIC_REDIRECT ?? '');
+  const { data } = await request.post(
+    `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${code}&redirect_uri=${url}`,
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    },
+  );
   return data;
 };
 

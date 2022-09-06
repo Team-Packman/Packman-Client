@@ -1,4 +1,4 @@
-import React, { useState, UIEvent } from 'react';
+import React, { useState, UIEvent, useEffect } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
@@ -59,6 +59,12 @@ function TogetherLanding() {
   const [currentCreating, setCurrentCreating] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
+
+  useEffect(() => {
+    return () => {
+      setScroll(false);
+    };
+  }, []);
 
   /////////////////// api /////////////////////
   const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDetail);
@@ -181,7 +187,7 @@ function TogetherLanding() {
         patchCategory(
           {
             id: categoryId,
-            nickname: name,
+            name,
             listId,
           },
           {
