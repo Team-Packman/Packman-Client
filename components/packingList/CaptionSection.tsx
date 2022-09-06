@@ -7,23 +7,23 @@ import { packmanColors } from '../../styles/color';
 interface CaptionSectionProps {
   packingList: any[];
   isDeleting: boolean;
-  deleteList: string[];
   onClickCaptionButton: () => void;
   handleIsDragged: (arr: boolean[]) => void;
   resetDeleteList: (arr: string[]) => void;
+  resetSwipableListItem: () => void;
 }
 function CaptionSection(props: CaptionSectionProps) {
   const {
     packingList,
     isDeleting,
-    deleteList,
     onClickCaptionButton,
     handleIsDragged,
     resetDeleteList,
+    resetSwipableListItem,
   } = props;
 
   return (
-    <StyledRoot>
+    <StyledRoot onClick={resetSwipableListItem}>
       {!isDeleting && (
         <StyledCaptionText>
           <span>{packingList.length}</span>

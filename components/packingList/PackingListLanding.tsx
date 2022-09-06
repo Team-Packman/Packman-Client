@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
@@ -75,12 +75,21 @@ function PackingListLanding() {
         togetherInventory?.data.togetherPackingList.length,
     ).fill(false),
   );
+
+  useEffect(() => {
+    console.log(showModal);
+  }, [showModal]);
+
   if (!inventory || !isInventory(inventory)) return null;
 
   const { togetherPackingList, alonePackingList, folder, currentFolder } = inventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
+  };
+
+  const resetIsDragged = () => {
+    setIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
   };
 
   const checkDeleteList = (id: string) => {
@@ -91,11 +100,11 @@ function PackingListLanding() {
 
   const openModal = () => {
     document.body.style.overflow = 'hidden';
-    setShowModal(true);
+    setShowModal((prev) => !prev);
   };
 
   const closeModal = () => {
-    handleIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
+    resetIsDragged();
     document.body.style.overflow = 'unset';
     setShowModal(false);
   };
@@ -139,10 +148,11 @@ function PackingListLanding() {
     } else if (index === 1) {
       router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
     }
+    resetSwipableListItem();
   };
 
   const onClickCaptionButton = () => {
-    setIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
+    resetIsDragged();
     setIsDeleting((prev) => !prev);
     if (!isDeleting) {
       setDeleteList([]);
@@ -164,13 +174,12 @@ function PackingListLanding() {
   const onClickDropBoxItem = (id: string) => {
     router.replace(`/packing-list?type=${type}&id=${id}`);
     setIsDeleting(false);
-    setIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
   };
 
   // 개별 삭제
   const onClickDeleteListItem = (idx: number) => {
-    setSelectedIndex(idx);
     openModal();
+    setSelectedIndex(idx);
   };
 
   // SwipableListItem 스와이프 여부 변경
@@ -178,8 +187,29 @@ function PackingListLanding() {
     setIsSwiped(isSwiped);
   };
 
+  const resetSwipableListItem = () => {
+    const checkIsDragged = isDragged.every((item) => !item);
+    if (!checkIsDragged && !showModal) {
+      resetIsDragged();
+    }
+  };
+
   return (
     <Layout back title="리스트 목록" icon="profile">
+      {showModal && (
+        <Modal
+          title="정말 삭제하시겠어요?"
+          closeModal={closeModal}
+          button={
+            <StyledModalButtonWrapper>
+              <StyledModalButton left onClick={closeModal}>
+                아니요
+              </StyledModalButton>
+              <StyledModalButton onClick={deleteListItem}>네</StyledModalButton>
+            </StyledModalButtonWrapper>
+          }
+        />
+      )}
       <StyledRoot
         onClick={() => {
           if (toggle) {
@@ -187,22 +217,12 @@ function PackingListLanding() {
           }
         }}
       >
-        {showModal && (
-          <Modal
-            title="정말 삭제하시겠어요?"
-            closeModal={closeModal}
-            button={
-              <StyledModalButtonWrapper>
-                <StyledModalButton left onClick={closeModal}>
-                  아니요
-                </StyledModalButton>
-                <StyledModalButton onClick={deleteListItem}>네</StyledModalButton>
-              </StyledModalButtonWrapper>
-            }
-          />
-        )}
-
-        <StyledFolderInfo onClick={() => setToggle((prev) => !prev)}>
+        <StyledFolderInfo
+          onClick={() => {
+            resetSwipableListItem();
+            setToggle((prev) => !prev);
+          }}
+        >
           <h1>{currentFolder.name}</h1>
           <div>
             <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
@@ -232,16 +252,16 @@ function PackingListLanding() {
         ) : (
           <>
             <CaptionSection
+              resetSwipableListItem={resetSwipableListItem}
               packingList={togetherPackingList ?? alonePackingList}
               isDeleting={isDeleting}
-              deleteList={deleteList}
               onClickCaptionButton={onClickCaptionButton}
               handleIsDragged={handleIsDragged}
               resetDeleteList={() => deleteList.length && setDeleteList([])}
             />
 
             <SwipeableList
-              isScrolled={isSwiped}
+              isSwiped={isSwiped}
               swipeableListItem={(togetherPackingList ?? alonePackingList).map((item, idx) => (
                 <SwipeablelistItem
                   key={item.id}
