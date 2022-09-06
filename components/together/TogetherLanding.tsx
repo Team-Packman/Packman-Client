@@ -1,4 +1,4 @@
-import React, { useState, UIEvent, useEffect } from 'react';
+import React, { useState, UIEvent, useEffect, useRef } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
@@ -49,7 +49,6 @@ function TogetherLanding() {
   const { isFresh } = useRecoilValue(listState);
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
   const [scroll, setScroll] = useGlobalState('scroll', false);
-  const [isScrolling, setIsScrolling] = useState(false);
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
@@ -59,6 +58,9 @@ function TogetherLanding() {
   const [currentCreating, setCurrentCreating] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
+
+  const isScrolling = useRef<boolean>(false);
+  const timer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     return () => {
@@ -475,13 +477,22 @@ function TogetherLanding() {
       }
     }
   };
+
   const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
-    if (e.currentTarget.scrollTop < 10) {
-      scroll && setScroll(false);
-    } else if (!isScrolling) {
-      setIsScrolling(true);
+    const height = e.currentTarget.clientHeight;
+    const scrollHeight = e.currentTarget.scrollHeight;
+
+    if (scroll && e.currentTarget.scrollTop < 10) {
+      setScroll(false);
+      isScrolling.current = false;
+      clearTimeout(timer.current);
+      return;
+    }
+
+    if (!isScrolling.current && scrollHeight - height > 180) {
+      isScrolling.current = true;
       !scroll && setScroll(true);
-      setTimeout(() => setIsScrolling(false), 500);
+      timer.current = setTimeout(() => (isScrolling.current = false), 300);
     }
   };
 
@@ -652,8 +663,8 @@ const StyledTogetherLanding = styled.div`
 `;
 
 const StyledBody = styled.div`
-  //100% - subheader
-  height: calc(100% - 11rem);
+  //100% - subheader - function section
+  max-height: calc(100% - 11rem - 8rem);
 
   display: flex;
   flex-direction: column;
@@ -666,6 +677,5 @@ const StyledBody = styled.div`
 `;
 const StyledScrollBlock = styled.div`
   width: 100%;
-  min-height: 8rem;
   background-color: transparent;
 `;

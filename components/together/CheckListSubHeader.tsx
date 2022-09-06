@@ -23,7 +23,7 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
   };
 
   return (
-    <StyledRoot scroll={scroll}>
+    <StyledRoot>
       {together && (
         <StyledModeBlock>
           <StyledModeWrapper index={activeMode}>
@@ -49,9 +49,7 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
 
 export default CheckListSubHeader;
 
-const StyledRoot = styled.div<{
-  scroll: boolean;
-}>`
+const StyledRoot = styled.div`
   position: relative;
   width: 100vw;
   z-index: 55;
