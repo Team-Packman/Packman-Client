@@ -59,8 +59,8 @@ function TogetherLanding() {
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
 
-  const isScrolling = useRef<boolean>(false);
-  const timer = useRef<NodeJS.Timeout>();
+  const [isScrolling, setIsScrolling] = useState(false);
+  const isSufficient = useRef<boolean>(false);
 
   useEffect(() => {
     return () => {
@@ -482,17 +482,15 @@ function TogetherLanding() {
     const height = e.currentTarget.clientHeight;
     const scrollHeight = e.currentTarget.scrollHeight;
 
-    if (scroll && e.currentTarget.scrollTop < 10) {
-      setScroll(false);
-      isScrolling.current = false;
-      clearTimeout(timer.current);
-      return;
-    }
+    if (e.currentTarget.scrollTop < 0) return;
+    if (scrollHeight - height > 180) isSufficient.current = true;
 
-    if (!isScrolling.current && scrollHeight - height > 180) {
-      isScrolling.current = true;
+    if (e.currentTarget.scrollTop < 10) {
+      scroll && setScroll(false);
+    } else if (!isScrolling && isSufficient.current) {
+      setIsScrolling(true);
       !scroll && setScroll(true);
-      timer.current = setTimeout(() => (isScrolling.current = false), 300);
+      setTimeout(() => setIsScrolling(false), 300);
     }
   };
 
