@@ -116,40 +116,42 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   return (
     <StyledRoot>
-      <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
-        <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
-      </div>
-      <StyledInputWrapper>
-        <StyledInput
-          type="text"
-          placeholder="김팩맨"
-          value={nickname}
-          maxLength={4}
-          onChange={onChangeNickname}
-        />
-        <StyledText nickname={nickname !== ''}>닉네임을 입력해주세요 (4자 이내)</StyledText>
-      </StyledInputWrapper>
+      <StyledProfile>
+        <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
+          <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
+        </div>
+        <StyledInputWrapper>
+          <StyledInput
+            type="text"
+            placeholder="김팩맨"
+            value={nickname}
+            maxLength={4}
+            onChange={onChangeNickname}
+          />
+          <StyledText nickname={nickname !== ''}>닉네임을 입력해주세요 (4자 이내)</StyledText>
+        </StyledInputWrapper>
 
-      <StyledSelectProfileWrapper>
-        {profileImage.map(({ id, src }) => (
-          <StyledImageWrapper
-            key={id}
-            selected={profile === id}
-            onClick={() => onClickProfileImage(id)}
-          >
-            <StyledBackground selected={profile === id} />
-            <StyledImage
+        <StyledSelectProfileWrapper>
+          {profileImage.map(({ id, src }) => (
+            <StyledImageWrapper
               key={id}
-              src={src}
-              alt="profile-image"
-              width={80}
-              height={80}
               selected={profile === id}
-              priority
-            />
-          </StyledImageWrapper>
-        ))}
-      </StyledSelectProfileWrapper>
+              onClick={() => onClickProfileImage(id)}
+            >
+              <StyledBackground selected={profile === id} />
+              <StyledImage
+                key={id}
+                src={src}
+                alt="profile-image"
+                width={80}
+                height={80}
+                selected={profile === id}
+                priority
+              />
+            </StyledImageWrapper>
+          ))}
+        </StyledSelectProfileWrapper>
+      </StyledProfile>
 
       <StyledButton
         type="button"
@@ -169,7 +171,14 @@ const StyledRoot = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: calc(100% - 23.4rem);
   margin-top: 4.84rem;
+  justify-content: space-between;
+`;
+const StyledProfile = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 const StyledInputWrapper = styled.div`
   display: flex;
@@ -233,12 +242,8 @@ const StyledImage = styled(Image)<{ selected: boolean }>`
 `;
 const StyledButton = styled.button<{ isActivate: boolean }>`
   ${FONT_STYLES.BODY4_SEMIBOLD};
-  position: absolute;
-  bottom: 3.4rem;
-
   width: calc(100vw - 4rem);
   height: 4.1rem;
-
   border: none;
   border-radius: 0.8rem;
   padding: 1.2rem 6.4rem;
