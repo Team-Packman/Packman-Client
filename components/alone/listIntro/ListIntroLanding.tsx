@@ -215,7 +215,6 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 router.push(`/together?id=${data?.data?.id}`);
-                setIsFresh({ isFresh: true });
               },
             },
           );
