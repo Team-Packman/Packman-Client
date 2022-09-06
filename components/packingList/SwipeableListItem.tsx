@@ -48,27 +48,29 @@ export default function SwipeablelistItem(props: ItemProps) {
     handleIsScrolled(false); // 터치를 하면 무조건 스크롤 가능하게 초기화
 
     const startX = e.targetTouches[0].clientX;
+    const startY = e.targetTouches[0].clientY;
     let tmpArr = Array(packingList?.length).fill(false);
 
     function Move(e: TouchEvent) {
       if (isSwiping) return;
 
       const endX = e.targetTouches[0].clientX;
+      const endY = e.targetTouches[0].clientY;
 
-      // 열기
-      if (startX - endX > 0) {
-        handleIsScrolled(true); // 일단 터치 시작하자마자 상하스크롤 멈추도록 함
-      }
+      if (Math.abs(startY - endY) > 10) return;
+
       // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
-      if (startX - endX > 10) {
+      if (startX - endX > 0) {
+        handleIsScrolled(true); // 상하 스크롤 막기
         if (!isSwiping) {
+          // 스와이핑 중으로 변경
           isSwiping = true;
         }
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
-        handleIsDragged(tmpArr);
+        handleIsDragged(tmpArr); // 배열 수정
       }
       // 닫기
-      if (endX - startX > 10) {
+      if (endX - startX > 0) {
         // 열려있던 경우에만 닫기
         if (isDragged[idx]) {
           if (!isSwiping) {
