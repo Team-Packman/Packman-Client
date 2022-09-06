@@ -5,6 +5,7 @@ import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
+import { useEffect, useState } from 'react';
 interface PackingList {
   id: string;
   departureDate: string;
@@ -23,6 +24,7 @@ interface ItemProps {
   onClickDeleteButton: (idx: number) => void;
   packingList: PackingList[];
   moveToPackingList: () => void;
+  handleIsScrolled: (isScrolled: boolean) => void;
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
@@ -36,36 +38,50 @@ export default function SwipeablelistItem(props: ItemProps) {
     onClickDeleteButton,
     packingList,
     moveToPackingList,
+    handleIsScrolled,
   } = props;
 
   const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
 
+  document.body.style.overflow = 'hidden';
   const onTouchStart = (e: React.TouchEvent) => {
-    document.body.style.overflow = 'hidden';
+    let isSwiping = false;
+
+    handleIsScrolled(false); // 터치를 하면 무조건 스크롤 가능하게 초기화
 
     const startX = e.targetTouches[0].clientX;
-    const startY = e.targetTouches[0].clientY;
-    let endX = e.targetTouches[0].clientX;
-    let endY = e.targetTouches[0].clientY;
+    let tmpArr = Array(packingList?.length).fill(false);
 
     function Move(e: TouchEvent) {
-      endX = e.targetTouches[0].clientX;
-      endY = e.targetTouches[0].clientY;
-    }
-    function End() {
-      if (Math.abs(startY - endY) > 10) return;
+      if (isSwiping) return;
 
-      let tmpArr = Array(packingList?.length).fill(false);
+      const endX = e.targetTouches[0].clientX;
 
-      if (startX - endX > 20) {
+      // 열기
+      if (startX - endX > 0) {
+        handleIsScrolled(true); // 일단 터치 시작하자마자 상하스크롤 멈추도록 함
+      }
+      // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
+      if (startX - endX > 10) {
+        if (!isSwiping) {
+          isSwiping = true;
+        }
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
         handleIsDragged(tmpArr);
-      } else if (endX - startX > 20) {
+      }
+      // 닫기
+      if (endX - startX > 10) {
+        // 열려있던 경우에만 닫기
         if (isDragged[idx]) {
+          if (!isSwiping) {
+            isSwiping = true;
+          }
           handleIsDragged(tmpArr);
+          handleIsScrolled(false);
         }
       }
-
+    }
+    function End() {
       document.removeEventListener('touchmove', Move);
       document.removeEventListener('touchend', End);
     }

@@ -30,6 +30,7 @@ function PackingListLanding() {
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isSwiped, setIsSwiped] = useState(false);
 
   // api 호출
   const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
@@ -163,12 +164,18 @@ function PackingListLanding() {
   const onClickDropBoxItem = (id: string) => {
     router.replace(`/packing-list?type=${type}&id=${id}`);
     setIsDeleting(false);
+    setIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
   };
 
   // 개별 삭제
   const onClickDeleteListItem = (idx: number) => {
     setSelectedIndex(idx);
     openModal();
+  };
+
+  // SwipableListItem 스와이프 여부 변경
+  const handleIsScrolled = (isSwiped: boolean) => {
+    setIsSwiped(isSwiped);
   };
 
   return (
@@ -234,6 +241,7 @@ function PackingListLanding() {
             />
 
             <SwipeableList
+              isScrolled={isSwiped}
               swipeableListItem={(togetherPackingList ?? alonePackingList).map((item, idx) => (
                 <SwipeablelistItem
                   key={item.id}
@@ -246,6 +254,7 @@ function PackingListLanding() {
                   onClickDeleteButton={() => onClickDeleteListItem(idx)}
                   packingList={togetherPackingList ?? alonePackingList}
                   moveToPackingList={() => moveToPackingList(item.id)}
+                  handleIsScrolled={(isSwiped: boolean) => handleIsScrolled(isSwiped)}
                 />
               ))}
             />
