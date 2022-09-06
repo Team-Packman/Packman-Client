@@ -59,12 +59,9 @@ export default function SwipeablelistItem(props: ItemProps) {
 
       if (Math.abs(startY - endY) > 10) return;
 
-      // 열기
-      if (startX - endX > 10) {
-        handleIsScrolled(true); // 일단 터치 시작하자마자 상하스크롤 멈추도록 함
-      }
       // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
       if (startX - endX > 10) {
+        handleIsScrolled(true);
         if (!isSwiping) {
           isSwiping = true;
         }
