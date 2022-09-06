@@ -5,7 +5,6 @@ import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
-import { useEffect, useState } from 'react';
 interface PackingList {
   id: string;
   departureDate: string;

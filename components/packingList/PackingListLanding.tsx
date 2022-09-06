@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
@@ -75,10 +75,6 @@ function PackingListLanding() {
         togetherInventory?.data.togetherPackingList.length,
     ).fill(false),
   );
-
-  useEffect(() => {
-    console.log(showModal);
-  }, [showModal]);
 
   if (!inventory || !isInventory(inventory)) return null;
 
