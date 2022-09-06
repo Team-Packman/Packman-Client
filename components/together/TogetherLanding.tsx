@@ -1,4 +1,4 @@
-import React, { useState, UIEvent, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
@@ -10,7 +10,6 @@ import { Pagination, Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CheckListSubHeader from './CheckListSubHeader';
 import PackingItem, { UpdateItemPayload } from '../common/PackingItem';
-import useGlobalState from '../../utils/hooks/useGlobalState';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
 import PackerModal, { PackerInfoPayload } from './PackerModal';
@@ -25,6 +24,7 @@ import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 import Loading from '../common/Loading';
 import 'swiper/css';
 import 'swiper/css/bundle';
+import useHide from '../../utils/hooks/useHide';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -48,7 +48,7 @@ function TogetherLanding() {
   const { id } = router.query;
   const { isFresh } = useRecoilValue(listState);
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
-  const [scroll, setScroll] = useGlobalState('scroll', false);
+
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
@@ -59,24 +59,8 @@ function TogetherLanding() {
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
 
-  const [isScrolling, setIsScrolling] = useState(false);
-  const isSufficient = useRef<boolean>(false);
-  const aloneSection = useRef<HTMLDivElement | null>(null);
-  const togetherSection = useRef<HTMLDivElement | null>(null);
-  const [refArr] = useState([aloneSection, togetherSection]);
+  const [{ sectionArr }, { checkSufficient }, scrollEvent] = useHide(activeMode);
 
-  useEffect(() => {
-    return () => {
-      setScroll(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    const el = refArr[activeMode].current;
-    if (el) {
-      isSufficient.current = el.scrollHeight - el.clientHeight > 180;
-    }
-  }, [activeMode]);
   /////////////////// api /////////////////////
   const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDetail);
   const addPackingListCategory = useAPI((api) => api.packingList.together.addPackingListCategory);
@@ -251,6 +235,7 @@ function TogetherLanding() {
     setCurrentEditing('');
     createdCategoryHandler();
     bottomModalCloseHandler();
+    checkSufficient();
   };
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
@@ -353,6 +338,7 @@ function TogetherLanding() {
     setCurrentEditing('');
     createdItemHandler();
     bottomModalCloseHandler();
+    checkSufficient();
   };
   const updatePacker = (payload: PackerInfoPayload) => {
     patchPacker(payload, {
@@ -487,17 +473,6 @@ function TogetherLanding() {
     }
   };
 
-  const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
-    if (!isSufficient.current) return;
-    if (e.currentTarget.scrollTop < 10) {
-      scroll && setScroll(false);
-    } else if (!isScrolling) {
-      setIsScrolling(true);
-      !scroll && setScroll(true);
-      setTimeout(() => setIsScrolling(false), 300);
-    }
-  };
-
   return (
     <Layout
       back
@@ -531,7 +506,7 @@ function TogetherLanding() {
           {packingRole.map((list, i) => {
             return (
               <SwiperSlide key={list.id} virtualIndex={i}>
-                <StyledBody onScroll={ScrollEvent} ref={refArr[i]}>
+                <StyledBody onScroll={scrollEvent} ref={sectionArr.current[i]}>
                   {list.category.map(({ id: categoryId, name, pack }) => (
                     <PackagesWithCategory
                       key={categoryId}
