@@ -46,7 +46,9 @@ function useHide(activeMode: number): UseHideOutput<HTMLDivElement, boolean> {
 
     if (hidden) {
       const gapForHidden = el.scrollHeight - (el.clientHeight - 117);
-      isSufficient.current = gapForHidden > 63;
+      isSufficient.current = gapForHidden > 180;
+
+      if (!isSufficient.current) setHidden(false);
     } else {
       isSufficient.current = el.scrollHeight - el.clientHeight > 180;
     }
