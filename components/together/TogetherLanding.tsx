@@ -482,7 +482,6 @@ function TogetherLanding() {
     const height = e.currentTarget.clientHeight;
     const scrollHeight = e.currentTarget.scrollHeight;
 
-    if (e.currentTarget.scrollTop < 0) return;
     if (scrollHeight - height > 180) isSufficient.current = true;
 
     if (e.currentTarget.scrollTop < 10) {
