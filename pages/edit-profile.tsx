@@ -49,7 +49,7 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  margin-top: ${({ isEditing }) => isEditing && '6rem'};
+  margin-top: ${({ isEditing }) => isEditing && '4rem'};
   overflow-y: auto;
 
   /* 브라우저별 스크롤바 숨김 설정 */

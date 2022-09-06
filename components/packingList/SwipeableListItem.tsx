@@ -58,8 +58,10 @@ export default function SwipeablelistItem(props: ItemProps) {
       const endY = e.targetTouches[0].clientY;
 
       // 기울기 40~45도 이상으로 대각선 스와이핑하면 상하 스크롤 실행
-      if (Math.abs((startY - endY) / (startX - endX)) > 0.25) return; // 기울기 계산, 대각선 이동 컨트롤
-
+      if (Math.abs((startY - endY) / (startX - endX)) > 0.25) {
+        handleIsDragged(Array(packingList?.length).fill(false));
+        return;
+      }
       //  아이템의 우측하단에서 좌측상단으로 대각선 스와이핑 했을 때는 열림
 
       // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
@@ -81,13 +83,13 @@ export default function SwipeablelistItem(props: ItemProps) {
             isSwiping = true;
           }
           handleIsDragged(tmpArr);
-          handleIsScrolled(false);
         }
       }
     }
     function End() {
       document.removeEventListener('touchmove', Move);
       document.removeEventListener('touchend', End);
+      handleIsScrolled(false);
     }
     document.addEventListener('touchmove', Move);
     document.addEventListener('touchend', End);
@@ -109,7 +111,11 @@ export default function SwipeablelistItem(props: ItemProps) {
         onTouchStart={onTouchStart}
         isDragged={isDragged[idx]}
         isDeleting={isDeleting}
-        onClick={moveToPackingList}
+        onClick={() => {
+          isDragged.every((item) => !item)
+            ? moveToPackingList()
+            : handleIsDragged(Array(packingList?.length).fill(false));
+        }}
       >
         <StyledItemInfo>
           <p>{departureDate}</p>
