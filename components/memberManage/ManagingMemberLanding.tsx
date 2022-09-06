@@ -5,23 +5,10 @@ import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Image from 'next/image';
-
-interface ImockData {
-  status: number;
-  success: boolean;
-  message: string;
-  data: {
-    title: string; // 함께 패킹리스트 제목
-    departureDate: string; // 함께 패킹리스트 출발 날짜
-    remainDay: string; // 함께 패킹리스트 남은 출발 날짜
-    member: {
-      // 그룹에 속한 멤버 배열
-      id: string; //  멤버 id
-      nickname: string; // 멤버 닉네임
-      profileImage: string; // 멤버 프로필 사진 id
-    }[];
-  };
-}
+import { useRouter } from 'next/router';
+import useAPI from '../../utils/hooks/useAPI';
+import { useQuery } from 'react-query';
+import Loading from '../common/Loading';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -30,47 +17,33 @@ interface Imember {
   profileImage: string; // 멤버 프로필 사진 id
 }
 
-const mockData: ImockData = {
-  status: 200,
-  success: true,
-  message: '멤버 조회 성공',
-  data: {
-    title: '패킹이들과 캠핑',
-    departureDate: '2022.08.26',
-    remainDay: '27',
-    member: [
-      {
-        id: '1',
-        nickname: '융맨',
-        profileImage: '1',
-      },
-      {
-        id: '2',
-        nickname: '서히',
-        profileImage: '2',
-      },
-      {
-        id: '3',
-        nickname: '현지',
-        profileImage: '3',
-      },
-      {
-        id: '4',
-        nickname: '경린',
-        profileImage: '4',
-      },
-    ],
-  },
-};
-
 function ManagingMemberLanding() {
+  const router = useRouter();
+  const { id } = router.query;
+  const getGroupMember = useAPI((api) => api.member.getGroupMember);
+  const { data } = useQuery(
+    ['getGroupMember', id],
+    () => getGroupMember({ listId: id as string }),
+    {
+      enabled: !!id,
+    },
+  );
+  console.log(getGroupMember);
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
-  const [members, setMembers] = useState<Imember[]>(mockData.data.member);
+  const [members, setMembers] = useState<Imember[]>([]);
   const [oldMembers, setOldMembers] = useState([...members]);
 
   const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    return () => {
+      if (hasCopiedTimeoutRef.current) {
+        clearTimeout(hasCopiedTimeoutRef.current);
+      }
+    };
+  }, []);
   const editMembers = () => {
     if (isEditing) {
       setMembers([...oldMembers]);
@@ -102,22 +75,22 @@ function ManagingMemberLanding() {
   };
 
   useEffect(() => {
-    return () => {
-      if (hasCopiedTimeoutRef.current) {
-        clearTimeout(hasCopiedTimeoutRef.current);
-      }
-    };
-  }, []);
+    if (packingList) setMembers(packingList.member);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  if (!data) return <Loading />;
+  const { data: packingList } = data;
 
   return (
     <Layout back title="멤버 관리">
       <StyledRoot>
         <StyledHeader>
           <StyledHeaderLeft>
-            <StyledListName>{mockData.data.title}</StyledListName>
-            <StyledListDate>{mockData.data.departureDate}</StyledListDate>
+            <StyledListName>{packingList.title}</StyledListName>
+            <StyledListDate>{packingList.departureDate}</StyledListDate>
           </StyledHeaderLeft>
-          <StyledDday>D-{mockData.data.remainDay}</StyledDday>
+          <StyledDday>D-{packingList.remainDay}</StyledDday>
         </StyledHeader>
         <WithMembersLabelAndEdit>
           <WithMembersLabel>함께하는 멤버</WithMembersLabel>

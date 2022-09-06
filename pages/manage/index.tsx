@@ -6,7 +6,7 @@ import TestLanding from '../../components/TestLanding';
 function Folder() {
   return (
     <AsyncBoundary>
-      <TestLanding />
+      <ManagingMemberLanding />
     </AsyncBoundary>
   );
 }

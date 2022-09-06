@@ -490,6 +490,7 @@ function TogetherLanding() {
       back
       title="패킹리스트"
       icon="member"
+      id={info.group.id}
       option={
         <CheckListHeader
           together
