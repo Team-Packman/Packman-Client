@@ -477,7 +477,7 @@ function TogetherLanding() {
       }
     }
   };
-  // console.log(scroll);
+
   const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
     const height = e.currentTarget.clientHeight;
     const scrollHeight = e.currentTarget.scrollHeight;
