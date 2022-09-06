@@ -60,16 +60,17 @@ export default function SwipeablelistItem(props: ItemProps) {
       if (Math.abs(startY - endY) > 10) return;
 
       // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
-      if (startX - endX > 10) {
-        handleIsScrolled(true);
+      if (startX - endX > 0) {
+        handleIsScrolled(true); // 상하 스크롤 막기
         if (!isSwiping) {
+          // 스와이핑 중으로 변경
           isSwiping = true;
         }
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
-        handleIsDragged(tmpArr);
+        handleIsDragged(tmpArr); // 배열 수정
       }
       // 닫기
-      if (endX - startX > 10) {
+      if (endX - startX > 0) {
         // 열려있던 경우에만 닫기
         if (isDragged[idx]) {
           if (!isSwiping) {
