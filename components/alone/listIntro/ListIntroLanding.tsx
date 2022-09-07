@@ -227,11 +227,11 @@ function ListIntroLanding() {
       <StyledBody>
         <StyledDataContainer>
           <h3>언제 출발하시나요?</h3>
-          <input type="date" onChange={handleDateChange} defaultValue={getTodayDate()} />
+          <StyledDate type="date" onChange={handleDateChange} defaultValue={getTodayDate()} />
         </StyledDataContainer>
         <StyledFolderContainer>
           <h3>폴더를 선택해주세요</h3>
-          <div>
+          <StyledFolderInputContent>
             <input
               type="text"
               onChange={(e) => handleFolderNameChange(e)}
@@ -240,7 +240,7 @@ function ListIntroLanding() {
               maxLength={10}
             />
             <button onClick={handleAddFolder}>생성</button>
-          </div>
+          </StyledFolderInputContent>
           <StyledTagContainer>
             {isAloned
               ? aloneFolder?.map((v, index) => (
@@ -300,66 +300,81 @@ export const StyledBody = styled.article`
 
 export const StyledDataContainer = styled.section`
   width: calc(100% - 4rem);
-  margin: 6.7rem auto 0 auto;
+  margin: 3rem auto 0 auto;
+`;
 
-  input[type='date']::-webkit-calendar-picker-indicator {
-    background: transparent;
-    bottom: 0;
-    color: transparent;
+export const StyledDate = styled.input`
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding: 1.1rem 0;
+  text-align: center;
+  border: 1px dashed ${packmanColors.pmDashGrey};
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: ${packmanColors.pmDeepGrey};
+  border-radius: 0.8rem;
+  background-color: ${packmanColors.pmWhite};
+
+  ::-webkit-datetime-edit-text,
+  ::-webkit-datetime-edit-month-field,
+  ::-webkit-datetime-edit-day-field,
+  ::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
+    color: ${packmanColors.pmDeepGrey};
+    background-color: ${packmanColors.pmWhite};
+  }
+
+  ::-webkit-calendar-picker-indicator {
+    background: rgba(0, 0, 0, 0);
+    color: rgba(0, 0, 0, 0);
+    opacity: 1;
     cursor: pointer;
     height: auto;
-    left: 0;
     position: absolute;
+    left: 0;
     right: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  input[type='date'] {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding: 1.1rem 11rem;
-    border: 1px dashed ${packmanColors.pmDashGrey};
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: ${packmanColors.pmDeepGrey};
-    border-radius: 0.8rem;
+    bottom: 0;
   }
 `;
 
 export const StyledFolderContainer = styled.section`
   width: calc(100% - 4rem);
   margin: 3.3rem auto 0 auto;
+`;
 
-  div {
-    display: flex;
-    width: 100%;
+export const StyledFolderInputContent = styled.div`
+  display: flex;
+  width: 100%;
 
-    input[type='text'] {
-      display: inline-block;
-      position: relative;
-      padding: 1.1rem 4rem;
-      border: 1px dashed ${packmanColors.pmDashGrey};
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: ${packmanColors.pmDeepGrey};
-      border-radius: 0.8rem;
-    }
+  input[type='text'] {
+    display: inline-block;
+    position: relative;
+    padding: 1.1rem 0;
+    text-align: center;
+    border: 1px dashed ${packmanColors.pmDashGrey};
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: ${packmanColors.pmDeepGrey};
+    border-radius: 0.8rem;
+    flex: 2;
+  }
 
-    button {
-      border: 0;
-      background-color: ${packmanColors.pmWhite};
-      color: ${packmanColors.pmDarkGrey};
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-left: 1.2rem;
-    }
+  button {
+    border: 0;
+    background-color: ${packmanColors.pmWhite};
+    color: ${packmanColors.pmDarkGrey};
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-left: 1rem;
+    flex: 0 1 auto;
   }
 `;
 
 export const StyledTagContainer = styled.div`
   display: flex;
+  justify-content: flex-start;
   flex-wrap: wrap;
   margin-top: 1.2rem;
 `;
