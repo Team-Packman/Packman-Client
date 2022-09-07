@@ -60,7 +60,7 @@ function PackingCategory(props: PackingCategoryProps) {
 
   const handleChange = ({ currentTarget: { innerText } }: FormEvent<HTMLSpanElement>) => {
     if (ref.current && innerText.length > MAX_LENGTH) {
-      ref.current.innerText = name;
+      ref.current.innerText = innerText.slice(0, MAX_LENGTH);
       setCaret(ref.current);
     }
   };
