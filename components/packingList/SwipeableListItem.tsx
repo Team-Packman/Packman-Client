@@ -84,12 +84,12 @@ export default function SwipeablelistItem(props: ItemProps) {
           }
           handleIsDragged(tmpArr);
         }
+        handleIsScrolled(false);
       }
     }
     function End() {
       document.removeEventListener('touchmove', Move);
       document.removeEventListener('touchend', End);
-      handleIsScrolled(false);
     }
     document.addEventListener('touchmove', Move);
     document.addEventListener('touchend', End);
