@@ -23,6 +23,8 @@ interface CheckListHeaderProps {
   updateRemainingInfo: (payload: RemainingInfoPayload, type: RemainingInfoType) => void;
 }
 
+const MAX_LENGTH = 12;
+
 function CheckListHeader(props: CheckListHeaderProps) {
   const { title: titleProps, listId, departureDate, updateRemainingInfo } = props;
   const [title, setTitle] = useState(titleProps);
@@ -31,12 +33,19 @@ function CheckListHeader(props: CheckListHeaderProps) {
   const [scroll] = useGlobalState<boolean>('scroll');
   const ref = useRef<HTMLInputElement | null>(null);
 
+  const handleTitle = (title: string) => {
+    if (title.length <= MAX_LENGTH) {
+      setTitle(title);
+    }
+  };
+
   const saveTitle = () => {
     const payload = {
       listId,
       title: title === '' ? titleProps : title,
     };
 
+    title === '' && setTitle(titleProps);
     updateRemainingInfo(payload, 'title');
     setIsEditing(false);
   };
@@ -62,7 +71,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
         <StyledInput
           ref={ref}
           value={title}
-          onChange={({ target: { value } }) => setTitle(value)}
+          onChange={({ target: { value } }) => handleTitle(value)}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveTitle)}
         />
       ) : (
