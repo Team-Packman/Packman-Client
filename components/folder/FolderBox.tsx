@@ -64,6 +64,9 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
 
   const onBlur = () => {
     setIsEditing(false);
+
+    title === '' && setTitle(name);
+
     if (!isNew) {
       handleOnBlurInEdit();
     } else {
@@ -98,16 +101,14 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
           </span>
         </StyledKebab>
         <StyledText onClick={(e) => onClickFolder(e, id, categoryName)}>
-          <input type="password" autoComplete="off" style={{ display: 'none' }} />
           <StyledInput
             type="text"
             ref={ref}
             value={title}
             placeholder={isNew ? '폴더 이름 입력' : ''}
-            onChange={(e) => onChange(e)}
+            onChange={onChange}
             onBlur={onBlur}
             disabled={!isEditing}
-            autoFocus
             isNew={isNew}
             maxLength={8}
           />
@@ -170,6 +171,10 @@ export const StyledInput = styled.input<{ isNew: boolean }>`
   -webkit-text-fill-color: ${({ isNew }) =>
     isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`};
   opacity: 1;
+
+  &:focus {
+    outline: none;
+  }
 
   &:disabled {
     border: 0;
