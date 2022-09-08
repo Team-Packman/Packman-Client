@@ -425,11 +425,7 @@ function AloneLanding() {
         />
       )}
       {addTemplateModalOpen && (
-        <ModalForAddToTemplate
-          title={list.title}
-          onClick={addTemplateModalCloseHandler}
-          isSaved={list.isSaved}
-        />
+        <ModalForAddToTemplate title={list.title} onClick={addTemplateModalCloseHandler} />
       )}
       {shareTemplateModalOpen && (
         <ModalForShare onClick={shareTemplateModalCloseHandler} inviteCode={list.inviteCode} />

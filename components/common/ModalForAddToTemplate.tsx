@@ -6,12 +6,11 @@ import Image from 'next/image';
 
 interface ModalForAddToTemplateProps {
   title: string;
-  isSaved: boolean;
   onClick: () => void;
 }
 
 function ModalForAddToTemplate(props: ModalForAddToTemplateProps) {
-  const { title, isSaved, onClick: modalHandler } = props;
+  const { title, onClick: modalHandler } = props;
   return (
     <>
       <StyledBg onClick={modalHandler} />
@@ -22,17 +21,10 @@ function ModalForAddToTemplate(props: ModalForAddToTemplateProps) {
         <div>
           <StyledTitle>{title}</StyledTitle>
           <StyledDescription>
-            {isSaved ? (
-              <>
-                <span>업데이트 </span>
-                <span>되었습니다.</span>
-              </>
-            ) : (
-              <>
-                <span>나만의 템플릿 </span>
-                <span>으로 추가되었습니다.</span>
-              </>
-            )}
+            <>
+              <span>나만의 템플릿 </span>
+              <span>으로 저장되었습니다.</span>
+            </>
           </StyledDescription>
         </div>
         <StyledConfirmButton onClick={modalHandler}>확인</StyledConfirmButton>
