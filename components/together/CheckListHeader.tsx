@@ -115,7 +115,7 @@ const StyledRoot = styled.div<{
   ${({ shared }) =>
     shared &&
     css`
-      z-index: 9999;
+      z-index: 1;
       box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.05);
     `}
 `;
