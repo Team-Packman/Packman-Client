@@ -29,15 +29,7 @@ function EditingProfile(props: CreateProfileProps) {
 export default EditingProfile;
 
 const StyledRoot = styled.div`
-  overflow-y: auto;
   height: 100%;
-
-  /* 브라우저별 스크롤바 숨김 설정 */
-  -ms-overflow-style: none; // Edge
-  scrollbar-width: none; // Firefox
-  &::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
-  }
 `;
 
 const StyledCommentWrapper = styled.div`
@@ -47,11 +39,6 @@ const StyledCommentWrapper = styled.div`
   justify-content: center;
   width: 100%;
   height: 8.7rem;
-
-  @media (max-height: 675px) {
-    height: 5rem;
-    justify-content: flex-start;
-  }
 
   & > h1 {
     ${FONT_STYLES.DISPLAY1_LIGHT};

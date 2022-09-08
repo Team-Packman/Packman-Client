@@ -170,16 +170,16 @@ export default SelectProfileSection;
 const StyledRoot = styled.section`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  height: calc(100% - 23.4rem);
+  height: calc(100% - 23.5rem);
   justify-content: space-between;
-  margin-top: 4.84rem;
+  margin-top: 4.7rem;
+  overflow-y: auto;
 
-  @media (max-height: 675px) {
-    margin-top: 0;
-    margin-bottom: 3rem;
-    height: 100%;
-    justify-content: flex-start;
+  /* 브라우저별 스크롤바 숨김 설정 */
+  -ms-overflow-style: none; // Edge
+  scrollbar-width: none; // Firefox
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
   }
 `;
 const StyledProfile = styled.div`
