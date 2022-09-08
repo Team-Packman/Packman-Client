@@ -37,7 +37,7 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
       )}
       <StyledOptions>
         <StyledButtonWrapper>
-          <StyledButton onClick={() => alert('준비 중인 기능입니다. 조금만 기다려 주세요!')}>
+          <StyledButton onClick={() => alert('준비중 입니다.\n조금만 기다려주세요🙏🏻')}>
             엿보기
           </StyledButton>
           <StyledLine />
