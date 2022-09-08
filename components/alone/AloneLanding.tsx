@@ -2,7 +2,6 @@ import React, { UIEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Layout from '../common/Layout';
-import useGlobalState from '../../utils/hooks/useGlobalState';
 import CheckListHeader from '../together/CheckListHeader';
 import useAPI from '../../utils/hooks/useAPI';
 import CheckListSubHeader from '../together/CheckListSubHeader';
@@ -322,7 +321,7 @@ function AloneLanding() {
   return (
     <Layout
       back
-      title="템플릿 미리보기"
+      title="패킹리스트"
       option={
         <CheckListHeader
           listId={list.id}

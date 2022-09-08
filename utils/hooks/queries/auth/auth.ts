@@ -60,14 +60,23 @@ export const useAddMemberMutation = () => {
 
 export const useCheckInvitation = (inviteCode: string) => {
   const client = useQueryClient();
-  const getInvited = useAPI((api) => api.packingList.together.getInvited);
 
-  const checkInvitation = async () => {
+  const getAloneInvited = useAPI((api) => api.packingList.alone.getInvited);
+  const getTogetherInvited = useAPI((api) => api.packingList.together.getInvited);
+
+  const checkInvitation = async function (type: 'alone' | 'together') {
     try {
-      const { data } = await client.fetchQuery(['invited', inviteCode], () =>
-        getInvited(inviteCode),
-      );
-      return data;
+      if (type === 'alone') {
+        const { data } = await client.fetchQuery(['aloneInvited', inviteCode], () =>
+          getAloneInvited(inviteCode),
+        );
+        return data;
+      } else {
+        const { data } = await client.fetchQuery(['togetherInvited', inviteCode], () =>
+          getTogetherInvited(inviteCode),
+        );
+        return data;
+      }
     } catch {
       throw new Error();
     }

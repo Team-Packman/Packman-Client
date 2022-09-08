@@ -20,13 +20,14 @@ interface CheckListHeaderProps {
   departureDate: string;
   together?: boolean;
   activeMode?: number;
-  updateRemainingInfo: (payload: RemainingInfoPayload, type: RemainingInfoType) => void;
+  shared?: boolean;
+  updateRemainingInfo?: (payload: RemainingInfoPayload, type: RemainingInfoType) => void;
 }
 
 const MAX_LENGTH = 12;
 
 function CheckListHeader(props: CheckListHeaderProps) {
-  const { title: titleProps, listId, departureDate, updateRemainingInfo } = props;
+  const { title: titleProps, listId, departureDate, shared, updateRemainingInfo } = props;
   const [title, setTitle] = useState(titleProps);
   const [isEditing, setIsEditing] = useState(false);
   const [isEntered, setIsEntered] = useState(false);
@@ -46,7 +47,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
     };
 
     title === '' && setTitle(titleProps);
-    updateRemainingInfo(payload, 'title');
+    updateRemainingInfo && updateRemainingInfo(payload, 'title');
     setIsEditing(false);
   };
 
@@ -55,7 +56,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
       listId,
       departureDate: e.target.value,
     };
-    updateRemainingInfo(payload, 'departure');
+    updateRemainingInfo && updateRemainingInfo(payload, 'departure');
     setIsEditing(false);
   };
 
@@ -66,7 +67,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
   }, [isEditing]);
 
   return (
-    <StyledRoot scroll={scroll} className="layout_option">
+    <StyledRoot scroll={scroll} shared={shared ?? false} className="layout_option">
       {isEditing ? (
         <StyledInput
           ref={ref}
@@ -94,6 +95,7 @@ export default CheckListHeader;
 
 const StyledRoot = styled.div<{
   scroll: boolean;
+  shared: boolean;
 }>`
   display: flex;
   flex-direction: column;
@@ -109,6 +111,13 @@ const StyledRoot = styled.div<{
       height: 0;
       opacity: 0;
     `};
+
+  ${({ shared }) =>
+    shared &&
+    css`
+      z-index: 9999;
+      box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.05);
+    `}
 `;
 
 const StyledTitle = styled.div`

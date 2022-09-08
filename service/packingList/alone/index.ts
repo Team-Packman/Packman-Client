@@ -237,3 +237,13 @@ export interface GetAlonePackingListDetailOutput {
     isSaved: false; // 혼자 패킹리스트 나만의 템플릿 추가 여부
   };
 }
+
+export interface GetAloneInvitedOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    id: string; // 혼자 패킹리스트 id
+    isOwner: boolean; // 혼자 패킹리스트 소유자인지 아닌지 (소유자이면: true)
+  };
+}

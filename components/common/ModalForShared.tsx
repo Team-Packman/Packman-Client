@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 function ModalForShared() {
+  const router = useRouter();
   return (
     <StyledRoot>
       <StyledModal>
@@ -12,7 +14,9 @@ function ModalForShared() {
           <Image src={ButtonX} alt="closeModal" width="24" height="24" />
         </ButtonContainer>
         <Description>친구가 패킹 리스트를 공유했어요! 🎁</Description>
-        <SeeListButton>3초만에 로그인하고 리스트 보기</SeeListButton>
+        <SeeListButton onClick={() => router.push('/login')}>
+          3초만에 로그인하고 리스트 보기
+        </SeeListButton>
       </StyledModal>
     </StyledRoot>
   );
