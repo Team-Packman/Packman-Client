@@ -31,7 +31,9 @@ function FolderInitial(props: FolderInitialProps) {
       <StyledInitialWrapper>
         <StyledLabel>{initialLables[currentIndex]}</StyledLabel>
         {!isFolderExist && (
-          <StyledStratButton onClick={onClick}>{initialButtons[currentIndex]}</StyledStratButton>
+          <StyledStratButton onClick={onClick} currentIndex={currentIndex}>
+            {initialButtons[currentIndex]}
+          </StyledStratButton>
         )}
       </StyledInitialWrapper>
     </StyledRoot>
@@ -72,12 +74,13 @@ export const StyledLabel = styled.p`
   margin-bottom: 1rem;
 `;
 
-export const StyledStratButton = styled.button`
+export const StyledStratButton = styled.button<{ currentIndex: number }>`
   width: calc(100% - 6rem);
   padding: 1.2rem 2.9rem;
   font-size: 1.4rem;
   color: ${packmanColors.pmWhite};
-  background: ${packmanColors.pmPink};
+  background: ${({ currentIndex }) =>
+    currentIndex === 0 ? `${packmanColors.pmPink}` : `${packmanColors.pmGreen}`};
   border: none;
   border-radius: 8px;
 `;

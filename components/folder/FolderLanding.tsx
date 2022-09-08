@@ -262,7 +262,7 @@ function FolderLanding() {
                   {isOutDated
                     ? 'Done!'
                     : recentPackingData?.data?.remainDay === '0'
-                    ? 'D-day'
+                    ? 'D-day 🎉'
                     : `D-${recentPackingData?.data?.remainDay}`}
                 </StyledRemainDay>
                 <StyledLeftMessage>
