@@ -16,12 +16,14 @@ import {
   DeleteAlonePackingListItemInput,
   DeleteAlonePackingListItemOutput,
   GetAlonePackingListDetailOutput,
+  GetAloneInvitedOutput,
 } from './index';
 import {
   fetchAddAlonePackingCategory,
   fetchAddAlonePackingFolder,
   fetchAddAlonePackingItem,
   fetchAloneFolder,
+  fetchAloneInvited,
   fetchAlonePackingListDetail,
   fetchDeleteAlonePackingCategory,
   fetchDeleteAlonePackingItem,
@@ -54,6 +56,7 @@ export interface AloneAPI {
     deleteAlonePackingListItem: (
       payload: DeleteAlonePackingListItemInput,
     ) => Promise<DeleteAlonePackingListItemOutput>;
+    getInvited: (invitedCode: string) => Promise<GetAloneInvitedOutput>;
   };
 }
 
@@ -76,6 +79,7 @@ const createAloneAPI = (request: AxiosInstance): AloneAPI => {
         fetchUpdateAlonePackingItem(request, payload),
       deleteAlonePackingListItem: (payload: DeleteAlonePackingListItemInput) =>
         fetchDeleteAlonePackingItem(request, payload),
+      getInvited: (invitedCode: string) => fetchAloneInvited(request, invitedCode),
     },
   };
 };

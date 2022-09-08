@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 function ModalForShared() {
+  const router = useRouter();
   return (
     <StyledRoot>
       <StyledModal>
@@ -12,7 +14,9 @@ function ModalForShared() {
           <Image src={ButtonX} alt="closeModal" width="24" height="24" />
         </ButtonContainer>
         <Description>친구가 패킹 리스트를 공유했어요! 🎁</Description>
-        <SeeListButton>3초만에 로그인하고 리스트 보기</SeeListButton>
+        <SeeListButton onClick={() => router.push('/login')}>
+          3초만에 로그인하고 리스트 보기
+        </SeeListButton>
       </StyledModal>
     </StyledRoot>
   );
@@ -31,15 +35,22 @@ const StyledRoot = styled.div`
 `;
 
 const StyledModal = styled.div`
-  width: calc(100% - 6rem);
-  background-color: ${packmanColors.pmWhite};
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  width: 32rem;
+  height: 17.6rem;
+
   padding: 0.8rem 0 2.4rem 0;
+
   border-radius: 10px;
+  background-color: ${packmanColors.pmWhite};
+
   position: absolute;
-  top: 35vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ButtonContainer = styled.div`

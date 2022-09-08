@@ -2,7 +2,6 @@ import React, { UIEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Layout from '../common/Layout';
-import useGlobalState from '../../utils/hooks/useGlobalState';
 import CheckListHeader from '../together/CheckListHeader';
 import useAPI from '../../utils/hooks/useAPI';
 import CheckListSubHeader from '../together/CheckListSubHeader';
@@ -18,6 +17,7 @@ import { useRouter } from 'next/router';
 import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 import ModalForShare from '../common/ModalForShare';
 import Loading from '../common/Loading';
+import useHide from '../../utils/hooks/useHide';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -40,8 +40,6 @@ function AloneLanding() {
   const router = useRouter();
   const { id } = router.query;
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
-  const [scroll, setScroll] = useGlobalState('scroll', false);
-  const [isScrolling, setIsScrolling] = useState(false);
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
   const [currentCreating, setCurrentCreating] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
@@ -49,6 +47,8 @@ function AloneLanding() {
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
   const [shareTemplateModalOpen, setShareTemplateModalOpen] = useState(false);
+
+  const [{ sectionArr }, { checkSufficient }, scrollEvent] = useHide(0);
 
   const getAlonePackingListDetail = useAPI(
     (api) => api.packingList.alone.getAlonePackingListDetail,
@@ -211,6 +211,7 @@ function AloneLanding() {
       }
     }
 
+    checkSufficient();
     setCurrentEditing('');
     createdCategoryHandler();
     bottomModalCloseHandler();
@@ -262,6 +263,7 @@ function AloneLanding() {
       );
     }
 
+    checkSufficient();
     setCurrentEditing('');
     createdHandler();
     bottomModalCloseHandler();
@@ -316,20 +318,10 @@ function AloneLanding() {
     }
   };
 
-  const ScrollEvent = (e: UIEvent<HTMLDivElement>) => {
-    if (e.currentTarget.scrollTop < 10) {
-      scroll && setScroll(false);
-    } else if (!isScrolling) {
-      setIsScrolling(true);
-      !scroll && setScroll(true);
-      setTimeout(() => setIsScrolling(false), 500);
-    }
-  };
-
   return (
     <Layout
       back
-      title="템플릿 미리보기"
+      title="패킹리스트"
       option={
         <CheckListHeader
           listId={list.id}
@@ -341,7 +333,7 @@ function AloneLanding() {
     >
       <StyledAloneLanding>
         <CheckListSubHeader categoryHandler={creatingCategoryHandler} />
-        <StyledBody onScroll={ScrollEvent}>
+        <StyledBody onScroll={scrollEvent} ref={sectionArr.current[0]}>
           {list.category.map(({ id: categoryId, name, pack }) => (
             <PackagesWithCategory
               key={categoryId}
@@ -417,7 +409,7 @@ function AloneLanding() {
           <AddTemplateButton
             onClick={() => updateRemainingInfo({ listId: list.id, isSaved: list.isSaved }, 'save')}
           >
-            나만의 템플릿으로 추가
+            {list.isSaved ? '나만의 템플릿 업데이트' : '나만의 템플릿으로 추가'}
           </AddTemplateButton>
           <SharePackingListButton icon onClick={shareTemplateModalOpenHandler}>
             패킹 리스트 공유
@@ -435,7 +427,9 @@ function AloneLanding() {
       {addTemplateModalOpen && (
         <ModalForAddToTemplate title={list.title} onClick={addTemplateModalCloseHandler} />
       )}
-      {shareTemplateModalOpen && <ModalForShare onClick={shareTemplateModalCloseHandler} />}
+      {shareTemplateModalOpen && (
+        <ModalForShare onClick={shareTemplateModalCloseHandler} inviteCode={list.inviteCode} />
+      )}
     </Layout>
   );
 }
