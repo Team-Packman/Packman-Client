@@ -31,15 +31,22 @@ const StyledRoot = styled.div`
 `;
 
 const StyledModal = styled.div`
-  width: calc(100% - 6rem);
-  background-color: ${packmanColors.pmWhite};
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  width: 32rem;
+  height: 17.6rem;
+
   padding: 0.8rem 0 2.4rem 0;
+
   border-radius: 10px;
+  background-color: ${packmanColors.pmWhite};
+
   position: absolute;
-  top: 35vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ButtonContainer = styled.div`

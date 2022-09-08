@@ -410,7 +410,7 @@ function AloneLanding() {
           <AddTemplateButton
             onClick={() => updateRemainingInfo({ listId: list.id, isSaved: list.isSaved }, 'save')}
           >
-            {list.isSaved ? '나만의 템플릿으로 추가' : '나만의 템플릿 업데이트'}
+            {list.isSaved ? '나만의 템플릿 업데이트' : '나만의 템플릿으로 추가'}
           </AddTemplateButton>
           <SharePackingListButton icon onClick={shareTemplateModalOpenHandler}>
             패킹 리스트 공유
@@ -428,7 +428,9 @@ function AloneLanding() {
       {addTemplateModalOpen && (
         <ModalForAddToTemplate title={list.title} onClick={addTemplateModalCloseHandler} />
       )}
-      {shareTemplateModalOpen && <ModalForShare onClick={shareTemplateModalCloseHandler} />}
+      {shareTemplateModalOpen && (
+        <ModalForShare onClick={shareTemplateModalCloseHandler} inviteCode={list.inviteCode} />
+      )}
     </Layout>
   );
 }
