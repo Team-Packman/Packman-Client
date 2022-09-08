@@ -201,7 +201,6 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 router.push(`/alone?id=${data?.data?.id}`);
-                setIsFresh({ isFresh: true });
               },
             },
           )
@@ -215,6 +214,7 @@ function ListIntroLanding() {
             {
               onSuccess: (data) => {
                 router.push(`/together?id=${data?.data?.id}`);
+                setIsFresh({ isFresh: true });
               },
             },
           );
