@@ -5,12 +5,11 @@ import { FONT_STYLES } from '../../styles/font';
 
 interface ModalProps {
   title: string;
-  image?: React.ReactNode;
   button?: React.ReactNode;
   closeModal: () => void;
 }
 export default function Modal(props: ModalProps) {
-  const { title, image, button, closeModal } = props;
+  const { title, button, closeModal } = props;
 
   return (
     <>
@@ -21,7 +20,6 @@ export default function Modal(props: ModalProps) {
         </StyledImageWrapper>
         <StyledModalInfo>
           <p>{title}</p>
-          {image}
           {button}
         </StyledModalInfo>
       </StyledRoot>

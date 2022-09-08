@@ -19,7 +19,7 @@ function ProfileLanding() {
   return (
     <>
       {!isAlreadyUser && (
-        <Layout padding>
+        <Layout padding noHeader>
           <StyledRoot>
             <CreateProfile
               comment={
@@ -45,4 +45,15 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  height: 100%;
+  overflow-y: auto;
+  margin-top: 4.7rem;
+
+  /* 브라우저별 스크롤바 숨김 설정 */
+  -ms-overflow-style: none; // Edge
+  scrollbar-width: none; // Firefox
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
 `;
