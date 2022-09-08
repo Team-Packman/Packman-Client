@@ -81,7 +81,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
       )}
 
       <StyledCalender>
-        <input type="date" value={departureDate} onChange={saveDate} />
+        <input type="date" value={departureDate} onChange={saveDate} disabled={shared} />
         <StyledDate>{departureDate.replaceAll('-', '. ')}</StyledDate>
         <StyledEdit>
           <Image src={Edit} layout="fill" alt="edit_ic" />

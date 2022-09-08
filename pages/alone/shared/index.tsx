@@ -10,7 +10,6 @@ import SharePackingListButton from '../../../components/common/SharePackingListB
 import PackagesWithCategory from '../../../components/common/PackagesWithCategory';
 import PackingItem from '../../../components/common/PackingItem';
 import PackingCategory from '../../../components/common/PackingCategory';
-import { packmanColors } from '../../../styles/color';
 import CheckListHeader from '../../../components/together/CheckListHeader';
 
 function SharedForAlone() {
@@ -71,18 +70,6 @@ function SharedForAlone() {
 }
 
 export default SharedForAlone;
-
-const StyledPreviewHeader = styled.div`
-  height: 8.4rem;
-  line-height: 8.4rem;
-  font-weight: 800;
-  font-size: 2.8rem;
-  padding: 0 2rem;
-  color: ${packmanColors.black};
-  background-color: ${packmanColors.pmWhite};
-  box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.05);
-  z-index: 1;
-`;
 
 const StyledBody = styled.div`
   display: flex;
