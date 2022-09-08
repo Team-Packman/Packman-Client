@@ -48,7 +48,7 @@ function TogetherLanding() {
   const router = useRouter();
   const { id } = router.query;
   const { isFresh } = useRecoilValue(listState);
-  console.log(isFresh);
+
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
 
   const [bottomModalOpen, setBottomModalOpen] = useState(false);

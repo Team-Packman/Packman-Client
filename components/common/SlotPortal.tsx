@@ -7,7 +7,7 @@ interface SlotProps {
 
 function SlotPortal({ id, children }: PropsWithChildren<SlotProps>) {
   const el = document.querySelector('#' + id);
-  console.log(el);
+
   return el ? reactDom.createPortal(children, el) : null;
 }
 
