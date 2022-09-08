@@ -48,6 +48,8 @@ function PackingItem(props: PackingItemProps) {
   const handleValue = (name: string) => {
     if (name.length <= MAX_LENGTH) {
       setName(name);
+    } else {
+      setName(name.slice(0, MAX_LENGTH));
     }
   };
 
@@ -93,9 +95,10 @@ function PackingItem(props: PackingItemProps) {
           <StyledInput
             ref={ref}
             value={name}
+            maxLength={MAX_LENGTH}
             placeholder="짐을 입력해주세요"
             onChange={({ target: { value } }) => handleValue(value)}
-            {...editHandler(isEntered, (state) => setIsEntered(state), saveResult)}
+            {...editHandler(isEntered, setIsEntered, saveResult)}
           />
         ) : (
           <StyledContent>{name}</StyledContent>
