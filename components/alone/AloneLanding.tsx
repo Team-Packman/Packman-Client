@@ -145,7 +145,7 @@ function AloneLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getAlonePackingListDetail');
+              client.invalidateQueries(['getAlonePackingListDetail', id]);
             },
           },
         );
@@ -159,7 +159,7 @@ function AloneLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getAlonePackingListDetail');
+              client.invalidateQueries(['getAlonePackingListDetail', id]);
             },
           },
         );
@@ -173,7 +173,7 @@ function AloneLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getAlonePackingListDetail');
+              client.invalidateQueries(['getAlonePackingListDetail', id]);
               addTemplateModalOpenHandler();
             },
           },
@@ -192,7 +192,7 @@ function AloneLanding() {
         },
         {
           onSuccess: () => {
-            client.invalidateQueries('getAlonePackingListDetail');
+            client.invalidateQueries(['getAlonePackingListDetail', id]);
             bottomModalCloseHandler();
           },
         },
@@ -205,7 +205,7 @@ function AloneLanding() {
             name,
           },
           {
-            onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+            onSuccess: () => client.invalidateQueries(['getAlonePackingListDetail', id]),
           },
         );
       }
@@ -231,7 +231,7 @@ function AloneLanding() {
             categoryId,
           },
           {
-            onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+            onSuccess: () => client.invalidateQueries(['getAlonePackingListDetail', id]),
           },
         );
       }
@@ -244,7 +244,7 @@ function AloneLanding() {
             categoryId,
           },
           {
-            onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+            onSuccess: () => client.invalidateQueries(['getAlonePackingListDetail', id]),
           },
         );
       }
@@ -258,7 +258,7 @@ function AloneLanding() {
           categoryId,
         },
         {
-          onSuccess: () => client.invalidateQueries('getAlonePackingListDetail'),
+          onSuccess: () => client.invalidateQueries(['getAlonePackingListDetail', id]),
         },
       );
     }
@@ -292,7 +292,7 @@ function AloneLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getAlonePackingListDetail');
+              client.invalidateQueries(['getAlonePackingListDetail', id]);
             },
           },
         );
@@ -308,7 +308,7 @@ function AloneLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getAlonePackingListDetail');
+              client.invalidateQueries(['getAlonePackingListDetail', id]);
             },
           },
         );
