@@ -351,8 +351,7 @@ export const StyledFolderInputContent = styled.div`
   input[type='text'] {
     display: inline-block;
     position: relative;
-    padding: 1.1rem 0;
-    text-align: center;
+    padding: 1.1rem 0 1.1rem 1.6rem;
     border: 1px dashed ${packmanColors.pmDashGrey};
     font-size: 1.5rem;
     font-weight: 500;
@@ -404,7 +403,7 @@ export const StyledListNameContainer = styled.section`
   input[type='text'] {
     display: inline-block;
     position: relative;
-    padding: 1.1rem 4rem;
+    padding: 1.1rem 0 1.1rem 1.6rem;
     border: 1px dashed ${packmanColors.pmDashGrey};
     font-size: 1.5rem;
     font-weight: 500;
