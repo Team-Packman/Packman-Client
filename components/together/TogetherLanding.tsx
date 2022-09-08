@@ -638,7 +638,11 @@ function TogetherLanding() {
         />
       )}
       {addTemplateModalOpen && (
-        <ModalForAddToTemplate title={info.title} onClick={addTemplateModalCloseHandler} />
+        <ModalForAddToTemplate
+          title={info.title}
+          onClick={addTemplateModalCloseHandler}
+          isSaved={info.togetherPackingList.isSaved}
+        />
       )}
     </Layout>
   );
