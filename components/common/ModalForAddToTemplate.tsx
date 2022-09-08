@@ -76,6 +76,7 @@ const StyledTitle = styled.div`
   color: ${packmanColors.black};
 `;
 const StyledDescription = styled.div`
+  text-align: center;
   margin-top: 2.4rem;
 
   & > span {
