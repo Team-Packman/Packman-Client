@@ -77,7 +77,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
           {...editHandler(isEntered, (state) => setIsEntered(state), saveTitle)}
         />
       ) : (
-        <StyledTitle onClick={() => setIsEditing(true)}>{title}</StyledTitle>
+        <StyledTitle onClick={() => !shared && setIsEditing(true)}>{title}</StyledTitle>
       )}
 
       <StyledCalender>
