@@ -303,6 +303,7 @@ export const StyledDataContainer = styled.section`
 `;
 
 export const StyledDate = styled.input`
+  -webkit-appearance: none;
   display: inline-block;
   position: relative;
   width: 100%;
@@ -391,7 +392,8 @@ export const StyledTag = styled.span<{ isSelected: boolean }>`
   margin-bottom: 1.3rem;
   background: ${({ isSelected }) =>
     isSelected ? `${packmanColors.pmWhite}` : `${packmanColors.pmBlueGrey}`};
-  border: ${({ isSelected }) => (isSelected ? `1px solid ${packmanColors.pmPink}` : '0')};
+  border: ${({ isSelected }) =>
+    isSelected ? `1px solid ${packmanColors.pmPink}` : `1px solid ${packmanColors.pmBlueGrey}`};
   border-radius: 0.8rem;
 `;
 

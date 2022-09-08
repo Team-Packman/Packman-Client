@@ -101,6 +101,8 @@ const StyledRoot = styled.div`
   & > h1 {
     color: ${packmanColors.pmBlack};
     font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+    padding-top: 0.8rem;
+    padding-bottom: 1rem;
   }
 `;
 
