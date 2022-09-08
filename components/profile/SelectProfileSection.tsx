@@ -172,8 +172,15 @@ const StyledRoot = styled.section`
   flex-direction: column;
   align-items: center;
   height: calc(100% - 23.4rem);
-  margin-top: 4.84rem;
   justify-content: space-between;
+  margin-top: 4.84rem;
+
+  @media (max-height: 675px) {
+    margin-top: 0;
+    margin-bottom: 3rem;
+    height: 100%;
+    justify-content: flex-start;
+  }
 `;
 const StyledProfile = styled.div`
   display: flex;

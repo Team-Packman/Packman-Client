@@ -5,6 +5,7 @@ import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
+import { useState } from 'react';
 interface PackingList {
   id: string;
   departureDate: string;
@@ -44,6 +45,7 @@ export default function SwipeablelistItem(props: ItemProps) {
 
   const onTouchStart = (e: React.TouchEvent) => {
     let isSwiping = false;
+    let isScrolling = false;
 
     handleIsScrolled(false); // 터치를 하면 무조건 스크롤 가능하게 초기화
 
@@ -60,9 +62,12 @@ export default function SwipeablelistItem(props: ItemProps) {
       // 기울기 40~45도 이상으로 대각선 스와이핑하면 상하 스크롤 실행
       if (Math.abs((startY - endY) / (startX - endX)) > 0.25) {
         handleIsDragged(Array(packingList?.length).fill(false));
+        isScrolling = true;
         return;
       }
       //  아이템의 우측하단에서 좌측상단으로 대각선 스와이핑 했을 때는 열림
+
+      if (isScrolling) return; // 상하 스크롤 중이면 좌우 스와이핑 막음
 
       // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
       if (startX - endX > 0) {
@@ -84,12 +89,12 @@ export default function SwipeablelistItem(props: ItemProps) {
           }
           handleIsDragged(tmpArr);
         }
+        handleIsScrolled(false);
       }
     }
     function End() {
       document.removeEventListener('touchmove', Move);
       document.removeEventListener('touchend', End);
-      handleIsScrolled(false);
     }
     document.addEventListener('touchmove', Move);
     document.addEventListener('touchend', End);
