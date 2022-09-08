@@ -61,6 +61,7 @@ export default function SwipeablelistItem(props: ItemProps) {
 
       // 기울기 40~45도 이상으로 대각선 스와이핑하면 상하 스크롤 실행
       if (Math.abs((startY - endY) / (startX - endX)) > 0.25) {
+        handleIsScrolled(false);
         handleIsDragged(Array(packingList?.length).fill(false));
         isScrolling = true;
         return;
@@ -72,11 +73,7 @@ export default function SwipeablelistItem(props: ItemProps) {
       // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
       if (startX - endX > 0) {
         handleIsScrolled(true); // 상하 스크롤 막기
-
-        if (!isSwiping) {
-          // 스와이핑 중으로 변경
-          isSwiping = true;
-        }
+        isSwiping = true; // 스와이핑 중으로 변경
         tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
         handleIsDragged(tmpArr); // 배열 수정
       }
@@ -84,9 +81,6 @@ export default function SwipeablelistItem(props: ItemProps) {
       if (endX - startX > 0) {
         // 열려있던 경우에만 닫기
         if (isDragged[idx]) {
-          if (!isSwiping) {
-            isSwiping = true;
-          }
           handleIsDragged(tmpArr);
         }
         handleIsScrolled(false);
