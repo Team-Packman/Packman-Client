@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import produce from 'immer';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
@@ -26,6 +27,7 @@ import 'swiper/css';
 import 'swiper/css/bundle';
 import useHide from '../../utils/hooks/useHide';
 import { GetTogetherPackingListDetailOutput } from '../../service/packingList/together';
+import { AxiosError } from 'axios';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -116,11 +118,25 @@ function TogetherLanding() {
     'updatePackingListCategory',
     updatePackingListCategory,
     {
-      onMutate: () => {
+      onMutate: async (newCategory) => {
+        await client.cancelQueries(['getPackingListDetail', id]);
+
         const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
           'getPackingListDetail',
           id,
         ]);
+
+        const newPrev = produce(prev, (draft) => {
+          draft?.data.togetherPackingList.category.map((category) => {
+            if (category.id === newCategory.id) {
+              category.name = newCategory.name;
+            }
+
+            return category;
+          });
+        });
+
+        client.setQueryData(['getPackingListDetail', id], newPrev);
 
         return { prev };
       },
@@ -129,6 +145,30 @@ function TogetherLanding() {
   const { mutate: patchAloneCategory } = useMutation(
     'updateAlonePackingListCategory',
     updateAlonePackingListCategory,
+    {
+      onMutate: async (newCategory) => {
+        await client.cancelQueries(['getPackingListDetail', id]);
+
+        const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
+          'getPackingListDetail',
+          id,
+        ]);
+
+        const newPrev = produce(prev, (draft) => {
+          draft?.data.myPackingList.category.map((category) => {
+            if (category.id === newCategory.id) {
+              category.name = newCategory.name;
+            }
+
+            return category;
+          });
+        });
+
+        client.setQueryData(['getPackingListDetail', id], newPrev);
+
+        return { prev };
+      },
+    },
   );
   const { mutate: patchItem } = useMutation('updatePackingListItem', updatePackingListItem);
   const { mutate: patchAloneItem } = useMutation(
@@ -198,6 +238,14 @@ function TogetherLanding() {
             listId,
           },
           {
+            onError: (err, variable, context) => {
+              if (context?.prev) {
+                client.setQueryData(['getPackingListDetail', id], context.prev);
+                if (err instanceof AxiosError) {
+                  alert(err.response?.data.message);
+                }
+              }
+            },
             onSettled: () => {
               client.invalidateQueries(['getPackingListDetail', id]);
             },
@@ -211,7 +259,15 @@ function TogetherLanding() {
             listId,
           },
           {
-            onSuccess: () => {
+            onError: (err, variable, context) => {
+              if (context?.prev) {
+                client.setQueryData(['getPackingListDetail', id], context.prev);
+                if (err instanceof AxiosError) {
+                  alert(err.response?.data.message);
+                }
+              }
+            },
+            onSettled: () => {
               client.invalidateQueries(['getPackingListDetail', id]);
             },
           },

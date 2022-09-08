@@ -1,4 +1,5 @@
-import React, { UIEvent, useState } from 'react';
+import React, { useState } from 'react';
+import produce from 'immer';
 import styled from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Layout from '../common/Layout';
@@ -18,6 +19,8 @@ import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 import ModalForShare from '../common/ModalForShare';
 import Loading from '../common/Loading';
 import useHide from '../../utils/hooks/useHide';
+import { GetAlonePackingListDetailOutput } from '../../service/packingList/alone';
+import { AxiosError } from 'axios';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -96,6 +99,30 @@ function AloneLanding() {
   const { mutate: patchAloneCategory } = useMutation(
     'updateAlonePackingListCategory',
     updateAlonePackingListCategory,
+    {
+      onMutate: async (newCategory) => {
+        await client.cancelQueries(['getAlonePackingListDetail', id]);
+
+        const prev = client.getQueryData<GetAlonePackingListDetailOutput>([
+          'getAlonePackingListDetail',
+          id,
+        ]);
+
+        const newPrev = produce(prev, (draft) => {
+          draft?.data.category.map((category) => {
+            if (category.id === newCategory.id) {
+              category.name = newCategory.name;
+            }
+
+            return category;
+          });
+        });
+
+        client.setQueryData(['getAlonePackingListDetail', id], newPrev);
+
+        return { prev };
+      },
+    },
   );
   const { mutate: patchAloneItem } = useMutation(
     'updateAlonePackingListItem',
@@ -191,9 +218,16 @@ function AloneLanding() {
           name,
         },
         {
-          onSuccess: () => {
+          onError: (err, variable, context) => {
+            if (context?.prev) {
+              client.setQueryData(['getAlonePackingListDetail', id], context.prev);
+              if (err instanceof AxiosError) {
+                alert(err.response?.data.message);
+              }
+            }
+          },
+          onSettled: () => {
             client.invalidateQueries(['getAlonePackingListDetail', id]);
-            bottomModalCloseHandler();
           },
         },
       );
