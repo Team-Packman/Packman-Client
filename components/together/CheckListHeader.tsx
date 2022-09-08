@@ -71,6 +71,7 @@ function CheckListHeader(props: CheckListHeaderProps) {
         <StyledInput
           ref={ref}
           value={title}
+          maxLength={MAX_LENGTH}
           onChange={({ target: { value } }) => handleTitle(value)}
           {...editHandler(isEntered, (state) => setIsEntered(state), saveTitle)}
         />

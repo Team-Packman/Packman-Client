@@ -95,6 +95,7 @@ function PackingItem(props: PackingItemProps) {
           <StyledInput
             ref={ref}
             value={name}
+            maxLength={MAX_LENGTH}
             placeholder="짐을 입력해주세요"
             onChange={({ target: { value } }) => handleValue(value)}
             {...editHandler(isEntered, setIsEntered, saveResult)}

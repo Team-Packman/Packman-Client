@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Layout from '../common/Layout';
 import styled from 'styled-components';
 import useAPI from '../../utils/hooks/useAPI';
@@ -25,6 +25,7 @@ import Loading from '../common/Loading';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import useHide from '../../utils/hooks/useHide';
+import { GetTogetherPackingListDetailOutput } from '../../service/packingList/together';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -113,6 +114,16 @@ function TogetherLanding() {
   const { mutate: patchCategory } = useMutation(
     'updatePackingListCategory',
     updatePackingListCategory,
+    {
+      onMutate: () => {
+        const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
+          'getPackingListDetail',
+          id,
+        ]);
+
+        return { prev };
+      },
+    },
   );
   const { mutate: patchAloneCategory } = useMutation(
     'updateAlonePackingListCategory',
@@ -186,8 +197,8 @@ function TogetherLanding() {
             listId,
           },
           {
-            onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+            onSettled: () => {
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -200,7 +211,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -214,7 +225,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -226,7 +237,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -252,7 +263,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -267,7 +278,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -283,7 +294,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDetail');
+                client.invalidateQueries(['getPackingListDetail', id]);
               },
             },
           );
@@ -296,7 +307,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDetail');
+                client.invalidateQueries(['getPackingListDetail', id]);
               },
             },
           );
@@ -314,7 +325,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -329,7 +340,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -343,7 +354,7 @@ function TogetherLanding() {
   const updatePacker = (payload: PackerInfoPayload) => {
     patchPacker(payload, {
       onSuccess: () => {
-        client.invalidateQueries('getPackingListDetail');
+        client.invalidateQueries(['getPackingListDetail', id]);
       },
     });
   };
@@ -360,7 +371,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -374,7 +385,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
         );
@@ -388,7 +399,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries('getPackingListDetail');
+              client.invalidateQueries(['getPackingListDetail', id]);
               addTemplateModalOpenHandler();
             },
           },
@@ -419,7 +430,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDetail');
+                client.invalidateQueries(['getPackingListDetail', id]);
               },
             },
           );
@@ -431,7 +442,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDetail');
+                client.invalidateQueries(['getPackingListDetail', id]);
               },
             },
           );
@@ -449,7 +460,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDetail');
+                client.invalidateQueries(['getPackingListDetail', id]);
               },
             },
           );
@@ -462,7 +473,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries('getPackingListDetail');
+                client.invalidateQueries(['getPackingListDetail', id]);
               },
             },
           );
