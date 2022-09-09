@@ -33,7 +33,7 @@ function PackingCategory(props: PackingCategoryProps) {
     modalHandler,
     isEditing,
   } = props;
-  const [text, setText] = useState(name);
+
   const [isEntered, setIsEntered] = useState(false);
   const ref = useRef<HTMLSpanElement | null>(null);
 
@@ -59,13 +59,6 @@ function PackingCategory(props: PackingCategoryProps) {
     }
   }, [isEditing]);
 
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.innerText = name;
-      setCaret(ref.current);
-    }
-  }, [name]);
-
   const handleChange = ({ currentTarget: { innerText } }: FormEvent<HTMLSpanElement>) => {
     if (ref.current && innerText.length > MAX_LENGTH) {
       ref.current.innerText = innerText.slice(0, MAX_LENGTH);
@@ -80,14 +73,14 @@ function PackingCategory(props: PackingCategoryProps) {
           suppressContentEditableWarning
           contentEditable={true}
           ref={ref}
-          defaultValue={text}
+          defaultValue={name}
           onInput={handleChange}
           {...editHandler(isEntered, setIsEntered, saveResult)}
         >
-          {text}
+          {name}
         </StyledCategory>
       ) : (
-        <StyledCategory>{text}</StyledCategory>
+        <StyledCategory>{name}</StyledCategory>
       )}
 
       <StyledKebab>{!isEditing && <Image src={Kebab} alt="kebab_ic" layout="fill" />}</StyledKebab>

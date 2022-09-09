@@ -66,6 +66,7 @@ export interface AddAlonePackingListIntroOutput {
 }
 
 export interface AddAlonePackingListCategoryInput {
+  id: string; // 클라이언트에서 사용하기 위한 id (!== 명세서)
   name: string; //혼자 패킹리스트에서 생성한 카테고리 이름
   listId: string; //혼자 패킹리스트 id
 }

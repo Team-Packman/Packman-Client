@@ -43,11 +43,12 @@ function TogetherLandingBottom(props: TogetherLandingBottomProps) {
     onEdit();
     closeModal();
   };
+
   return (
     <>
       <StyledBackground onClick={closeModal} />
       <StyledRoot>
-        <Image src={iSwipeBar} alt="스와이프바" />
+        <Image src={iSwipeBar} alt="swipe_bar_ic" />
         <h1>{isClickDelete ? '정말 삭제하시겠어요?' : content}</h1>
         <StyledButtonWrapper>
           {isClickDelete ? (
