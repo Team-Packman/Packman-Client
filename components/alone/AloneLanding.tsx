@@ -51,7 +51,7 @@ function AloneLanding() {
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
   const [shareTemplateModalOpen, setShareTemplateModalOpen] = useState(false);
 
-  const [{ sectionArr }, { checkSufficient }, scrollEvent] = useHide(0);
+  const [{ sectionArr }, _, scrollEvent] = useHide(0);
 
   const getAlonePackingListDetail = useAPI(
     (api) => api.packingList.alone.getAlonePackingListDetail,
@@ -245,7 +245,6 @@ function AloneLanding() {
       }
     }
 
-    checkSufficient();
     setCurrentEditing('');
     createdCategoryHandler();
     bottomModalCloseHandler();
@@ -297,7 +296,6 @@ function AloneLanding() {
       );
     }
 
-    checkSufficient();
     setCurrentEditing('');
     createdHandler();
     bottomModalCloseHandler();
@@ -478,12 +476,11 @@ const StyledAloneLanding = styled.div`
 
 const StyledBody = styled.div`
   display: flex;
-  //100% - subheader - device
-  height: calc(100% - 4rem - 10rem);
+  //100% - subheader - functional section
+  height: calc(100% - 4rem - 12.1rem);
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: scroll;
-  margin-bottom: 24.4rem;
   padding: 0 2rem;
   padding-top: 1.6rem;
 `;

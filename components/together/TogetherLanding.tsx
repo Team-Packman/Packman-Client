@@ -303,7 +303,6 @@ function TogetherLanding() {
     setCurrentEditing('');
     createdCategoryHandler();
     bottomModalCloseHandler();
-    checkSufficient();
   };
   const updateItem = (payload: UpdateItemPayload) => {
     const { name, listId, packId, categoryId, isChecked } = payload;
@@ -406,7 +405,6 @@ function TogetherLanding() {
     setCurrentEditing('');
     createdItemHandler();
     bottomModalCloseHandler();
-    checkSufficient();
   };
   const updatePacker = (payload: PackerInfoPayload) => {
     patchPacker(payload, {
