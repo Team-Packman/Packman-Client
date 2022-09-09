@@ -22,7 +22,7 @@ function ModalForAddToTemplate(props: ModalForAddToTemplateProps) {
           <StyledTitle>{title}</StyledTitle>
           <StyledDescription>
             <>
-              <span>나만의 템플릿 </span>
+              <span>나만의 템플릿</span>
               <span>으로 저장되었습니다.</span>
             </>
           </StyledDescription>
