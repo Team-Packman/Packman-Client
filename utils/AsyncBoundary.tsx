@@ -1,8 +1,12 @@
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { PropsWithChildren, ReactNode, Suspense, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from 'react-query';
+import { useResetRecoilState } from 'recoil';
 import Error from '../components/common/Error';
 import Loading from '../components/common/Loading';
+import { authUserAtom, invitationAtom } from './recoil/atom/atom';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
@@ -30,7 +34,16 @@ export const useErrorBubbling = () => {
   };
 };
 const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
-  console.error(error);
+  const router = useRouter();
+  const resetUser = useResetRecoilState(authUserAtom);
+  const resetInvitation = useResetRecoilState(invitationAtom);
+
+  if (error instanceof AxiosError && error.response?.status === 0) {
+    resetUser();
+    resetInvitation();
+    router.replace('/login');
+  }
+
   return (
     <div>
       <Error />

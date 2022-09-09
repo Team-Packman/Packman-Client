@@ -1,3 +1,4 @@
+import { invitationAtom } from './../../../recoil/atom/atom';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useQueryClient, useMutation } from 'react-query';
@@ -32,6 +33,7 @@ export const useRefresh = (tokens: RefreshInput) => {
             return;
           }
           default:
+            resetUser();
             throw new Error();
         }
       }
@@ -60,6 +62,7 @@ export const useAddMemberMutation = () => {
 
 export const useCheckInvitation = (inviteCode: string) => {
   const client = useQueryClient();
+  const resetInvitation = useResetRecoilState(invitationAtom);
 
   const getAloneInvited = useAPI((api) => api.packingList.alone.getInvited);
   const getTogetherInvited = useAPI((api) => api.packingList.together.getInvited);
@@ -78,6 +81,7 @@ export const useCheckInvitation = (inviteCode: string) => {
         return data;
       }
     } catch {
+      resetInvitation();
       throw new Error();
     }
   };

@@ -82,9 +82,9 @@ export const useInvitation = () => {
           );
         }
       }
-    }
 
-    resetInvitation();
+      resetInvitation();
+    }
   };
 
   return receiveGuest;
