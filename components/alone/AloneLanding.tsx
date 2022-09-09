@@ -94,6 +94,28 @@ function AloneLanding() {
   const { mutate: addAloneCategory } = useMutation(
     'addAlonePackingListCategory',
     addAlonePackingListCategory,
+    {
+      onMutate: async (newCategory) => {
+        const prev = client.getQueryData<GetAlonePackingListDetailOutput>([
+          'getAlonePackingListDetail',
+          id,
+        ]);
+
+        const newPrev = produce(prev, (draft) => {
+          draft?.data.category.map((category) => {
+            if (category.id === newCategory.id) {
+              category.name = newCategory.name;
+            }
+
+            return category;
+          });
+        });
+
+        client.setQueryData(['getAlonePackingListDetail', id], newPrev);
+
+        return { prev };
+      },
+    },
   );
   const { mutate: addAloneItem } = useMutation('addAlonePackingListItem', addAlonePackingListItem);
   const { mutate: patchAloneCategory } = useMutation(
@@ -101,8 +123,6 @@ function AloneLanding() {
     updateAlonePackingListCategory,
     {
       onMutate: async (newCategory) => {
-        await client.cancelQueries(['getAlonePackingListDetail', id]);
-
         const prev = client.getQueryData<GetAlonePackingListDetailOutput>([
           'getAlonePackingListDetail',
           id,
@@ -235,11 +255,22 @@ function AloneLanding() {
       if (name.length !== 0) {
         addAloneCategory(
           {
+            id: categoryId,
             listId,
             name,
           },
           {
-            onSuccess: () => client.invalidateQueries(['getAlonePackingListDetail', id]),
+            onError: (err, variable, context) => {
+              if (context?.prev) {
+                client.setQueryData(['getAlonePackingListDetail', id], context.prev);
+                if (err instanceof AxiosError) {
+                  alert(err.response?.data.message);
+                }
+              }
+            },
+            onSettled: () => {
+              client.invalidateQueries(['getAlonePackingListDetail', id]);
+            },
           },
         );
       }

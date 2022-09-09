@@ -26,7 +26,10 @@ import Loading from '../common/Loading';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import useHide from '../../utils/hooks/useHide';
-import { GetTogetherPackingListDetailOutput } from '../../service/packingList/together';
+import {
+  AddTogetherPackingListCategoryOutput,
+  GetTogetherPackingListDetailOutput,
+} from '../../service/packingList/together';
 import { AxiosError } from 'axios';
 
 interface FocusInfo {
@@ -107,10 +110,45 @@ function TogetherLanding() {
       enabled: !!id,
     },
   );
-  const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory);
+  const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory, {
+    onMutate: async (newCategory) => {
+      const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
+        'getPackingListDetail',
+        id,
+      ]);
+      const newPrev = produce(prev, (draft) => {
+        draft?.data.togetherPackingList.category.map((category) => {
+          if (category.id === newCategory.id) {
+            category.name = newCategory.name;
+          }
+          return category;
+        });
+      });
+      client.setQueryData(['getPackingListDetail', id], newPrev);
+      return { prev };
+    },
+  });
   const { mutate: addAloneCategory } = useMutation(
     'addAlonePackingListCategory',
     addAlonePackingListCategory,
+    {
+      onMutate: async (newCategory) => {
+        const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
+          'getPackingListDetail',
+          id,
+        ]);
+        const newPrev = produce(prev, (draft) => {
+          draft?.data.togetherPackingList.category.map((category) => {
+            if (category.id === newCategory.id) {
+              category.name = newCategory.name;
+            }
+            return category;
+          });
+        });
+        client.setQueryData(['getPackingListDetail', id], newPrev);
+        return { prev };
+      },
+    },
   );
   const { mutate: addItem } = useMutation('addPackingListItem', addPackingListItem);
   const { mutate: addAloneItem } = useMutation('addAlonePackingListItem', addAlonePackingListItem);
@@ -119,8 +157,6 @@ function TogetherLanding() {
     updatePackingListCategory,
     {
       onMutate: async (newCategory) => {
-        await client.cancelQueries(['getPackingListDetail', id]);
-
         const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
           'getPackingListDetail',
           id,
@@ -147,8 +183,6 @@ function TogetherLanding() {
     updateAlonePackingListCategory,
     {
       onMutate: async (newCategory) => {
-        await client.cancelQueries(['getPackingListDetail', id]);
-
         const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
           'getPackingListDetail',
           id,
@@ -277,11 +311,20 @@ function TogetherLanding() {
       if (!activeMode) {
         addCategory(
           {
+            id: categoryId,
             name,
             listId,
           },
           {
-            onSuccess: () => {
+            onError: (err, variable, context) => {
+              if (context?.prev) {
+                client.setQueryData(['getPackingListDetail', id], context.prev);
+                if (err instanceof AxiosError) {
+                  alert(err.response?.data.message);
+                }
+              }
+            },
+            onSettled: () => {
               client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
@@ -289,11 +332,20 @@ function TogetherLanding() {
       } else {
         addAloneCategory(
           {
+            id: categoryId,
             name,
             listId,
           },
           {
-            onSuccess: () => {
+            onError: (err, variable, context) => {
+              if (context?.prev) {
+                client.setQueryData(['getPackingListDetail', id], context.prev);
+                if (err instanceof AxiosError) {
+                  alert(err.response?.data.message);
+                }
+              }
+            },
+            onSettled: () => {
               client.invalidateQueries(['getPackingListDetail', id]);
             },
           },
