@@ -9,6 +9,8 @@ import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
 import { useQuery } from 'react-query';
 import Loading from '../common/Loading';
+import { useRecoilValue } from 'recoil';
+import { authUserAtom } from '../../utils/recoil/atom/atom';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -28,8 +30,9 @@ function ManagingMemberLanding() {
       enabled: !!id,
     },
   );
-  console.log(getGroupMember);
 
+  const user = useRecoilValue(authUserAtom);
+  const userId = user.id;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [members, setMembers] = useState<Imember[]>([]);
@@ -44,6 +47,7 @@ function ManagingMemberLanding() {
       }
     };
   }, []);
+
   const editMembers = () => {
     if (isEditing) {
       setMembers([...oldMembers]);
@@ -81,6 +85,8 @@ function ManagingMemberLanding() {
 
   if (!data) return <Loading />;
   const { data: packingList } = data;
+  if (members.length === 0) return <Loading />;
+  console.log(members);
 
   return (
     <Layout back title="멤버 관리">
@@ -90,13 +96,19 @@ function ManagingMemberLanding() {
             <StyledListName>{packingList.title}</StyledListName>
             <StyledListDate>{packingList.departureDate}</StyledListDate>
           </StyledHeaderLeft>
-          <StyledDday>D-{packingList.remainDay}</StyledDday>
+          <StyledDday>
+            D-{parseInt(packingList.remainDay) ? packingList.remainDay : 'day'}
+          </StyledDday>
         </StyledHeader>
         <WithMembersLabelAndEdit>
           <WithMembersLabel>함께하는 멤버</WithMembersLabel>
-          <WithMembersEditButton onClick={editMembers}>
-            {isEditing ? '취소' : '편집'}
-          </WithMembersEditButton>
+          {userId === members[0].id ? (
+            <WithMembersEditButton onClick={editMembers}>
+              {isEditing ? '취소' : '편집'}
+            </WithMembersEditButton>
+          ) : (
+            <></>
+          )}
         </WithMembersLabelAndEdit>
         <WithMembers>
           {members.map((member, index: number) => {
@@ -190,6 +202,7 @@ const StyledDday = styled.div`
 const WithMembersLabelAndEdit = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 4rem;
 `;
 
 const WithMembersLabel = styled.h1`
@@ -199,7 +212,6 @@ const WithMembersLabel = styled.h1`
 const WithMembersEditButton = styled.div`
   font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
   color: ${packmanColors.pmDarkGrey};
-  margin-bottom: 4rem;
 `;
 
 const WithMembers = styled.div`
