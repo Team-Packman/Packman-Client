@@ -13,6 +13,7 @@ export interface AuthUser extends CreatingUser {
 }
 
 export interface Invitation {
+  type: 'alone' | 'together';
   inviteCode: string;
 }
 

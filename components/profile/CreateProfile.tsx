@@ -9,18 +9,20 @@ interface CreateProfileProps {
 function CreateProfile(props: CreateProfileProps) {
   const { comment } = props;
   return (
-    <>
+    <StyledRoot>
       <StyledCommentWrapper>{comment}</StyledCommentWrapper>
       <SelectProfileSection />
-    </>
+    </StyledRoot>
   );
 }
 
 export default CreateProfile;
 
+const StyledRoot = styled.div`
+  height: 100%;
+`;
 const StyledCommentWrapper = styled.h1`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

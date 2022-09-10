@@ -19,7 +19,7 @@ function Invited() {
 
   useEffect(() => {
     if (inviteCode && typeof inviteCode === 'string') {
-      setInvitation({ inviteCode });
+      setInvitation({ type: 'together', inviteCode });
     }
   }, [inviteCode]);
 
@@ -33,7 +33,7 @@ function Invited() {
     },
   );
 
-  useQuery(['invited', inviteCode], () => getInvited(inviteCode as string), {
+  useQuery(['togetherInvited', inviteCode], () => getInvited(inviteCode as string), {
     enabled: !!inviteCode && user.isAlreadyUser,
     onSuccess: ({ data: { id: listId, isMember } }) =>
       isMember

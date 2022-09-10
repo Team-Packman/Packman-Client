@@ -4,21 +4,20 @@ import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/png/ButtonX.png';
 import forShare from '/public/assets/png/forShare.png';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
 interface ModalForShareProps {
   onClick?: () => void;
+  inviteCode: string;
 }
 
 function ModalForShare(props: ModalForShareProps) {
-  const { onClick: modalHandler } = props;
+  const { onClick: modalHandler, inviteCode } = props;
 
-  const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/alone/invited/${router.query.id}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/alone/invited?inviteCode=${inviteCode}`,
     );
     setIsCopied(true);
   };

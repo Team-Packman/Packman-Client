@@ -21,8 +21,10 @@ function ModalForAddToTemplate(props: ModalForAddToTemplateProps) {
         <div>
           <StyledTitle>{title}</StyledTitle>
           <StyledDescription>
-            <span>나만의 템플릿</span>
-            <span>으로 추가되었습니다.</span>
+            <>
+              <span>나만의 템플릿</span>
+              <span>으로 저장되었습니다.</span>
+            </>
           </StyledDescription>
         </div>
         <StyledConfirmButton onClick={modalHandler}>확인</StyledConfirmButton>
@@ -76,6 +78,7 @@ const StyledTitle = styled.div`
   color: ${packmanColors.black};
 `;
 const StyledDescription = styled.div`
+  text-align: center;
   margin-top: 2.4rem;
 
   & > span {

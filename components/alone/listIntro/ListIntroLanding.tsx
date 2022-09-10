@@ -303,6 +303,7 @@ export const StyledDataContainer = styled.section`
 `;
 
 export const StyledDate = styled.input`
+  -webkit-appearance: none;
   display: inline-block;
   position: relative;
   width: 100%;
@@ -350,8 +351,7 @@ export const StyledFolderInputContent = styled.div`
   input[type='text'] {
     display: inline-block;
     position: relative;
-    padding: 1.1rem 0;
-    text-align: center;
+    padding: 1.1rem 0 1.1rem 1.6rem;
     border: 1px dashed ${packmanColors.pmDashGrey};
     font-size: 1.5rem;
     font-weight: 500;
@@ -391,7 +391,8 @@ export const StyledTag = styled.span<{ isSelected: boolean }>`
   margin-bottom: 1.3rem;
   background: ${({ isSelected }) =>
     isSelected ? `${packmanColors.pmWhite}` : `${packmanColors.pmBlueGrey}`};
-  border: ${({ isSelected }) => (isSelected ? `1px solid ${packmanColors.pmPink}` : '0')};
+  border: ${({ isSelected }) =>
+    isSelected ? `1px solid ${packmanColors.pmPink}` : `1px solid ${packmanColors.pmBlueGrey}`};
   border-radius: 0.8rem;
 `;
 
@@ -402,7 +403,7 @@ export const StyledListNameContainer = styled.section`
   input[type='text'] {
     display: inline-block;
     position: relative;
-    padding: 1.1rem 4rem;
+    padding: 1.1rem 0 1.1rem 1.6rem;
     border: 1px dashed ${packmanColors.pmDashGrey};
     font-size: 1.5rem;
     font-weight: 500;

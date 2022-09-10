@@ -1,7 +1,9 @@
+import { GetAloneInvitedOutput } from './../../../service/packingList/alone/index';
 import { useAddMemberMutation, useCheckInvitation, useKaKaoFlow } from './../queries/auth/auth';
 import { authUserAtom, invitationAtom, kakao, creatingUserAtom } from './../../recoil/atom/atom';
 import { useRecoilState, useResetRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
+import { GetInvitedOutput } from '../../../service/packingList/together';
 
 export const useKaKaoLogin = () => {
   const router = useRouter();
@@ -45,7 +47,7 @@ export const useKaKaoLogin = () => {
 
 export const useInvitation = () => {
   const router = useRouter();
-  const { inviteCode } = useRecoilValue(invitationAtom);
+  const { type, inviteCode } = useRecoilValue(invitationAtom);
   const resetInvitation = useResetRecoilState(invitationAtom);
 
   const addMember = useAddMemberMutation();
@@ -55,22 +57,34 @@ export const useInvitation = () => {
     if (!inviteCode) {
       router.replace('/folder');
     } else {
-      const { id: listId, isMember } = await checkInvitation();
+      if (type === 'alone') {
+        const { id: listId, isOwner } = (await checkInvitation(
+          type,
+        )) as GetAloneInvitedOutput['data'];
 
-      if (isMember) {
-        router.replace(`/together?id=${listId}`);
-      } else {
-        addMember(
-          { listId },
-          {
-            onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
-            onError: () => router.replace('/folder'),
-          },
-        );
+        if (isOwner) {
+          router.replace(`/alone?id=${listId}`);
+        } else {
+          router.replace(`/alone/shared?id=${listId}`);
+        }
+      } else if (type === 'together') {
+        const { id: listId, isMember } = (await checkInvitation(type)) as GetInvitedOutput['data'];
+
+        if (isMember) {
+          router.replace(`/together?id=${listId}`);
+        } else {
+          addMember(
+            { listId },
+            {
+              onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
+              onError: () => router.replace('/folder'),
+            },
+          );
+        }
       }
-    }
 
-    resetInvitation();
+      resetInvitation();
+    }
   };
 
   return receiveGuest;

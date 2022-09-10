@@ -1,3 +1,4 @@
+import { GetAloneInvitedOutput } from './../../../../service/packingList/alone/index';
 import { AxiosInstance } from 'axios';
 import {
   AddAlonePackingListIntroOutput,
@@ -84,5 +85,13 @@ export const fetchAlonePackingListDetail = async (
   listId: string,
 ): Promise<GetAlonePackingListDetailOutput> => {
   const { data } = await request(`/list/alone/${listId}`);
+  return data;
+};
+
+export const fetchAloneInvited = async (
+  request: AxiosInstance,
+  inviteCode: string,
+): Promise<GetAloneInvitedOutput> => {
+  const { data } = await request(`/list/alone/invite/${inviteCode}`);
   return data;
 };

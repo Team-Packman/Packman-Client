@@ -28,9 +28,16 @@ function useHide(activeMode: number): UseHideOutput<HTMLDivElement, boolean> {
   const sectionArr = useRef([togetherSection, aloneSection]);
   const sufficientArr = useRef([togetherSufficient, aloneSufficient]);
 
+  const init = useRef<boolean>(true);
+
   useEffect(() => {
     checkSufficient();
-  }, [activeMode, sectionArr.current[activeMode].current]);
+  }, [
+    activeMode,
+    sectionArr.current[activeMode].current,
+    sectionArr.current[activeMode].current?.scrollHeight,
+    sufficientArr.current[activeMode].current,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -48,13 +55,16 @@ function useHide(activeMode: number): UseHideOutput<HTMLDivElement, boolean> {
       const gapForHidden = el.scrollHeight - (el.clientHeight - 117);
       isSufficient.current = gapForHidden > 180;
 
-      if (!isSufficient.current) setHidden(false);
+      !init.current && setHidden(isSufficient.current);
     } else {
       isSufficient.current = el.scrollHeight - el.clientHeight > 180;
+
+      !init.current && setHidden(isSufficient.current);
     }
   };
 
   const scrollEvent = (e: UIEvent<HTMLDivElement>) => {
+    init.current = false;
     if (!sufficientArr.current[activeMode].current) return;
 
     if (e.currentTarget.scrollTop < 10) {
