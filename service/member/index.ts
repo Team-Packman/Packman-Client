@@ -16,5 +16,6 @@ export interface GetGroupMemberOutput {
       nickname: string; // 멤버 닉네임
       profileImage: string; // 멤버 프로필 사진 id
     }[];
+    inviteCode: string; // 함께 패킹리스트 초대코드
   };
 }

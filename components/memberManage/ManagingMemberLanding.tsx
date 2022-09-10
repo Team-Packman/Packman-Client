@@ -134,7 +134,10 @@ function ManagingMemberLanding() {
         {isEditing ? (
           <InvitingButton onClick={clickInvitingButton}>완료</InvitingButton>
         ) : (
-          <CopyToClipboard text={'링크!'} onCopy={copyToClipboard}>
+          <CopyToClipboard
+            text={`${process.env.NEXT_PUBLIC_DOMAIN}together/invited?inviteCode=${packingList.inviteCode}`}
+            onCopy={copyToClipboard}
+          >
             <InvitingButton onClick={clickInvitingButton}>멤버 초대하기</InvitingButton>
           </CopyToClipboard>
         )}
