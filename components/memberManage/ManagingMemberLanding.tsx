@@ -86,7 +86,6 @@ function ManagingMemberLanding() {
   if (!data) return <Loading />;
   const { data: packingList } = data;
   if (members.length === 0) return <Loading />;
-  console.log(members);
 
   return (
     <Layout back title="멤버 관리">
