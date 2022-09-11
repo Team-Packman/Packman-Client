@@ -56,7 +56,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Packman</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta
+          name="description"
+          content="내 손안 짐 챙김 도우미,팩맨. 지금 바로 팩맨을 사용해보세요!"
+        />
       </Head>
       <CssBaseline />
       <GlobalStyle />
