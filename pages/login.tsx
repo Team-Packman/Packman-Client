@@ -6,7 +6,7 @@ import { AsyncBoundary } from '../utils/AsyncBoundary';
 function Login() {
   return (
     <AsyncBoundary>
-      <HeadMeta description="카카오 로그인으로 3초만에 시작하기" />
+      <HeadMeta title="로그인" description="카카오 로그인으로 3초만에 시작하기" />
       <LoginLanding />
     </AsyncBoundary>
   );

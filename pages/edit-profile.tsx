@@ -5,7 +5,7 @@ import { AsyncBoundary } from '../utils/AsyncBoundary';
 function EditProfile() {
   return (
     <AsyncBoundary>
-      <HeadMeta description="문의하기" />
+      <HeadMeta title="Packman" description="문의하기" />
       <EditProfileLanding />
     </AsyncBoundary>
   );
