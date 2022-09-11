@@ -157,7 +157,7 @@ const StyledPackerImg = styled.div<{
   position: relative;
   width: 100%;
   height: 6.4rem;
-  border: 2px solid transparent;
+  border: 2.5px solid transparent;
   ${({ selected }) =>
     selected &&
     css`
@@ -168,10 +168,10 @@ const StyledPackerImg = styled.div<{
 
 const StyledBackground = styled.div<{ selected: boolean }>`
   position: absolute;
-  transform: translate(-0.1rem, -0.1rem);
+  transform: translate(-0.15rem, -0.15rem);
 
-  width: 6.4rem;
-  height: 6.4rem;
+  width: 6.3rem;
+  height: 6.3rem;
   border-radius: 0.7rem;
   background: url('assets/svg/iSelected.svg') no-repeat center;
   background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};

@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 
-interface CreateProfileProps {
+interface EditingProfileProps {
   comment: React.ReactNode;
   oldNickname: string;
   oldProfileImageId: string;
   finishEditing: () => void;
 }
 
-function EditingProfile(props: CreateProfileProps) {
+function EditingProfile(props: EditingProfileProps) {
   const { comment, oldNickname, oldProfileImageId, finishEditing } = props;
 
   return (
