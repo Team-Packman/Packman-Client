@@ -178,7 +178,7 @@ export const StyledInput = styled.input<{ isNew: boolean }>`
 
   &:disabled {
     border: 0;
-    padding: 0;
+    padding: 0.3rem 0;
     color: ${packmanColors.pmBlack};
   }
 `;
