@@ -200,7 +200,7 @@ function ListIntroLanding() {
             },
             {
               onSuccess: (data) => {
-                router.push(`/alone?id=${data?.data?.id}`);
+                router.push(`/alone?id=${data?.data?.id}&folderId=${folderId}`);
               },
             },
           )
@@ -213,7 +213,7 @@ function ListIntroLanding() {
             },
             {
               onSuccess: (data) => {
-                router.push(`/together?id=${data?.data?.id}`);
+                router.push(`/together?id=${data?.data?.id}&folderId=${folderId}`);
                 setIsFresh({ isFresh: true });
               },
             },
