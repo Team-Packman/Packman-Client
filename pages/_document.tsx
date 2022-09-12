@@ -60,6 +60,12 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" href="/assets/pwa/apple-icon-180.png" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="mobile-web-app-capable" content="yes" />
+          {/*Google / Search Engine Tags*/}
+          <meta itemProp="name" content="팩맨 - 내 손안의 짐 챙김 도우미" />
+          <meta
+            itemProp="description"
+            content="내 손안 짐 챙김 도우미,팩맨. 지금 바로 팩맨을 사용해보세요!"
+          />
           <link
             rel="apple-touch-startup-image"
             href="/assets/pwa/apple-splash-2048-2732.jpg"

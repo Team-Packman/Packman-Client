@@ -167,7 +167,7 @@ function PackingListLanding() {
 
   const moveToPackingList = (id: string) => {
     if (!isDeleting) {
-      router.push(`/${type}?id=${id}`);
+      router.push(`/${type}?id=${id}&folderId=${currentFolder.id}`);
     }
   };
 
