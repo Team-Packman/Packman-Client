@@ -68,54 +68,73 @@ function SelectTemplateLanding() {
 
   return (
     <Layout back title="템플릿 선택하기" padding>
-      <StyledTemplateWrapper>
-        <picture>
-          {(basicTemplateImageList[+templateImageIndex] ||
-            randomImageList[+templateImageIndex]) && (
-            <Image
-              src={
-                templateType === 'basic'
-                  ? basicTemplateImageList[+templateImageIndex]
-                  : randomImageList[+templateImageIndex]
-              }
-              alt="template-image"
-              width={375}
-              height={211}
-              priority
-            />
-          )}
-        </picture>
-        <Template
-          isAloned={type === 'alone'}
-          basicTemplate={basicTemplate}
-          myTemplate={myTemplate}
-          activate={(isSelected: string) =>
-            isSelected === '' ? deactivateConfirmButtonHandler() : activateConfirmButtonHandler()
-          }
-          changeTemplateImage={(template: Itemplate[], templateId: string, templateType: string) =>
-            changeTemplateImage(template, templateId, templateType)
-          }
-          setTemplateId={(templateId: string) => setTemplateIdHandler(templateId)}
-        />
-      </StyledTemplateWrapper>
-      <StyledButtonWrapper>
-        <StyledButton isActivated onClick={onClickSkipButton}>
-          건너뛰기
-        </StyledButton>
-        <StyledButton
-          isMyTemplate
-          disabled={!activateButton}
-          isActivated={activateButton}
-          onClick={onClickConfirmButton}
-        >
-          확인
-        </StyledButton>
-      </StyledButtonWrapper>
+      <StyledRoot>
+        <StyledTemplateWrapper>
+          <picture>
+            {(basicTemplateImageList[+templateImageIndex] ||
+              randomImageList[+templateImageIndex]) && (
+              <Image
+                src={
+                  templateType === 'basic'
+                    ? basicTemplateImageList[+templateImageIndex]
+                    : randomImageList[+templateImageIndex]
+                }
+                alt="template-image"
+                width={375}
+                height={211}
+                priority
+              />
+            )}
+          </picture>
+          <Template
+            isAloned={type === 'alone'}
+            basicTemplate={basicTemplate}
+            myTemplate={myTemplate}
+            activate={(isSelected: string) =>
+              isSelected === '' ? deactivateConfirmButtonHandler() : activateConfirmButtonHandler()
+            }
+            changeTemplateImage={(
+              template: Itemplate[],
+              templateId: string,
+              templateType: string,
+            ) => changeTemplateImage(template, templateId, templateType)}
+            setTemplateId={(templateId: string) => setTemplateIdHandler(templateId)}
+          />
+        </StyledTemplateWrapper>
+        <StyledButtonWrapper>
+          <StyledButton isActivated onClick={onClickSkipButton}>
+            건너뛰기
+          </StyledButton>
+          <StyledButton
+            isMyTemplate
+            disabled={!activateButton}
+            isActivated={activateButton}
+            onClick={onClickConfirmButton}
+          >
+            확인
+          </StyledButton>
+        </StyledButtonWrapper>
+      </StyledRoot>
     </Layout>
   );
 }
 
 export default SelectTemplateLanding;
+const StyledRoot = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow-y: auto;
+
+  /* 브라우저별 스크롤바 숨김 설정 */
+  -ms-overflow-style: none; // Edge
+  scrollbar-width: none; // Firefox
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
+`;
 const StyledTemplateWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -125,20 +144,18 @@ const StyledTemplateWrapper = styled.div`
   }
 `;
 const StyledButtonWrapper = styled.div`
-  position: fixed;
-  bottom: 3.3rem;
   display: flex;
   justify-content: space-between;
 
   width: calc(100vw - 4rem);
   height: 4rem;
-
+  margin-bottom: 3.3rem;
   background-color: #fff;
 `;
 const StyledButton = styled.button<{ isMyTemplate?: boolean; isActivated: boolean }>`
   ${FONT_STYLES.BODY4_SEMIBOLD};
   width: calc((100vw - 4rem) / 2 - 0.6rem);
-  height: 100%;
+  height: 4rem;
   border-radius: 0.8rem;
 
   ${({ isMyTemplate }) =>
