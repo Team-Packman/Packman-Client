@@ -5,6 +5,7 @@ type Router = 'push' | 'replace' | 'back';
 
 export const useHeaderRouter = () => {
   const router = useRouter();
+  const { folderId } = router.query;
   const [route, setRoute] = useState<() => void>(() => {});
 
   const registerURL = (type: Router, url?: string) => () => {
@@ -15,8 +16,10 @@ export const useHeaderRouter = () => {
     if (router.isReady) {
       switch (router.pathname) {
         case '/alone':
+          setRoute(() => registerURL('replace', `/packing-list?type=alone&id=${folderId}`));
+          return;
         case '/together':
-          setRoute(() => registerURL('replace', '/folder'));
+          setRoute(() => registerURL('replace', `/packing-list?type=together&id=${folderId}`));
           return;
         default:
           setRoute(() => registerURL('back'));
