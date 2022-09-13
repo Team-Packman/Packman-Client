@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import loginLogo from '/public/assets/svg/loginLogo.svg';
-import KakaoLogin from '/public/assets/png/kakaoLogin.png';
+import KakaoLogin from '/public/assets/svg/kakaoLogin.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 import { packmanColors } from '../../styles/color';
