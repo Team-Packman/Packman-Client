@@ -7,7 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Loading from '../common/Loading';
 import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
@@ -20,8 +20,10 @@ interface Imember {
 }
 
 function ManagingMemberLanding() {
+  const client = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
+
   const getGroupMember = useAPI((api) => api.member.getGroupMember);
   const { data } = useQuery(
     ['getGroupMember', id],
@@ -35,7 +37,7 @@ function ManagingMemberLanding() {
   const userId = user.id;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
-  const [members, setMembers] = useState<Imember[]>([]);
+  const [members, setMembers] = useState<Imember[]>([]); //
   const [oldMembers, setOldMembers] = useState([...members]);
 
   const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -57,11 +59,30 @@ function ManagingMemberLanding() {
     setIsEditing((prev) => !prev);
   };
 
+  const deletePackingListMember = useAPI((api) => api.member.deleteGroupMember);
+  const { mutate: deleteListMember } = useMutation(
+    'deletePackingListMember',
+    deletePackingListMember,
+  );
+
   const deleteMember = (index: number) => {
+    //
     setMembers(
       members.filter((member, memberIndex) => {
         return memberIndex !== index;
       }),
+    );
+    //
+    deleteListMember(
+      {
+        groupId: id as string,
+        userId: members[index].id,
+      },
+      {
+        onSuccess: () => {
+          client.invalidateQueries(['getGroupMember', id]);
+        },
+      },
     );
   };
 
@@ -78,14 +99,27 @@ function ManagingMemberLanding() {
     }, 3000);
   };
 
+  //
   useEffect(() => {
-    if (packingList) setMembers(packingList.member);
+    if (packingList) setMembers([...packingList.member]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+  //
 
   if (!data) return <Loading />;
   const { data: packingList } = data;
   if (members.length === 0) return <Loading />;
+
+  const getRemainDayToString = () => {
+    const remainDayToInt = parseInt(packingList.remainDay);
+    if (!remainDayToInt) {
+      return 'D-day';
+    } else if (remainDayToInt < 0) {
+      return 'D-done';
+    } else {
+      return `D-${packingList.remainDay}`;
+    }
+  };
 
   return (
     <Layout back title="멤버 관리">
@@ -95,9 +129,7 @@ function ManagingMemberLanding() {
             <StyledListName>{packingList.title}</StyledListName>
             <StyledListDate>{packingList.departureDate}</StyledListDate>
           </StyledHeaderLeft>
-          <StyledDday>
-            D-{parseInt(packingList.remainDay) ? packingList.remainDay : 'day'}
-          </StyledDday>
+          <StyledDday>{getRemainDayToString()}</StyledDday>
         </StyledHeader>
         <WithMembersLabelAndEdit>
           <WithMembersLabel>함께하는 멤버</WithMembersLabel>
