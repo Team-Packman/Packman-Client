@@ -10,6 +10,7 @@ import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import { RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
+import HeadMeta from '../components/HeadMeta';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -54,13 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Head>
-        <title>Packman</title>
-        <meta
-          name="description"
-          content="내 손안 짐 챙김 도우미,팩맨. 지금 바로 팩맨을 사용해보세요!"
-        />
-      </Head>
+      <HeadMeta page={Component.displayName} />
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>

@@ -5,10 +5,10 @@ import { AsyncBoundary } from '../utils/AsyncBoundary';
 function EditProfile() {
   return (
     <AsyncBoundary>
-      <HeadMeta title="Packman" description="문의하기" />
       <EditProfileLanding />
     </AsyncBoundary>
   );
 }
 
+EditProfile.displayName = 'edit-profile';
 export default EditProfile;
