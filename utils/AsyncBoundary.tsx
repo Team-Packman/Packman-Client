@@ -1,12 +1,11 @@
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
 import { PropsWithChildren, ReactNode, Suspense, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { useQueryErrorResetBoundary } from 'react-query';
+import { QueryErrorResetBoundary, useQueryErrorResetBoundary } from 'react-query';
 import { useResetRecoilState } from 'recoil';
 import Error from '../components/common/Error';
 import Loading from '../components/common/Loading';
-import { authUserAtom, invitationAtom } from './recoil/atom/atom';
+import { invitationAtom } from './recoil/atom/atom';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
@@ -34,22 +33,17 @@ export const useErrorBubbling = () => {
   };
 };
 const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
-  const router = useRouter();
-  const resetUser = useResetRecoilState(authUserAtom);
   const resetInvitation = useResetRecoilState(invitationAtom);
 
-  if (error instanceof AxiosError && error.response?.status === 0) {
-    resetUser();
-    resetInvitation();
-    router.replace('/login');
+  if (error instanceof AxiosError) {
+    switch (error.response?.status) {
+      case 0:
+      case 404:
+        resetInvitation();
+    }
   }
 
-  return (
-    <div>
-      <Error />
-      <button onClick={resetErrorBoundary}>reset</button>
-    </div>
-  );
+  return <Error />;
 };
 
 export function AsyncBoundary({
@@ -57,17 +51,20 @@ export function AsyncBoundary({
   loadingFallback,
 }: PropsWithChildren<AsyncBoundaryProps>) {
   const { reset } = useQueryErrorResetBoundary();
+
   return (
-    <ErrorBoundary
-      FallbackComponent={({ error, resetErrorBoundary }) => {
-        if (isExpectedError(error)) {
-          return errorFallback({ error, resetErrorBoundary });
-        }
-        return <h1>Unexpected Error</h1>;
-      }}
-      onReset={reset}
-    >
-      <Suspense fallback={loadingFallback ?? <Loading />}>{children}</Suspense>
-    </ErrorBoundary>
+    <QueryErrorResetBoundary>
+      <ErrorBoundary
+        FallbackComponent={(fallback) => {
+          if (isExpectedError(fallback.error)) {
+            return errorFallback(fallback);
+          }
+          return <h1>Unexpected Error</h1>;
+        }}
+        onReset={reset}
+      >
+        <Suspense fallback={loadingFallback ?? <Loading />}>{children}</Suspense>
+      </ErrorBoundary>
+    </QueryErrorResetBoundary>
   );
 }

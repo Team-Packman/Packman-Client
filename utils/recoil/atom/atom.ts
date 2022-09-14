@@ -1,4 +1,4 @@
-import { AuthUser, CreatingUser, Invitation, ListState, Kakao } from './';
+import { AuthUser, ErrorFlag, CreatingUser, Invitation, ListState, Kakao } from './';
 import { recoilPersist } from 'recoil-persist';
 import { atom } from 'recoil';
 
@@ -50,4 +50,9 @@ export const listState = atom<ListState>({
   default: {
     isFresh: false,
   },
+});
+
+export const errorFlagAtom = atom<ErrorFlag>({
+  key: 'errorFlag',
+  default: false,
 });

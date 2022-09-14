@@ -24,3 +24,4 @@ export interface Kakao {
 export interface ListState {
   isFresh: boolean;
 }
+export type ErrorFlag = boolean;

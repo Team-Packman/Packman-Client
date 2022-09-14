@@ -18,7 +18,6 @@ export default function createAxios(endpoint: string) {
   const axiosWithAuth = axios.create({
     baseURL: endpoint,
     headers: { 'Content-Type': 'application/json' },
-    withCredentials: true,
   });
 
   return {
