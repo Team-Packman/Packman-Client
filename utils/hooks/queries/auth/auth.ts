@@ -6,10 +6,12 @@ import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { RefreshInput, RefreshOutput } from '../../../../service/auth';
 import { authUserAtom } from '../../../recoil/atom/atom';
 import useAPI from '../../useAPI';
+import useErrorFlag from '../../recoil/useErrorFlag';
 
 export const useRefresh = (tokens: RefreshInput) => {
   const router = useRouter();
   const client = useQueryClient();
+  const setIsError = useErrorFlag();
   const setUser = useSetRecoilState(authUserAtom);
   const resetUser = useResetRecoilState(authUserAtom);
   const fetchRefresh = useAPI((api) => api.auth.refresh);
@@ -34,7 +36,7 @@ export const useRefresh = (tokens: RefreshInput) => {
           }
           default:
             resetUser();
-            throw new Error();
+            setIsError(true);
         }
       }
     }
@@ -62,6 +64,7 @@ export const useAddMemberMutation = () => {
 
 export const useCheckInvitation = (inviteCode: string) => {
   const client = useQueryClient();
+  const setIsError = useErrorFlag();
   const resetInvitation = useResetRecoilState(invitationAtom);
 
   const getAloneInvited = useAPI((api) => api.packingList.alone.getInvited);
@@ -82,7 +85,7 @@ export const useCheckInvitation = (inviteCode: string) => {
       }
     } catch {
       resetInvitation();
-      throw new Error();
+      setIsError(true);
     }
   };
 

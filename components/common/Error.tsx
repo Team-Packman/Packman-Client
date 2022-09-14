@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import ErrorImage from '/public/assets/png/ErrorImage.png';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
+import HomeIC from '/public/assets/svg/home_ic.svg';
+import Link from 'next/link';
 
 function Error() {
   return (
@@ -12,6 +14,11 @@ function Error() {
       <ErrorTitle>앗차차..!</ErrorTitle>
       <ErrorSubTitle>오류가 났어요</ErrorSubTitle>
       <ErrorSubTitle>다시 시도해 주세요</ErrorSubTitle>
+      <Link href={'/folder'}>
+        <ErrorReset>
+          <Image src={HomeIC} alt="home_ic" /> <em>홈으로 돌아가기</em>
+        </ErrorReset>
+      </Link>
     </StyledRoot>
   );
 }
@@ -36,4 +43,28 @@ const ErrorTitle = styled.div`
 const ErrorSubTitle = styled.div`
   font-style: ${FONT_STYLES.BODY3_REGULAR};
   color: ${packmanColors.pmBlack};
+`;
+
+const ErrorReset = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 33.6rem;
+  height: 4.1rem;
+
+  border: none;
+  background-color: ${packmanColors.pmPink};
+
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: ${packmanColors.pmWhite};
+
+  border-radius: 8px;
+
+  margin-top: 13rem;
+
+  & > em {
+    margin-left: 1rem;
+  }
 `;

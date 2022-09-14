@@ -1,9 +1,11 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { useRefresh } from '../hooks/queries/auth/auth';
 import { authUserAtom } from '../recoil/atom/atom';
 
 function withAuth(axiosWithAuth: AxiosInstance) {
+  const router = useRouter();
   const { accessToken, refreshToken } = useRecoilValue(authUserAtom);
   const refresh = useRefresh({ accessToken, refreshToken });
 
@@ -26,12 +28,17 @@ function withAuth(axiosWithAuth: AxiosInstance) {
       const config = error.config;
 
       if (error.response.status === 401) {
-        const tokens = await refresh();
+        if (!config.headers['Authorization']) {
+          alert('로그인 후 이용해 주세요');
+          router.replace('/login');
+        } else {
+          const tokens = await refresh();
 
-        if (tokens) {
-          config.headers['Authorization'] = `${tokens.accessToken}`;
+          if (tokens) {
+            config.headers['Authorization'] = `${tokens.accessToken}`;
 
-          return axiosWithAuth(config);
+            return axiosWithAuth(config);
+          }
         }
       }
 
