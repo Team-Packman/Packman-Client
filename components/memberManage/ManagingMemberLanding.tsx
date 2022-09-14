@@ -149,14 +149,14 @@ function ManagingMemberLanding() {
                   <Crown>
                     <Image src={'/assets/png/crown.png'} alt="왕관" layout="fill" />
                   </Crown>
-                  <MemberImage index={index} />
+                  <MemberImage index={index} profileImage={member.profileImage} />
                   <MemberName>{member.nickname}</MemberName>
                 </Member>
               );
             }
             return (
               <Member key={index}>
-                <MemberImage index={index} />
+                <MemberImage index={index} profileImage={member.profileImage} />
                 <MemberName>{member.nickname}</MemberName>
                 <RemoveButton
                   onClick={() => {
@@ -169,10 +169,10 @@ function ManagingMemberLanding() {
               </Member>
             );
           })}
+          <InviteOtherMember length={members.length}>
+            함께 패킹할 멤버를 초대해보세요
+          </InviteOtherMember>
         </WithMembers>
-        <InviteOtherMember length={members.length}>
-          함께 패킹할 멤버를 초대해보세요
-        </InviteOtherMember>
         <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied>
         {isEditing ? (
           <InvitingButton onClick={clickInvitingButton}>완료</InvitingButton>
@@ -247,9 +247,11 @@ const WithMembersEditButton = styled.div`
 
 const WithMembers = styled.div`
   display: grid;
+  position: relative;
   grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr));
   gap: 2rem;
   justify-items: center;
+  min-height: 15rem;
 `;
 
 const Member = styled.div`
@@ -275,13 +277,14 @@ const Crown = styled.div`
   top: -2rem;
 `;
 
-const MemberImage = styled.img<{ index: number }>`
+const MemberImage = styled.img<{ index: number; profileImage: string }>`
   width: 6.4rem;
   height: 6.4rem;
   border-radius: 50%;
-  background-color: yellow;
   margin-bottom: 0.5rem;
   border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
+  background-image: url(${({ profileImage }) => `/assets/png/profile${profileImage}.png`});
+  background-size: contain;
 `;
 
 const MemberName = styled.div`
@@ -292,7 +295,7 @@ const MemberName = styled.div`
 const InviteOtherMember = styled.div<{ length: number }>`
   display: ${({ length }) => (length === 1 ? 'block;' : 'none;')};
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
@@ -319,6 +322,5 @@ const InvitingButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
   bottom: 8rem;
 `;
