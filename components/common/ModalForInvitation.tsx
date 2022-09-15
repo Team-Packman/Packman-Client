@@ -5,12 +5,15 @@ import ButtonX from '/public/assets/png/ButtonX.png';
 import Image from 'next/image';
 import { useResetRecoilState } from 'recoil';
 import { listState } from '../../utils/recoil/atom/atom';
+import { useRouter } from 'next/router';
 
 interface ModalForInvitationProps {
   inviteCode: string;
 }
 
 function ModalForInvitation(props: ModalForInvitationProps) {
+  const router = useRouter();
+  const { folderId } = router.query;
   const { inviteCode } = props;
 
   const closeModal = useResetRecoilState(listState);
@@ -18,7 +21,7 @@ function ModalForInvitation(props: ModalForInvitationProps) {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/together/invited?inviteCode=${inviteCode}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/together/invited?inviteCode=${inviteCode}&folderId=${folderId}`,
     );
     setIsCopied(true);
   };

@@ -14,18 +14,18 @@ interface LayoutProps {
   icon?: Icon;
   option?: ReactNode;
   noHeader?: boolean;
-  id?: string;
+  groupId?: string;
 }
 
 function Layout(props: LayoutProps) {
-  const { children, back, title, icon, option, padding, noHeader, id } = props;
+  const { children, back, title, icon, option, padding, noHeader, groupId } = props;
 
   const [scroll] = useGlobalState<boolean>('scroll');
   const optionEl = document.querySelector('.layout_option');
 
   return (
     <StyledRoot>
-      {!noHeader && <Header back={back} title={title} icon={icon} id={id} />}
+      {!noHeader && <Header back={back} title={title} icon={icon} groupId={groupId} />}
       {option}
       <StyledMain
         scroll={scroll}

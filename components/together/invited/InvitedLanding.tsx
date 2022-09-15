@@ -8,7 +8,7 @@ import ModalForInvited from '../../../components/common/ModalForInvited';
 
 function InvitedLanding() {
   const router = useRouter();
-  const { inviteCode } = router.query;
+  const { inviteCode, folderId } = router.query;
   const user = useRecoilValue(authUserAtom);
   const setInvitation = useSetRecoilState(invitationAtom);
   const getInvited = useAPI((api) => api.packingList.together.getInvited);
@@ -19,7 +19,7 @@ function InvitedLanding() {
 
   useEffect(() => {
     if (inviteCode && typeof inviteCode === 'string') {
-      setInvitation({ type: 'together', inviteCode });
+      setInvitation({ type: 'together', inviteCode, folderId });
     }
   }, [inviteCode]);
 
@@ -37,11 +37,12 @@ function InvitedLanding() {
     enabled: !!inviteCode && user.isAlreadyUser,
     onSuccess: ({ data: { id: listId, isMember } }) =>
       isMember
-        ? router.replace(`/together?id=${listId}`)
+        ? router.replace(`/together?id=${listId}&folderId=${folderId}`)
         : mutate(
             { listId },
             {
-              onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
+              onSuccess: ({ data: { listId } }) =>
+                router.replace(`/together?id=${listId}&folderId=${folderId}`),
             },
           ),
   });

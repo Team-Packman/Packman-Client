@@ -33,6 +33,7 @@ export const invitationAtom = atom<Invitation>({
   default: {
     type: 'alone',
     inviteCode: '',
+    folderId: '',
   },
   effects_UNSTABLE: [persistAtom],
 });

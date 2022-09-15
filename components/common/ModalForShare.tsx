@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import ButtonX from '/public/assets/png/ButtonX.png';
+import ButtonX from '/public/assets/svg/iClose.svg';
 import forShare from '/public/assets/png/forShare.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 interface ModalForShareProps {
   onClick?: () => void;
@@ -11,13 +12,15 @@ interface ModalForShareProps {
 }
 
 function ModalForShare(props: ModalForShareProps) {
+  const router = useRouter();
+  const { folderId } = router.query;
   const { onClick: modalHandler, inviteCode } = props;
 
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/alone/invited?inviteCode=${inviteCode}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/alone/invited?inviteCode=${inviteCode}&folderId=${folderId}`,
     );
     setIsCopied(true);
   };
@@ -30,7 +33,7 @@ function ModalForShare(props: ModalForShareProps) {
           <Image src={ButtonX} alt="closeModal" width="24" height="24" onClick={modalHandler} />
         </ButtonContainer>
         <Description>패킹 리스트 공유</Description>
-        <Image src={forShare} alt="forShare" width="260" height="260" />
+        <Image src={forShare} alt="forShare" placeholder="blur" width="260" height="260" />
         <SubDescription>
           {isCopied ? '복사되었습니다!' : '나의 패킹 리스트를 공유해보세요!'}
         </SubDescription>
@@ -116,4 +119,8 @@ const SeeListButton = styled.div`
   align-items: center;
   text-align: center;
   margin-top: 1rem;
+
+  &:active {
+    background-color: red;
+  }
 `;

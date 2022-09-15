@@ -68,7 +68,12 @@ function PackerModal(props: PackerModalProps) {
             <StyledPacker key={id} onClick={() => setSelected(id)}>
               <StyledPackerImg selected={selected === id}>
                 <StyledBackground selected={selected === id} />
-                <Image src={ProfileList[+profileImage]} alt="profile" layout="fill" />
+                <Image
+                  src={ProfileList[+profileImage]}
+                  placeholder="blur"
+                  alt="profile"
+                  layout="fill"
+                />
               </StyledPackerImg>
               <StyledPackerName selected={selected === id}>{nickname}</StyledPackerName>
             </StyledPacker>

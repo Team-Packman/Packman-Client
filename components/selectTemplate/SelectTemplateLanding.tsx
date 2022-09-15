@@ -79,6 +79,7 @@ function SelectTemplateLanding() {
                     ? basicTemplateImageList[+templateImageIndex]
                     : randomImageList[+templateImageIndex]
                 }
+                placeholder="blur"
                 alt="template-image"
                 width={375}
                 height={211}

@@ -26,10 +26,7 @@ import Loading from '../common/Loading';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import useHide from '../../utils/hooks/useHide';
-import {
-  AddTogetherPackingListCategoryOutput,
-  GetTogetherPackingListDetailOutput,
-} from '../../service/packingList/together';
+import { GetTogetherPackingListDetailOutput } from '../../service/packingList/together';
 import { AxiosError } from 'axios';
 
 interface FocusInfo {
@@ -51,7 +48,7 @@ type RemainingInfoType = 'title' | 'departure' | 'save';
 function TogetherLanding() {
   const client = useQueryClient();
   const router = useRouter();
-  const { id } = router.query;
+  const { id, folderId } = router.query;
   const { isFresh } = useRecoilValue(listState);
 
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
@@ -596,7 +593,7 @@ function TogetherLanding() {
       back
       title="패킹리스트"
       icon="member"
-      id={info.group.id}
+      groupId={info.group.id}
       option={
         <CheckListHeader
           together
