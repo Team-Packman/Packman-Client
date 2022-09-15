@@ -118,7 +118,13 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     <StyledRoot>
       <StyledProfile>
         <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
-          <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
+          <Image
+            src={profileImage[+index].src}
+            placeholder="blur"
+            alt="profile-image"
+            layout="fill"
+            priority
+          />
         </div>
         <StyledInputWrapper>
           <StyledInput
@@ -145,6 +151,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                 alt="profile-image"
                 width={80}
                 height={80}
+                placeholder="blur"
                 selected={profile === id}
                 priority
               />

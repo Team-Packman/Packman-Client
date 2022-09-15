@@ -37,7 +37,7 @@ function Header(props: HeaderProps) {
         )}
         {title ? (
           title === 'logo' ? (
-            <Link href={'/'}>
+            <Link href={'/folder'}>
               <picture>
                 <Image src={Logo} layout="fill" alt="logo" />
               </picture>
