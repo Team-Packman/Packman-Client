@@ -1,4 +1,3 @@
-import React from 'react';
 import { useResetRecoilState } from 'recoil';
 import { authUserAtom, invitationAtom, kakao } from '../../recoil/atom/atom';
 

@@ -7,13 +7,14 @@ import { RefreshInput, RefreshOutput } from '../../../../service/auth';
 import { authUserAtom } from '../../../recoil/atom/atom';
 import useAPI from '../../useAPI';
 import useErrorFlag from '../../recoil/useErrorFlag';
+import useReset from '../../recoil/useReset';
 
 export const useRefresh = (tokens: RefreshInput) => {
   const router = useRouter();
   const client = useQueryClient();
+  const reset = useReset();
   const setIsError = useErrorFlag();
   const setUser = useSetRecoilState(authUserAtom);
-  const resetUser = useResetRecoilState(authUserAtom);
   const fetchRefresh = useAPI((api) => api.auth.refresh);
 
   const refresh = async () => {
@@ -29,13 +30,13 @@ export const useRefresh = (tokens: RefreshInput) => {
         switch (error.response?.status) {
           case 400:
           case 401: {
-            resetUser();
+            reset();
             alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
             router.replace('/login');
             return;
           }
           default:
-            resetUser();
+            reset();
             setIsError(true);
         }
       }
