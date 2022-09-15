@@ -1,5 +1,4 @@
 import Image, { StaticImageData } from 'next/image';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
@@ -19,7 +18,6 @@ interface SelectProfileSectionProps {
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const [nickname, setNickname] = useState(oldNickname ? oldNickname : '');
@@ -30,11 +28,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
-  const { mutate: addUserProfileMutate } = useMutation(addUserProfile, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('getUserInfo');
-    },
-  });
+  const { mutate: addUserProfileMutate } = useMutation(addUserProfile);
 
   //프로필 수정
   const updateUserProfile = useAPI((api) => api.user.updateUserProfile);
@@ -104,7 +98,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       {
         onSuccess: ({ data }) => {
           setUser(data);
-          router.push('/folder');
         },
       },
     );

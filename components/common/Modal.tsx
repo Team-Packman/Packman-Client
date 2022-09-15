@@ -12,8 +12,7 @@ export default function Modal(props: ModalProps) {
   const { title, button, closeModal } = props;
 
   return (
-    <>
-      <StyledBackground onClick={closeModal} />
+    <StyledBackground>
       <StyledRoot>
         <StyledImageWrapper>
           <Image src={iClose} alt="close" onClick={closeModal} />
@@ -23,14 +22,14 @@ export default function Modal(props: ModalProps) {
           {button}
         </StyledModalInfo>
       </StyledRoot>
-    </>
+    </StyledBackground>
   );
 }
 const StyledBackground = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.47);
   z-index: 110;
   overflow: hidden;
@@ -40,8 +39,9 @@ const StyledRoot = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
+
   position: absolute;
-  top: calc(var(--vh, 1vh) * 100 / 2);
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 32rem;
@@ -65,9 +65,10 @@ const StyledImageWrapper = styled.div`
 const StyledModalInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+
   & > p {
     ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     color: #282828;
-    margin-bottom: 2.95rem;
   }
 `;

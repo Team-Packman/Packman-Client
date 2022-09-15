@@ -110,7 +110,7 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   list-style: none;
   margin: 0;
   padding: 0;
-  z-index: 1600;
+  z-index: 1300;
 
   // Display button to the bottom right
   position: fixed;

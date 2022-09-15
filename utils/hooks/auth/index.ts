@@ -10,7 +10,6 @@ export const useKaKaoLogin = () => {
   const [{ mutate: kakaoAuth }, { mutate: kakaoLogin }] = useKaKaoFlow();
 
   const [user, setUser] = useRecoilState(authUserAtom);
-  const resetInvitation = useResetRecoilState(invitationAtom);
   const setKakaoInfo = useSetRecoilState(kakao);
   const setCreatingUser = useSetRecoilState(creatingUserAtom);
 
@@ -27,7 +26,6 @@ export const useKaKaoLogin = () => {
                 setUser(data as typeof user);
               } else {
                 setCreatingUser(data);
-                resetInvitation();
                 router.replace('/profile');
               }
             },

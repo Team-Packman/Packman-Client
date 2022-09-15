@@ -10,7 +10,7 @@ import Link from 'next/link';
 function Error() {
   return (
     <StyledRoot>
-      <Image src={ErrorImage} alt="error" width="182" height="165" />
+      <Image src={ErrorImage} placeholder="blur" alt="error" width="182" height="165" />
       <ErrorTitle>앗차차..!</ErrorTitle>
       <ErrorSubTitle>오류가 났어요</ErrorSubTitle>
       <ErrorSubTitle>다시 시도해 주세요</ErrorSubTitle>
