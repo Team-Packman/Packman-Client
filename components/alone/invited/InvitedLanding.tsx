@@ -8,7 +8,7 @@ import { authUserAtom, invitationAtom } from '../../../utils/recoil/atom/atom';
 
 function InvitedLanding() {
   const router = useRouter();
-  const { inviteCode } = router.query;
+  const { folderId, inviteCode } = router.query;
   const user = useRecoilValue(authUserAtom);
   const setInvitation = useSetRecoilState(invitationAtom);
 
@@ -16,7 +16,7 @@ function InvitedLanding() {
 
   useEffect(() => {
     if (inviteCode && typeof inviteCode === 'string') {
-      setInvitation({ type: 'alone', inviteCode });
+      setInvitation({ type: 'alone', inviteCode, folderId });
     }
   }, [inviteCode]);
 
@@ -27,7 +27,7 @@ function InvitedLanding() {
       enabled: !!inviteCode && !!user.isAlreadyUser,
       onSuccess: ({ data: { id, isOwner } }) => {
         if (isOwner) {
-          router.replace(`/alone?id=${id}`);
+          router.replace(`/alone?id=${id}&folderId=${folderId}`);
         } else {
           router.replace(`/alone/shared?id=${id}`);
         }
