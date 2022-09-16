@@ -63,7 +63,11 @@ export function AsyncBoundary({
         }}
         onReset={reset}
       >
-        <Suspense fallback={loadingFallback ?? <Loading />}>{children}</Suspense>
+        <Suspense
+          fallback={loadingFallback === undefined ? <Loading /> : loadingFallback ?? <Loading />}
+        >
+          {children}
+        </Suspense>
       </ErrorBoundary>
     </QueryErrorResetBoundary>
   );
