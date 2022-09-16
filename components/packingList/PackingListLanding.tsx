@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
 import Modal from '../common/Modal';
 import Layout from '../common/Layout';
-import DropBox from './DropBox';
 import SwipeableList from './SwipeableList';
 import SwipeablelistItem from './SwipeableListItem';
 import FloatActionButton from '../folder/FloatActionButton';
@@ -16,6 +15,7 @@ import { packmanColors } from '../../styles/color';
 import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
+import Link from 'next/link';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
@@ -165,21 +165,10 @@ function PackingListLanding() {
     }
   };
 
-  const moveToPackingList = (id: string) => {
-    if (!isDeleting) {
-      router.push(`/${type}?id=${id}&folderId=${currentFolder.id}`);
-    }
-  };
-
   // 전체 삭제
   const onClickDeleteButton = () => {
     const payload = (togetherPackingList ?? alonePackingList).map(({ id }) => id);
     setDeleteList(payload);
-  };
-
-  const onClickDropBoxItem = (id: string) => {
-    router.replace(`/packing-list?type=${type}&id=${id}`);
-    setIsDeleting(false);
   };
 
   // 개별 삭제
@@ -199,6 +188,8 @@ function PackingListLanding() {
       resetIsDragged();
     }
   };
+
+  const DropBox = lazy(() => import('./DropBox'));
 
   return (
     <Layout back title="리스트 목록" icon="profile">
@@ -226,17 +217,20 @@ function PackingListLanding() {
           <div>
             <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
             {toggle && (
-              <DropBox>
-                {folder.map(({ id, name }) => (
-                  <StyledItem
-                    key={id}
-                    currentId={id === currentFolder.id}
-                    onClick={() => onClickDropBoxItem(id)}
-                  >
-                    {name}
-                  </StyledItem>
-                ))}
-              </DropBox>
+              <Suspense fallback={null}>
+                <DropBox>
+                  {folder.map(({ id, name }) => (
+                    <Link key={id} href={`/packing-list?type=${type}&id=${id}`}>
+                      <StyledItem
+                        currentId={id === currentFolder.id}
+                        onClick={() => setIsDeleting(false)}
+                      >
+                        {name}
+                      </StyledItem>
+                    </Link>
+                  ))}
+                </DropBox>
+              </Suspense>
             )}
           </div>
         </StyledFolderInfo>
@@ -272,7 +266,6 @@ function PackingListLanding() {
                   checkDeleteList={(id: string) => checkDeleteList(id)}
                   onClickDeleteButton={() => onClickDeleteListItem(idx)}
                   packingList={togetherPackingList ?? alonePackingList}
-                  moveToPackingList={() => moveToPackingList(item.id)}
                   handleIsScrolled={(isSwiped: boolean) => handleIsScrolled(isSwiped)}
                 />
               ))}

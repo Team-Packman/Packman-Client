@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { useQuery } from 'react-query';
 import Layout from '../common/Layout';
-import EditingProfile from './EditingProfile';
 import SettingProfile from './SettingProfile';
 import useAPI from '../../utils/hooks/useAPI';
 
@@ -16,24 +15,32 @@ function EditProfileLanding() {
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
 
+  useEffect(() => {
+    const test = import('./EditingProfile');
+  }, []);
+
   if (!data) return null;
 
   const { nickname, profileImage } = data.data;
+
+  const EditingProfile = lazy(() => import('./EditingProfile'));
 
   return (
     <Layout {...layoutProps} padding>
       <StyledRoot isEditing={isEditing}>
         {isEditing ? (
-          <EditingProfile
-            comment={
-              <h1>
-                <b>프로필 수정</b>을 완료해주세요!
-              </h1>
-            }
-            oldNickname={nickname}
-            oldProfileImageId={profileImage}
-            finishEditing={finishEditingProfileHandler}
-          />
+          <Suspense fallback={null}>
+            <EditingProfile
+              comment={
+                <h1>
+                  <b>프로필 수정</b>을 완료해주세요!
+                </h1>
+              }
+              oldNickname={nickname}
+              oldProfileImageId={profileImage}
+              finishEditing={finishEditingProfileHandler}
+            />
+          </Suspense>
         ) : (
           <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
         )}
