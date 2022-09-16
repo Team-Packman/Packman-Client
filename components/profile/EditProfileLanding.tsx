@@ -5,7 +5,6 @@ import Layout from '../common/Layout';
 import SettingProfile from './SettingProfile';
 import useAPI from '../../utils/hooks/useAPI';
 import useDynamic from '../../utils/hooks/useDynamic';
-import { AsyncBoundary } from '../../utils/AsyncBoundary';
 
 function EditProfileLanding() {
   const [isEditing, setIsEditing] = useState(false);
@@ -26,18 +25,16 @@ function EditProfileLanding() {
     <Layout {...layoutProps} padding>
       <StyledRoot isEditing={isEditing}>
         {isEditing ? (
-          <AsyncBoundary loadingFallback={null}>
-            <EditingProfile
-              comment={
-                <h1>
-                  <b>프로필 수정</b>을 완료해주세요!
-                </h1>
-              }
-              oldNickname={nickname}
-              oldProfileImageId={profileImage}
-              finishEditing={finishEditingProfileHandler}
-            />
-          </AsyncBoundary>
+          <EditingProfile
+            comment={
+              <h1>
+                <b>프로필 수정</b>을 완료해주세요!
+              </h1>
+            }
+            oldNickname={nickname}
+            oldProfileImageId={profileImage}
+            finishEditing={finishEditingProfileHandler}
+          />
         ) : (
           <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
         )}
@@ -54,12 +51,4 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   align-items: center;
   height: 100%;
   margin-top: ${({ isEditing }) => isEditing && '4rem'};
-  overflow-y: auto;
-
-  /* 브라우저별 스크롤바 숨김 설정 */
-  -ms-overflow-style: none; // Edge
-  scrollbar-width: none; // Firefox
-  &::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
-  }
 `;

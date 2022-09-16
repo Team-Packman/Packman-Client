@@ -37,7 +37,11 @@ function HeadMeta(props: HeadMetaProps) {
         name="viewport"
         content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
       />
-      <meta property="og:title" content={description || '팩맨 - 내 손안의 짐 챙김 도우미'} />
+      <meta property="og:title" content={title || '팩맨 - 내 손안의 짐 챙김 도우미'} />
+      <meta
+        property="og:description"
+        content={description || '내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
+      />
     </Head>
   );
 }

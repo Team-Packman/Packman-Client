@@ -78,9 +78,7 @@ function PackingListLanding() {
     ).fill(false),
   );
 
-  const DropBox = useDynamic(() => import('./DropBox'), {
-    enable: false,
-  });
+  const DropBox = useDynamic(() => import('./DropBox'));
 
   if (!inventory || !isInventory(inventory)) return null;
 
@@ -152,9 +150,6 @@ function PackingListLanding() {
     // 폴더 이름과 삼각형 아이콘을 클릭했을 때만 toggle되도록 함
     if (e.target instanceof HTMLDivElement) return;
     setToggle((prev) => !prev);
-
-    // 삼각형을 눌렀을 때 DropbBox 컴포넌트 렌더링
-    DropBox.preload?.();
   };
 
   const handleFloatClick = (index: number) => {
@@ -224,20 +219,18 @@ function PackingListLanding() {
           <div>
             <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
             {toggle && (
-              <AsyncBoundary loadingFallback={null}>
-                <DropBox>
-                  {folder.map(({ id, name }) => (
-                    <Link key={id} href={`/packing-list?type=${type}&id=${id}`}>
-                      <StyledItem
-                        currentId={id === currentFolder.id}
-                        onClick={() => setIsDeleting(false)}
-                      >
-                        {name}
-                      </StyledItem>
-                    </Link>
-                  ))}
-                </DropBox>
-              </AsyncBoundary>
+              <DropBox>
+                {folder.map(({ id, name }) => (
+                  <Link key={id} href={`/packing-list?type=${type}&id=${id}`}>
+                    <StyledItem
+                      currentId={id === currentFolder.id}
+                      onClick={() => setIsDeleting(false)}
+                    >
+                      {name}
+                    </StyledItem>
+                  </Link>
+                ))}
+              </DropBox>
             )}
           </div>
         </StyledFolderInfo>
