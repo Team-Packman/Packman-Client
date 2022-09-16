@@ -18,7 +18,7 @@ function HeadMeta(props: HeadMetaProps) {
   if (page) {
     switch (page) {
       case 'login':
-        assignMeta('Packman : 로그인', '카카오 로그인으로 3초만에 시작하기');
+        assignMeta('Packman Sign in', '카카오 로그인으로 3초만에 시작하기');
         break;
       case 'edit-profile':
         assignMeta('', 'Packman : 문의하기');
@@ -28,7 +28,7 @@ function HeadMeta(props: HeadMetaProps) {
 
   return (
     <Head>
-      <title>{title || 'Packman'}</title>
+      <title lang="en">{title || 'Packman'}</title>
       <meta
         name="description"
         content={description || '내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
