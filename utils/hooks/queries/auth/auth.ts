@@ -1,4 +1,4 @@
-import { invitationAtom } from './../../../recoil/atom/atom';
+import { invitationAtom, errorFlagAtom } from './../../../recoil/atom/atom';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useQueryClient, useMutation } from 'react-query';
@@ -6,14 +6,14 @@ import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { RefreshInput, RefreshOutput } from '../../../../service/auth';
 import { authUserAtom } from '../../../recoil/atom/atom';
 import useAPI from '../../useAPI';
-import useErrorFlag from '../../recoil/useErrorFlag';
 import useReset from '../../recoil/useReset';
+import { useErrorBubbling } from '../../../AsyncBoundary';
 
 export const useRefresh = (tokens: RefreshInput) => {
   const router = useRouter();
   const client = useQueryClient();
   const reset = useReset();
-  const setIsError = useErrorFlag();
+  const { reportError } = useErrorBubbling();
   const setUser = useSetRecoilState(authUserAtom);
   const fetchRefresh = useAPI((api) => api.auth.refresh);
 
@@ -37,7 +37,7 @@ export const useRefresh = (tokens: RefreshInput) => {
           }
           default:
             reset();
-            setIsError(true);
+            reportError(error);
         }
       }
     }
@@ -65,8 +65,8 @@ export const useAddMemberMutation = () => {
 
 export const useCheckInvitation = (inviteCode: string) => {
   const client = useQueryClient();
-  const setIsError = useErrorFlag();
   const resetInvitation = useResetRecoilState(invitationAtom);
+  const { reportError } = useErrorBubbling();
 
   const getAloneInvited = useAPI((api) => api.packingList.alone.getInvited);
   const getTogetherInvited = useAPI((api) => api.packingList.together.getInvited);
@@ -84,9 +84,9 @@ export const useCheckInvitation = (inviteCode: string) => {
         );
         return data;
       }
-    } catch {
+    } catch (error) {
       resetInvitation();
-      setIsError(true);
+      reportError(error);
     }
   };
 

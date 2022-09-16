@@ -90,19 +90,30 @@ const StyledRoot = styled.div`
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  bottom: 0 !important;
+  bottom: 0;
   width: 100%;
   height: 14.1rem;
   background-color: ${packmanColors.pmWhite};
   border-radius: 2.4rem 2.4rem 0 0;
   padding: 0.8rem 0;
   z-index: 10000;
+  animation: appear 0.3s;
 
   & > h1 {
     color: ${packmanColors.pmBlack};
     font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     padding-top: 0.8rem;
     padding-bottom: 1rem;
+  }
+
+  @keyframes appear {
+    from {
+      bottom: -10rem;
+    }
+
+    to {
+      bottom: 0;
+    }
   }
 `;
 
