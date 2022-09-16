@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import Layout from '../common/Layout';
@@ -51,4 +51,16 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   align-items: center;
   height: 100%;
   margin-top: ${({ isEditing }) => isEditing && '4rem'};
+
+  ${({ isEditing }) =>
+    !isEditing &&
+    css`
+      overflow-y: auto;
+      /* 브라우저별 스크롤바 숨김 설정 */
+      -ms-overflow-style: none; // Edge
+      scrollbar-width: none; // Firefox
+      &::-webkit-scrollbar {
+        display: none; // Chrome, Safari, Opera
+      }
+    `}
 `;

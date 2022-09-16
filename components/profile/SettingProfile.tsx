@@ -188,7 +188,6 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  overflow-y: visible;
 
   & > p {
     display: flex;
