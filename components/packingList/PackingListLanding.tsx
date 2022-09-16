@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
@@ -16,6 +16,8 @@ import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
 import Link from 'next/link';
+import { AsyncBoundary } from '../../utils/AsyncBoundary';
+import useDynamic from '../../utils/hooks/useDynamic';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
@@ -75,6 +77,10 @@ function PackingListLanding() {
         togetherInventory?.data.togetherPackingList.length,
     ).fill(false),
   );
+
+  const DropBox = useDynamic(() => import('./DropBox'), {
+    enable: false,
+  });
 
   if (!inventory || !isInventory(inventory)) return null;
 
@@ -146,6 +152,9 @@ function PackingListLanding() {
     // 폴더 이름과 삼각형 아이콘을 클릭했을 때만 toggle되도록 함
     if (e.target instanceof HTMLDivElement) return;
     setToggle((prev) => !prev);
+
+    // 삼각형을 눌렀을 때 DropbBox 컴포넌트 렌더링
+    DropBox.preload?.();
   };
 
   const handleFloatClick = (index: number) => {
@@ -189,8 +198,6 @@ function PackingListLanding() {
     }
   };
 
-  const DropBox = lazy(() => import('./DropBox'));
-
   return (
     <Layout back title="리스트 목록" icon="profile">
       {showModal && (
@@ -217,7 +224,7 @@ function PackingListLanding() {
           <div>
             <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
             {toggle && (
-              <Suspense fallback={null}>
+              <AsyncBoundary loadingFallback={null}>
                 <DropBox>
                   {folder.map(({ id, name }) => (
                     <Link key={id} href={`/packing-list?type=${type}&id=${id}`}>
@@ -230,7 +237,7 @@ function PackingListLanding() {
                     </Link>
                   ))}
                 </DropBox>
-              </Suspense>
+              </AsyncBoundary>
             )}
           </div>
         </StyledFolderInfo>

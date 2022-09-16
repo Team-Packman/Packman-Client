@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import Layout from '../common/Layout';
 import SettingProfile from './SettingProfile';
 import useAPI from '../../utils/hooks/useAPI';
+import useDynamic from '../../utils/hooks/useDynamic';
+import { AsyncBoundary } from '../../utils/AsyncBoundary';
 
 function EditProfileLanding() {
   const [isEditing, setIsEditing] = useState(false);
@@ -14,22 +16,17 @@ function EditProfileLanding() {
 
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
-
-  useEffect(() => {
-    const test = import('./EditingProfile');
-  }, []);
+  const EditingProfile = useDynamic(() => import('./EditingProfile'));
 
   if (!data) return null;
 
   const { nickname, profileImage } = data.data;
 
-  const EditingProfile = lazy(() => import('./EditingProfile'));
-
   return (
     <Layout {...layoutProps} padding>
       <StyledRoot isEditing={isEditing}>
         {isEditing ? (
-          <Suspense fallback={null}>
+          <AsyncBoundary loadingFallback={null}>
             <EditingProfile
               comment={
                 <h1>
@@ -40,7 +37,7 @@ function EditProfileLanding() {
               oldProfileImageId={profileImage}
               finishEditing={finishEditingProfileHandler}
             />
-          </Suspense>
+          </AsyncBoundary>
         ) : (
           <SettingProfile onClickEditText={() => setIsEditing(true)} profileData={data.data} />
         )}
