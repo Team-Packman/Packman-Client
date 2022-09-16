@@ -105,7 +105,7 @@ const StyledTemplateWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   &:not(:last-child) {
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
   }
   & > h1 {
     ${FONT_STYLES.SUBHEAD1_SEMIBOLD};

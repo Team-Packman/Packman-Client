@@ -152,8 +152,7 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
   position: relative;
   background: ${packmanColors.pmWhite};
   width: 16rem;
-  transform: ${({ open }) =>
-    open ? 'transform: translateY(0) scale(1)' : 'translateY(50px) scale(0)'};
+  transform: ${({ open }) => (open ? ' translateY(0) scale(1)' : 'translateY(50px) scale(0)')};
   transition: transform 300ms, opacity 300ms;
   opacity: ${({ open }) => (open ? '1' : '0')};
 

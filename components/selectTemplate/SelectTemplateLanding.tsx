@@ -81,8 +81,7 @@ function SelectTemplateLanding() {
                 }
                 placeholder="blur"
                 alt="template-image"
-                width={375}
-                height={211}
+                layout="fill"
                 priority
               />
             )}
@@ -127,20 +126,16 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  overflow-y: auto;
-
-  /* 브라우저별 스크롤바 숨김 설정 */
-  -ms-overflow-style: none; // Edge
-  scrollbar-width: none; // Firefox
-  &::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
-  }
 `;
 const StyledTemplateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   & > picture {
+    position: relative;
+    aspect-ratio: 3.75 / 2.11;
+    width: 33.5rem;
+    height: 21.1rem;
     margin: 0rem 0 3.3rem 0;
   }
 `;

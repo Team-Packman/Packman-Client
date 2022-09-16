@@ -173,14 +173,6 @@ const StyledRoot = styled.section`
   height: calc(100% - 23.5rem);
   justify-content: space-between;
   margin-top: 4.7rem;
-  overflow-y: auto;
-
-  /* 브라우저별 스크롤바 숨김 설정 */
-  -ms-overflow-style: none; // Edge
-  scrollbar-width: none; // Firefox
-  &::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
-  }
 `;
 const StyledProfile = styled.div`
   display: flex;
