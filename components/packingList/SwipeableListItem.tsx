@@ -5,7 +5,8 @@ import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 interface PackingList {
   id: string;
   departureDate: string;
@@ -23,7 +24,6 @@ interface ItemProps {
   checkDeleteList: (id: string) => void;
   onClickDeleteButton: (idx: number) => void;
   packingList: PackingList[];
-  moveToPackingList: () => void;
   handleIsScrolled: (isScrolled: boolean) => void;
 }
 
@@ -37,11 +37,12 @@ export default function SwipeablelistItem(props: ItemProps) {
     checkDeleteList,
     onClickDeleteButton,
     packingList,
-    moveToPackingList,
     handleIsScrolled,
   } = props;
 
   const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const router = useRouter();
+  const { type } = router.query;
 
   const onTouchStart = (e: React.TouchEvent) => {
     let isSwiping = false;
@@ -95,61 +96,62 @@ export default function SwipeablelistItem(props: ItemProps) {
   };
 
   return (
-    <StyledRoot isDeleting={isDeleting}>
-      {isDeleting && (
-        <StyledSelectDelete>
-          <Image
-            src={deleteList.includes(id) ? iCheckPink : iCheck}
-            alt="check"
-            onClick={() => checkDeleteList(id)}
-            layout="fill"
-          />
-        </StyledSelectDelete>
-      )}
-      <StyledItemWrapper
-        onTouchStart={onTouchStart}
-        isDragged={isDragged[idx]}
-        isDeleting={isDeleting}
-        onClick={() => {
-          isDragged.every((item) => !item)
-            ? moveToPackingList()
-            : handleIsDragged(Array(packingList?.length).fill(false));
-        }}
-      >
-        <StyledItemInfo>
-          <p>{departureDate}</p>
-          <p>{title}</p>
-          <StyledPackInfo>
-            <span>총 {packTotalNum}개의 짐</span>
-            {packRemainNum !== '0' ? (
-              <StyledPackRemainText>
-                아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
-              </StyledPackRemainText>
-            ) : (
-              packTotalNum !== '0' &&
-              packRemainNum === '0' && (
-                <StyledPackRemainText>
-                  <span>패킹</span>이 완료되었어요!
-                </StyledPackRemainText>
-              )
-            )}
-          </StyledPackInfo>
-        </StyledItemInfo>
-        <Image src={iRightArrow} alt="right-arrow" width={24} height={24} />
-      </StyledItemWrapper>
-
-      {!isDeleting && (
-        <StyledDeleteButton
+    <Link href={!isDeleting ? `/${type}?id=${id}` : ''}>
+      <StyledRoot isDeleting={isDeleting}>
+        {isDeleting && (
+          <StyledSelectDelete>
+            <Image
+              src={deleteList.includes(id) ? iCheckPink : iCheck}
+              alt="check"
+              onClick={() => checkDeleteList(id)}
+              layout="fill"
+            />
+          </StyledSelectDelete>
+        )}
+        <StyledItemWrapper
+          onTouchStart={onTouchStart}
           isDragged={isDragged[idx]}
+          isDeleting={isDeleting}
           onClick={() => {
-            // 아이템 삭제
-            onClickDeleteButton(idx);
+            !isDragged.every((item) => !item) &&
+              handleIsDragged(Array(packingList?.length).fill(false));
           }}
         >
-          <div>삭제</div>
-        </StyledDeleteButton>
-      )}
-    </StyledRoot>
+          <StyledItemInfo>
+            <p>{departureDate}</p>
+            <p>{title}</p>
+            <StyledPackInfo>
+              <span>총 {packTotalNum}개의 짐</span>
+              {packRemainNum !== '0' ? (
+                <StyledPackRemainText>
+                  아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
+                </StyledPackRemainText>
+              ) : (
+                packTotalNum !== '0' &&
+                packRemainNum === '0' && (
+                  <StyledPackRemainText>
+                    <span>패킹</span>이 완료되었어요!
+                  </StyledPackRemainText>
+                )
+              )}
+            </StyledPackInfo>
+          </StyledItemInfo>
+          <Image src={iRightArrow} alt="right-arrow" width={24} height={24} />
+        </StyledItemWrapper>
+
+        {!isDeleting && (
+          <StyledDeleteButton
+            isDragged={isDragged[idx]}
+            onClick={() => {
+              // 아이템 삭제
+              onClickDeleteButton(idx);
+            }}
+          >
+            <div>삭제</div>
+          </StyledDeleteButton>
+        )}
+      </StyledRoot>
+    </Link>
   );
 }
 
