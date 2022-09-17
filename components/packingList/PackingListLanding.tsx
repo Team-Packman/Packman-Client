@@ -217,7 +217,9 @@ function PackingListLanding() {
         <StyledFolderInfo onClick={onClickFolderInfo}>
           <h1>{currentFolder.name}</h1>
           <div>
-            <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
+            <StyledToggleImage toggle={toggle.toString()}>
+              <Image src={iShowMore} alt="상세보기" />
+            </StyledToggleImage>
             {toggle && (
               <DropBox>
                 {folder.map(({ id, name }) => (
@@ -338,7 +340,7 @@ const StyledItem = styled.div<{ currentId: boolean }>`
     border-bottom: 1px solid ${packmanColors.pmGrey};
   }
 `;
-const StyledToggleImage = styled(Image)<{ toggle: string }>`
+const StyledToggleImage = styled.div<{ toggle: string }>`
   width: 2.4rem;
   height: 2.4rem;
   transition: 0.2s ease-in-out;

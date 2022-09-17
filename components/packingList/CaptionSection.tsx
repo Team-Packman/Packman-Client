@@ -36,13 +36,13 @@ function CaptionSection(props: CaptionSectionProps) {
         {isDeleting ? (
           <p onClick={() => handleIsDragged(Array(packingList.length).fill(false))}>취소</p>
         ) : (
-          <Image
-            src={iTrash}
-            alt="삭제"
-            width={24}
-            height={24}
-            onClick={() => handleIsDragged(Array(packingList.length).fill(false))}
-          />
+          <StyledTrashImage>
+            <Image
+              src={iTrash}
+              alt="삭제"
+              onClick={() => handleIsDragged(Array(packingList.length).fill(false))}
+            />
+          </StyledTrashImage>
         )}
       </StyledCaptionButtonWrapper>
     </StyledRoot>
@@ -77,6 +77,10 @@ const StyledCaptionText = styled.p`
     ${FONT_STYLES.BODY2_SEMIBOLD};
     color: ${packmanColors.pmPink};
   }
+`;
+const StyledTrashImage = styled.div`
+  width: 2.4rem;
+  height: 2.4rem;
 `;
 const StyledCaptionButtonWrapper = styled.div`
   position: absolute;
