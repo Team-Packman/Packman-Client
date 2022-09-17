@@ -48,6 +48,16 @@ class MyDocument extends Document {
           {/* pwa */}
           <meta name="theme-color" content="#fff" />
           <link
+            rel="preconnect"
+            crossOrigin=""
+            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css"
+          />
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css"
+          />
+
+          {/* <link
             rel="preload"
             href="/assets/font/Pretendard-Medium.woff2"
             as="font"
@@ -81,7 +91,7 @@ class MyDocument extends Document {
             as="font"
             crossOrigin=""
             type="font/woff2"
-          />
+          /> */}
           <link rel="manifest" href="/manifest.json" />
           <meta name="apple-mobile-web-app-title" content="Packman" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
