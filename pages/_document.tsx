@@ -42,10 +42,46 @@ class MyDocument extends Document {
           {/* 검색엔진이 대부분 무시하는 추세 */}
           {/* <meta name="keywords" content="짐,짐 챙기기,여행 짐,여행 체크리스트" /> */}
           {/* 추후 수정 */}
+
           <meta property="og:image" content="/assets/pwa/apple-splash-1136-640.jpg" />
           <meta property="og:url" content="https://www.packman.kr" />
           {/* pwa */}
           <meta name="theme-color" content="#fff" />
+          <link
+            rel="preload"
+            href="/assets/font/Pretendard-Medium.woff2"
+            as="font"
+            crossOrigin=""
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/assets/font/Pretendard-SemiBold.woff2"
+            as="font"
+            crossOrigin=""
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/assets/font/Pretendard-ExtraBold.woff2"
+            as="font"
+            crossOrigin=""
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/assets/font/Pretendard-Light.woff2"
+            as="font"
+            crossOrigin=""
+            type="font/woff2"
+          />
+          <link
+            rel="preload"
+            href="/assets/font/Pretendard-Regular.woff2"
+            as="font"
+            crossOrigin=""
+            type="font/woff2"
+          />
           <link rel="manifest" href="/manifest.json" />
           <meta name="apple-mobile-web-app-title" content="Packman" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
