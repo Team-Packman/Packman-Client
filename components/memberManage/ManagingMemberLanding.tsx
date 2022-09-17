@@ -39,6 +39,7 @@ function ManagingMemberLanding() {
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [members, setMembers] = useState<Imember[]>([]); //
   const [oldMembers, setOldMembers] = useState([...members]);
+  const [willBeDeleted, setWillBeDeleted] = useState<string[]>([]);
 
   const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -66,28 +67,27 @@ function ManagingMemberLanding() {
   );
 
   const deleteMember = (index: number) => {
-    //
     setMembers(
       members.filter((member, memberIndex) => {
         return memberIndex !== index;
       }),
     );
-    //
-    deleteListMember(
-      {
-        groupId: id as string,
-        userId: members[index].id,
-      },
-      {
-        onSuccess: () => {
-          client.invalidateQueries(['getGroupMember', id]);
-        },
-      },
-    );
+    setWillBeDeleted((prev) => [...prev, members[index].id]);
   };
 
   const clickInvitingButton = () => {
     if (isEditing) {
+      deleteListMember(
+        {
+          groupId: id as string,
+          userId: willBeDeleted.join(),
+        },
+        {
+          onSuccess: () => {
+            client.invalidateQueries(['getGroupMember', id]);
+          },
+        },
+      );
       setIsEditing(false);
     }
   };
