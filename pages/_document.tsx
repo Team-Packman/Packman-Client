@@ -47,7 +47,15 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://www.packman.kr" />
           {/* pwa */}
           <meta name="theme-color" content="#fff" />
+
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+            rel="stylesheet"
+          />
+
+          {/* <link
             rel="preconnect"
             crossOrigin=""
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css"
@@ -55,7 +63,7 @@ class MyDocument extends Document {
           <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css"
-          />
+          /> */}
 
           {/* <link
             rel="preload"

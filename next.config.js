@@ -18,4 +18,9 @@ module.exports = withPWA({
       },
     ];
   },
+  webpack: (config, options) => {
+    config.plugins.push();
+
+    return config;
+  },
 });
