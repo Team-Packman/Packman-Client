@@ -16,7 +16,7 @@ export const GlobalStyle = createGlobalStyle`
         padding: 0;
         margin: 0;
         line-height: 1.6;
-        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+        font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
             Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
         font-size: 62.5%;
         position:fixed;
