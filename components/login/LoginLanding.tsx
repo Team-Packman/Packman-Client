@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import loginLogo from '/public/assets/svg/loginLogo.svg';
-import KakaoLogin from '/public/assets/png/kakaoLogin.png';
+import KakaoLogin from '/public/assets/svg/kakaoLogin.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 import { packmanColors } from '../../styles/color';
@@ -30,6 +30,7 @@ function LoginLanding() {
 
   return (
     <StyledRoot>
+      <h1>팩맨 - 내 손안의 짐 챙김 도우미</h1>
       <LogoAndTitle>
         <Image src={loginLogo} alt="팩맨 로고" />
         <Title>내 손안의 짐 챙김 도우미</Title>
@@ -59,6 +60,11 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
+
+  & > h1 {
+    font-size: 10rem;
+    opacity: 0;
+  }
 `;
 
 const LogoAndTitle = styled.div`

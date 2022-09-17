@@ -1,15 +1,16 @@
 import type { AppProps } from 'next/app';
-import Head from 'next/head';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useState } from 'react';
 import { APIProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
-import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
-import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import { RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
+import HeadMeta from '../components/HeadMeta';
+import { AsyncBoundary } from '../utils/AsyncBoundary';
+import React from 'react';
+// import '../styles/fonts.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -27,20 +28,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 
   useEffect(() => {
-    const localStoragePersistor = createWebStoragePersistor({ storage: window?.localStorage });
-
-    persistQueryClient({
-      queryClient,
-      persistor: localStoragePersistor,
-      dehydrateOptions: {
-        shouldDehydrateQuery: ({ queryKey }) => {
-          return queryKey === 'User' || queryKey === 'From' ? true : false;
-        },
-      },
-    });
-  }, [queryClient]);
-
-  useEffect(() => {
     setScreenSize();
     window.addEventListener('resize', () => setScreenSize());
     return () => window.removeEventListener('resize', setScreenSize);
@@ -51,22 +38,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   if (!show) return null;
-
   return (
     <>
-      <Head>
-        <title>Packman</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-      </Head>
+      <HeadMeta page={Component.displayName} />
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
           <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
             <Hydrate state={pageProps?.dehydratedState}>
-              <GlobalStyle />
-              <Component {...pageProps} />
-              <InstallGuide />
+              <AsyncBoundary>
+                <GlobalStyle />
+                <Component {...pageProps} />
+                <InstallGuide />
+              </AsyncBoundary>
             </Hydrate>
           </APIProvider>
         </QueryClientProvider>

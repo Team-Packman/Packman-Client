@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
+import useReset from '../../utils/hooks/recoil/useReset';
 interface ProfileData {
   id: string;
   nickname: string;
@@ -35,6 +36,7 @@ function SettingProfile(props: SettingProfileProps) {
   const [isLogoutClicked, setIsLogoutClicked] = useState(true);
   const { accessToken: kakaoAccessToken } = useRecoilValue(kakao);
   const accessToken = useRecoilValue(authUserAtom).accessToken;
+  const resetAllPersist = useReset();
 
   const router = useRouter();
 
@@ -56,9 +58,6 @@ function SettingProfile(props: SettingProfileProps) {
     setShowModal(false);
   };
 
-  const resetUserState = useResetRecoilState(authUserAtom); //유저 전역변수 초기화
-  const resetKakaoToken = useResetRecoilState(kakao); // 카카오 액세스 토큰 초기화
-
   //로그아웃 및 recoil 초기화
   const onClickLogout = () => {
     (async () => {
@@ -76,8 +75,7 @@ function SettingProfile(props: SettingProfileProps) {
           },
         );
       } finally {
-        resetUserState();
-        resetKakaoToken();
+        resetAllPersist();
         router.replace('/login');
       }
     })();
@@ -96,7 +94,13 @@ function SettingProfile(props: SettingProfileProps) {
         <p onClick={onClickEditText}>수정</p>
 
         <StyledProfile>
-          <Image src={profile[+profileImage].src} alt="my-profile-image" width={80} height={80} />
+          <Image
+            src={profile[+profileImage].src}
+            alt="my-profile-image"
+            placeholder="blur"
+            width={80}
+            height={80}
+          />
           <div>
             <h1>{nickname}</h1>
             <p>{email}</p>
@@ -184,7 +188,6 @@ const StyledRoot = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  overflow-y: visible;
 
   & > p {
     display: flex;
@@ -311,6 +314,7 @@ const StyledModalButtonWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
+  margin-top: 2.95rem;
 `;
 const StyledModalButton = styled.button<{ left?: boolean }>`
   ${FONT_STYLES.BODY4_SEMIBOLD};

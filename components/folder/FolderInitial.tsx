@@ -24,9 +24,9 @@ function FolderInitial(props: FolderInitialProps) {
   return (
     <StyledRoot>
       {currentIndex === 0 ? (
-        <Image src={InitLogo} width={273} height={273} alt="test" />
+        <Image src={InitLogo} width={273} height={273} placeholder="blur" alt="test" />
       ) : (
-        <Image src={InitAloneLogo} width={273} height={273} alt="test" />
+        <Image src={InitAloneLogo} width={273} height={273} placeholder="blur" alt="test" />
       )}
       <StyledInitialWrapper>
         <StyledLabel>{initialLables[currentIndex]}</StyledLabel>

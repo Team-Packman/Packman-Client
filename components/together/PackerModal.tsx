@@ -2,6 +2,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
+import { FONT_STYLES } from '../../styles/font';
 import { ProfileList } from '../../utils/profileImages';
 
 export interface PackerInfoPayload {
@@ -61,16 +62,24 @@ function PackerModal(props: PackerModalProps) {
       <StyledModal>
         <StyledTitle>챙길 사람을 선택해주세요</StyledTitle>
         <StyledRandomButton onClick={StartDraw}>랜덤 배정</StyledRandomButton>
+
         <StyledPackerWrapper>
           {member.map(({ id, nickname, profileImage }) => (
             <StyledPacker key={id} onClick={() => setSelected(id)}>
               <StyledPackerImg selected={selected === id}>
-                <Image src={ProfileList[+profileImage]} alt="profile" layout="fill" />
+                <StyledBackground selected={selected === id} />
+                <Image
+                  src={ProfileList[+profileImage]}
+                  placeholder="blur"
+                  alt="profile"
+                  layout="fill"
+                />
               </StyledPackerImg>
-              <StyledPackerName>{nickname}</StyledPackerName>
+              <StyledPackerName selected={selected === id}>{nickname}</StyledPackerName>
             </StyledPacker>
           ))}
         </StyledPackerWrapper>
+
         <StyledConfirmButton selected={selected !== ''} onClick={clickHandler}>
           배정 완료
         </StyledConfirmButton>
@@ -153,23 +162,34 @@ const StyledPackerImg = styled.div<{
   position: relative;
   width: 100%;
   height: 6.4rem;
-  border: 2px solid ${packmanColors.pmGrey};
+  border: 2.5px solid transparent;
   ${({ selected }) =>
     selected &&
     css`
       border-color: ${packmanColors.pink};
     `}
-  background-color: ${packmanColors.pmGrey};
   border-radius: 0.8rem;
 `;
 
-const StyledPackerName = styled.div`
+const StyledBackground = styled.div<{ selected: boolean }>`
+  position: absolute;
+  transform: translate(-0.15rem, -0.15rem);
+
+  width: 6.3rem;
+  height: 6.3rem;
+  border-radius: 0.7rem;
+  background: url('assets/svg/iSelected.svg') no-repeat center;
+  background-color: ${({ selected }) => (selected ? 'rgba(0,0,0,0.48)' : 'transparent')};
+  z-index: ${({ selected }) => selected && '1'};
+`;
+
+const StyledPackerName = styled.div<{ selected: boolean }>`
+  ${FONT_STYLES.BODY2_SEMIBOLD};
   width: 100%;
   height: 1.7rem;
   line-height: 1.7rem;
-  font-weight: 600;
-  font-size: 1.4rem;
   text-align: center;
+  color: ${({ selected }) => selected && packmanColors.pmPink};
 `;
 
 const StyledConfirmButton = styled.button<{

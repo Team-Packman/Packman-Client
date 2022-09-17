@@ -23,7 +23,7 @@ function PackagesWithCategory(props: PropsWithChildren<PackagesWithCategoryProps
         {!preview && (
           <li>
             <StyledAddButton onClick={createHandler}>
-              <Image src={Plus} alt="plus_ic" />
+              <Image src={Plus} alt="plus_ic" layout="fill" />
             </StyledAddButton>
           </li>
         )}
@@ -52,6 +52,8 @@ const StyledAddButton = styled.button`
 
   width: 100%;
   height: 3.2rem;
+
+  position: relative;
 
   background-color: transparent;
 

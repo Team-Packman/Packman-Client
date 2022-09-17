@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import Layout from '../common/Layout';
-import EditingProfile from './EditingProfile';
 import SettingProfile from './SettingProfile';
 import useAPI from '../../utils/hooks/useAPI';
+import useDynamic from '../../utils/hooks/useDynamic';
 
 function EditProfileLanding() {
   const [isEditing, setIsEditing] = useState(false);
@@ -15,6 +15,7 @@ function EditProfileLanding() {
 
   const getUserInfo = useAPI((api) => api.user.getUserInfo);
   const { data } = useQuery('getUserInfo', () => getUserInfo());
+  const EditingProfile = useDynamic(() => import('./EditingProfile'));
 
   if (!data) return null;
 
@@ -50,12 +51,16 @@ const StyledRoot = styled.div<{ isEditing: boolean }>`
   align-items: center;
   height: 100%;
   margin-top: ${({ isEditing }) => isEditing && '4rem'};
-  overflow-y: auto;
 
-  /* 브라우저별 스크롤바 숨김 설정 */
-  -ms-overflow-style: none; // Edge
-  scrollbar-width: none; // Firefox
-  &::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
-  }
+  ${({ isEditing }) =>
+    !isEditing &&
+    css`
+      overflow-y: auto;
+      /* 브라우저별 스크롤바 숨김 설정 */
+      -ms-overflow-style: none; // Edge
+      scrollbar-width: none; // Firefox
+      &::-webkit-scrollbar {
+        display: none; // Chrome, Safari, Opera
+      }
+    `}
 `;

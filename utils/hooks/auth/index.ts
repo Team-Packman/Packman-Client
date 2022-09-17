@@ -10,7 +10,6 @@ export const useKaKaoLogin = () => {
   const [{ mutate: kakaoAuth }, { mutate: kakaoLogin }] = useKaKaoFlow();
 
   const [user, setUser] = useRecoilState(authUserAtom);
-  const resetInvitation = useResetRecoilState(invitationAtom);
   const setKakaoInfo = useSetRecoilState(kakao);
   const setCreatingUser = useSetRecoilState(creatingUserAtom);
 
@@ -27,7 +26,6 @@ export const useKaKaoLogin = () => {
                 setUser(data as typeof user);
               } else {
                 setCreatingUser(data);
-                resetInvitation();
                 router.replace('/profile');
               }
             },
@@ -47,7 +45,7 @@ export const useKaKaoLogin = () => {
 
 export const useInvitation = () => {
   const router = useRouter();
-  const { type, inviteCode } = useRecoilValue(invitationAtom);
+  const { type, inviteCode, folderId } = useRecoilValue(invitationAtom);
   const resetInvitation = useResetRecoilState(invitationAtom);
 
   const addMember = useAddMemberMutation();
@@ -63,7 +61,7 @@ export const useInvitation = () => {
         )) as GetAloneInvitedOutput['data'];
 
         if (isOwner) {
-          router.replace(`/alone?id=${listId}`);
+          router.replace(`/alone?id=${listId}&folderId=${folderId}`);
         } else {
           router.replace(`/alone/shared?id=${listId}`);
         }
@@ -71,12 +69,13 @@ export const useInvitation = () => {
         const { id: listId, isMember } = (await checkInvitation(type)) as GetInvitedOutput['data'];
 
         if (isMember) {
-          router.replace(`/together?id=${listId}`);
+          router.replace(`/together?id=${listId}&folderId=${folderId}`);
         } else {
           addMember(
             { listId },
             {
-              onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
+              onSuccess: ({ data: { listId } }) =>
+                router.replace(`/together?id=${listId}&folderId=${folderId}`),
               onError: () => router.replace('/folder'),
             },
           );

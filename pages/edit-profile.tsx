@@ -9,4 +9,5 @@ function EditProfile() {
   );
 }
 
+EditProfile.displayName = 'EditProfile';
 export default EditProfile;

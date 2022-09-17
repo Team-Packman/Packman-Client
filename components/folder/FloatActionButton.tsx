@@ -110,12 +110,12 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   list-style: none;
   margin: 0;
   padding: 0;
-  z-index: 1600;
+  z-index: 1300;
 
   // Display button to the bottom right
   position: fixed;
   right: 2rem;
-  bottom: 8rem;
+  bottom: 13.5rem;
 
   // Set max height to only trigger mouse enter
   // when user hover over first button
@@ -124,7 +124,8 @@ export const StyledFABContainer = styled.ul<{ pageName: string; isAloned: string
   li:first-child {
     position: fixed;
     right: 2rem;
-    bottom: 1rem;
+    bottom: 6.5rem;
+    filter: drop-shadow(2px 4px 16px rgba(0, 0, 0, 0.2));
   }
 
   li:last-child {
@@ -151,8 +152,7 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
   position: relative;
   background: ${packmanColors.pmWhite};
   width: 16rem;
-  transform: ${({ open }) =>
-    open ? 'transform: translateY(0) scale(1)' : 'translateY(50px) scale(0)'};
+  transform: ${({ open }) => (open ? 'translateY(0) scale(1)' : 'translateY(50px) scale(0)')};
   transition: transform 300ms, opacity 300ms;
   opacity: ${({ open }) => (open ? '1' : '0')};
 

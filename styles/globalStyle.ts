@@ -21,6 +21,9 @@ export const GlobalStyle = createGlobalStyle`
         font-size: 62.5%;
         position:fixed;
         overflow: hidden;
+        @media (max-height:700px){
+            font-size: 56.25%;
+        }
     }
 
     * {

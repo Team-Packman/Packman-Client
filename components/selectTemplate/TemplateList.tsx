@@ -17,7 +17,7 @@ const StyledRoot = styled.div`
   display: flex;
   flex-wrap: wrap;
   height: 13rem;
-  padding: 1rem 0;
+  margin: 1rem 0;
   overflow-y: scroll;
   align-content: flex-start;
 

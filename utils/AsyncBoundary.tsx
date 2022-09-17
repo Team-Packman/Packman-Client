@@ -1,18 +1,17 @@
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
-import { PropsWithChildren, ReactNode, Suspense, useState } from 'react';
+import { PropsWithChildren, ReactNode, Suspense, useEffect, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { useQueryErrorResetBoundary } from 'react-query';
-import { useResetRecoilState } from 'recoil';
+import { QueryErrorResetBoundary, useQueryErrorResetBoundary } from 'react-query';
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 import Error from '../components/common/Error';
 import Loading from '../components/common/Loading';
-import { authUserAtom, invitationAtom } from './recoil/atom/atom';
+import { errorFlagAtom, invitationAtom } from './recoil/atom/atom';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
 }
 
-const isExpectedError = <Error extends unknown>(res: Error): res is Error => {
+const isExpectedError = (res: unknown): res is Error => {
   if (typeof res !== 'object' || res == null) {
     return false;
   }
@@ -21,35 +20,35 @@ const isExpectedError = <Error extends unknown>(res: Error): res is Error => {
 };
 
 export const useErrorBubbling = () => {
-  const [isError, setIsError] = useState<Error | null>(null);
+  const [isError, setIsError] = useState<Error | string | null>(null);
 
   if (isError !== null) {
     throw isError;
   }
 
   return {
-    onError: (error: Error) => {
-      error instanceof Error && setIsError(error);
+    reportError: (error: unknown) => {
+      try {
+        isExpectedError(error) ? setIsError(error) : setIsError(JSON.stringify(error));
+      } catch (error) {
+        setIsError(String(error));
+      }
     },
   };
 };
+
 const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
-  const router = useRouter();
-  const resetUser = useResetRecoilState(authUserAtom);
   const resetInvitation = useResetRecoilState(invitationAtom);
 
-  if (error instanceof AxiosError && error.response?.status === 0) {
-    resetUser();
-    resetInvitation();
-    router.replace('/login');
+  if (error instanceof AxiosError) {
+    switch (error.response?.status) {
+      case 0:
+      case 404:
+        resetInvitation();
+    }
   }
 
-  return (
-    <div>
-      <Error />
-      <button onClick={resetErrorBoundary}>reset</button>
-    </div>
-  );
+  return <Error />;
 };
 
 export function AsyncBoundary({
@@ -57,17 +56,24 @@ export function AsyncBoundary({
   loadingFallback,
 }: PropsWithChildren<AsyncBoundaryProps>) {
   const { reset } = useQueryErrorResetBoundary();
+
   return (
-    <ErrorBoundary
-      FallbackComponent={({ error, resetErrorBoundary }) => {
-        if (isExpectedError(error)) {
-          return errorFallback({ error, resetErrorBoundary });
-        }
-        return <h1>Unexpected Error</h1>;
-      }}
-      onReset={reset}
-    >
-      <Suspense fallback={loadingFallback ?? <Loading />}>{children}</Suspense>
-    </ErrorBoundary>
+    <QueryErrorResetBoundary>
+      <ErrorBoundary
+        FallbackComponent={(fallback) => {
+          if (isExpectedError(fallback.error)) {
+            return errorFallback(fallback);
+          }
+          return <h1>Unexpected Error</h1>;
+        }}
+        onReset={reset}
+      >
+        <Suspense
+          fallback={loadingFallback === undefined ? <Loading /> : loadingFallback ?? <Loading />}
+        >
+          {children}
+        </Suspense>
+      </ErrorBoundary>
+    </QueryErrorResetBoundary>
   );
 }

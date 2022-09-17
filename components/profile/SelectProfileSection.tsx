@@ -1,5 +1,4 @@
 import Image, { StaticImageData } from 'next/image';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
@@ -19,7 +18,6 @@ interface SelectProfileSectionProps {
 
 function SelectProfileSection(props: SelectProfileSectionProps) {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { isEditing, oldNickname, oldProfileImageId, finishEditing } = props;
   const profileImage = ProfileList.map((e: StaticImageData, i: number) => ({ id: i + '', src: e }));
   const [nickname, setNickname] = useState(oldNickname ? oldNickname : '');
@@ -30,11 +28,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
-  const { mutate: addUserProfileMutate } = useMutation(addUserProfile, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('getUserInfo');
-    },
-  });
+  const { mutate: addUserProfileMutate } = useMutation(addUserProfile);
 
   //프로필 수정
   const updateUserProfile = useAPI((api) => api.user.updateUserProfile);
@@ -104,7 +98,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       {
         onSuccess: ({ data }) => {
           setUser(data);
-          router.push('/folder');
         },
       },
     );
@@ -118,7 +111,13 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
     <StyledRoot>
       <StyledProfile>
         <div style={{ position: 'relative', width: '12rem', height: '12rem' }}>
-          <Image src={profileImage[+index].src} alt="profile-image" layout="fill" priority />
+          <Image
+            src={profileImage[+index].src}
+            placeholder="blur"
+            alt="profile-image"
+            layout="fill"
+            priority
+          />
         </div>
         <StyledInputWrapper>
           <StyledInput
@@ -145,6 +144,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
                 alt="profile-image"
                 width={80}
                 height={80}
+                placeholder="blur"
                 selected={profile === id}
                 priority
               />
@@ -173,14 +173,6 @@ const StyledRoot = styled.section`
   height: calc(100% - 23.5rem);
   justify-content: space-between;
   margin-top: 4.7rem;
-  overflow-y: auto;
-
-  /* 브라우저별 스크롤바 숨김 설정 */
-  -ms-overflow-style: none; // Edge
-  scrollbar-width: none; // Firefox
-  &::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
-  }
 `;
 const StyledProfile = styled.div`
   display: flex;
