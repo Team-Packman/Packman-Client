@@ -9,6 +9,7 @@ import { RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
 import HeadMeta from '../components/HeadMeta';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
+import React from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -36,7 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   if (!show) return null;
-
   return (
     <>
       <HeadMeta page={Component.displayName} />
