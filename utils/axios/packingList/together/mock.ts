@@ -54,6 +54,7 @@ export const fetchPackingListDetail = async (
         data: {
           id: '5',
           title: '단체 해외여행',
+          folderId: '1',
           departureDate: '2022.12.22',
           togetherPackingList: {
             id: '13',
