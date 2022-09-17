@@ -10,5 +10,5 @@ function Login() {
   );
 }
 
-Login.displayName = 'login';
+Login.displayName = 'Login';
 export default Login;

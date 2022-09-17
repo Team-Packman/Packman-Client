@@ -9,5 +9,5 @@ function EditProfile() {
   );
 }
 
-EditProfile.displayName = 'edit-profile';
+EditProfile.displayName = 'EditProfile';
 export default EditProfile;

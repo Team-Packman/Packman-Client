@@ -19,7 +19,6 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
             Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
         font-size: 62.5%;
-        /* font-size: 55.5%; */
         position:fixed;
         overflow: hidden;
         @media (max-height:700px){
