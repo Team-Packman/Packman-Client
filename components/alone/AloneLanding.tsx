@@ -13,14 +13,12 @@ import PackingCategory, { UpdateCategoryPayload } from '../common/PackingCategor
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 import SharePackingListButton from '../common/SharePackingListButton';
-import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRouter } from 'next/router';
-import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
-import ModalForShare from '../common/ModalForShare';
 import Loading from '../common/Loading';
 import useHide from '../../utils/hooks/useHide';
 import { GetAlonePackingListDetailOutput } from '../../service/packingList/alone';
 import { AxiosError } from 'axios';
+import useDynamic from '../../utils/hooks/useDynamic';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -43,6 +41,11 @@ function AloneLanding() {
   const router = useRouter();
   const { id } = router.query;
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
+
+  const PackingListBottomModal = useDynamic(() => import('../common/PackingListBottomModal'));
+  const ModalForShare = useDynamic(() => import('../common/ModalForShare'));
+  const ModalForAddToTemplate = useDynamic(() => import('../common/ModalForAddToTemplate'));
+
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
   const [currentCreating, setCurrentCreating] = useState('');
   const [currentEditing, setCurrentEditing] = useState('');
