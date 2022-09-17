@@ -13,21 +13,19 @@ import CheckListSubHeader from './CheckListSubHeader';
 import PackingItem, { UpdateItemPayload } from '../common/PackingItem';
 import { packmanColors } from '../../styles/color';
 import Packer from '../common/Packer';
-import PackerModal, { PackerInfoPayload } from './PackerModal';
+import { PackerInfoPayload } from './PackerModal';
 import FunctionSection from '../common/FunctionSection';
 import AddTemplateButton from '../common/AddTemplateButton';
 import { useRouter } from 'next/router';
-import ModalForInvitation from '../common/ModalForInvitation';
-import PackingListBottomModal from '../common/PackingListBottomModal';
 import { useRecoilValue } from 'recoil';
 import { listState } from '../../utils/recoil/atom/atom';
-import ModalForAddToTemplate from '../common/ModalForAddToTemplate';
 import Loading from '../common/Loading';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import useHide from '../../utils/hooks/useHide';
 import { GetTogetherPackingListDetailOutput } from '../../service/packingList/together';
 import { AxiosError } from 'axios';
+import useDynamic from '../../utils/hooks/useDynamic';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -52,6 +50,11 @@ function TogetherLanding() {
   const { isFresh } = useRecoilValue(listState);
 
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
+
+  const PackerModal = useDynamic(() => import('./PackerModal'));
+  const ModalForInvitation = useDynamic(() => import('../common/ModalForInvitation'));
+  const PackingListBottomModal = useDynamic(() => import('../common/PackingListBottomModal'));
+  const ModalForAddToTemplate = useDynamic(() => import('../common/ModalForAddToTemplate'));
 
   const [bottomModalOpen, setBottomModalOpen] = useState(false);
   const [packerModalOpen, setPackerModalOpen] = useState(false);
