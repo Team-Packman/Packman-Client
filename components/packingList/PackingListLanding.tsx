@@ -16,7 +16,6 @@ import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
 import Link from 'next/link';
-import { AsyncBoundary } from '../../utils/AsyncBoundary';
 import useDynamic from '../../utils/hooks/useDynamic';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
@@ -154,9 +153,9 @@ function PackingListLanding() {
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=together`);
     } else if (index === 1) {
-      router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=alone`);
     }
     resetSwipableListItem();
   };

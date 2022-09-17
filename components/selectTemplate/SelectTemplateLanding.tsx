@@ -18,6 +18,7 @@ import Template from './Template';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 import Layout from '../common/Layout';
+import Link from 'next/link';
 
 interface Itemplate {
   id: string;
@@ -29,7 +30,7 @@ const randomImageList = [random1, random2, random3, random4];
 
 function SelectTemplateLanding() {
   const router = useRouter();
-  const { type, folderId } = router.query;
+  const { type } = router.query;
 
   const [activateButton, setActivateButton] = useState(false);
   const [templateImageIndex, setTemplateImageIndex] = useState('');
@@ -56,11 +57,6 @@ function SelectTemplateLanding() {
       }
     });
   };
-  const onClickConfirmButton = () => {
-    router.push(`/preview?id=${templateId}&folderId=${folderId ?? ''}&type=${type}`);
-  };
-  const onClickSkipButton = () =>
-    router.push(`/list-intro?id=&folderId=${folderId ?? ''}&type=${type}`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);
@@ -102,17 +98,14 @@ function SelectTemplateLanding() {
           />
         </StyledTemplateWrapper>
         <StyledButtonWrapper>
-          <StyledButton isActivated onClick={onClickSkipButton}>
-            건너뛰기
-          </StyledButton>
-          <StyledButton
-            isMyTemplate
-            disabled={!activateButton}
-            isActivated={activateButton}
-            onClick={onClickConfirmButton}
-          >
-            확인
-          </StyledButton>
+          <Link href={`/list-intro?id=&type=${type}`}>
+            <StyledButton isActivated>건너뛰기</StyledButton>
+          </Link>
+          <Link href={`/preview?id=${templateId}&type=${type}`}>
+            <StyledButton isMyTemplate disabled={!activateButton} isActivated={activateButton}>
+              확인
+            </StyledButton>
+          </Link>
         </StyledButtonWrapper>
       </StyledRoot>
     </Layout>
