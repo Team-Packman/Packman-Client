@@ -68,25 +68,27 @@ function CheckListHeader(props: CheckListHeaderProps) {
 
   return (
     <StyledRoot scroll={scroll} shared={shared ?? false} className="layout_option">
-      {isEditing ? (
-        <StyledInput
-          ref={ref}
-          value={title}
-          maxLength={MAX_LENGTH}
-          onChange={({ target: { value } }) => handleTitle(value)}
-          {...editHandler(isEntered, (state) => setIsEntered(state), saveTitle)}
-        />
-      ) : (
-        <StyledTitle onClick={() => !shared && setIsEditing(true)}>{title}</StyledTitle>
-      )}
+      <label>
+        {isEditing ? (
+          <StyledInput
+            ref={ref}
+            value={title}
+            maxLength={MAX_LENGTH}
+            onChange={({ target: { value } }) => handleTitle(value)}
+            {...editHandler(isEntered, (state) => setIsEntered(state), saveTitle)}
+          />
+        ) : (
+          <StyledTitle onClick={() => !shared && setIsEditing(true)}>{title}</StyledTitle>
+        )}
 
-      <StyledCalender>
-        <input type="date" value={departureDate} onChange={saveDate} disabled={shared} />
-        <StyledDate>{departureDate.replaceAll('-', '. ')}</StyledDate>
-        <StyledEdit>
-          <Image src={Edit} layout="fill" alt="edit_ic" />
-        </StyledEdit>
-      </StyledCalender>
+        <StyledCalender>
+          <input type="date" value={departureDate} onChange={saveDate} disabled={shared} />
+          <StyledDate>{departureDate.replaceAll('-', '. ')}</StyledDate>
+          <StyledEdit>
+            <Image src={Edit} layout="fill" alt="edit_ic" />
+          </StyledEdit>
+        </StyledCalender>
+      </label>
     </StyledRoot>
   );
 }

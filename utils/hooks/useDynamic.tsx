@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { ComponentType, useEffect } from 'react';
+import { ComponentType, useEffect, useMemo } from 'react';
 
 type LazyComponent = ComponentType<any> & {
   preload?: () => void;
@@ -21,7 +21,7 @@ const lazyImport = (importFn: ImportFn) => {
 };
 
 function useDynamic(importFn: ImportFn, { enable }: Options = { enable: true }) {
-  const component = lazyImport(importFn);
+  const component = useMemo(() => lazyImport(importFn), []);
 
   useEffect(() => {
     if (enable) {
