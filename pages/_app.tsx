@@ -13,7 +13,7 @@ import React from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
-
+  console.log('compiler test');
   const [queryClient] = useState(
     () =>
       new QueryClient({

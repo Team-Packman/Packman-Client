@@ -4,10 +4,13 @@ import { ParsedUrlQuery } from 'querystring';
 
 type Router = 'push' | 'replace' | 'back';
 
-export const useHeaderRouter = (): [() => void, ParsedUrlQuery] => {
+interface Path {
+  folderId?: string;
+}
+
+export const useHeaderRouter = (path?: Path): [() => void] => {
   const router = useRouter();
-  const { folderId } = router.query;
-  const [route, setRoute] = useState<() => void>(() => {});
+  const [route, setRoute] = useState<(path?: Path) => void>((path?: Path) => {});
 
   const registerURL = (type: Router, url?: string) => () => {
     router[type](url ?? '');
@@ -20,10 +23,12 @@ export const useHeaderRouter = (): [() => void, ParsedUrlQuery] => {
           setRoute(() => registerURL('replace', `/folder`));
           return;
         case '/alone':
-          setRoute(() => registerURL('replace', `/packing-list?type=alone&id=${folderId}`));
+          setRoute(() => registerURL('replace', `/packing-list?type=alone&id=${path?.folderId}`));
           return;
         case '/together':
-          setRoute(() => registerURL('replace', `/packing-list?type=together&id=${folderId}`));
+          setRoute(() =>
+            registerURL('replace', `/packing-list?type=together&id=${path?.folderId}`),
+          );
           return;
         default:
           setRoute(() => registerURL('back'));
@@ -31,5 +36,5 @@ export const useHeaderRouter = (): [() => void, ParsedUrlQuery] => {
     }
   }, [router]);
 
-  return [route, router.query];
+  return [route];
 };
