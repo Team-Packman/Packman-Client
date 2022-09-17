@@ -7,6 +7,7 @@ import { packmanColors } from '../styles/color';
 
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { FONT_STYLES } from '../styles/font';
 
 SwiperCore.use([Virtual, Navigation, Pagination]);
 
@@ -96,6 +97,7 @@ export const StyledSwiper = styled(Swiper)`
   }
 
   .swiper-pagination-bullet-active {
+    ${FONT_STYLES.BODY4_SEMIBOLD};
     color: ${packmanColors.pmWhite};
     background: ${packmanColors.pmBlack};
   }
