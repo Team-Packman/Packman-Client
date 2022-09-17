@@ -34,7 +34,7 @@ function PackagesWithCategory(props: PropsWithChildren<PackagesWithCategoryProps
 
 export default PackagesWithCategory;
 
-const StyledRoot = styled.ul`
+const StyledRoot = styled.div`
   & > ul {
     margin-top: 0.8rem;
   }
