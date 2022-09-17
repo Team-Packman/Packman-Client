@@ -10,6 +10,7 @@ import FolderList from './FolderList';
 import SwiperContainer from '../Swiper';
 import FloatActionButton from './FloatActionButton';
 import Layout from '../common/Layout';
+import { FONT, FONT_STYLES } from '../../styles/font';
 
 export interface ModalDataProps {
   id: string;
@@ -254,7 +255,7 @@ function FolderLanding() {
               <StyledLabel>
                 <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
                 <StyledPackTotalNum>
-                  총{recentPackingData?.data?.packTotalNum}개의 짐
+                  총 {recentPackingData?.data?.packTotalNum}개의 짐
                 </StyledPackTotalNum>
               </StyledLabel>
               <StyledDday>
@@ -369,30 +370,28 @@ export const StyledLabel = styled.div`
 `;
 
 export const StyledTitle = styled.p`
-  font-size: 1.8rem;
-  font-weight: 600;
+  ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   margin-bottom: 0.9rem;
 `;
 
 export const StyledPackTotalNum = styled.p`
+  ${FONT_STYLES.BODY1_REGULAR};
   width: fit-content;
   padding: 0.1rem 1rem;
   color: ${packmanColors.pmBlack};
-  font-size: 1.3rem;
   border-radius: 1.2rem;
   border: 1px solid ${packmanColors.pmPink};
 `;
 
 export const StyledDday = styled.div`
+  ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   display: flex;
   flex-direction: column;
   align-items: end;
 `;
 
 export const StyledRemainDay = styled.p`
-  font-size: 2.8rem;
-  font-family: 'Pretendard';
-  font-weight: 800;
+  ${FONT_STYLES.DISPLAY3_EXTRABOLD};
   color: ${packmanColors.pmGreen};
 `;
 

@@ -1,47 +1,48 @@
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 
 interface HeadMetaProps {
-  title?: string;
-  description?: string;
   page?: string;
 }
 
 function HeadMeta(props: HeadMetaProps) {
   const { page } = props;
-  let title, description;
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const assignMeta = (t: string, d: string) => {
-    title = t;
-    description = d;
+    setTitle(t);
+    setDescription(d);
   };
 
-  if (page) {
-    switch (page) {
-      case 'login':
-        assignMeta('Packman Sign in', '카카오 로그인으로 3초만에 시작하기');
-        break;
-      case 'edit-profile':
-        assignMeta('', 'Packman : 문의하기');
-        break;
+  useEffect(() => {
+    if (page) {
+      switch (page) {
+        case 'Login':
+          assignMeta('Packman : 로그인', '카카오 로그인으로 3초만에 시작하기');
+          break;
+        case 'EditProfile':
+          assignMeta('', 'Packman : 문의하기');
+          break;
+      }
+    } else {
+      assignMeta('Packman', '내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!');
     }
-  }
+  }, [page]);
 
   return (
     <Head>
-      <title lang="en">{title || 'Packman'}</title>
-      <meta
-        name="description"
-        content={description || '내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
-      />
+      <title lang="en">{title}</title>
+      <meta name="description" content={description} />
       <meta
         name="viewport"
         content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
       />
-      <meta property="og:title" content={title || '팩맨 - 내 손안의 짐 챙김 도우미'} />
       <meta
-        property="og:description"
-        content={description || '내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
+        property="og:title"
+        content={title === 'Packman' ? '팩맨 - 내 손안의 짐 챙김 도우미' : title}
       />
+      <meta property="og:description" content={description} />
     </Head>
   );
 }

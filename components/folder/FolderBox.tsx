@@ -5,6 +5,7 @@ import { packmanColors } from '../../styles/color';
 import { FolderListProps, FolderProps } from './FolderList';
 import Kebab from '/public/assets/svg/kebab_ic.svg';
 import Close from '/public/assets/svg/iClose.svg';
+import { FONT_STYLES } from '../../styles/font';
 
 type FolderBoxProps = FolderProps & Omit<FolderListProps, 'list'>;
 interface AddNewFolderType {
@@ -160,8 +161,7 @@ export const StyledText = styled.div`
 `;
 
 export const StyledInput = styled.input<{ isNew: boolean }>`
-  font-size: 1.4rem;
-  font-weight: 600;
+  ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   background: ${packmanColors.pmBlueGrey};
   border: 1px solid ${packmanColors.pmDeepGrey};
   border-radius: 0.4rem;
@@ -184,6 +184,6 @@ export const StyledInput = styled.input<{ isNew: boolean }>`
 `;
 
 export const StyledFolderInfo = styled.p`
-  font-size: 1.2rem;
+  ${FONT_STYLES.CAPTION1_REGULAR};
   color: ${packmanColors.pmDeepGrey};
 `;

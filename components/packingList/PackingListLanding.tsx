@@ -326,14 +326,14 @@ const StyledFolderInfo = styled.div`
 `;
 
 const StyledItem = styled.div<{ currentId: boolean }>`
+  ${({ currentId }) => (currentId ? FONT_STYLES.BODY4_SEMIBOLD : FONT_STYLES.BODY3_REGULAR)};
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 4.8rem;
-  font-weight: ${({ currentId }) => (currentId ? '600' : '400')};
   font-size: 1.5rem;
-  color: ${packmanColors.pmDarkGrey};
+  color: ${({ currentId }) => (currentId ? packmanColors.pmBlack : packmanColors.pmDarkGrey)};
   &:not(:last-child) {
     border-bottom: 1px solid ${packmanColors.pmGrey};
   }
