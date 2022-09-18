@@ -11,6 +11,8 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Loading from '../common/Loading';
 import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
+import produce from 'immer';
+import { GetGroupMemberOutput } from '../../service/member';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -37,8 +39,7 @@ function ManagingMemberLanding() {
   const userId = user.id;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
-  const [members, setMembers] = useState<Imember[]>([]); //
-  const [oldMembers, setOldMembers] = useState([...members]);
+  const [oldMembers, setOldMembers] = useState<Imember[]>([]);
   const [willBeDeleted, setWillBeDeleted] = useState<string[]>([]);
 
   const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -53,7 +54,8 @@ function ManagingMemberLanding() {
 
   const editMembers = () => {
     if (isEditing) {
-      setMembers([...oldMembers]);
+      // setMembers([...oldMembers]);
+      members = oldMembers;
     } else {
       setOldMembers([...members]);
     }
@@ -66,13 +68,17 @@ function ManagingMemberLanding() {
     deletePackingListMember,
   );
 
-  const deleteMember = (index: number) => {
-    setMembers(
-      members.filter((member, memberIndex) => {
-        return memberIndex !== index;
-      }),
-    );
-    setWillBeDeleted((prev) => [...prev, members[index].id]);
+  const deleteMember = (memberId: string) => {
+    const prev = client.getQueryData<GetGroupMemberOutput>(['getGroupMember', id]);
+
+    const newPrev = produce(prev, (draft) => {
+      draft?.data.member.filter((member) => {
+        return member.id !== memberId;
+      });
+    });
+
+    client.setQueryData(['getGroupMember', id], newPrev);
+    setWillBeDeleted((prev) => [...prev, memberId]);
   };
 
   const clickInvitingButton = () => {
@@ -99,16 +105,15 @@ function ManagingMemberLanding() {
     }, 3000);
   };
 
-  //
-  useEffect(() => {
-    if (packingList) setMembers([...packingList.member]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-  //
-
-  if (!data) return <Loading />;
+  if (!data) {
+    return <Loading />;
+  }
   const { data: packingList } = data;
-  if (members.length === 0) return <Loading />;
+  // if (packingList.member.length === 0) return <Loading />;
+  if (!packingList) {
+    return <Loading />;
+  }
+  let members = packingList.member;
 
   const getRemainDayToString = () => {
     const remainDayToInt = parseInt(packingList.remainDay);
@@ -149,18 +154,18 @@ function ManagingMemberLanding() {
                   <Crown>
                     <Image src={'/assets/png/crown.png'} alt="왕관" layout="fill" />
                   </Crown>
-                  <MemberImage index={index} profileImage={member.profileImage} />
+                  <MemberImage index={index} profileImage={parseInt(member.profileImage)} />
                   <MemberName>{member.nickname}</MemberName>
                 </Member>
               );
             }
             return (
               <Member key={index}>
-                <MemberImage index={index} profileImage={member.profileImage} />
+                <MemberImage index={index} profileImage={parseInt(member.profileImage)} />
                 <MemberName>{member.nickname}</MemberName>
                 <RemoveButton
                   onClick={() => {
-                    deleteMember(index);
+                    deleteMember(member.id);
                   }}
                   isEditing={isEditing}
                 >
@@ -178,7 +183,7 @@ function ManagingMemberLanding() {
           <InvitingButton onClick={clickInvitingButton}>완료</InvitingButton>
         ) : (
           <CopyToClipboard
-            text={`${process.env.NEXT_PUBLIC_DOMAIN}together/invited?inviteCode=${packingList.inviteCode}`}
+            text={`${process.env.NEXT_PUBLIC_DOMAIN}together/invited?inviteCode=Kpm-g&folderId=${id}`}
             onCopy={copyToClipboard}
           >
             <InvitingButton onClick={clickInvitingButton}>멤버 초대하기</InvitingButton>
@@ -277,13 +282,13 @@ const Crown = styled.div`
   top: -2rem;
 `;
 
-const MemberImage = styled.img<{ index: number; profileImage: string }>`
+const MemberImage = styled.img<{ index: number; profileImage: number }>`
   width: 6.4rem;
   height: 6.4rem;
   border-radius: 50%;
   margin-bottom: 0.5rem;
   border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
-  background-image: url(${({ profileImage }) => `/assets/png/profile${profileImage}.png`});
+  background-image: url(${({ profileImage }) => `/assets/png/profile${profileImage + 1}.png`});
   background-size: contain;
 `;
 
