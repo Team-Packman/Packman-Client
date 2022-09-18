@@ -3,21 +3,22 @@ import styled, { css } from 'styled-components';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import korea_travel from '/public/assets/png/korea_travel.png';
-import oversea_travel from '/public/assets/png/oversea_travel.png';
-import jeju from '/public/assets/png/jeju.png';
-import pet from '/public/assets/png/pet.png';
-import concert from '/public/assets/png/concert.png';
-import toeic from '/public/assets/png/toeic.png';
-import random1 from '/public/assets/png/random1.png';
-import random2 from '/public/assets/png/random2.png';
-import random3 from '/public/assets/png/random3.png';
-import random4 from '/public/assets/png/random4.png';
+import korea_travel from '/public/assets/png/korea_travel.webp';
+import oversea_travel from '/public/assets/png/oversea_travel.webp';
+import jeju from '/public/assets/png/jeju.webp';
+import pet from '/public/assets/png/pet.webp';
+import concert from '/public/assets/png/concert.webp';
+import toeic from '/public/assets/png/toeic.webp';
+import random1 from '/public/assets/png/random1.webp';
+import random2 from '/public/assets/png/random2.webp';
+import random3 from '/public/assets/png/random3.webp';
+import random4 from '/public/assets/png/random4.webp';
 import useAPI from '../../utils/hooks/useAPI';
 import Template from './Template';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 import Layout from '../common/Layout';
+import Link from 'next/link';
 
 interface Itemplate {
   id: string;
@@ -29,7 +30,7 @@ const randomImageList = [random1, random2, random3, random4];
 
 function SelectTemplateLanding() {
   const router = useRouter();
-  const { type, folderId } = router.query;
+  const { type } = router.query;
 
   const [activateButton, setActivateButton] = useState(false);
   const [templateImageIndex, setTemplateImageIndex] = useState('');
@@ -56,11 +57,6 @@ function SelectTemplateLanding() {
       }
     });
   };
-  const onClickConfirmButton = () => {
-    router.push(`/preview?id=${templateId}&folderId=${folderId ?? ''}&type=${type}`);
-  };
-  const onClickSkipButton = () =>
-    router.push(`/list-intro?id=&folderId=${folderId ?? ''}&type=${type}`);
 
   const activateConfirmButtonHandler = () => setActivateButton(true);
   const deactivateConfirmButtonHandler = () => setActivateButton(false);
@@ -102,17 +98,14 @@ function SelectTemplateLanding() {
           />
         </StyledTemplateWrapper>
         <StyledButtonWrapper>
-          <StyledButton isActivated onClick={onClickSkipButton}>
-            건너뛰기
-          </StyledButton>
-          <StyledButton
-            isMyTemplate
-            disabled={!activateButton}
-            isActivated={activateButton}
-            onClick={onClickConfirmButton}
-          >
-            확인
-          </StyledButton>
+          <Link href={`/list-intro?id=&type=${type}`}>
+            <StyledButton isActivated>건너뛰기</StyledButton>
+          </Link>
+          <Link href={`/preview?id=${templateId}&type=${type}`}>
+            <StyledButton isMyTemplate disabled={!activateButton} isActivated={activateButton}>
+              확인
+            </StyledButton>
+          </Link>
         </StyledButtonWrapper>
       </StyledRoot>
     </Layout>

@@ -223,6 +223,7 @@ export interface GetAlonePackingListDetailOutput {
   data: {
     id: string; // 혼자 패킹리스트 id
     title: string; // 혼자 패킹리스트 제목
+    folderId: string;
     departureDate: string; // 혼자 패킹리스트 출발 일시
     category: {
       id: string; // 혼자 패킹리스트 카테고리id

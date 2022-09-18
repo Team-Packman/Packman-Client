@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ButtonX from '/public/assets/png/ButtonX.png';
+import iClose from '/public/assets/svg/iClose.svg';
 import { packmanColors } from '../../styles/color';
 import Image from 'next/image';
 
@@ -16,7 +16,7 @@ function ModalForAddToTemplate(props: ModalForAddToTemplateProps) {
       <StyledBg onClick={modalHandler} />
       <StyledModal>
         <StyledButtonContainer onClick={modalHandler}>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" />
+          <Image src={iClose} alt="closeModal" width="24" height="24" />
         </StyledButtonContainer>
         <div>
           <StyledTitle>{title}</StyledTitle>

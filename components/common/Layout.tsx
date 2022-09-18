@@ -15,17 +15,20 @@ interface LayoutProps {
   option?: ReactNode;
   noHeader?: boolean;
   groupId?: string;
+  folderId?: string;
 }
 
 function Layout(props: LayoutProps) {
-  const { children, back, title, icon, option, padding, noHeader, groupId } = props;
+  const { children, back, title, icon, option, padding, noHeader, groupId, folderId } = props;
 
   const [scroll] = useGlobalState<boolean>('scroll');
   const optionEl = document.querySelector('.layout_option');
 
   return (
     <StyledRoot>
-      {!noHeader && <Header back={back} title={title} icon={icon} groupId={groupId} />}
+      {!noHeader && (
+        <Header back={back} title={title} icon={icon} groupId={groupId} folderId={folderId} />
+      )}
       {option}
       <StyledMain
         scroll={scroll}

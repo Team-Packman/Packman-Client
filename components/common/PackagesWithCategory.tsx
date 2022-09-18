@@ -23,7 +23,7 @@ function PackagesWithCategory(props: PropsWithChildren<PackagesWithCategoryProps
         {!preview && (
           <li>
             <StyledAddButton onClick={createHandler}>
-              <Image src={Plus} alt="plus_ic" layout="fill" />
+              <Image src={Plus} alt="plus_ic" layout="fill" priority />
             </StyledAddButton>
           </li>
         )}
@@ -34,7 +34,7 @@ function PackagesWithCategory(props: PropsWithChildren<PackagesWithCategoryProps
 
 export default PackagesWithCategory;
 
-const StyledRoot = styled.ul`
+const StyledRoot = styled.div`
   & > ul {
     margin-top: 0.8rem;
   }

@@ -117,12 +117,12 @@ const StyledModeWrapper = styled.div<{
   &:after {
     content: '';
     position: absolute;
-    transition: left 0.3s;
-    left: ${({ index }) => index !== undefined && `calc(${index} * 50%)`};
+    transition: transform 0.3s;
+    transform: ${({ index }) => index !== undefined && `translate(calc(${index} * 100%))`};
     width: 50%;
     height: 100%;
     background-color: ${packmanColors.black};
-    border-radius: 0.7rem;
+    border-radius: 0.6rem;
     z-index: 2;
   }
 `;

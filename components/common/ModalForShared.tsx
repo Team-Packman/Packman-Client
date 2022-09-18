@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import ButtonX from '/public/assets/png/ButtonX.png';
+import iClose from '/public/assets/svg/iClose.svg';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -11,7 +11,7 @@ function ModalForShared() {
     <StyledRoot>
       <StyledModal>
         <ButtonContainer>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" />
+          <Image src={iClose} alt="closeModal" width="24" height="24" />
         </ButtonContainer>
         <Description>친구가 패킹 리스트를 공유했어요! 🎁</Description>
         <SeeListButton onClick={() => router.push('/login')}>

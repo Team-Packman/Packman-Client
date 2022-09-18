@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
-import ErrorImage from '/public/assets/png/ErrorImage.png';
+import ErrorImage from '/public/assets/png/ErrorImage.webp';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 import HomeIC from '/public/assets/svg/home_ic.svg';

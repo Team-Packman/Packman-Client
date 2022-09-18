@@ -18,4 +18,14 @@ module.exports = withPWA({
       },
     ];
   },
+  compiler: {
+    removeConsole: {
+      exclude: ['error'],
+    },
+  },
+  webpack: (config, options) => {
+    config.plugins.push();
+
+    return config;
+  },
 });

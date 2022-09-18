@@ -19,19 +19,22 @@ interface HeaderProps {
   title?: string;
   icon?: Icon;
   groupId?: string;
+  folderId?: string;
 }
 
 function Header(props: HeaderProps) {
-  const { back, title, icon, groupId } = props;
+  const { back, title, icon, groupId, folderId } = props;
 
-  const [route, { folderId }] = useHeaderRouter();
   const [scroll] = useGlobalState<boolean>('scroll');
+  const [route] = useHeaderRouter({
+    folderId,
+  });
 
   return (
     <StyledRoot>
       <StyledContent scroll={scroll}>
         {back && (
-          <StyledBack onClick={() => route()}>
+          <StyledBack onClick={route}>
             <Image src={BackIC} layout="fill" alt="back_icon" />
           </StyledBack>
         )}

@@ -124,6 +124,7 @@ export interface GetTogetherPackingListDetailOutput {
   data: {
     id: string; //함께패킹리스트-나의 패킹리스트 연결 키(본 키로 함께 패킹리스트 구분)
     title: string; // 패킹리스트 제목
+    folderId: string; //해당 패킹리스트가 속한 폴더 id
     departureDate: string; // 출발 날짜
     togetherPackingList: {
       id: string; // 함께 패킹리스트 id

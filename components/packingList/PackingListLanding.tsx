@@ -16,7 +16,6 @@ import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
 import Link from 'next/link';
-import { AsyncBoundary } from '../../utils/AsyncBoundary';
 import useDynamic from '../../utils/hooks/useDynamic';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
@@ -154,9 +153,9 @@ function PackingListLanding() {
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=together`);
     } else if (index === 1) {
-      router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
+      router.push(`/select-template?type=alone`);
     }
     resetSwipableListItem();
   };
@@ -217,7 +216,9 @@ function PackingListLanding() {
         <StyledFolderInfo onClick={onClickFolderInfo}>
           <h1>{currentFolder.name}</h1>
           <div>
-            <StyledToggleImage src={iShowMore} alt="상세보기" toggle={toggle.toString()} />
+            <StyledToggleImage toggle={toggle.toString()}>
+              <Image src={iShowMore} alt="상세보기" layout="fill" />
+            </StyledToggleImage>
             {toggle && (
               <DropBox>
                 {folder.map(({ id, name }) => (
@@ -338,7 +339,7 @@ const StyledItem = styled.div<{ currentId: boolean }>`
     border-bottom: 1px solid ${packmanColors.pmGrey};
   }
 `;
-const StyledToggleImage = styled(Image)<{ toggle: string }>`
+const StyledToggleImage = styled.div<{ toggle: string }>`
   width: 2.4rem;
   height: 2.4rem;
   transition: 0.2s ease-in-out;

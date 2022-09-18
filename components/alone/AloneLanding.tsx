@@ -388,6 +388,7 @@ function AloneLanding() {
     <Layout
       back
       title="패킹리스트"
+      folderId={list.folderId}
       option={
         <CheckListHeader
           listId={list.id}
