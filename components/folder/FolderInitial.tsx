@@ -2,8 +2,8 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import InitLogo from '/public/assets/png/home_together.png';
-import InitAloneLogo from '/public/assets/png/home_alone.png';
+import InitLogo from '/public/assets/png/home_together.webp';
+import InitAloneLogo from '/public/assets/png/home_alone.webp';
 
 export interface FolderInitialProps {
   categoryName: string;

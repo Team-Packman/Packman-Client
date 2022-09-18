@@ -136,7 +136,15 @@ export default function SwipeablelistItem(props: ItemProps) {
               )}
             </StyledPackInfo>
           </StyledItemInfo>
-          <Image src={iRightArrow} alt="right-arrow" width={24} height={24} />
+          <StyledArrowImage>
+            <Image
+              src={iRightArrow}
+              width={2.4}
+              height={2.4}
+              alt="right-arrow"
+              layout="responsive"
+            />
+          </StyledArrowImage>
         </StyledItemWrapper>
 
         {!isDeleting && (
@@ -218,7 +226,10 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
     }
   }};
 `;
-
+const StyledArrowImage = styled.div`
+  width: 2.4rem;
+  height: 2.4rem;
+`;
 const StyledItemInfo = styled.div`
   display: flex;
   flex-direction: column;

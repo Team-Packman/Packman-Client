@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import ButtonX from '/public/assets/svg/iClose.svg';
-import forShare from '/public/assets/png/forShare.png';
+import forShare from '/public/assets/png/forShare.webp';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
