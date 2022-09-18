@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Layout from '../common/Layout';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Loading from '../common/Loading';
+import { useRecoilValue } from 'recoil';
+import { authUserAtom } from '../../utils/recoil/atom/atom';
+import produce from 'immer';
+import { GetGroupMemberOutput } from '../../service/member';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -18,8 +22,10 @@ interface Imember {
 }
 
 function ManagingMemberLanding() {
+  const client = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
+
   const getGroupMember = useAPI((api) => api.member.getGroupMember);
   const { data } = useQuery(
     ['getGroupMember', id],
@@ -28,12 +34,13 @@ function ManagingMemberLanding() {
       enabled: !!id,
     },
   );
-  console.log(getGroupMember);
 
+  const user = useRecoilValue(authUserAtom);
+  const userId = user.id;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
-  const [members, setMembers] = useState<Imember[]>([]);
-  const [oldMembers, setOldMembers] = useState([...members]);
+  const [oldMembers, setOldMembers] = useState<Imember[]>([]);
+  const [willBeDeleted, setWillBeDeleted] = useState<string[]>([]);
 
   const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -44,25 +51,63 @@ function ManagingMemberLanding() {
       }
     };
   }, []);
+
   const editMembers = () => {
-    if (isEditing) {
-      setMembers([...oldMembers]);
-    } else {
-      setOldMembers([...members]);
+    const prev = client.getQueryData<GetGroupMemberOutput>(['getGroupMember', id]);
+
+    // 취소 버튼 누를 시
+    if (prev) {
+      if (isEditing) {
+        const newPrev = produce(prev, (draft) => {
+          draft.data.member = oldMembers;
+        });
+
+        client.setQueryData(['getGroupMember', id], newPrev);
+      }
+      // 편집 버튼 누를 시
+      else {
+        setOldMembers(prev.data.member);
+      }
     }
     setIsEditing((prev) => !prev);
   };
 
-  const deleteMember = (index: number) => {
-    setMembers(
-      members.filter((member, memberIndex) => {
-        return memberIndex !== index;
-      }),
-    );
+  const deletePackingListMember = useAPI((api) => api.member.deleteGroupMember);
+  const { mutate: deleteListMember } = useMutation(
+    'deletePackingListMember',
+    deletePackingListMember,
+  );
+
+  const deleteMember = (memberId: string) => {
+    const prev = client.getQueryData<GetGroupMemberOutput>(['getGroupMember', id]);
+
+    const newPrev = produce(prev, (draft) => {
+      let index;
+      draft?.data.member.forEach((member, i) => {
+        if (member.id === memberId) {
+          index = i;
+        }
+      });
+      index && draft?.data.member.splice(index, 1);
+    });
+
+    client.setQueryData(['getGroupMember', id], newPrev);
+    setWillBeDeleted((prev) => [...prev, memberId]);
   };
 
   const clickInvitingButton = () => {
     if (isEditing) {
+      deleteListMember(
+        {
+          groupId: id as string,
+          userId: willBeDeleted.join(),
+        },
+        {
+          onSuccess: () => {
+            client.invalidateQueries(['getGroupMember', id]);
+          },
+        },
+      );
       setIsEditing(false);
     }
   };
@@ -74,13 +119,26 @@ function ManagingMemberLanding() {
     }, 3000);
   };
 
-  useEffect(() => {
-    if (packingList) setMembers(packingList.member);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
-  if (!data) return <Loading />;
+  if (!data) {
+    return <Loading />;
+  }
   const { data: packingList } = data;
+  // if (packingList.member.length === 0) return <Loading />;
+  if (!packingList) {
+    return <Loading />;
+  }
+  const members = packingList.member;
+
+  const getRemainDayToString = () => {
+    const remainDayToInt = parseInt(packingList.remainDay);
+    if (!remainDayToInt) {
+      return 'D-day 🎉';
+    } else if (remainDayToInt < 0) {
+      return 'Done!';
+    } else {
+      return `D-${packingList.remainDay}`;
+    }
+  };
 
   return (
     <Layout back title="멤버 관리">
@@ -88,15 +146,19 @@ function ManagingMemberLanding() {
         <StyledHeader>
           <StyledHeaderLeft>
             <StyledListName>{packingList.title}</StyledListName>
-            <StyledListDate>{packingList.departureDate}</StyledListDate>
+            <StyledListDate>{packingList.departureDate.replaceAll('-', '. ')}</StyledListDate>
           </StyledHeaderLeft>
-          <StyledDday>D-{packingList.remainDay}</StyledDday>
+          <StyledDday>{getRemainDayToString()}</StyledDday>
         </StyledHeader>
         <WithMembersLabelAndEdit>
           <WithMembersLabel>함께하는 멤버</WithMembersLabel>
-          <WithMembersEditButton onClick={editMembers}>
-            {isEditing ? '취소' : '편집'}
-          </WithMembersEditButton>
+          {userId === members[0].id ? (
+            <WithMembersEditButton onClick={editMembers}>
+              {isEditing ? '취소' : '편집'}
+            </WithMembersEditButton>
+          ) : (
+            <></>
+          )}
         </WithMembersLabelAndEdit>
         <WithMembers>
           {members.map((member, index: number) => {
@@ -106,18 +168,18 @@ function ManagingMemberLanding() {
                   <Crown>
                     <Image src={'/assets/png/crown.png'} alt="왕관" layout="fill" />
                   </Crown>
-                  <MemberImage index={index} />
+                  <MemberImage index={index} profileImage={parseInt(member.profileImage)} />
                   <MemberName>{member.nickname}</MemberName>
                 </Member>
               );
             }
             return (
               <Member key={index}>
-                <MemberImage index={index} />
+                <MemberImage index={index} profileImage={parseInt(member.profileImage)} />
                 <MemberName>{member.nickname}</MemberName>
                 <RemoveButton
                   onClick={() => {
-                    deleteMember(index);
+                    deleteMember(member.id);
                   }}
                   isEditing={isEditing}
                 >
@@ -126,18 +188,27 @@ function ManagingMemberLanding() {
               </Member>
             );
           })}
+          <InviteOtherMember length={members.length}>
+            함께 패킹할 멤버를 초대해보세요
+          </InviteOtherMember>
         </WithMembers>
-        <InviteOtherMember length={members.length}>
-          함께 패킹할 멤버를 초대해보세요
-        </InviteOtherMember>
-        <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied>
-        {isEditing ? (
-          <InvitingButton onClick={clickInvitingButton}>완료</InvitingButton>
-        ) : (
-          <CopyToClipboard text={'링크!'} onCopy={copyToClipboard}>
-            <InvitingButton onClick={clickInvitingButton}>멤버 초대하기</InvitingButton>
-          </CopyToClipboard>
-        )}
+        <InvitingButtonWrapper>
+          {/* <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied> */}
+          {isEditing ? (
+            <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
+              완료
+            </InvitingButton>
+          ) : (
+            <CopyToClipboard
+              text={`${process.env.NEXT_PUBLIC_DOMAIN}together/invited?inviteCode=${packingList.inviteCode}`}
+              onCopy={copyToClipboard}
+            >
+              <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
+                멤버 초대하기
+              </InvitingButton>
+            </CopyToClipboard>
+          )}
+        </InvitingButtonWrapper>
       </StyledRoot>
     </Layout>
   );
@@ -151,6 +222,8 @@ const StyledRoot = styled.div`
   padding: 0 2rem;
   overflow-y: scroll;
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledHeader = styled.section`
@@ -187,6 +260,7 @@ const StyledDday = styled.div`
 const WithMembersLabelAndEdit = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 4rem;
 `;
 
 const WithMembersLabel = styled.h1`
@@ -196,14 +270,15 @@ const WithMembersLabel = styled.h1`
 const WithMembersEditButton = styled.div`
   font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
   color: ${packmanColors.pmDarkGrey};
-  margin-bottom: 4rem;
 `;
 
 const WithMembers = styled.div`
   display: grid;
+  position: relative;
   grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr));
   gap: 2rem;
   justify-items: center;
+  min-height: 15rem;
 `;
 
 const Member = styled.div`
@@ -229,13 +304,14 @@ const Crown = styled.div`
   top: -2rem;
 `;
 
-const MemberImage = styled.img<{ index: number }>`
+const MemberImage = styled.img<{ index: number; profileImage: number }>`
   width: 6.4rem;
   height: 6.4rem;
   border-radius: 50%;
-  background-color: yellow;
   margin-bottom: 0.5rem;
   border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
+  background-image: url(${({ profileImage }) => `/assets/png/profile${profileImage + 1}.webp`});
+  background-size: contain;
 `;
 
 const MemberName = styled.div`
@@ -246,7 +322,7 @@ const MemberName = styled.div`
 const InviteOtherMember = styled.div<{ length: number }>`
   display: ${({ length }) => (length === 1 ? 'block;' : 'none;')};
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
@@ -263,7 +339,14 @@ const LinkHasCopied = styled.div`
   text-align: center;
 `;
 
-const InvitingButton = styled.div`
+const InvitingButtonWrapper = styled.div`
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-end;
+  padding-bottom: 13rem;
+`;
+
+const InvitingButton = styled.div<{ hasCopied: boolean }>`
   width: calc(100vw - 4rem);
   height: 4rem;
   color: white;
@@ -273,6 +356,20 @@ const InvitingButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  bottom: 8rem;
+  position: relative;
+  ${({ hasCopied }) =>
+    hasCopied &&
+    css`
+      &::after {
+        font-style: ${FONT_STYLES.BODY1_REGULAR};
+        color: ${packmanColors.pmDarkGrey};
+        position: absolute;
+        bottom: 12.5rem;
+        width: calc(100vw - 4rem);
+        text-align: center;
+        top: -2.5rem;
+        height: 2rem;
+        content: '링크가 복사되었습니다';
+      }
+    `}
 `;
