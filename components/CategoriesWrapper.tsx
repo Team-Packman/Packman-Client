@@ -9,7 +9,7 @@ function CategoriesWrapper() {
       <CategoryWrapper>
         <CategoryNameWrapper>
           <CategoryName>필수</CategoryName>
-          <Image src={'/assets/png/kebabButton.png'} alt={'categoryName'} width={24} height={24} />
+          <Image src={'/assets/png/kekbab_ic.svg'} alt={'categoryName'} width={24} height={24} />
         </CategoryNameWrapper>
         <ListItemWrapper>
           <input type="checkbox" />
