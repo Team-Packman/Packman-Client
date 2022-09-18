@@ -193,7 +193,6 @@ function ManagingMemberLanding() {
           </InviteOtherMember>
         </WithMembers>
         <InvitingButtonWrapper>
-          {/* <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied> */}
           {isEditing ? (
             <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
               완료
@@ -274,11 +273,13 @@ const WithMembersEditButton = styled.div`
 
 const WithMembers = styled.div`
   display: grid;
-  position: relative;
+  justify-items: center;
   grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr));
   gap: 2rem;
-  justify-items: center;
-  min-height: 15rem;
+
+  height: 30rem;
+
+  position: relative;
 `;
 
 const Member = styled.div`
@@ -322,21 +323,12 @@ const MemberName = styled.div`
 const InviteOtherMember = styled.div<{ length: number }>`
   display: ${({ length }) => (length === 1 ? 'block;' : 'none;')};
   position: absolute;
-  top: 30%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   color: ${packmanColors.pmGrey};
   white-space: nowrap;
-`;
-
-const LinkHasCopied = styled.div`
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
-  color: ${packmanColors.pmDarkGrey};
-  position: absolute;
-  bottom: 12.5rem;
-  width: calc(100vw - 4rem);
-  text-align: center;
 `;
 
 const InvitingButtonWrapper = styled.div`
