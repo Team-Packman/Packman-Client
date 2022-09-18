@@ -217,7 +217,7 @@ function PackingListLanding() {
           <h1>{currentFolder.name}</h1>
           <div>
             <StyledToggleImage toggle={toggle.toString()}>
-              <Image src={iShowMore} alt="상세보기" />
+              <Image src={iShowMore} alt="상세보기" layout="fill" />
             </StyledToggleImage>
             {toggle && (
               <DropBox>

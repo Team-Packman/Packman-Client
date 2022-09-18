@@ -137,7 +137,13 @@ export default function SwipeablelistItem(props: ItemProps) {
             </StyledPackInfo>
           </StyledItemInfo>
           <StyledArrowImage>
-            <Image src={iRightArrow} alt="right-arrow" />
+            <Image
+              src={iRightArrow}
+              width={2.4}
+              height={2.4}
+              alt="right-arrow"
+              layout="responsive"
+            />
           </StyledArrowImage>
         </StyledItemWrapper>
 

@@ -40,6 +40,7 @@ function CaptionSection(props: CaptionSectionProps) {
             <Image
               src={iTrash}
               alt="삭제"
+              layout="fill"
               onClick={() => handleIsDragged(Array(packingList.length).fill(false))}
             />
           </StyledTrashImage>
