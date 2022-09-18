@@ -15,6 +15,7 @@ interface Font {
     | 'body2'
     | 'body3'
     | 'body4'
+    | 'body5'
     | 'caption1'
     | 'caption2';
 }
@@ -50,6 +51,8 @@ const getLineHeight = (type: Font['type']) => {
       return 22;
     case 'subhead1':
       return 19;
+    case 'body5':
+      return 16;
     case 'body4':
       return 18;
     case 'body3':
@@ -84,6 +87,7 @@ export const FONT_STYLES = {
   BODY2_SEMIBOLD: FONT({ size: 14, weight: 'SB', type: 'body2' }),
   BODY3_REGULAR: FONT({ size: 15, weight: 'R', type: 'body3' }),
   BODY4_SEMIBOLD: FONT({ size: 15, weight: 'SB', type: 'body4' }),
+  BODY5_MEDIUM: FONT({ size: 16, weight: 'M', type: 'body4' }),
   CAPTION1_REGULAR: FONT({ size: 12, weight: 'R', type: 'caption1' }),
   CAPTION2_SEMIBOLD: FONT({ size: 12, weight: 'SB', type: 'caption2' }),
 };

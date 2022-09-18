@@ -282,7 +282,11 @@ function FolderLanding() {
               </StyledDday>
             </>
           </StyledRecentBanner>
-          <SwiperContainer isRecentListExist={isRecentListExist} getSwiperIndex={getSwiperIndex}>
+          <SwiperContainer
+            isRecentListExist={isRecentListExist}
+            getSwiperIndex={getSwiperIndex}
+            activeIndex={currentSwiperIndex}
+          >
             {
               <FolderList
                 key="1"
