@@ -46,7 +46,7 @@ type RemainingInfoType = 'title' | 'departure' | 'save';
 function TogetherLanding() {
   const client = useQueryClient();
   const router = useRouter();
-  const { id, folderId } = router.query;
+  const { id } = router.query;
   const { isFresh } = useRecoilValue(listState);
 
   const initialFocus: FocusInfo = { type: 'category', categoryId: '', packId: '', title: '' };
@@ -66,7 +66,7 @@ function TogetherLanding() {
   const [currentEditing, setCurrentEditing] = useState('');
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
 
-  const [{ sectionArr }, { checkSufficient }, scrollEvent] = useHide(activeMode);
+  const [{ sectionArr }, _, scrollEvent] = useHide(activeMode);
 
   /////////////////// api /////////////////////
   const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDetail);
@@ -597,6 +597,7 @@ function TogetherLanding() {
       title="패킹리스트"
       icon="member"
       groupId={info.group.id}
+      folderId={info.folderId}
       option={
         <CheckListHeader
           together
