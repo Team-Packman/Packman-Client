@@ -142,7 +142,7 @@ export const StyledInfo = styled.div`
 export const StyledKebab = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 0.5rem 0.4rem 0 0;
+  padding: 0.5rem 0rem 0 0;
   z-index: 10;
   cursor: pointer;
 

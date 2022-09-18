@@ -15,11 +15,12 @@ interface SwiperProps {
   key?: string;
   isRecentListExist: boolean;
   getSwiperIndex(index: number): void;
+  activeIndex: number;
   children: ReactNode[];
 }
 
 function SwiperContainer(props: SwiperProps) {
-  const { children, isRecentListExist, getSwiperIndex } = props;
+  const { children, isRecentListExist, getSwiperIndex, activeIndex } = props;
 
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(); /* eslint-disable no-unused-vars */
   const [bullet] = useState<string[]>(['함께 패킹', '혼자 패킹']);
@@ -40,6 +41,7 @@ function SwiperContainer(props: SwiperProps) {
         pagination={pagination}
         onSlideChange={(s) => getSwiperIndex(s.activeIndex)}
         virtual
+        active={activeIndex}
       >
         {slides.map((slideContent, index) => (
           <SwiperSlide key={slideContent.key} virtualIndex={index}>
@@ -63,7 +65,9 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   margin-top: ${({ isRecentListExist }) => (isRecentListExist ? '0' : '4.2rem')};
 `;
 
-export const StyledSwiper = styled(Swiper)`
+export const StyledSwiper = styled(Swiper)<{
+  active: number;
+}>`
   display: flex;
   flex: 1;
   justify-content: center;
@@ -76,8 +80,8 @@ export const StyledSwiper = styled(Swiper)`
     height: 4rem;
     width: 100%;
     border: 1px solid ${packmanColors.pmDeepGrey};
-    border-radius: 0.6rem;
-    background: ${packmanColors.pmWhite};
+    border-radius: 0.8rem;
+    /* background: ${packmanColors.pmWhite}; */
   }
 
   .swiper-pagination-bullet {
@@ -88,18 +92,33 @@ export const StyledSwiper = styled(Swiper)`
     height: 100%;
     border-radius: 0.6rem;
     color: ${packmanColors.pmDeepGrey};
-    font-size: 16px;
-    background: ${packmanColors.pmWhite};
+    ${FONT_STYLES.BODY5_MEDIUM};
+    background: transparent;
   }
   .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
   .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
     margin: 0 0 !important;
+    opacity: 1;
+  }
+  .swiper-pagination {
+    &:after {
+      content: '';
+      position: absolute;
+      transition: transform 0.3s;
+      transform: ${({ active }) => `translateX(calc(${active} * 100%))`};
+      width: 50%;
+      height: 100%;
+      background-color: ${packmanColors.black};
+      border-radius: 0.6rem;
+      z-index: 2;
+    }
   }
 
   .swiper-pagination-bullet-active {
-    ${FONT_STYLES.BODY4_SEMIBOLD};
+    ${FONT_STYLES.BODY5_MEDIUM};
     color: ${packmanColors.pmWhite};
-    background: ${packmanColors.pmBlack};
+    background: transparent;
+    z-index: 3;
   }
   .swiper-slide {
     display: flex;
