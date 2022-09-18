@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import ButtonX from '/public/assets/png/ButtonX.png';
+import iClose from '/public/assets/svg/iClose.svg';
 import Image from 'next/image';
 import { useResetRecoilState } from 'recoil';
 import { listState } from '../../utils/recoil/atom/atom';
@@ -31,7 +31,7 @@ function ModalForInvitation(props: ModalForInvitationProps) {
       <StyledBg onClick={closeModal} />
       <StyledModal>
         <ButtonContainer>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" onClick={closeModal} />
+          <Image src={iClose} alt="closeModal" width="24" height="24" onClick={closeModal} />
         </ButtonContainer>
         <Description>함께 패킹할 멤버를 초대해보세요!</Description>
         <CopyLinkButton onClick={copyToClipboard} isCopied={isCopied}>

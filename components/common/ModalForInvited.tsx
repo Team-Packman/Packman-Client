@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import ButtonX from '/public/assets/png/ButtonX.png';
+import iClose from '/public/assets/svg/iClose.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -17,7 +17,7 @@ function ModalForInvited(props: ModalForInvitedProps) {
       <StyledBg />
       <StyledModal>
         <ButtonContainer>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" />
+          <Image src={iClose} alt="closeModal" width="24" height="24" />
         </ButtonContainer>
         <ListName>{title}</ListName>
         <Description>패킹 멤버로 초대되었습니다.</Description>

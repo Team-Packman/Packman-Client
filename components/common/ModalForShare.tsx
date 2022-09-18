@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
-import ButtonX from '/public/assets/svg/iClose.svg';
+import iClose from '/public/assets/svg/iClose.svg';
 import forShare from '/public/assets/png/forShare.webp';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -30,7 +30,7 @@ function ModalForShare(props: ModalForShareProps) {
       <StyledBg onClick={modalHandler} />
       <StyledModal>
         <ButtonContainer>
-          <Image src={ButtonX} alt="closeModal" width="24" height="24" onClick={modalHandler} />
+          <Image src={iClose} alt="closeModal" width="24" height="24" onClick={modalHandler} />
         </ButtonContainer>
         <Description>패킹 리스트 공유</Description>
         <Image src={forShare} alt="forShare" placeholder="blur" width="260" height="260" />
