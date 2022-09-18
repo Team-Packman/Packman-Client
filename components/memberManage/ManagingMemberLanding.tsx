@@ -199,7 +199,7 @@ function ManagingMemberLanding() {
             </InvitingButton>
           ) : (
             <CopyToClipboard
-              text={`${process.env.NEXT_PUBLIC_DOMAIN}together/invited?inviteCode=${packingList.inviteCode}`}
+              text={`${process.env.NEXT_PUBLIC_DOMAIN}/together/invited?inviteCode=${packingList.inviteCode}`}
               onCopy={copyToClipboard}
             >
               <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
