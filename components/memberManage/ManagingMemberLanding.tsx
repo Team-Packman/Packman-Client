@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Layout from '../common/Layout';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -53,11 +53,21 @@ function ManagingMemberLanding() {
   }, []);
 
   const editMembers = () => {
-    if (isEditing) {
-      // setMembers([...oldMembers]);
-      members = oldMembers;
-    } else {
-      setOldMembers([...members]);
+    const prev = client.getQueryData<GetGroupMemberOutput>(['getGroupMember', id]);
+
+    // 취소 버튼 누를 시
+    if (prev) {
+      if (isEditing) {
+        const newPrev = produce(prev, (draft) => {
+          draft.data.member = oldMembers;
+        });
+
+        client.setQueryData(['getGroupMember', id], newPrev);
+      }
+      // 편집 버튼 누를 시
+      else {
+        setOldMembers(prev.data.member);
+      }
     }
     setIsEditing((prev) => !prev);
   };
@@ -72,9 +82,13 @@ function ManagingMemberLanding() {
     const prev = client.getQueryData<GetGroupMemberOutput>(['getGroupMember', id]);
 
     const newPrev = produce(prev, (draft) => {
-      draft?.data.member.filter((member) => {
-        return member.id !== memberId;
+      let index;
+      draft?.data.member.forEach((member, i) => {
+        if (member.id === memberId) {
+          index = i;
+        }
       });
+      index && draft?.data.member.splice(index, 1);
     });
 
     client.setQueryData(['getGroupMember', id], newPrev);
@@ -113,14 +127,14 @@ function ManagingMemberLanding() {
   if (!packingList) {
     return <Loading />;
   }
-  let members = packingList.member;
+  const members = packingList.member;
 
   const getRemainDayToString = () => {
     const remainDayToInt = parseInt(packingList.remainDay);
     if (!remainDayToInt) {
-      return 'D-day';
+      return 'D-day 🎉';
     } else if (remainDayToInt < 0) {
-      return 'D-done';
+      return 'Done!';
     } else {
       return `D-${packingList.remainDay}`;
     }
@@ -132,7 +146,7 @@ function ManagingMemberLanding() {
         <StyledHeader>
           <StyledHeaderLeft>
             <StyledListName>{packingList.title}</StyledListName>
-            <StyledListDate>{packingList.departureDate}</StyledListDate>
+            <StyledListDate>{packingList.departureDate.replaceAll('-', '. ')}</StyledListDate>
           </StyledHeaderLeft>
           <StyledDday>{getRemainDayToString()}</StyledDday>
         </StyledHeader>
@@ -178,17 +192,23 @@ function ManagingMemberLanding() {
             함께 패킹할 멤버를 초대해보세요
           </InviteOtherMember>
         </WithMembers>
-        <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied>
-        {isEditing ? (
-          <InvitingButton onClick={clickInvitingButton}>완료</InvitingButton>
-        ) : (
-          <CopyToClipboard
-            text={`${process.env.NEXT_PUBLIC_DOMAIN}together/invited?inviteCode=Kpm-g&folderId=${id}`}
-            onCopy={copyToClipboard}
-          >
-            <InvitingButton onClick={clickInvitingButton}>멤버 초대하기</InvitingButton>
-          </CopyToClipboard>
-        )}
+        <InvitingButtonWrapper>
+          {/* <LinkHasCopied>{hasCopied ? '링크가 복사되었습니다' : ''}</LinkHasCopied> */}
+          {isEditing ? (
+            <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
+              완료
+            </InvitingButton>
+          ) : (
+            <CopyToClipboard
+              text={`${process.env.NEXT_PUBLIC_DOMAIN}together/invited?inviteCode=${packingList.inviteCode}`}
+              onCopy={copyToClipboard}
+            >
+              <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
+                멤버 초대하기
+              </InvitingButton>
+            </CopyToClipboard>
+          )}
+        </InvitingButtonWrapper>
       </StyledRoot>
     </Layout>
   );
@@ -202,6 +222,8 @@ const StyledRoot = styled.div`
   padding: 0 2rem;
   overflow-y: scroll;
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledHeader = styled.section`
@@ -288,7 +310,7 @@ const MemberImage = styled.img<{ index: number; profileImage: number }>`
   border-radius: 50%;
   margin-bottom: 0.5rem;
   border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
-  background-image: url(${({ profileImage }) => `/assets/png/profile${profileImage + 1}.png`});
+  background-image: url(${({ profileImage }) => `/assets/png/profile${profileImage + 1}.webp`});
   background-size: contain;
 `;
 
@@ -317,7 +339,14 @@ const LinkHasCopied = styled.div`
   text-align: center;
 `;
 
-const InvitingButton = styled.div`
+const InvitingButtonWrapper = styled.div`
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-end;
+  padding-bottom: 13rem;
+`;
+
+const InvitingButton = styled.div<{ hasCopied: boolean }>`
   width: calc(100vw - 4rem);
   height: 4rem;
   color: white;
@@ -327,5 +356,20 @@ const InvitingButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  bottom: 8rem;
+  position: relative;
+  ${({ hasCopied }) =>
+    hasCopied &&
+    css`
+      &::after {
+        font-style: ${FONT_STYLES.BODY1_REGULAR};
+        color: ${packmanColors.pmDarkGrey};
+        position: absolute;
+        bottom: 12.5rem;
+        width: calc(100vw - 4rem);
+        text-align: center;
+        top: -2.5rem;
+        height: 2rem;
+        content: '링크가 복사되었습니다';
+      }
+    `}
 `;
