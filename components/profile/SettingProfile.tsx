@@ -6,7 +6,6 @@ import Modal from '../common/Modal';
 import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
-import { useResetRecoilState } from 'recoil';
 import { authUserAtom, kakao } from '../../utils/recoil/atom/atom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
