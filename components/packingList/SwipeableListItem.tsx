@@ -107,7 +107,7 @@ export default function SwipeablelistItem(props: ItemProps) {
           />
         </StyledSelectDelete>
       )}
-      <Link href={!isDeleting ? `/${type}?id=${id}` : '#'}>
+      <Link href={!isDeleting && isDragged.every((item) => !item) ? `/${type}?id=${id}` : '#'}>
         <StyledItemWrapper
           onTouchStart={onTouchStart}
           isDragged={isDragged[idx]}
