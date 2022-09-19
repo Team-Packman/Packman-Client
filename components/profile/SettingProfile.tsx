@@ -314,7 +314,6 @@ const StyledModalButtonWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  margin-top: 2.95rem;
 `;
 const StyledModalButton = styled.button<{ left?: boolean }>`
   ${FONT_STYLES.BODY4_SEMIBOLD};
