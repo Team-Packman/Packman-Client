@@ -320,7 +320,7 @@ const StyledFolderInfo = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 0.4rem;
+    margin-left: 0.8rem;
   }
 `;
 
