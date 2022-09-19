@@ -30,7 +30,7 @@ const randomImageList = [random1, random2, random3, random4];
 
 function SelectTemplateLanding() {
   const router = useRouter();
-  const { type } = router.query;
+  const { type, folderId } = router.query;
 
   const [activateButton, setActivateButton] = useState(false);
   const [templateImageIndex, setTemplateImageIndex] = useState('');
@@ -98,10 +98,10 @@ function SelectTemplateLanding() {
           />
         </StyledTemplateWrapper>
         <StyledButtonWrapper>
-          <Link href={`/list-intro?id=&type=${type}`}>
+          <Link href={`/list-intro?id=&type=${type}&folderId=${folderId}`}>
             <StyledButton isActivated>건너뛰기</StyledButton>
           </Link>
-          <Link href={`/preview?id=${templateId}&type=${type}`}>
+          <Link href={`/preview?id=${templateId}&type=${type}&folderId=${folderId}`}>
             <StyledButton isMyTemplate disabled={!activateButton} isActivated={activateButton}>
               확인
             </StyledButton>

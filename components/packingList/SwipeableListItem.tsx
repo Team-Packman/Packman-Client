@@ -96,18 +96,18 @@ export default function SwipeablelistItem(props: ItemProps) {
   };
 
   return (
-    <Link href={!isDeleting ? `/${type}?id=${id}` : ''}>
-      <StyledRoot isDeleting={isDeleting}>
-        {isDeleting && (
-          <StyledSelectDelete>
-            <Image
-              src={deleteList.includes(id) ? iCheckPink : iCheck}
-              alt="check"
-              onClick={() => checkDeleteList(id)}
-              layout="fill"
-            />
-          </StyledSelectDelete>
-        )}
+    <StyledRoot isDeleting={isDeleting}>
+      {isDeleting && (
+        <StyledSelectDelete>
+          <Image
+            src={deleteList.includes(id) ? iCheckPink : iCheck}
+            alt="check"
+            onClick={() => checkDeleteList(id)}
+            layout="fill"
+          />
+        </StyledSelectDelete>
+      )}
+      <Link href={!isDeleting ? `/${type}?id=${id}` : '#'}>
         <StyledItemWrapper
           onTouchStart={onTouchStart}
           isDragged={isDragged[idx]}
@@ -146,20 +146,20 @@ export default function SwipeablelistItem(props: ItemProps) {
             />
           </StyledArrowImage>
         </StyledItemWrapper>
+      </Link>
 
-        {!isDeleting && (
-          <StyledDeleteButton
-            isDragged={isDragged[idx]}
-            onClick={() => {
-              // 아이템 삭제
-              onClickDeleteButton(idx);
-            }}
-          >
-            <div>삭제</div>
-          </StyledDeleteButton>
-        )}
-      </StyledRoot>
-    </Link>
+      {!isDeleting && (
+        <StyledDeleteButton
+          isDragged={isDragged[idx]}
+          onClick={() => {
+            // 아이템 삭제
+            onClickDeleteButton(idx);
+          }}
+        >
+          <div>삭제</div>
+        </StyledDeleteButton>
+      )}
+    </StyledRoot>
   );
 }
 

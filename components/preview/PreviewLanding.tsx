@@ -16,6 +16,7 @@ import Loading from '../common/Loading';
 function PreviewLanding() {
   const router = useRouter();
   const { id, type, folderId } = router.query;
+  console.log(router.query);
 
   const getTemplate = useAPI((api) => api.ect.getTemplate);
   const { data } = useQuery(['getTemplate', id], () => getTemplate(id as string), {

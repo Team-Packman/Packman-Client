@@ -69,6 +69,7 @@ const StyledModalInfo = styled.div`
 
   & > p {
     ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+    padding-bottom: 3.7rem;
     color: #282828;
   }
 `;

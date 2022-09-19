@@ -121,9 +121,7 @@ function PackingListLanding() {
             folderId: currentFolder.id,
             listId: deleteList.join(','),
           });
-      if (deleteList.length === (togetherPackingList ?? alonePackingList).length) {
-        setIsDeleting(false);
-      }
+      setIsDeleting(false);
       setDeleteList([]);
     }
     // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
@@ -153,9 +151,9 @@ function PackingListLanding() {
 
   const handleFloatClick = (index: number) => {
     if (index === 0) {
-      router.push(`/select-template?type=together`);
+      router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
     } else if (index === 1) {
-      router.push(`/select-template?type=alone`);
+      router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
     }
     resetSwipableListItem();
   };
