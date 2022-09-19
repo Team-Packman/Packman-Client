@@ -28,7 +28,6 @@ function ManagingMemberLanding() {
       enabled: !!id,
     },
   );
-  console.log(getGroupMember);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
