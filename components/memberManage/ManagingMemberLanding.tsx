@@ -33,6 +33,7 @@ function ManagingMemberLanding() {
     () => getGroupMember({ listId: id as string }),
     {
       enabled: !!id,
+      refetchInterval: 3000,
     },
   );
 
@@ -120,14 +121,8 @@ function ManagingMemberLanding() {
     }, 3000);
   };
 
-  if (!data) {
-    return <Loading />;
-  }
+  if (!data) return <Loading />;
   const { data: packingList } = data;
-  // if (packingList.member.length === 0) return <Loading />;
-  if (!packingList) {
-    return <Loading />;
-  }
   const members = packingList.member;
 
   const getRemainDayToString = () => {
