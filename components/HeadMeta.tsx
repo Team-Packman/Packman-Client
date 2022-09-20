@@ -1,12 +1,16 @@
 import Head from 'next/head';
 
 interface HeadMetaProps {
-  title?: string;
-  description?: string;
+  props: {
+    title?: string;
+    description?: string;
+  };
 }
 
 function HeadMeta(props: HeadMetaProps) {
-  const { title, description } = props;
+  const {
+    props: { title, description },
+  } = props;
 
   return (
     <Head>

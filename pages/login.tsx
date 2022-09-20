@@ -8,10 +8,9 @@ interface LoginProps {
   description: string;
 }
 function Login(props: LoginProps) {
-  const { title, description } = props;
   return (
     <>
-      <HeadMeta title={title} description={description} />
+      <HeadMeta props={props} />
       <AsyncBoundary>
         <LoginLanding />
       </AsyncBoundary>

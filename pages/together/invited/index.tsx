@@ -9,10 +9,9 @@ interface InvitedProps {
   title: string;
 }
 function Invited(props: InvitedProps) {
-  const { title } = props;
   return (
     <>
-      <HeadMeta title={title} />
+      <HeadMeta props={props} />
       <AsyncBoundary>
         <InvitedLanding />;
       </AsyncBoundary>

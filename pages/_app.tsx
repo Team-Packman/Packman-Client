@@ -11,6 +11,11 @@ import HeadMeta from '../components/HeadMeta';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 
+interface HeadMetaProps {
+  title?: string;
+  description?: string;
+}
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
 
@@ -39,7 +44,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   if (!show) return null;
   return (
     <>
-      <HeadMeta />
+      <HeadMeta props={pageProps as HeadMetaProps} />
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
