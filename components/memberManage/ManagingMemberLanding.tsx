@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
 import produce from 'immer';
 import { GetGroupMemberOutput } from '../../service/member';
+import { ProfileList } from '../../utils/profileImages';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -32,6 +33,7 @@ function ManagingMemberLanding() {
     () => getGroupMember({ listId: id as string }),
     {
       enabled: !!id,
+      refetchInterval: 3000,
     },
   );
 
@@ -119,14 +121,8 @@ function ManagingMemberLanding() {
     }, 3000);
   };
 
-  if (!data) {
-    return <Loading />;
-  }
+  if (!data) return <Loading />;
   const { data: packingList } = data;
-  // if (packingList.member.length === 0) return <Loading />;
-  if (!packingList) {
-    return <Loading />;
-  }
   const members = packingList.member;
 
   const getRemainDayToString = () => {
@@ -168,14 +164,30 @@ function ManagingMemberLanding() {
                   <Crown>
                     <Image src={'/assets/png/crown.png'} alt="왕관" layout="fill" />
                   </Crown>
-                  <MemberImage index={index} profileImage={parseInt(member.profileImage)} />
+                  <MemberImage index={index}>
+                    <Image
+                      src={ProfileList[+member.profileImage]}
+                      width={64}
+                      height={64}
+                      alt="profile_image"
+                      priority
+                    />
+                  </MemberImage>
                   <MemberName>{member.nickname}</MemberName>
                 </Member>
               );
             }
             return (
               <Member key={index}>
-                <MemberImage index={index} profileImage={parseInt(member.profileImage)} />
+                <MemberImage index={index}>
+                  <Image
+                    src={ProfileList[+member.profileImage]}
+                    width={64}
+                    height={64}
+                    alt="profile_image"
+                    priority
+                  />
+                </MemberImage>
                 <MemberName>{member.nickname}</MemberName>
                 <RemoveButton
                   onClick={() => {
@@ -183,7 +195,12 @@ function ManagingMemberLanding() {
                   }}
                   isEditing={isEditing}
                 >
-                  <Image src={'/assets/png/removeMember.png'} alt="삭제" layout="fill" />
+                  <Image
+                    src={'/assets/png/removeMember.png'}
+                    alt="삭제"
+                    layout="fill"
+                    loading="eager"
+                  />
                 </RemoveButton>
               </Member>
             );
@@ -305,14 +322,12 @@ const Crown = styled.div`
   top: -2rem;
 `;
 
-const MemberImage = styled.img<{ index: number; profileImage: number }>`
-  width: 6.4rem;
-  height: 6.4rem;
-  border-radius: 50%;
+const MemberImage = styled.div<{ index: number }>`
   margin-bottom: 0.5rem;
-  border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
-  background-image: url(${({ profileImage }) => `/assets/png/profile${profileImage + 1}.webp`});
-  background-size: contain;
+  & > span {
+    border-radius: 50%;
+    border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
+  }
 `;
 
 const MemberName = styled.div`

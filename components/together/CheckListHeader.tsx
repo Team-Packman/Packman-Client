@@ -41,14 +41,16 @@ function CheckListHeader(props: CheckListHeaderProps) {
   };
 
   const saveTitle = () => {
-    const payload = {
-      listId,
-      title: title === '' ? titleProps : title,
-    };
+    if (ref.current) {
+      const payload = {
+        listId,
+        title: title === '' ? titleProps : title,
+      };
 
-    title === '' && setTitle(titleProps);
-    updateRemainingInfo && updateRemainingInfo(payload, 'title');
-    setIsEditing(false);
+      title === '' && setTitle(titleProps);
+      updateRemainingInfo && updateRemainingInfo(payload, 'title');
+      setIsEditing(false);
+    }
   };
 
   const saveDate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +67,10 @@ function CheckListHeader(props: CheckListHeaderProps) {
       ref.current && ref.current.focus();
     }
   }, [isEditing]);
+
+  useEffect(() => {
+    setTitle(titleProps);
+  }, [titleProps]);
 
   return (
     <StyledRoot scroll={scroll} shared={shared ?? false} className="layout_option">
