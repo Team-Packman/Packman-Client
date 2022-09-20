@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   if (!show) return null;
   return (
     <>
-      <HeadMeta page={Component.displayName} />
+      <HeadMeta />
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>

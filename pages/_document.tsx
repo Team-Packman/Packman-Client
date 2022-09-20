@@ -39,7 +39,7 @@ class MyDocument extends Document {
         <Head>
           {/* 검색엔진이 대부분 무시하는 추세 */}
           {/* <meta name="keywords" content="짐,짐 챙기기,여행 짐,여행 체크리스트" /> */}
-          <meta name="title" content="팩맨 - 내 손안의 짐 챙김 도우미" />
+          {/* <meta name="title" content="팩맨 - 내 손안의 짐 챙김 도우미" />
           <meta
             name="description"
             content="내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!"
@@ -52,7 +52,7 @@ class MyDocument extends Document {
           <meta
             property="og:description"
             content="내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!"
-          />
+          /> */}
           <meta property="og:image" content="/assets/pwa/apple-splash-1136-640.jpg" />
           <meta property="og:url" content="https://www.packman.kr" />
           {/* pwa */}
