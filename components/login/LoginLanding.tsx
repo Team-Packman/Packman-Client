@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import loginLogo from '/public/assets/svg/loginLogo.svg';
-import KakaoLogin from '/public/assets/svg/kakaoLogin.svg';
+import loginLogo from '/public/assets/png/loginLogo.webp';
+import KakaoLogin from '/public/assets/png/kakaoLogin.webp';
 import Image from 'next/image';
 import Link from 'next/link';
 import { packmanColors } from '../../styles/color';
@@ -32,19 +32,17 @@ function LoginLanding() {
     <StyledRoot>
       <h1>팩맨 - 내 손안의 짐 챙김 도우미</h1>
       <LogoAndTitle>
-        <Image src={loginLogo} alt="팩맨 로고" />
+        <LogoWrapper>
+          <Image src={loginLogo} alt="팩맨 로고" layout="fill" />
+        </LogoWrapper>
         <Title>내 손안의 짐 챙김 도우미</Title>
       </LogoAndTitle>
       <ButtonsContainer>
-        <LoginDescription>3초만에 시작하기</LoginDescription>
         <Link href={KAKAO_HREF}>
           <LoginButton id="custom-login-btn">
             <Image src={KakaoLogin} alt="카카오 로그인 버튼" layout="fill" />
           </LoginButton>
         </Link>
-        <LoginDescription>
-          로그인 시 이용약관과 개인정보 처리 방침에 동의하게 됩니다.
-        </LoginDescription>
       </ButtonsContainer>
     </StyledRoot>
   );
@@ -68,12 +66,29 @@ const StyledRoot = styled.div`
 `;
 
 const LogoAndTitle = styled.div`
+  width: 100%;
   position: absolute;
   top: 20vh;
   right: 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 1rem;
+`;
+
+const LogoWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 80%;
+  aspect-ratio: 13.16 / 6.01;
+
+  @media screen and (min-width: 700px) {
+    max-width: 60%;
+  }
+
+  @media screen and (min-width: 1024px) {
+    max-width: 30%;
+  }
 `;
 
 const Title = styled.div`
@@ -86,6 +101,10 @@ const Title = styled.div`
   flex-direction: row-reverse;
   padding-right: 4.3rem;
   color: ${packmanColors.pmWhite};
+
+  @media screen and (min-width: 700px) {
+    font-size: 2.3rem;
+  }
 `;
 
 const ButtonsContainer = styled.div`
@@ -95,21 +114,44 @@ const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.8em;
+
+  @media screen and (min-width: 700px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const LoginButton = styled.div`
+  width: 33.6rem;
   max-width: calc(100% - 4rem);
-  width: 336px;
-  height: 45px;
-  position: relative;
-`;
 
-const LoginDescription = styled.div`
-  font-weight: 400;
-  font-size: 1rem;
-  line-height: 1.2rem;
-  display: flex;
-  align-items: center;
-  color: ${packmanColors.pmWhite};
+  position: relative;
+
+  aspect-ratio: 33.6/ 4.5;
+
+  &::before {
+    content: '3초만에 시작하기';
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: ${packmanColors.pmWhite};
+
+    position: absolute;
+    bottom: calc(100% + 1.2rem);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &::after {
+    content: '로그인 시 이용약관과 개인정보 처리 방침에 동의하게 됩니다.';
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: ${packmanColors.pmDeepGrey};
+
+    position: absolute;
+    top: calc(100% + 1.2rem);
+    left: 50%;
+    width: 200%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
 `;
