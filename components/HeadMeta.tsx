@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 
 interface HeadMetaProps {
   page?: string;
+  title?: string;
 }
 
 function HeadMeta(props: HeadMetaProps) {
-  const { page } = props;
+  const { page, title: ogtitle } = props;
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -38,10 +39,7 @@ function HeadMeta(props: HeadMetaProps) {
         name="viewport"
         content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
       />
-      <meta
-        property="og:title"
-        content={title === 'Packman' ? '팩맨 - 내 손안의 짐 챙김 도우미' : title}
-      />
+      <meta property="og:title" content={ogtitle || '팩맨 - 내 손안의 짐 챙김 도우미'} />
       <meta property="og:description" content={description} />
     </Head>
   );
