@@ -19,6 +19,7 @@ import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 import Layout from '../common/Layout';
 import Link from 'next/link';
+import CustomImage from '../common/CustomImage';
 
 interface Itemplate {
   id: string;
@@ -66,10 +67,10 @@ function SelectTemplateLanding() {
     <Layout back title="템플릿 선택하기" padding>
       <StyledRoot>
         <StyledTemplateWrapper>
-          <picture>
+          <StyledPicture>
             {(basicTemplateImageList[+templateImageIndex] ||
               randomImageList[+templateImageIndex]) && (
-              <Image
+              <CustomImage
                 src={
                   templateType === 'basic'
                     ? basicTemplateImageList[+templateImageIndex]
@@ -81,7 +82,7 @@ function SelectTemplateLanding() {
                 priority
               />
             )}
-          </picture>
+          </StyledPicture>
           <Template
             isAloned={type === 'alone'}
             basicTemplate={basicTemplate}
@@ -124,12 +125,20 @@ const StyledTemplateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  & > picture {
-    position: relative;
-    aspect-ratio: 3.75 / 2.11;
-    width: 33.5rem;
-    height: 21.1rem;
-    margin: 0rem 0 3.3rem 0;
+
+  width: 100%;
+`;
+const StyledPicture = styled.picture`
+  position: relative;
+  aspect-ratio: 3.75 / 2.11;
+  width: 100%;
+  max-width: 50rem;
+  margin: 0rem 0 3.3rem 0;
+
+  & > span {
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
 `;
 const StyledButtonWrapper = styled.div`
