@@ -4,6 +4,7 @@ import { authUserAtom, invitationAtom, kakao, creatingUserAtom } from './../../r
 import { useRecoilState, useResetRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import { GetInvitedOutput } from '../../../service/packingList/together';
+import cookie from 'react-cookies';
 
 export const useKaKaoLogin = () => {
   const router = useRouter();
@@ -22,6 +23,8 @@ export const useKaKaoLogin = () => {
           },
           {
             onSuccess: ({ data }) => {
+              cookie.save('accessToken', data.accessToken + '', {});
+
               if (data.isAlreadyUser) {
                 setUser(data as typeof user);
               } else {
