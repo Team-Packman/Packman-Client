@@ -10,7 +10,7 @@ interface LoginProps {
 function Login(props: LoginProps) {
   return (
     <>
-      <HeadMeta props={props} />
+      {/* <HeadMeta props={props} /> */}
       <AsyncBoundary>
         <LoginLanding />
       </AsyncBoundary>
