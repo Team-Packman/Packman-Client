@@ -4,13 +4,15 @@ import LoginLanding from '../components/login/LoginLanding';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 
 interface LoginProps {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
+  url?: string;
 }
 function Login(props: LoginProps) {
+  const { title, description, url } = props;
   return (
     <>
-      {/* <HeadMeta props={props} /> */}
+      <HeadMeta title={title} description={description} url={url} />
       <AsyncBoundary>
         <LoginLanding />
       </AsyncBoundary>
@@ -24,5 +26,6 @@ Login.getInitialProps = () => {
   return {
     title: 'Packman : 로그인',
     description: '카카오 로그인으로 3초만에 시작하기',
+    url: 'https://www.packman.kr/login',
   };
 };

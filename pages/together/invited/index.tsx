@@ -8,11 +8,14 @@ import { AsyncBoundary } from '../../../utils/AsyncBoundary';
 interface InvitedProps {
   title: string;
   description: string;
+  url: string;
 }
 function Invited(props: InvitedProps) {
+  const { title, description, url } = props;
+
   return (
     <>
-      {/* <HeadMeta props={props} /> */}
+      <HeadMeta title={title} description={description} url={url} />
       <AsyncBoundary>
         <InvitedLanding />;
       </AsyncBoundary>
@@ -35,6 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       title,
       description: '내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!',
+      url: `https://www.packman.kr/together/invited?inviteCode=${inviteCode}`,
     },
   };
 };
