@@ -10,6 +10,8 @@ import InstallGuide from '../components/common/InstallGuide';
 import HeadMeta from '../components/HeadMeta';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
+import GoogleTagManager, { GoogleTagManagerId } from '../components/GoogleTagManager';
+import { googleTagManagerId } from '../utils/constant/index';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -41,6 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <GoogleTagManager googleTagManagerId={googleTagManagerId as GoogleTagManagerId} />
       <HeadMeta title={title} description={description} />
       <CssBaseline />
       <GlobalStyle />

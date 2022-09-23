@@ -7,6 +7,7 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
+import { googleTagManagerId } from '../utils/constant/index';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
@@ -205,6 +206,19 @@ class MyDocument extends Document {
           {/* ///////////////////////////////////////// */}
         </Head>
         <body>
+          {/* <!-- Google Tag Manager (noscript) --> */}
+          <noscript
+            dangerouslySetInnerHTML={{
+              __html: `
+              <iframe
+                src="https://www.googletagmanager.com/ns.html?id=${googleTagManagerId}"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+              />`,
+            }}
+          />
+          {/* <!-- End Google Tag Manager (noscript) --> */}
           <Main />
           <NextScript />
         </body>
