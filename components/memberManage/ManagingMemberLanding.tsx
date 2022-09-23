@@ -207,10 +207,10 @@ function ManagingMemberLanding() {
               </Member>
             );
           })}
-          <InviteOtherMember length={members.length}>
-            함께 패킹할 멤버를 초대해보세요
-          </InviteOtherMember>
         </WithMembers>
+        <InviteOtherMember length={members.length}>
+          함께 패킹할 멤버를 초대해보세요
+        </InviteOtherMember>
         <InvitingButtonWrapper>
           {isEditing ? (
             <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
@@ -337,7 +337,7 @@ const MemberName = styled.div`
 `;
 
 const InviteOtherMember = styled.div<{ length: number }>`
-  display: ${({ length }) => (length === 1 ? 'block;' : 'none;')};
+  display: ${({ length }) => (length === 1 ? 'block' : 'none')};
   position: absolute;
   top: 50%;
   left: 50%;
