@@ -14,12 +14,10 @@ function Invited(props: InvitedProps) {
   const { title, description, url } = props;
 
   return (
-    <>
+    <AsyncBoundary>
       <HeadMeta title={title} description={description} url={url} />
-      <AsyncBoundary>
-        <InvitedLanding />;
-      </AsyncBoundary>
-    </>
+      <InvitedLanding />;
+    </AsyncBoundary>
   );
 }
 
