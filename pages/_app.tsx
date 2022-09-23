@@ -43,12 +43,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <GoogleTagManager />
-      <HeadMeta title={title} description={description} url={url} />
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
           <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
+            <HeadMeta title={title} description={description} url={url} />
             <Hydrate state={pageProps?.dehydratedState}>
               <AsyncBoundary>
                 <GlobalStyle />
