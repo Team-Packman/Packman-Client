@@ -46,9 +46,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
+        <HeadMeta title={title} description={description} url={url} />
         <QueryClientProvider client={queryClient}>
           <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-            <HeadMeta title={title} description={description} url={url} />
             <Hydrate state={pageProps?.dehydratedState}>
               <AsyncBoundary>
                 <GlobalStyle />
