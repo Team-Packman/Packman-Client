@@ -171,6 +171,7 @@ function ManagingMemberLanding() {
                       height={64}
                       alt="profile_image"
                       priority
+                      layout="responsive"
                     />
                   </MemberImage>
                   <MemberName>{member.nickname}</MemberName>
@@ -186,6 +187,7 @@ function ManagingMemberLanding() {
                     height={64}
                     alt="profile_image"
                     priority
+                    layout="responsive"
                   />
                 </MemberImage>
                 <MemberName>{member.nickname}</MemberName>
@@ -294,8 +296,6 @@ const WithMembers = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr));
   gap: 2rem;
 
-  height: 30rem;
-
   position: relative;
 `;
 
@@ -323,11 +323,12 @@ const Crown = styled.div`
 `;
 
 const MemberImage = styled.div<{ index: number }>`
+  width: 6.4rem;
+  height: 6.4rem;
   margin-bottom: 0.5rem;
-  & > span {
-    border-radius: 50%;
-    border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
-  }
+  border-radius: 50%;
+  border: ${({ index }) => (index === 0 ? `0.2rem solid ${packmanColors.pmPink}` : 'none')};
+  overflow: hidden;
 `;
 
 const MemberName = styled.div`
