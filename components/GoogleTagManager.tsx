@@ -1,15 +1,8 @@
 import Script from 'next/script';
 import React from 'react';
+import { googleTagManagerId } from '../utils/constant/index';
 
-export type GoogleTagManagerId = `GTM-${string}`;
-
-interface GoogleTagManagerProps {
-  googleTagManagerId: GoogleTagManagerId;
-}
-
-function GoogleTagManager(props: GoogleTagManagerProps) {
-  const { googleTagManagerId } = props;
-
+function GoogleTagManager() {
   return (
     <Script
       id="gtm"
