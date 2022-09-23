@@ -11,10 +11,12 @@ interface LoginProps {
 function Login(props: LoginProps) {
   const { title, description, url } = props;
   return (
-    <AsyncBoundary>
+    <>
       <HeadMeta title={title} description={description} url={url} />
-      <LoginLanding />
-    </AsyncBoundary>
+      <AsyncBoundary>
+        <LoginLanding />
+      </AsyncBoundary>
+    </>
   );
 }
 
