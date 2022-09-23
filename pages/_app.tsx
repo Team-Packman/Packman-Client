@@ -7,6 +7,7 @@ import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import { RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
+import HeadMeta from '../components/HeadMeta';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';
@@ -37,10 +38,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   if (!show) return null;
+  const { title, description, url } = pageProps;
 
   return (
     <>
       <GoogleTagManager />
+      <HeadMeta title={title} description={description} url={url} />
       <CssBaseline />
       <GlobalStyle />
       <RecoilRoot>
