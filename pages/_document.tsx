@@ -40,6 +40,10 @@ class MyDocument extends Document {
         <Head>
           {/* 검색엔진이 대부분 무시하는 추세 */}
           {/* <meta name="keywords" content="짐,짐 챙기기,여행 짐,여행 체크리스트" /> */}
+          <meta
+            name="viewport"
+            content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+          />
           {/* pwa */}
           <meta name="theme-color" content="#fff" />
 
