@@ -13,7 +13,7 @@ interface InvitedProps {
 function Invited({ title, description }: InvitedProps) {
   return (
     <>
-      {HeadMeta({ title, description })}
+      <HeadMeta title={title} description={description} />
       <AsyncBoundary>
         <InvitedLanding />;
       </AsyncBoundary>
