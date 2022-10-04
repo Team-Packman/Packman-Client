@@ -1,8 +1,10 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import { useQueryClient } from 'react-query';
+import styled from 'styled-components';
 import { useSwiper } from 'swiper/react';
 import { packmanColors } from '../../styles/color';
-import useGlobalState from '../../utils/hooks/useGlobalState';
+import { useErrorBubbling } from '../../utils/AsyncBoundary';
+import useAPI from '../../utils/hooks/useAPI';
 
 interface CheckListSubHeaderProps {
   slot?: string;
@@ -14,11 +16,27 @@ interface CheckListSubHeaderProps {
 
 function CheckListSubHeader(props: CheckListSubHeaderProps) {
   const { together, activeMode, modeHandler, categoryHandler } = props;
+  const client = useQueryClient();
+  const getHelp = useAPI((api) => api.packingList.common.getHelp);
   const swiper = useSwiper();
+  const { reportError } = useErrorBubbling();
 
-  const handleClick = (idx: number) => {
+  const handleClickMode = (idx: number) => {
     modeHandler && modeHandler(idx);
     swiper.slideTo(idx);
+  };
+
+  const fetchHelp = async () => {
+    try {
+      await client.fetchQuery(['getHelp'], () => getHelp());
+    } catch (error) {
+      reportError(error);
+    }
+  };
+
+  const handleClickHelp = async () => {
+    await fetchHelp();
+    alert('준비중 입니다.\n조금만 기다려주세요🙏🏻');
   };
 
   return (
@@ -26,10 +44,10 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
       {together && (
         <StyledModeBlock>
           <StyledModeWrapper index={activeMode}>
-            <StyledMode onClick={() => handleClick(0)} selected={activeMode === 0}>
+            <StyledMode onClick={() => handleClickMode(0)} selected={activeMode === 0}>
               함께 패킹
             </StyledMode>
-            <StyledMode onClick={() => handleClick(1)} selected={activeMode === 1}>
+            <StyledMode onClick={() => handleClickMode(1)} selected={activeMode === 1}>
               나의 패킹
             </StyledMode>
           </StyledModeWrapper>
@@ -37,9 +55,7 @@ function CheckListSubHeader(props: CheckListSubHeaderProps) {
       )}
       <StyledOptions>
         <StyledButtonWrapper>
-          <StyledButton onClick={() => alert('준비중 입니다.\n조금만 기다려주세요🙏🏻')}>
-            엿보기
-          </StyledButton>
+          <StyledButton onClick={handleClickHelp}>엿보기</StyledButton>
           <StyledLine />
           <StyledButton onClick={categoryHandler}>카테고리 추가</StyledButton>
         </StyledButtonWrapper>

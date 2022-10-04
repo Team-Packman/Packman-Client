@@ -28,3 +28,22 @@ export interface GetSharedPackingListDetailOutput {
     }[];
   };
 }
+
+export interface GetHelp {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    id: string; // 엿보기 템플릿 id
+    category: {
+      // 카테고리
+      id: string; // 카테고리 id
+      name: string; // 카테고리 이름
+      pack: {
+        // 짐
+        id: string; // 짐 id
+        name: string; // 짐 이름
+      }[];
+    }[];
+  };
+}

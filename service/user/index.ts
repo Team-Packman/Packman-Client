@@ -41,6 +41,7 @@ export interface AddUserProfileInput {
   name: string; //회원가입한 유저의 카카오 프로필 네임
   nickname: string; // 회원가입한 유저의 닉네임
   profileImage: string; // 회원가입한 유저의 프로필 이미지
+  path: string;
 }
 export interface AddUserProfileOutput {
   status: number;

@@ -110,6 +110,7 @@ function TogetherLanding() {
       enabled: !!id,
     },
   );
+
   const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory, {
     onMutate: async (newCategory) => {
       const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
