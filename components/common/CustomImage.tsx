@@ -7,9 +7,13 @@ function CustomImage(props: Omit<ImageProps, 'onLoadingComplete'>) {
 
   return (
     <>
-      <Skeleton animation="wave" width={props.width} height={props.height} />
       {isLoading && <Skeleton animation="wave" width={props.width} height={props.height} />}
-      <Image {...props} alt="template_img" onLoadingComplete={() => setIsLoading(false)} />
+      <Image
+        {...props}
+        alt="template_img"
+        onLoadingComplete={() => setIsLoading(false)}
+        style={{ visibility: isLoading ? 'hidden' : undefined }}
+      />
     </>
   );
 }
