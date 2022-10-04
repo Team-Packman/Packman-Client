@@ -8,12 +8,12 @@ import { useInvitation } from '../../utils/hooks/auth';
 
 function ProfileLanding() {
   const { isAlreadyUser } = useRecoilValue(authUserAtom);
+  const receiveGuest = useInvitation();
 
   useEffect(() => {
     isAlreadyUser && receiveGuest();
   }, [isAlreadyUser]);
 
-  const receiveGuest = useInvitation();
   return (
     <Layout padding noHeader>
       <StyledRoot>

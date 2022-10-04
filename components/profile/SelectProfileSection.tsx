@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authUserAtom, creatingUserAtom } from '../../utils/recoil/atom/atom';
+import { authUserAtom, creatingUserAtom, invitationAtom } from '../../utils/recoil/atom/atom';
 
 interface SelectProfileSectionProps {
   isEditing?: boolean;
@@ -24,6 +24,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const [profile, setProfile] = useState(oldProfileImageId ? oldProfileImageId : '0');
   const [index, setIndex] = useState(oldProfileImageId ? oldProfileImageId : ''); //중앙 120px 이미지 다룰 인덱스
   const creatingUser = useRecoilValue(creatingUserAtom);
+  const invitation = useRecoilValue(invitationAtom);
   const setUser = useSetRecoilState(authUserAtom);
 
   //프로필 생성
@@ -37,6 +38,12 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       queryClient.invalidateQueries('getUserInfo');
     },
   });
+
+  const checkPath = () => {
+    if (invitation.type === 'alone') return '1';
+    if (invitation.type === 'together') return '2';
+    else return '0';
+  };
 
   //버튼 활성화 여부
   const setIsActivate = () => {
@@ -94,6 +101,7 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
         nickname,
         name: creatingUser.name,
         profileImage: profile,
+        path: checkPath(),
       },
       {
         onSuccess: ({ data }) => {
