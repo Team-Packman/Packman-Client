@@ -2,10 +2,10 @@ import { AxiosError } from 'axios';
 import { PropsWithChildren, ReactNode, Suspense, useEffect, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { QueryErrorResetBoundary, useQueryErrorResetBoundary } from 'react-query';
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 import Error from '../components/common/Error';
 import Loading from '../components/common/Loading';
-import { errorFlagAtom, invitationAtom } from './recoil/atom/atom';
+import { invitationAtom } from './recoil/atom/atom';
 
 interface AsyncBoundaryProps {
   loadingFallback?: ReactNode;
@@ -34,6 +34,7 @@ export const useErrorBubbling = () => {
         setIsError(String(error));
       }
     },
+    isError,
   };
 };
 
