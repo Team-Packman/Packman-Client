@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
 import HeadMeta from '../../../components/HeadMeta';
+import { NextSeo } from 'next-seo';
 import InvitedLanding from '../../../components/together/invited/InvitedLanding';
 import { GetSharedPackingListDetailOutput } from '../../../service/packingList/common';
 import { AsyncBoundary } from '../../../utils/AsyncBoundary';
@@ -13,7 +14,15 @@ interface InvitedProps {
 function Invited({ title, description }: InvitedProps) {
   return (
     <>
-      <HeadMeta title={title} description={description} />
+      {/* <HeadMeta title={title} description={description} /> */}
+      <NextSeo
+        title={title}
+        description={description}
+        openGraph={{
+          title,
+          description,
+        }}
+      />
       <AsyncBoundary>
         <InvitedLanding />;
       </AsyncBoundary>
