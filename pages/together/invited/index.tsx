@@ -1,12 +1,19 @@
 import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
+import HeadMeta from '../../../components/HeadMeta';
 import InvitedLanding from '../../../components/together/invited/InvitedLanding';
 import { GetSharedPackingListDetailOutput } from '../../../service/packingList/common';
 import { AsyncBoundary } from '../../../utils/AsyncBoundary';
 
-function Invited() {
+interface InvitedProps {
+  title: string;
+  description: string;
+}
+
+function Invited({ title, description }: InvitedProps) {
   return (
     <>
+      {HeadMeta({ title, description })}
       <AsyncBoundary>
         <InvitedLanding />;
       </AsyncBoundary>
