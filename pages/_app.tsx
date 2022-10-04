@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <HeadMeta title={title} description={description} url={url} />
+      {/* <HeadMeta title={title} description={description} url={url} /> */}
       <GoogleTagManager />
       <CssBaseline />
       <GlobalStyle />
