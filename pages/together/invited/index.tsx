@@ -15,7 +15,7 @@ function Invited(props: InvitedProps) {
 
   return (
     <>
-      <HeadMeta title={title} description={description} url={url} />
+      {/* <HeadMeta title={title} description={description} url={url} /> */}
       <AsyncBoundary>
         <InvitedLanding />;
       </AsyncBoundary>

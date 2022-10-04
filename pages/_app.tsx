@@ -42,6 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <HeadMeta title={title} description={description} url={url} />
       <GoogleTagManager />
       <CssBaseline />
       <GlobalStyle />
@@ -51,7 +52,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Hydrate state={pageProps?.dehydratedState}>
               <AsyncBoundary>
                 <GlobalStyle />
-                <HeadMeta title={title} description={description} url={url} />
                 <Component {...pageProps} />
                 <InstallGuide />
               </AsyncBoundary>
