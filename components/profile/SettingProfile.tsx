@@ -111,7 +111,13 @@ function SettingProfile(props: SettingProfileProps) {
           <h1>설정</h1>
           <StyledToggleWrapper>
             <p>알림 설정</p>
-            <StyledToggle isToggled={toggle} onClick={() => setToggle((prev) => !prev)}>
+            <StyledToggle
+              isToggled={toggle}
+              onClick={() => {
+                setToggle((prev) => !prev);
+                alert('준비중 입니다.\n조금만 기다려주세요🙏🏻');
+              }}
+            >
               <StyledToggleCircle isToggled={toggle} />
             </StyledToggle>
           </StyledToggleWrapper>
