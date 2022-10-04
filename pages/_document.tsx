@@ -46,7 +46,7 @@ class MyDocument extends Document {
             name="viewport"
             content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
           />
-          {/* <meta
+          <meta
             name="description"
             content={'내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
           />
@@ -62,9 +62,9 @@ class MyDocument extends Document {
             property="og:description"
             content={'내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
             key="og:description"
-          /> */}
-          <meta property="og:image" content="/assets/pwa/apple-splash-1136-640.jpg" />
-          <meta property="og:url" content={'https://www.packman.kr'} key="og:url" />
+          />
+          <meta property="og:image" content="/og.jpg" />
+          <meta property="og:url" content="https://www.packman.kr" key="og:url" />
           {/* pwa */}
           <meta name="theme-color" content="#fff" />
 
