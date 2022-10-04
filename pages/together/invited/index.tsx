@@ -18,6 +18,7 @@ export default Invited;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { inviteCode } = context.query;
+
   const { data }: AxiosResponse<GetSharedPackingListDetailOutput> = await axios.get(
     `${process.env.NEXT_PUBLIC_END}/list/together/share/${inviteCode}`,
   );
