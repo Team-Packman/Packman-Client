@@ -35,7 +35,7 @@ function LoginLanding() {
         <LogoWrapper>
           <Image src={loginLogo} alt="팩맨 로고" layout="fill" />
         </LogoWrapper>
-        <Title>내 손안의 짐 챙김 도우미</Title>
+        <Title>내 손안 짐 챙김 도우미</Title>
       </LogoAndTitle>
       <ButtonsContainer>
         <Link href={KAKAO_HREF}>
