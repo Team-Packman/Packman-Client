@@ -30,7 +30,7 @@ function LoginLanding() {
 
   return (
     <StyledRoot>
-      <h1>팩맨 - 내 손안의 짐 챙김 도우미</h1>
+      <h1>팩맨 - 내 손안 짐 챙김 도우미</h1>
       <LogoAndTitle>
         <LogoWrapper>
           <Image src={loginLogo} alt="팩맨 로고" layout="fill" />

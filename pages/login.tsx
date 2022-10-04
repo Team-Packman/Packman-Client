@@ -11,7 +11,7 @@ function Login(props: LoginProps) {
   const { title, description, url } = props;
   return (
     <>
-      <HeadMeta title={title} description={description} url={url} />
+      {/* <HeadMeta title={title} description={description} url={url} /> */}
       <AsyncBoundary>
         <LoginLanding />
       </AsyncBoundary>
