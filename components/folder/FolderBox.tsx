@@ -75,6 +75,12 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
     }
   };
 
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onBlur();
+    }
+  };
+
   useEffect(() => {
     if (isEditing) {
       ref.current && ref.current?.focus();
@@ -109,6 +115,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
             placeholder={isNew ? '폴더 이름 입력' : ''}
             onChange={onChange}
             onBlur={onBlur}
+            onKeyPress={onKeyPress}
             disabled={!isEditing}
             isNew={isNew}
             maxLength={8}
