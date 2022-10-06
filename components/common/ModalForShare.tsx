@@ -4,7 +4,6 @@ import { packmanColors } from '../../styles/color';
 import iClose from '/public/assets/svg/iClose.svg';
 import forShare from '/public/assets/png/forShare.webp';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
 interface ModalForShareProps {
   onClick?: () => void;
@@ -12,15 +11,13 @@ interface ModalForShareProps {
 }
 
 function ModalForShare(props: ModalForShareProps) {
-  const router = useRouter();
-  const { folderId } = router.query;
   const { onClick: modalHandler, inviteCode } = props;
 
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/alone/invited?inviteCode=${inviteCode}&folderId=${folderId}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/alone/invited?inviteCode=${inviteCode}`,
     );
     setIsCopied(true);
   };
