@@ -142,7 +142,7 @@ export const StyledInfo = styled.div`
 export const StyledKebab = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 0.5rem 0rem 0 0;
+  padding: 0.7rem 0 0 0;
   z-index: 10;
   cursor: pointer;
 
@@ -156,7 +156,7 @@ export const StyledText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 0 2rem 1.6rem;
+  margin: 0 1.5rem 2rem 1.5rem;
   height: 100%;
 `;
 
@@ -171,6 +171,7 @@ export const StyledInput = styled.input<{ isNew: boolean }>`
   -webkit-text-fill-color: ${({ isNew }) =>
     isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`};
   opacity: 1;
+  width: 100%;
 
   &:focus {
     outline: none;
