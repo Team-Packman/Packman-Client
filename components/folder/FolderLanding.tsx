@@ -179,6 +179,7 @@ function FolderLanding() {
 
   const handleOnBlurInAdd = () => {
     setAddNewFolder(false);
+    setNewFolderData({ name: '', isAloned: false });
 
     if (newFolderData.name) {
       addFolderMutate(newFolderData, {
