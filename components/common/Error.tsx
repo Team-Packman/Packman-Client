@@ -7,7 +7,11 @@ import { packmanColors } from '../../styles/color';
 import HomeIC from '/public/assets/svg/home_ic.svg';
 import Link from 'next/link';
 
-function Error() {
+interface ErrorProps {
+  reset: (...args: unknown[]) => void;
+}
+
+function Error({ reset }: ErrorProps) {
   return (
     <StyledRoot>
       <Image src={ErrorImage} placeholder="blur" alt="error" width="182" height="165" />
@@ -15,7 +19,7 @@ function Error() {
       <ErrorSubTitle>오류가 났어요</ErrorSubTitle>
       <ErrorSubTitle>다시 시도해 주세요</ErrorSubTitle>
       <Link href={'/folder'}>
-        <ErrorReset>
+        <ErrorReset onClick={() => reset()}>
           <Image src={HomeIC} alt="home_ic" /> <em>홈으로 돌아가기</em>
         </ErrorReset>
       </Link>
