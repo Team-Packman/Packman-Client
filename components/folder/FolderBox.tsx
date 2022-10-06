@@ -16,7 +16,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
   const {
     id = '',
     name = '',
-    listNum = '',
+    listNum = '0',
     editableFolderId = '',
     categoryName = '',
     isNew = false,
