@@ -8,7 +8,7 @@ import HomeIC from '/public/assets/svg/home_ic.svg';
 import Link from 'next/link';
 
 interface ErrorProps {
-  reset: (...args: unknown[]) => void;
+  reset?: (...args: unknown[]) => void;
 }
 
 function Error({ reset }: ErrorProps) {
@@ -19,7 +19,7 @@ function Error({ reset }: ErrorProps) {
       <ErrorSubTitle>오류가 났어요</ErrorSubTitle>
       <ErrorSubTitle>다시 시도해 주세요</ErrorSubTitle>
       <Link href={'/folder'}>
-        <ErrorReset onClick={() => reset()}>
+        <ErrorReset onClick={() => reset?.()}>
           <Image src={HomeIC} alt="home_ic" /> <em>홈으로 돌아가기</em>
         </ErrorReset>
       </Link>
