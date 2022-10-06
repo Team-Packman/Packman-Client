@@ -4,25 +4,30 @@ import styled from 'styled-components';
 import ErrorImage from '/public/assets/png/ErrorImage.webp';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
-import HomeIC from '/public/assets/svg/home_ic.svg';
-import Link from 'next/link';
+import HomeIC from '/public/assets/svg/refresh_ic.svg';
+import { useRouter } from 'next/router';
 
 interface ErrorProps {
   reset?: (...args: unknown[]) => void;
 }
 
 function Error({ reset }: ErrorProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    reset?.();
+    router.reload();
+  };
+
   return (
     <StyledRoot>
-      <Image src={ErrorImage} placeholder="blur" alt="error" width="182" height="165" />
+      <Image src={ErrorImage} placeholder="blur" alt="error" width="182" height="165" priority />
       <ErrorTitle>앗차차..!</ErrorTitle>
       <ErrorSubTitle>오류가 났어요</ErrorSubTitle>
       <ErrorSubTitle>다시 시도해 주세요</ErrorSubTitle>
-      <Link href={'/folder'}>
-        <ErrorReset onClick={() => reset?.()}>
-          <Image src={HomeIC} alt="home_ic" /> <em>홈으로 돌아가기</em>
-        </ErrorReset>
-      </Link>
+      <ErrorReset onClick={handleClick}>
+        <Image src={HomeIC} alt="refresh_ic" /> <em>새로고침</em>
+      </ErrorReset>
     </StyledRoot>
   );
 }

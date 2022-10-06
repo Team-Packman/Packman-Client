@@ -101,7 +101,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
         <StyledKebab>
           <span onClick={() => onClickIcon(id, name)}>
             {isNew ? (
-              <Image src={Close} alt="Close icon" width={14} height={14} />
+              <Image src={Close} alt="Close icon" width={25} height={35} />
             ) : (
               <Image src={Kebab} alt="kebab icon" width={25} height={25} />
             )}
@@ -155,6 +155,8 @@ export const StyledKebab = styled.div`
 
   & > span {
     z-index: 100;
+    display: flex;
+    align-items: center;
     cursor: pointer;
   }
 `;
