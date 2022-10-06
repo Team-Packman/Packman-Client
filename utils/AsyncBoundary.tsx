@@ -49,7 +49,7 @@ const errorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
     }
   }
 
-  return <Error />;
+  return <Error reset={resetErrorBoundary} />;
 };
 
 export function AsyncBoundary({
