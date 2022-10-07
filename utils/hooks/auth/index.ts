@@ -64,7 +64,7 @@ export const useInvitation = () => {
         )) as GetAloneInvitedOutput['data'];
 
         if (isOwner) {
-          router.replace(`/alone?id=${listId}&folderId=${folderId}`);
+          router.replace(`/alone?id=${listId}`);
         } else {
           router.replace(`/alone/shared?id=${listId}`);
         }
@@ -72,13 +72,12 @@ export const useInvitation = () => {
         const { id: listId, isMember } = (await checkInvitation(type)) as GetInvitedOutput['data'];
 
         if (isMember) {
-          router.replace(`/together?id=${listId}&folderId=${folderId}`);
+          router.replace(`/together?id=${listId}`);
         } else {
           addMember(
             { listId },
             {
-              onSuccess: ({ data: { listId } }) =>
-                router.replace(`/together?id=${listId}&folderId=${folderId}`),
+              onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
               onError: () => router.replace('/folder'),
             },
           );

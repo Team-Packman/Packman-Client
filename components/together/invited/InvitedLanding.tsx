@@ -37,12 +37,11 @@ function InvitedLanding() {
     enabled: !!inviteCode && user.isAlreadyUser,
     onSuccess: ({ data: { id: listId, isMember } }) =>
       isMember
-        ? router.replace(`/together?id=${listId}&folderId=${folderId}`)
+        ? router.replace(`/together?id=${listId}`)
         : mutate(
             { listId },
             {
-              onSuccess: ({ data: { listId } }) =>
-                router.replace(`/together?id=${listId}&folderId=${folderId}`),
+              onSuccess: ({ data: { listId } }) => router.replace(`/together?id=${listId}`),
             },
           ),
   });
