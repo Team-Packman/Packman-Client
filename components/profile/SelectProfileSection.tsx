@@ -26,7 +26,6 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
   const creatingUser = useRecoilValue(creatingUserAtom);
   const invitation = useRecoilValue(invitationAtom);
   const setUser = useSetRecoilState(authUserAtom);
-  const { gender, ageRange } = useRecoilValue(authUserAtom);
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
@@ -100,8 +99,8 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
       {
         email: creatingUser.email,
         name: creatingUser.name,
-        gender,
-        ageRange,
+        gender: creatingUser.gender,
+        ageRange: creatingUser.ageRange,
         nickname,
         profileImage: profile,
         path: checkPath(),
