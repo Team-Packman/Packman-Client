@@ -2,6 +2,8 @@ export interface CreatingUser {
   isAlreadyUser: boolean; // 이미 존재하는 유저 확인
   name: string; //생성된 유저의 카카오톡 프로필 네임
   email: string; // 생성된 유저 email
+  gender: string | null; // 생성된 유저 성별
+  ageRange: string | null; // 생성된 유저 연령대
 }
 
 export interface AuthUser extends CreatingUser {
