@@ -55,12 +55,12 @@ class MyDocument extends Document {
           <meta property="og:type" content="website" />
           <meta
             property="og:title"
-            content={'팩맨 Packman - 내손안 짐챙김 도우미'}
+            content={'팩맨 Packman - 내 손 안 짐 챙김 도우미'}
             key="og:title"
           />
           <meta
             property="og:description"
-            content={'내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
+            content={'내 손 안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
             key="og:description"
           />
           <meta property="og:image" content="/og.jpg" />
