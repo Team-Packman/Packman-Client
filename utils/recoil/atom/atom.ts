@@ -27,6 +27,8 @@ export const creatingUserAtom = atom<CreatingUser>({
     isAlreadyUser: false,
     name: '',
     email: '',
+    gender: '',
+    ageRange: '',
   },
 });
 
