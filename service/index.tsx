@@ -1,5 +1,5 @@
 import createPackingListAPI, { PackingListAPI } from './packingList/index';
-import { Config } from '../utils/axios/axios';
+import { Config } from '../utils/axios';
 import createFolderAPI, { FolderAPI } from './folder/mockAPI';
 import createEctAPI, { EctAPI } from './ect/createAPI';
 import createInventoryAPI, { InventoryAPI } from './inventory';

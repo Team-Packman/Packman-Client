@@ -12,7 +12,7 @@ import {
   fetchKakaoLogin,
   fetchRefresh,
 } from '../../utils/axios/auth';
-import { Config } from '../../utils/axios/axios';
+import { Config } from '../../utils/axios';
 
 export interface AuthAPI {
   refresh: (tokens: RefreshInput) => Promise<RefreshOutput>;

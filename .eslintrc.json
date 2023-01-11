@@ -29,7 +29,7 @@
   "plugins": ["react", "@typescript-eslint", "prettier", "react-hooks"],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/prop-types": "on",
+    "react/prop-types": "off",
     "react/display-name": "off",
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],

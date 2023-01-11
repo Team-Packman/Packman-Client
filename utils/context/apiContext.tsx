@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from 'react';
 import { APIService, createAPIService } from '../../service';
-import createAxios from '../axios/axios';
+import createAxios from '../axios';
 import withAuth from '../axios/withAuth';
 
 interface APIProviderProps {
