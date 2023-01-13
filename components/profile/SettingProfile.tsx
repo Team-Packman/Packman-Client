@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Image, { StaticImageData } from 'next/image';
 import { packmanColors } from '../../styles/color';
 import { useState } from 'react';
-import Modal from '../common/ModalLegacy';
+import Modal from '../common/Modal';
 import Footer from '../common/Footer';
 import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';

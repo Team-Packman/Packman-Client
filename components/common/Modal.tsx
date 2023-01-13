@@ -1,109 +1,75 @@
-import React, { PropsWithChildren, ReactElement } from 'react';
-import ReactDOM from 'react-dom';
-import Image from 'next/image';
 import styled from 'styled-components';
 import iClose from '/public/assets/svg/iClose.svg';
-import { packmanColors } from '../../styles/color';
+import Image from 'next/image';
+import { FONT_STYLES } from '../../styles/font';
 
 interface ModalProps {
-  onClick: VoidFunction;
-  closeBtn?: boolean;
+  title: string;
+  button?: React.ReactNode;
+  closeModal: () => void;
 }
+export default function Modal(props: ModalProps) {
+  const { title, button, closeModal } = props;
 
-function Modal({ children, onClick, closeBtn = true }: PropsWithChildren<ModalProps>) {
-  return ReactDOM.createPortal(
-    <>
-      <Modal.Bg onClick={onClick}></Modal.Bg>
-      <StyledModal>
-        {closeBtn && <Modal.CloseBtn onClick={onClick} />}
-        {children}
-      </StyledModal>
-    </>,
-    document.querySelector('#__next') as Element,
-  );
-}
-
-type BgProps = ModalProps;
-
-Modal.Bg = function Bg({ onClick }: BgProps) {
-  return <StyledBg onClick={onClick} />;
-};
-
-type CloseBtnProps = ModalProps;
-
-Modal.CloseBtn = function CloseBtn({ onClick }: CloseBtnProps) {
   return (
-    <StyledButtonContainer>
-      <StyledCloseBtn onClick={onClick}>
-        <Image src={iClose} alt="closeModal" width="24" height="24" />
-      </StyledCloseBtn>
-    </StyledButtonContainer>
+    <StyledBackground>
+      <StyledRoot>
+        <StyledImageWrapper>
+          <Image src={iClose} alt="close" onClick={closeModal} />
+        </StyledImageWrapper>
+        <StyledModalInfo>
+          <p>{title}</p>
+          {button}
+        </StyledModalInfo>
+      </StyledRoot>
+    </StyledBackground>
   );
-};
-
-Modal.Body = function Body({ children }: PropsWithChildren) {
-  return <StyledBody>{children}</StyledBody>;
-};
-
-interface ControlsProps {
-  controls: ReactElement;
 }
-
-Modal.Controls = function Controls({ controls }: ControlsProps) {
-  return controls;
-};
-
-export default Modal;
-
-const StyledBg = styled.div`
+const StyledBackground = styled.div`
   position: fixed;
-  width: 100vw;
-  height: calc(var(--vh, 1vh) * 100);
-  background-color: rgba(0, 0, 0, 0.48);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 9999;
-  left: 0;
   top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.47);
+  z-index: 110;
+  overflow: hidden;
 `;
-
-const StyledModal = styled.div`
+const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  text-align: center;
 
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 99999;
   transform: translate(-50%, -50%);
-
   width: 32rem;
+  height: 17.6rem;
+  background-color: #fff;
+  border-radius: 1.34rem;
 
-  background-color: ${packmanColors.pmWhite};
+  z-index: 115;
 
-  padding: 0.8rem 1.6rem 2.4rem 1.6rem;
-
-  border-radius: 1rem;
+  & > span {
+    position: absolute;
+    top: 0.7rem;
+    right: 1.5rem;
+  }
 `;
-
-const StyledButtonContainer = styled.div`
-  width: 100%;
+const StyledImageWrapper = styled.div`
+  position: absolute;
+  top: 0.7rem;
+  right: 1.4rem;
+`;
+const StyledModalInfo = styled.div`
   display: flex;
-  flex-direction: row-reverse;
-  margin-right: -1.6rem;
-  margin-bottom: 1.1rem;
-`;
+  flex-direction: column;
+  justify-content: center;
 
-const StyledCloseBtn = styled.button`
-  height: 2.4rem;
-
-  background: ${packmanColors.pmWhite};
-
-  border: none;
-`;
-
-const StyledBody = styled.div`
-  width: 100%;
+  & > p {
+    ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+    padding-bottom: 3.7rem;
+    color: #282828;
+  }
 `;
