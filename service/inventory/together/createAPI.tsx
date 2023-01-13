@@ -1,4 +1,3 @@
-import { AxiosInstance } from 'axios';
 import {
   DeleteTogetherInventoryInput,
   DeleteTogetherInventoryOutput,
@@ -18,13 +17,12 @@ export interface TogetherAPI {
   };
 }
 
-const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
-  const authReq = request;
+const createTogetherAPI = (): TogetherAPI => {
   return {
     together: {
-      getTogetherInventory: (folderId: string) => fetchTogetherInventory(authReq, folderId),
+      getTogetherInventory: (folderId: string) => fetchTogetherInventory(folderId),
       deleteTogetherInventory: (params: DeleteTogetherInventoryInput) =>
-        fetchDeleteTogetherInventory(authReq, params),
+        fetchDeleteTogetherInventory(params),
     },
   };
 };

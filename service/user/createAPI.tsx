@@ -1,4 +1,3 @@
-import { AxiosInstance } from 'axios';
 import {
   AddUserProfileInput,
   AddUserProfileOutput,
@@ -21,13 +20,12 @@ export interface UserAPI {
   deleteUserInfo: (accessToken: string) => Promise<DeleteUserInfoOutput>;
 }
 
-const createUserAPI = (request: AxiosInstance): UserAPI => {
+const createUserAPI = (): UserAPI => {
   return {
-    getUserInfo: () => fetchUserInfo(request),
-    updateUserProfile: (payload: UpdateUserProfileInput) =>
-      fetchUpdateUserProfile(request, payload),
-    addUserProfile: (payload: AddUserProfileInput) => fetchAddUserProfile(request, payload),
-    deleteUserInfo: (accessToken: string) => fetchDeleteUserInfo(request, accessToken),
+    getUserInfo: () => fetchUserInfo(),
+    updateUserProfile: (payload: UpdateUserProfileInput) => fetchUpdateUserProfile(payload),
+    addUserProfile: (payload: AddUserProfileInput) => fetchAddUserProfile(payload),
+    deleteUserInfo: (accessToken: string) => fetchDeleteUserInfo(accessToken),
   };
 };
 

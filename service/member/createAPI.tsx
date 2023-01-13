@@ -1,4 +1,3 @@
-import { AxiosInstance } from 'axios';
 import {
   DeleteGroupMemberInput,
   DeleteGroupMemberOutput,
@@ -12,10 +11,10 @@ export interface MemberAPI {
   deleteGroupMember: (payload: DeleteGroupMemberInput) => Promise<DeleteGroupMemberOutput>;
 }
 
-const createMemberAPI = (request: AxiosInstance): MemberAPI => {
+const createMemberAPI = (): MemberAPI => {
   return {
-    getGroupMember: (payload: GetGroupMemberInput) => fetchGroupMember(request, payload),
-    deleteGroupMember: (payload: DeleteGroupMemberInput) => deleteGroupMember(request, payload),
+    getGroupMember: (payload: GetGroupMemberInput) => fetchGroupMember(payload),
+    deleteGroupMember: (payload: DeleteGroupMemberInput) => deleteGroupMember(payload),
   };
 };
 

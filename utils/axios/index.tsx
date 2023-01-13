@@ -3,11 +3,11 @@ import { authUserAtom } from '../recoil/atom/atom';
 import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { PropsWithChildren, useEffect, ReactNode } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 
 enum AXIOS_KEY {
   axiosBasic = 'axiosBasic',
-  axiosWithAuth = 'axiosWithAuth',
+  client = 'client',
 }
 
 export type Config = {
@@ -23,7 +23,7 @@ export default function createAxios(endpoint: string, config?: AxiosRequestConfi
     ...config,
   });
 
-  const axiosWithAuth = axios.create({
+  const client = axios.create({
     baseURL: BASE_URL,
     headers: { 'Content-Type': 'application/json', ...config?.headers },
     ...config,
@@ -31,7 +31,7 @@ export default function createAxios(endpoint: string, config?: AxiosRequestConfi
 
   return {
     axiosBasic,
-    axiosWithAuth,
+    client,
   };
 }
 
@@ -40,53 +40,53 @@ function AxiosInterceptor({ children }: PropsWithChildren) {
   const { accessToken, refreshToken } = useRecoilValue(authUserAtom);
   const refresh = useRefresh({ accessToken, refreshToken });
 
-  useEffect(() => {
-    const requestIntercept = axiosWithAuth.interceptors.request.use(
-      (config: AxiosRequestConfig) => {
-        if (config.headers && !config.headers['Authorization']) {
-          config.headers['Authorization'] = `${accessToken}`;
-
-          return config;
-        }
+  const requestIntercept = client.interceptors.request.use(
+    (config: AxiosRequestConfig) => {
+      if (config.headers && !config.headers['Authorization']) {
+        config.headers['Authorization'] = `${accessToken}`;
 
         return config;
-      },
-      (error) => Promise.reject(error),
-    );
+      }
 
-    const responseIntercept = axiosWithAuth.interceptors.response.use(
-      (config: AxiosRequestConfig) => config,
-      async (error) => {
-        const config = error.config;
+      return config;
+    },
+    (error) => Promise.reject(error),
+  );
 
-        if (error.response.status === 401) {
-          if (!config.headers['Authorization']) {
-            alert('로그인 후 이용해 주세요');
-            router.replace('/login');
-          } else {
-            const tokens = await refresh();
+  const responseIntercept = client.interceptors.response.use(
+    (config: AxiosRequestConfig) => config,
+    async (error) => {
+      const config = error.config;
 
-            if (tokens) {
-              config.headers['Authorization'] = `${tokens.accessToken}`;
+      if (error.response.status === 401) {
+        if (!config.headers['Authorization']) {
+          alert('로그인 후 이용해 주세요');
+          router.replace('/login');
+        } else {
+          const tokens = await refresh();
 
-              return axiosWithAuth(config);
-            }
+          if (tokens) {
+            config.headers['Authorization'] = `${tokens.accessToken}`;
+
+            return client(config);
           }
         }
+      }
 
-        return Promise.reject(error);
-      },
-    );
+      return Promise.reject(error);
+    },
+  );
 
+  useEffect(() => {
     return () => {
-      axiosWithAuth.interceptors.request.eject(requestIntercept);
-      axiosWithAuth.interceptors.response.eject(responseIntercept);
+      client.interceptors.request.eject(requestIntercept);
+      client.interceptors.response.eject(responseIntercept);
     };
   }, []);
 
   return <>{children}</>;
 }
 
-const { axiosBasic, axiosWithAuth } = createAxios(BASE_URL);
+const { axiosBasic, client } = createAxios(BASE_URL);
 
-export { axiosBasic, axiosWithAuth, AxiosInterceptor };
+export { axiosBasic, client, AxiosInterceptor };

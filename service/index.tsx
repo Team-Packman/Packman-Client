@@ -1,6 +1,5 @@
 import createPackingListAPI, { PackingListAPI } from './packingList/index';
-import { Config } from '../utils/axios';
-import createFolderAPI, { FolderAPI } from './folder/mockAPI';
+import createFolderAPI, { FolderAPI } from './folder/createAPI';
 import createEctAPI, { EctAPI } from './ect/createAPI';
 import createInventoryAPI, { InventoryAPI } from './inventory';
 import createUserAPI, { UserAPI } from './user/createAPI';
@@ -17,16 +16,14 @@ export interface APIService {
   ect: EctAPI;
 }
 
-export function createAPIService(config: Config): APIService {
-  const { axiosWithAuth } = config;
-
-  const auth = createAuthAPI(config);
-  const folder = createFolderAPI(axiosWithAuth);
-  const packingList = createPackingListAPI(axiosWithAuth);
-  const member = createMemberAPI(axiosWithAuth);
-  const user = createUserAPI(axiosWithAuth);
-  const ect = createEctAPI(axiosWithAuth);
-  const inventory = createInventoryAPI(axiosWithAuth);
+export function createAPIService(): APIService {
+  const auth = createAuthAPI();
+  const folder = createFolderAPI();
+  const packingList = createPackingListAPI();
+  const member = createMemberAPI();
+  const user = createUserAPI();
+  const inventory = createInventoryAPI();
+  const ect = createEctAPI();
 
   return {
     auth,
@@ -38,3 +35,7 @@ export function createAPIService(config: Config): APIService {
     inventory,
   };
 }
+
+const apiService = createAPIService();
+
+export default apiService;
