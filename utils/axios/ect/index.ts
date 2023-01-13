@@ -1,28 +1,21 @@
-import { AxiosInstance } from 'axios';
+import { client } from '..';
 import {
   GetAloneTemplateListOutput,
   GetTemplateOutput,
   GetTogetherTemplateListOutput,
 } from '../../../service/ect/index';
 
-export const fetchTemplate = async (
-  request: AxiosInstance,
-  templateId: string,
-): Promise<GetTemplateOutput> => {
-  const { data } = await request(`/template/${templateId}`);
+export const fetchTemplate = async (templateId: string): Promise<GetTemplateOutput> => {
+  const { data } = await client(`/template/${templateId}`);
   return data;
 };
 
-export const fetchAloneTemplateList = async (
-  request: AxiosInstance,
-): Promise<GetAloneTemplateListOutput> => {
-  const { data } = await request(`/template/alone`);
+export const fetchAloneTemplateList = async (): Promise<GetAloneTemplateListOutput> => {
+  const { data } = await client(`/template/alone`);
   return data;
 };
 
-export const fetchTogetherTemplateList = async (
-  request: AxiosInstance,
-): Promise<GetTogetherTemplateListOutput> => {
-  const { data } = await request(`/template/together`);
+export const fetchTogetherTemplateList = async (): Promise<GetTogetherTemplateListOutput> => {
+  const { data } = await client(`/template/together`);
   return data;
 };

@@ -11,6 +11,7 @@ import SEO from '../next-seo.config';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';
+import { AxiosInterceptor } from '../utils/axios';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -46,15 +47,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyle />
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
-          <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-            <Hydrate state={pageProps?.dehydratedState}>
-              <AsyncBoundary>
-                <GlobalStyle />
-                <Component {...pageProps} />
-                <InstallGuide />
-              </AsyncBoundary>
-            </Hydrate>
-          </APIProvider>
+          <AxiosInterceptor>
+            <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
+              <Hydrate state={pageProps?.dehydratedState}>
+                <AsyncBoundary>
+                  <GlobalStyle />
+                  <Component {...pageProps} />
+                  <InstallGuide />
+                </AsyncBoundary>
+              </Hydrate>
+            </APIProvider>
+          </AxiosInterceptor>
         </QueryClientProvider>
       </RecoilRoot>
     </>

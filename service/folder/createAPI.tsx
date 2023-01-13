@@ -7,8 +7,7 @@ import {
   AddFolderInput,
   AddFolderOutput,
 } from './index';
-import { AxiosInstance } from 'axios';
-import withAuth from '../../utils/axios/withAuth';
+
 import {
   fetchAddFolder,
   fetchDeleteFolder,
@@ -25,14 +24,13 @@ export interface FolderAPI {
   addFolder: (payload: AddFolderInput) => Promise<AddFolderOutput>;
 }
 
-const createFolderAPI = (request: AxiosInstance): FolderAPI => {
-  const authReq = request;
+const createFolderAPI = (): FolderAPI => {
   return {
-    getFolders: () => fetchFolders(authReq),
-    getRecentPackingList: () => fetchRecentPackingList(authReq),
-    updateFolderName: (payload: UpdateFolderNameInput) => fetchUpdateFolderName(authReq, payload),
-    deleteFolder: (folderId: string) => fetchDeleteFolder(authReq, folderId),
-    addFolder: (payload: AddFolderInput) => fetchAddFolder(authReq, payload),
+    getFolders: () => fetchFolders(),
+    getRecentPackingList: () => fetchRecentPackingList(),
+    updateFolderName: (payload: UpdateFolderNameInput) => fetchUpdateFolderName(payload),
+    deleteFolder: (folderId: string) => fetchDeleteFolder(folderId),
+    addFolder: (payload: AddFolderInput) => fetchAddFolder(payload),
   };
 };
 

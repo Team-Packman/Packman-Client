@@ -1,4 +1,3 @@
-import { AxiosInstance } from 'axios';
 import { DeleteAloneInventoryInput, DeleteAloneInventoryOutput, GetAloneInventoryOutput } from '.';
 import { fetchAloneInventory, fetchDeleteAloneInventory } from '../../../utils/inventory/alone';
 
@@ -11,13 +10,12 @@ export interface AloneAPI {
   };
 }
 
-const createAloneAPI = (request: AxiosInstance): AloneAPI => {
-  const authReq = request;
+const createAloneAPI = (): AloneAPI => {
   return {
     alone: {
-      getAloneInventory: (folderId: string) => fetchAloneInventory(authReq, folderId),
+      getAloneInventory: (folderId: string) => fetchAloneInventory(folderId),
       deleteAloneInventory: (params: DeleteAloneInventoryInput) =>
-        fetchDeleteAloneInventory(authReq, params),
+        fetchDeleteAloneInventory(params),
     },
   };
 };

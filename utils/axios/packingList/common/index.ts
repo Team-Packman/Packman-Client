@@ -1,19 +1,19 @@
+import { client } from '../..';
 import {
   GetHelp,
   GetSharedPackingListDetailInput,
   GetSharedPackingListDetailOutput,
 } from './../../../../service/packingList/common/index';
-import { AxiosInstance } from 'axios';
 
-export const fetchSharedPackingListDetail = async (
-  request: AxiosInstance,
-  { type, inviteCode }: GetSharedPackingListDetailInput,
-): Promise<GetSharedPackingListDetailOutput> => {
-  const { data } = await request(`/list/${type}/share/${inviteCode}`);
+export const fetchSharedPackingListDetail = async ({
+  type,
+  inviteCode,
+}: GetSharedPackingListDetailInput): Promise<GetSharedPackingListDetailOutput> => {
+  const { data } = await client(`/list/${type}/share/${inviteCode}`);
   return data;
 };
 
-export const fetchHelp = async (request: AxiosInstance): Promise<GetHelp> => {
-  const { data } = await request(`/help`);
+export const fetchHelp = async (): Promise<GetHelp> => {
+  const { data } = await client(`/help`);
   return data;
 };

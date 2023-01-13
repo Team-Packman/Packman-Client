@@ -12,7 +12,6 @@ import {
   fetchKakaoLogin,
   fetchRefresh,
 } from '../../utils/axios/auth';
-import { Config } from '../../utils/axios/axios';
 
 export interface AuthAPI {
   refresh: (tokens: RefreshInput) => Promise<RefreshOutput>;
@@ -21,12 +20,12 @@ export interface AuthAPI {
   fetchKakaoLogin: (payload: KakaoLoginInput) => Promise<KakaoLoginOutput>;
 }
 
-const createAuthAPI = ({ axiosBasic, axiosWithAuth: request }: Config): AuthAPI => {
+const createAuthAPI = (): AuthAPI => {
   return {
-    fetchGoogleLogin: (payload: GoogleLoginInput) => fetchGoogleLogin(request, payload),
-    fetchKakaoLogin: (payload: KakaoLoginInput) => fetchKakaoLogin(request, payload),
-    fetchKakaoAuth: (code: string) => fetchKakaoAuth(axiosBasic, code),
-    refresh: (tokens) => fetchRefresh(axiosBasic, tokens),
+    fetchGoogleLogin: (payload: GoogleLoginInput) => fetchGoogleLogin(payload),
+    fetchKakaoLogin: (payload: KakaoLoginInput) => fetchKakaoLogin(payload),
+    fetchKakaoAuth: (code: string) => fetchKakaoAuth(code),
+    refresh: (tokens) => fetchRefresh(tokens),
   };
 };
 
