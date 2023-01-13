@@ -26,6 +26,7 @@ import useHide from '../../utils/hooks/useHide';
 import { GetTogetherPackingListDetailOutput } from '../../service/packingList/together';
 import { AxiosError } from 'axios';
 import useDynamic from '../../utils/hooks/useDynamic';
+import useBoolean from '../../utils/hooks/common/useBoolean';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -54,10 +55,10 @@ function TogetherLanding() {
   const PackerModal = useDynamic(() => import('./PackerModal'));
   const ModalForInvitation = useDynamic(() => import('../common/ModalForInvitation'));
   const PackingListBottomModal = useDynamic(() => import('../common/PackingListBottomModal'));
-  const ModalForAddToTemplate = useDynamic(() => import('../common/ModalForAddToTemplate'));
+  const AddToTemplateModal = useDynamic(() => import('./AddToTemplateModal'));
 
-  const [bottomModalOpen, setBottomModalOpen] = useState(false);
-  const [packerModalOpen, setPackerModalOpen] = useState(false);
+  const [bottomModalOpen, openBottomModal, closeBottomModal] = useBoolean(false);
+  const [packerModalOpen, openPackerModal, closePackerModal] = useBoolean(false);
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState(0);
 
@@ -243,20 +244,20 @@ function TogetherLanding() {
   const bottomModalOpenHandler = (payload: FocusInfo) => {
     if (!currentEditing) {
       setCurrentFocus(payload);
-      setBottomModalOpen(true);
+      openBottomModal();
     }
   };
   const bottomModalCloseHandler = () => {
     setCurrentFocus(initialFocus);
-    setBottomModalOpen(false);
+    closeBottomModal();
   };
   const packerModalOpenHandler = (packId: string) => {
     setCurrentFocus({ ...initialFocus, type: 'item', packId });
-    setPackerModalOpen(true);
+    openPackerModal();
   };
   const packerModalCloseHandler = () => {
     setCurrentFocus(initialFocus);
-    setPackerModalOpen(false);
+    closePackerModal();
   };
 
   const addTemplateModalOpenHandler = () => setAddTemplateModalOpen(true);
@@ -746,7 +747,7 @@ function TogetherLanding() {
         />
       )}
       {addTemplateModalOpen && (
-        <ModalForAddToTemplate title={info.title} onClick={addTemplateModalCloseHandler} />
+        <AddToTemplateModal title={info.title} onClick={addTemplateModalCloseHandler} />
       )}
     </Layout>
   );

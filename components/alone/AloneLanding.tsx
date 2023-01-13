@@ -44,7 +44,7 @@ function AloneLanding() {
 
   const PackingListBottomModal = useDynamic(() => import('../common/PackingListBottomModal'));
   const ModalForShare = useDynamic(() => import('../common/ModalForShare'));
-  const ModalForAddToTemplate = useDynamic(() => import('../common/ModalForAddToTemplate'));
+  const AddToTemplateModal = useDynamic(() => import('../together/AddToTemplateModal'));
 
   const [currentFocus, setCurrentFocus] = useState(initialFocus);
   const [currentCreating, setCurrentCreating] = useState('');
@@ -492,7 +492,7 @@ function AloneLanding() {
         />
       )}
       {addTemplateModalOpen && (
-        <ModalForAddToTemplate title={list.title} onClick={addTemplateModalCloseHandler} />
+        <AddToTemplateModal title={list.title} onClick={addTemplateModalCloseHandler} />
       )}
       {shareTemplateModalOpen && (
         <ModalForShare onClick={shareTemplateModalCloseHandler} inviteCode={list.inviteCode} />

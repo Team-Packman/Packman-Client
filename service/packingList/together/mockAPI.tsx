@@ -6,7 +6,6 @@ import {
   GetTogetherFolderOutput,
   GetTogetherPackingListDetailOutput,
 } from './index';
-import withAuth from '../../../utils/axios/withAuth';
 import {
   fetchGroupMember,
   fetchPackingListDetail,
@@ -34,9 +33,9 @@ export const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
       getGroupMembers: (groupId: string) => fetchGroupMember(request, groupId),
       getPackingListDeatil: (listId: string) => fetchPackingListDetail(request, listId),
       // 연결한 api
-      getTogetherFolder: () => fetchTogetherFolder(request),
+      getTogetherFolder: () => fetchTogetherFolder(),
       addTogetherPackingListFolder: (payload: AddTogetherPackingListIntroInput) =>
-        fetchAddTogetherPackingFolder(request, payload),
+        fetchAddTogetherPackingFolder(payload),
     },
   };
 };

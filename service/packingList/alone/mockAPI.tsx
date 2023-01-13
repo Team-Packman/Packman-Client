@@ -1,15 +1,10 @@
-import {
-  fetchPackingListIntro,
-  fetchPackingListWithFolders,
-} from '../../../utils/axios/packingList/alone/mock';
+import { fetchPackingListWithFolders } from '../../../utils/axios/packingList/alone/mock';
 import {
   AddAlonePackingListIntroOutput,
   AddAlonePackingListIntroInput,
   GetAloneFolderOutput,
   GetPackingListWithFoldersOutput,
 } from './index';
-import { AxiosInstance } from 'axios';
-import withAuth from '../../../utils/axios/withAuth';
 import {
   fetchAddAlonePackingFolder,
   fetchAloneFolder,
@@ -26,14 +21,14 @@ export interface AloneAPI {
   };
 }
 
-export const createAloneAPI = (request: AxiosInstance): AloneAPI => {
+export const createAloneAPI = (): AloneAPI => {
   return {
     alone: {
-      getPackingListWithFolders: () => fetchPackingListWithFolders(request),
+      getPackingListWithFolders: () => fetchPackingListWithFolders(),
       // 연결한 api
-      getAloneFolder: () => fetchAloneFolder(request),
+      getAloneFolder: () => fetchAloneFolder(),
       addAlonePackingListFolder: (payload: AddAlonePackingListIntroInput) =>
-        fetchAddAlonePackingFolder(request, payload),
+        fetchAddAlonePackingFolder(payload),
     },
   };
 };

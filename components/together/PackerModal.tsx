@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import { ProfileList } from '../../utils/profileImages';
+import Modal from '../common/Modal';
 
 export interface PackerInfoPayload {
   listId: string; // 패킹리스트 id
@@ -57,12 +58,12 @@ function PackerModal(props: PackerModalProps) {
     updatePacker(payload);
     modalHandler();
   };
+
   return (
-    <StyledRoot>
-      <StyledModal>
+    <Modal onClick={modalHandler}>
+      <Modal.Body>
         <StyledTitle>챙길 사람을 선택해주세요</StyledTitle>
         <StyledRandomButton onClick={StartDraw}>랜덤 배정</StyledRandomButton>
-
         <StyledPackerWrapper>
           {member.map(({ id, nickname, profileImage }) => (
             <StyledPacker key={id} onClick={() => setSelected(id)}>
@@ -79,52 +80,24 @@ function PackerModal(props: PackerModalProps) {
             </StyledPacker>
           ))}
         </StyledPackerWrapper>
-
-        <StyledConfirmButton selected={selected !== ''} onClick={clickHandler}>
-          배정 완료
-        </StyledConfirmButton>
-      </StyledModal>
-      <StyledBg onClick={modalHandler} />
-    </StyledRoot>
+      </Modal.Body>
+      <Modal.Controls
+        controls={
+          <StyledConfirmButton selected={selected !== ''} onClick={clickHandler}>
+            배정 완료
+          </StyledConfirmButton>
+        }
+      />
+    </Modal>
   );
 }
 
 export default PackerModal;
 
-const StyledRoot = styled.div`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 99999;
-`;
-
-const StyledBg = styled.div`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 45;
-`;
-const StyledModal = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 32rem;
-  height: 40.2rem;
-  border-radius: 0.8rem;
-  background-color: ${packmanColors.pmWhite};
-  padding: 0 1.6rem;
-  z-index: 46;
-`;
-
 const StyledTitle = styled.div`
   font-weight: 600;
   font-size: 1.6rem;
   text-align: center;
-  margin-top: 4.3rem;
 `;
 
 const StyledRandomButton = styled.button`
