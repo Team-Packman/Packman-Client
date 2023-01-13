@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
-function useBoolean() {
-  const [boolean, setBoolean] = useState(false);
+function useBoolean(initial: boolean): [boolean, VoidFunction, VoidFunction, VoidFunction] {
+  const [boolean, setBoolean] = useState<boolean>(initial);
 
   const setTrue = useCallback(() => {
     setBoolean(true);

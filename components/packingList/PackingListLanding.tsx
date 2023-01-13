@@ -5,7 +5,7 @@ import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
-import Modal from '../common/Modal';
+import Modal from '../common/ModalLegacy';
 import Layout from '../common/Layout';
 import SwipeableList from './SwipeableList';
 import SwipeablelistItem from './SwipeableListItem';
