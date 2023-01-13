@@ -3,10 +3,7 @@ import {
   AddAlonePackingListIntroOutput,
   GetPackingListWithFoldersOutput,
 } from './../../../../service/packingList/alone/index';
-import { AxiosInstance } from 'axios';
-export const fetchPackingListWithFolders = async (
-  request: AxiosInstance,
-): Promise<GetPackingListWithFoldersOutput> => {
+export const fetchPackingListWithFolders = async (): Promise<GetPackingListWithFoldersOutput> => {
   return new Promise((r) =>
     setTimeout(() => {
       r({
@@ -59,7 +56,6 @@ export const fetchPackingListWithFolders = async (
 };
 
 export const fetchPackingListIntro = async (
-  request: AxiosInstance,
   info: AddAlonePackingListIntroInput,
 ): Promise<AddAlonePackingListIntroOutput> => {
   return new Promise((r) =>
