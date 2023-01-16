@@ -12,7 +12,7 @@ function InventoryDeleteButton(props: PropsWithChildren<InventoryDeleteButtonPro
 
   return (
     <StyledRoot>
-      <Button onClick={onClick}>{children}</Button>
+      <Button.LongButton onClick={onClick}>{children}</Button.LongButton>
     </StyledRoot>
   );
 }
@@ -20,6 +20,7 @@ function InventoryDeleteButton(props: PropsWithChildren<InventoryDeleteButtonPro
 export default InventoryDeleteButton;
 
 const StyledRoot = styled.div`
+  width: calc(100vw - 4rem);
   position: fixed;
   bottom: 1.5rem;
 `;
