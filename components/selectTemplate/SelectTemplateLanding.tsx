@@ -9,8 +9,8 @@ import Layout from '../common/Layout';
 import Link from 'next/link';
 import CustomImage from '../common/CustomImage';
 import Button from '../common/Button';
-import { basicTemplateImageList, randomImageList } from '../../utils/constant/select-template';
 import useBoolean from '../../utils/hooks/common/useBoolean';
+import { basicTemplateImageList, randomImageList } from '../../utils/constant/select-template';
 
 interface Itemplate {
   id: string;
@@ -89,10 +89,10 @@ function SelectTemplateLanding() {
 
         <StyledButtonWrapper>
           <Link href={`/list-intro?id=&type=${type}&folderId=${folderId}`}>
-            <Button.CancelButton>건너뛰기</Button.CancelButton>
+            <Button outline>건너뛰기</Button>
           </Link>
           <Link href={`/preview?id=${templateId}&type=${type}&folderId=${folderId}`}>
-            <Button.ConfirmButton isActive={isActive}>확인</Button.ConfirmButton>
+            <Button disabled={!isActive}>확인</Button>
           </Link>
         </StyledButtonWrapper>
       </StyledRoot>

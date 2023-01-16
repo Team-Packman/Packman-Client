@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../common/Button';
 import styled from 'styled-components';
+import { packmanColors } from '../../styles/color';
 
 interface DeleteInventoryButtonProps {
   cancel: VoidFunction;
@@ -12,8 +13,11 @@ function DeleteInventoryListModalButton(props: DeleteInventoryButtonProps) {
 
   return (
     <StyledRoot>
-      <Button.CancelButton onClick={cancel}>아니오</Button.CancelButton>
-      <Button.ConfirmButton onClick={deleteList}>네</Button.ConfirmButton>
+      <Button onClick={cancel} color={packmanColors.pmDeepGrey} background={packmanColors.pmWhite}>
+        아니오
+      </Button>
+
+      <Button onClick={deleteList}>네</Button>
     </StyledRoot>
   );
 }

@@ -18,7 +18,6 @@ import Link from 'next/link';
 import useDynamic from '../../utils/hooks/useDynamic';
 import InventoryDeleteButton from './InventoryDeleteButton';
 import useBoolean from '../../utils/hooks/common/useBoolean';
-import Modal from '../common/Modal';
 import DeleteInventoryListModal from './DeleteInventoryListModal';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
