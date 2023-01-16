@@ -17,6 +17,8 @@ import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
 import Link from 'next/link';
 import useDynamic from '../../utils/hooks/useDynamic';
+import Button from '../common/Button';
+import InventoryDeleteButton from './InventoryDeleteButton';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
@@ -272,17 +274,13 @@ function PackingListLanding() {
           </>
         )}
         {isDeleting && (
-          <StyledButtonWrapper>
-            <StyledDeleteButton>
-              <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
-                {!deleteList.length
-                  ? ' 전체 선택'
-                  : deleteList.length === (togetherPackingList ?? alonePackingList).length
-                  ? '전체 삭제'
-                  : '선택 삭제'}
-              </div>
-            </StyledDeleteButton>
-          </StyledButtonWrapper>
+          <InventoryDeleteButton onClick={!deleteList.length ? onClickDeleteButton : openModal}>
+            {!deleteList.length
+              ? ' 전체 선택'
+              : deleteList.length === (togetherPackingList ?? alonePackingList).length
+              ? '전체 삭제'
+              : '선택 삭제'}
+          </InventoryDeleteButton>
         )}
 
         {!isDeleting && (
@@ -375,19 +373,4 @@ const StyledModalButton = styled.button<{ left?: boolean }>`
   background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
   border-radius: 0.8rem;
   ${FONT_STYLES.BODY4_SEMIBOLD};
-`;
-const StyledButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const StyledDeleteButton = styled.button`
-  position: fixed;
-  bottom: 1.507rem;
-  width: calc(100vw - 4rem);
-  height: 4.7rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
-  background-color: ${packmanColors.pmPink};
-  color: #fff;
-  border: none;
-  border-radius: 0.5rem;
 `;
