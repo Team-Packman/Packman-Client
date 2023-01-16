@@ -35,8 +35,10 @@ const StyledButton = styled.button<{
   display: flex;
   justify-content: center;
   align-items: center;
+
   width: 100%;
   height: 100%;
+
   ${FONT_STYLES.BODY4_SEMIBOLD};
   border: 1px solid ${({ color }) => color};
   border-radius: 0.8rem;

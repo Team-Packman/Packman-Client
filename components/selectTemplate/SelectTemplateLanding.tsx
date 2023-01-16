@@ -105,11 +105,12 @@ function SelectTemplateLanding() {
 
 export default SelectTemplateLanding;
 const StyledRoot = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+
+  height: 100%;
 `;
 const StyledTemplateWrapper = styled.div`
   display: flex;

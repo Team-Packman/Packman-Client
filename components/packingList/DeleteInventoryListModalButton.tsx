@@ -30,9 +30,10 @@ export default DeleteInventoryListModalButton;
 
 const StyledRoot = styled.div`
   display: flex;
+  justify-content: space-between;
+
   width: 100%;
   height: 3.4rem;
-  justify-content: space-between;
   & button:not(:last-child) {
     margin-right: 0.8rem;
   }
