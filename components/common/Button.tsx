@@ -1,27 +1,25 @@
-import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 
 interface ButtonProps {
-  children: ReactNode;
   onClick?: VoidFunction;
   color?: string;
   background?: string;
   disabled?: boolean;
-  outline?: boolean;
 }
 function Button(props: PropsWithChildren<ButtonProps>) {
-  const { children, onClick, color, background, disabled, outline } = props;
+  const {
+    children,
+    onClick,
+    color = packmanColors.pmWhite,
+    background = packmanColors.pmPink,
+    disabled = false,
+  } = props;
 
   return (
-    <StyledButton
-      onClick={onClick}
-      color={color || packmanColors.pmWhite}
-      background={background || packmanColors.pmPink}
-      disabled={disabled || false}
-      outline={outline || false}
-    >
+    <StyledButton onClick={onClick} color={color} background={background} disabled={disabled}>
       {children}
     </StyledButton>
   );
@@ -33,7 +31,6 @@ const StyledButton = styled.button<{
   color: string;
   background: string;
   disabled: boolean;
-  outline: boolean;
 }>`
   display: flex;
   justify-content: center;
@@ -52,13 +49,5 @@ const StyledButton = styled.button<{
       color: ${packmanColors.pmWhite};
       border: 1px solid ${packmanColors.pmGrey};
       background-color: ${packmanColors.pmGrey};
-    `}
-
-  ${({ outline }) =>
-    outline &&
-    css`
-      color: ${packmanColors.black};
-      border: 1px solid ${packmanColors.black};
-      background-color: ${packmanColors.pmWhite};
     `}
 `;

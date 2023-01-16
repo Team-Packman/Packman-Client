@@ -7,12 +7,12 @@ import DeleteInventoryButton from './DeleteInventoryListModalButton';
 interface DeleteInventoryListModalProps {
   title: string;
   onClick: VoidFunction;
-  cancel: VoidFunction;
-  deleteList: VoidFunction;
+  onCancel: VoidFunction;
+  onDelete: VoidFunction;
 }
 
 function DeleteInventoryListModal(props: DeleteInventoryListModalProps) {
-  const { title, onClick, cancel, deleteList } = props;
+  const { title, onClick, onCancel, onDelete } = props;
 
   return (
     <Modal onClick={onClick}>
@@ -20,7 +20,7 @@ function DeleteInventoryListModal(props: DeleteInventoryListModalProps) {
         <StyledTitle>{title}</StyledTitle>
       </Modal.Body>
       <Modal.Controls
-        controls={<DeleteInventoryButton cancel={cancel} deleteList={deleteList} />}
+        controls={<DeleteInventoryButton onCancel={onCancel} onDelete={onDelete} />}
       />
     </Modal>
   );

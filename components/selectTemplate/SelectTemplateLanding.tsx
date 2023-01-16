@@ -11,6 +11,7 @@ import CustomImage from '../common/CustomImage';
 import Button from '../common/Button';
 import useBoolean from '../../utils/hooks/common/useBoolean';
 import { basicTemplateImageList, randomImageList } from '../../utils/constant/select-template';
+import { packmanColors } from '../../styles/color';
 
 interface Itemplate {
   id: string;
@@ -89,7 +90,9 @@ function SelectTemplateLanding() {
 
         <StyledButtonWrapper>
           <Link href={`/list-intro?id=&type=${type}&folderId=${folderId}`}>
-            <Button outline>건너뛰기</Button>
+            <Button color={packmanColors.pmBlack} background={packmanColors.pmWhite}>
+              건너뛰기
+            </Button>
           </Link>
           <Link href={`/preview?id=${templateId}&type=${type}&folderId=${folderId}`}>
             <Button disabled={!isActive}>확인</Button>

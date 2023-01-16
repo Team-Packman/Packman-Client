@@ -200,8 +200,8 @@ function PackingListLanding() {
         <DeleteInventoryListModal
           title="정말 삭제하시겠어요?"
           onClick={closeModal}
-          cancel={closeModal}
-          deleteList={deleteListItem}
+          onCancel={closeModal}
+          onDelete={deleteListItem}
         />
       )}
       <StyledRoot onClick={() => isDropBoxOpen && setDropBoxClose()}>

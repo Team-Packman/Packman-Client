@@ -4,20 +4,24 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 
 interface DeleteInventoryButtonProps {
-  cancel: VoidFunction;
-  deleteList: VoidFunction;
+  onCancel: VoidFunction;
+  onDelete: VoidFunction;
 }
 
 function DeleteInventoryListModalButton(props: DeleteInventoryButtonProps) {
-  const { cancel, deleteList } = props;
+  const { onCancel, onDelete } = props;
 
   return (
     <StyledRoot>
-      <Button onClick={cancel} color={packmanColors.pmDeepGrey} background={packmanColors.pmWhite}>
+      <Button
+        onClick={onCancel}
+        color={packmanColors.pmDeepGrey}
+        background={packmanColors.pmWhite}
+      >
         아니오
       </Button>
 
-      <Button onClick={deleteList}>네</Button>
+      <Button onClick={onDelete}>네</Button>
     </StyledRoot>
   );
 }
