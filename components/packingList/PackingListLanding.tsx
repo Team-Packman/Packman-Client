@@ -5,7 +5,6 @@ import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
-import Modal from '../common/ModalLegacy';
 import Layout from '../common/Layout';
 import SwipeableList from './SwipeableList';
 import SwipeablelistItem from './SwipeableListItem';
@@ -17,6 +16,9 @@ import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
 import Link from 'next/link';
 import useDynamic from '../../utils/hooks/useDynamic';
+import InventoryDeleteButton from './InventoryDeleteButton';
+import useBoolean from '../../utils/hooks/common/useBoolean';
+import DeleteInventoryListModal from './DeleteInventoryListModal';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
@@ -26,10 +28,12 @@ function PackingListLanding() {
   const id = router.query.id as string;
   const type = router.query.type as string;
 
-  const [toggle, setToggle] = useState(false);
+  const [isDropBoxOpen, toggle, setDropBoxClose] = useBoolean(false);
+  const [isModalOpen, setModalOpen, setModalClose] = useBoolean(false);
+
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteList, setDeleteList] = useState<string[]>([]);
-  const [showModal, setShowModal] = useState(false);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isSwiped, setIsSwiped] = useState(false);
 
@@ -99,13 +103,13 @@ function PackingListLanding() {
 
   const openModal = () => {
     document.body.style.overflow = 'hidden';
-    setShowModal((prev) => !prev);
+    setModalOpen();
   };
 
   const closeModal = () => {
     resetIsDragged();
     document.body.style.overflow = 'unset';
-    setShowModal(false);
+    setModalClose();
   };
 
   const deleteListItem = () => {
@@ -146,7 +150,7 @@ function PackingListLanding() {
 
     // 폴더 이름과 삼각형 아이콘을 클릭했을 때만 toggle되도록 함
     if (e.target instanceof HTMLDivElement) return;
-    setToggle((prev) => !prev);
+    toggle();
   };
 
   const handleFloatClick = (index: number) => {
@@ -185,39 +189,29 @@ function PackingListLanding() {
 
   const resetSwipableListItem = () => {
     const checkIsDragged = isDragged.every((item) => !item);
-    if (!checkIsDragged && !showModal) {
+    if (!checkIsDragged && !isModalOpen) {
       resetIsDragged();
     }
   };
 
   return (
     <Layout back title="리스트 목록" icon="profile">
-      {showModal && (
-        <Modal
+      {isModalOpen && (
+        <DeleteInventoryListModal
           title="정말 삭제하시겠어요?"
-          closeModal={closeModal}
-          button={
-            <StyledModalButtonWrapper>
-              <StyledModalButton left onClick={closeModal}>
-                아니요
-              </StyledModalButton>
-              <StyledModalButton onClick={deleteListItem}>네</StyledModalButton>
-            </StyledModalButtonWrapper>
-          }
+          onClick={closeModal}
+          onCancel={closeModal}
+          onDelete={deleteListItem}
         />
       )}
-      <StyledRoot
-        onClick={() => {
-          toggle && setToggle(false);
-        }}
-      >
+      <StyledRoot onClick={() => isDropBoxOpen && setDropBoxClose()}>
         <StyledFolderInfo onClick={onClickFolderInfo}>
           <h1>{currentFolder.name}</h1>
           <div>
-            <StyledToggleImage toggle={toggle.toString()}>
+            <StyledToggleImage toggle={isDropBoxOpen}>
               <Image src={iShowMore} alt="상세보기" layout="fill" />
             </StyledToggleImage>
-            {toggle && (
+            {isDropBoxOpen && (
               <DropBox>
                 {folder.map(({ id, name }) => (
                   <Link key={id} href={`/packing-list?type=${type}&id=${id}`}>
@@ -272,17 +266,13 @@ function PackingListLanding() {
           </>
         )}
         {isDeleting && (
-          <StyledButtonWrapper>
-            <StyledDeleteButton>
-              <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
-                {!deleteList.length
-                  ? ' 전체 선택'
-                  : deleteList.length === (togetherPackingList ?? alonePackingList).length
-                  ? '전체 삭제'
-                  : '선택 삭제'}
-              </div>
-            </StyledDeleteButton>
-          </StyledButtonWrapper>
+          <InventoryDeleteButton onClick={!deleteList.length ? onClickDeleteButton : openModal}>
+            {!deleteList.length
+              ? ' 전체 선택'
+              : deleteList.length === (togetherPackingList ?? alonePackingList).length
+              ? '전체 삭제'
+              : '선택 삭제'}
+          </InventoryDeleteButton>
         )}
 
         {!isDeleting && (
@@ -337,11 +327,11 @@ const StyledItem = styled.div<{ currentId: boolean }>`
     border-bottom: 1px solid ${packmanColors.pmGrey};
   }
 `;
-const StyledToggleImage = styled.div<{ toggle: string }>`
+const StyledToggleImage = styled.div<{ toggle: boolean }>`
   width: 2.4rem;
   height: 2.4rem;
   transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle === 'true' ? 'rotate(180deg)' : 'rotate(0deg)')};
+  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;
@@ -358,36 +348,4 @@ const StyledEmpty = styled.div`
   text-align: center;
   color: ${packmanColors.pmGrey};
   ${FONT_STYLES.HEADLINE1_MEDIUM};
-`;
-
-const StyledModalButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 2.1rem;
-`;
-const StyledModalButton = styled.button<{ left?: boolean }>`
-  width: 13.5rem;
-  height: 3.4rem;
-  border: ${({ left }) => (left ? `1px solid ${packmanColors.pmDeepGrey}` : 'none')};
-  color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
-  background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
-  border-radius: 0.8rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
-`;
-const StyledButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const StyledDeleteButton = styled.button`
-  position: fixed;
-  bottom: 1.507rem;
-  width: calc(100vw - 4rem);
-  height: 4.7rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
-  background-color: ${packmanColors.pmPink};
-  color: #fff;
-  border: none;
-  border-radius: 0.5rem;
 `;
