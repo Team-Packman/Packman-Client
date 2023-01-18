@@ -60,7 +60,7 @@ export const StyledRoot = styled.div<{ isRecentListExist: boolean }>`
   flex: 1;
   flex-direction: column;
   align-items: center;
-  width: calc(100% - 4rem);
+  width: 100%;
   overflow-y: auto;
   margin-top: ${({ isRecentListExist }) => (isRecentListExist ? '0' : '4.2rem')};
 `;
