@@ -7,6 +7,7 @@ import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import ChipButton from '../common/ChipButton';
 interface PackingList {
   id: string;
   departureDate: string;
@@ -121,7 +122,7 @@ export default function SwipeablelistItem(props: ItemProps) {
             <p>{departureDate}</p>
             <p>{title}</p>
             <StyledPackInfo>
-              <span>총 {packTotalNum}개의 짐</span>
+              <ChipButton text={`총 ${packTotalNum}개의 짐`} />
               {packRemainNum !== '0' ? (
                 <StyledPackRemainText>
                   아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
@@ -254,19 +255,6 @@ const StyledPackInfo = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 28.1rem;
-
-  & > span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 8.3rem;
-    height: 2.4rem;
-    color: ${packmanColors.pmBlack};
-    ${FONT_STYLES.BODY1_REGULAR};
-    border: 0.1rem solid ${packmanColors.pmPink};
-    border-radius: 1.2rem;
-    text-align: center;
-  }
 `;
 const StyledPackRemainText = styled.p`
   position: absolute;
