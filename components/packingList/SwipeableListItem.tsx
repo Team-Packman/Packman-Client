@@ -16,31 +16,27 @@ interface PackingList {
 }
 
 interface ItemProps {
-  idx: number;
-  handleIsDragged: (tmpArr: boolean[]) => void;
-  isDragged: boolean[];
-  isDeleting: boolean;
-  deleteList: string[];
-  checkDeleteList: (id: string) => void;
-  onClickDeleteButton: (idx: number) => void;
-  packingList: PackingList[];
-  handleIsScrolled: (isScrolled: boolean) => void;
+  swipe: (item?: string) => void;
+  isSwiped: Set<string>;
+  isDeletingMode: boolean;
+  deleteList: Set<string>;
+  modifyDeleteList: (id: string) => void;
+  packingList: PackingList;
+  deleteSingleListItem: (id: string) => void;
 }
 
 export default function SwipeablelistItem(props: ItemProps) {
   const {
-    idx,
-    handleIsDragged,
-    isDragged,
-    isDeleting,
+    swipe,
+    isSwiped,
+    isDeletingMode,
     deleteList,
-    checkDeleteList,
-    onClickDeleteButton,
+    modifyDeleteList,
     packingList,
-    handleIsScrolled,
+    deleteSingleListItem,
   } = props;
 
-  const { id, departureDate, title, packTotalNum, packRemainNum } = packingList[idx];
+  const { id, departureDate, title, packTotalNum, packRemainNum } = packingList;
   const router = useRouter();
   const { type } = router.query;
 
@@ -48,11 +44,8 @@ export default function SwipeablelistItem(props: ItemProps) {
     let isSwiping = false;
     let isScrolling = false;
 
-    handleIsScrolled(false); // 터치를 하면 무조건 스크롤 가능하게 초기화
-
     const startX = e.targetTouches[0].clientX;
     const startY = e.targetTouches[0].clientY;
-    let tmpArr = Array(packingList?.length).fill(false);
 
     function Move(e: TouchEvent) {
       if (isSwiping) return;
@@ -60,31 +53,23 @@ export default function SwipeablelistItem(props: ItemProps) {
       const endX = e.targetTouches[0].clientX;
       const endY = e.targetTouches[0].clientY;
 
-      // 기울기 40~45도 이상으로 대각선 스와이핑하면 상하 스크롤 실행
+      // 기울기 40~45도 이상으로 대각선 스와이핑하면 수직 스와이핑 실행
       if (Math.abs((startY - endY) / (startX - endX)) > 0.25) {
-        handleIsScrolled(false);
-        handleIsDragged(Array(packingList?.length).fill(false));
+        swipe();
         isScrolling = true;
         return;
       }
       //  아이템의 우측하단에서 좌측상단으로 대각선 스와이핑 했을 때는 열림
 
-      if (isScrolling) return; // 상하 스크롤 중이면 좌우 스와이핑 막음
+      if (isScrolling) return; // 수직 스와이핑 중이면 좌우 스와이핑 방지
 
-      // 우측에서 좌측으로 스와이프해서 아이템을 여는 경우
+      // 수평으로 스와이프해서 아이템을 여는 경우
       if (startX - endX > 0) {
-        handleIsScrolled(true); // 상하 스크롤 막기
-        isSwiping = true; // 스와이핑 중으로 변경
-        tmpArr = tmpArr.map((_, index) => (idx === index ? true : false));
-        handleIsDragged(tmpArr); // 배열 수정
+        isSwiping = true;
+        open();
       }
-      // 닫기
       if (endX - startX > 0) {
-        // 열려있던 경우에만 닫기
-        if (isDragged[idx]) {
-          handleIsDragged(tmpArr);
-        }
-        handleIsScrolled(false);
+        close();
       }
     }
     function End() {
@@ -95,26 +80,36 @@ export default function SwipeablelistItem(props: ItemProps) {
     document.addEventListener('touchend', End);
   };
 
+  const open = () => {
+    swipe(id);
+  };
+
+  const close = () => {
+    if (isSwiped.has(id)) {
+      swipe(id);
+    }
+  };
+
   return (
-    <StyledRoot isDeleting={isDeleting}>
-      {isDeleting && (
+    <StyledRoot isDeletingMode={isDeletingMode}>
+      {isDeletingMode && (
         <StyledSelectDelete>
           <Image
-            src={deleteList.includes(id) ? iCheckPink : iCheck}
+            src={deleteList.has(id) ? iCheckPink : iCheck}
             alt="check"
-            onClick={() => checkDeleteList(id)}
+            onClick={() => modifyDeleteList(id)}
             layout="fill"
           />
         </StyledSelectDelete>
       )}
-      <Link href={!isDeleting && isDragged.every((item) => !item) ? `/${type}?id=${id}` : '#'}>
+      <Link href={!isDeletingMode && !isSwiped.size ? `/${type}?id=${id}` : '#'}>
         <StyledItemWrapper
           onTouchStart={onTouchStart}
-          isDragged={isDragged[idx]}
-          isDeleting={isDeleting}
+          isSwiped={isSwiped.has(id)}
+          isDeletingMode={isDeletingMode}
           onClick={() => {
-            !isDragged.every((item) => !item) &&
-              handleIsDragged(Array(packingList?.length).fill(false));
+            swipe();
+            modifyDeleteList(id);
           }}
         >
           <StyledItemInfo>
@@ -148,12 +143,12 @@ export default function SwipeablelistItem(props: ItemProps) {
         </StyledItemWrapper>
       </Link>
 
-      {!isDeleting && (
+      {!isDeletingMode && (
         <StyledDeleteButton
-          isDragged={isDragged[idx]}
+          isSwiped={isSwiped.has(id)}
           onClick={() => {
             // 아이템 삭제
-            onClickDeleteButton(idx);
+            deleteSingleListItem(id);
           }}
         >
           <div>삭제</div>
@@ -163,10 +158,10 @@ export default function SwipeablelistItem(props: ItemProps) {
   );
 }
 
-const StyledRoot = styled.div<{ isDeleting: boolean }>`
+const StyledRoot = styled.div<{ isDeletingMode: boolean }>`
   position: relative;
   display: flex;
-  justify-content: ${({ isDeleting }) => !isDeleting && 'center'};
+  justify-content: ${({ isDeletingMode }) => !isDeletingMode && 'center'};
   align-items: center;
   width: 100%;
   height: 10.8rem;
@@ -185,7 +180,7 @@ const StyledSelectDelete = styled.div`
   height: 2.4rem;
 `;
 
-const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boolean }>`
+const StyledItemWrapper = styled.article<{ isSwiped: boolean; isDeletingMode: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -206,10 +201,10 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   -ms-user-select: none;
   user-select: none;
 
-  ${({ isDragged, isDeleting }) => {
-    switch (isDeleting) {
+  ${({ isSwiped, isDeletingMode }) => {
+    switch (isDeletingMode) {
       case false:
-        return isDragged
+        return isSwiped
           ? css`
               transform: translateX(-4.7rem);
               -webkit-transform: 0.4s translateX(-4.7rem);
@@ -279,7 +274,7 @@ const StyledPackRemainText = styled.p`
   }
 `;
 
-const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
+const StyledDeleteButton = styled.div<{ isSwiped: boolean }>`
   position: absolute;
   right: 0;
   display: flex;
@@ -291,9 +286,9 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   color: ${packmanColors.pmWhite};
   transition: 0.4s ease-in-out;
   -webkit-transition: 0.4s ease-in-out;
-  transform: ${({ isDragged }) => (isDragged ? 'translateX(0rem)' : 'translateX(5.6rem)')};
-  -webkit-transform: ${({ isDragged }) => (isDragged ? 'translateX(0rem)' : 'translateX(5.6rem)')};
-  opacity: ${({ isDragged }) => (isDragged ? '1' : '0')};
+  transform: ${({ isSwiped }) => (isSwiped ? 'translateX(0rem)' : 'translateX(5.6rem)')};
+  -webkit-transform: ${({ isSwiped }) => (isSwiped ? 'translateX(0rem)' : 'translateX(5.6rem)')};
+  opacity: ${({ isSwiped }) => (isSwiped ? '1' : '0')};
 
   & > div {
     color: ${packmanColors.pmWhite};
