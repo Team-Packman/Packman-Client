@@ -157,56 +157,34 @@ function ManagingMemberLanding() {
           )}
         </WithMembersLabelAndEdit>
         <WithMembers>
-          {members.map((member, index: number) => {
-            if (index === 0) {
-              return (
-                <Member key={index}>
-                  <Crown>
-                    <Image src={'/assets/png/crown.png'} alt="왕관" layout="fill" />
-                  </Crown>
-                  <MemberImage index={index}>
-                    <Image
-                      src={ProfileList[+member.profileImage]}
-                      width={64}
-                      height={64}
-                      alt="profile_image"
-                      priority
-                      layout="responsive"
-                    />
-                  </MemberImage>
-                  <MemberName>{member.nickname}</MemberName>
-                </Member>
-              );
-            }
-            return (
-              <Member key={index}>
-                <MemberImage index={index}>
-                  <Image
-                    src={ProfileList[+member.profileImage]}
-                    width={64}
-                    height={64}
-                    alt="profile_image"
-                    priority
-                    layout="responsive"
-                  />
-                </MemberImage>
-                <MemberName>{member.nickname}</MemberName>
-                <RemoveButton
-                  onClick={() => {
-                    deleteMember(member.id);
-                  }}
-                  isEditing={isEditing}
-                >
-                  <Image
-                    src={'/assets/png/removeMember.png'}
-                    alt="삭제"
-                    layout="fill"
-                    loading="eager"
-                  />
-                </RemoveButton>
-              </Member>
-            );
-          })}
+          {members.map((member, index: number) => (
+            <Member key={index}>
+              {index === 0 && (
+                <Crown>
+                  <Image src={'/assets/png/crown.png'} alt="왕관" layout="fill" />
+                </Crown>
+              )}
+              <MemberImage index={index}>
+                <Image
+                  src={ProfileList[+member.profileImage]}
+                  width={64}
+                  height={64}
+                  alt="profile_image"
+                  priority
+                  layout="responsive"
+                />
+              </MemberImage>
+              <MemberName>{member.nickname}</MemberName>
+              <RemoveButton onClick={() => deleteMember(member.id)} isEditing={isEditing}>
+                <Image
+                  src={'/assets/png/removeMember.png'}
+                  alt="삭제"
+                  layout="fill"
+                  loading="eager"
+                />
+              </RemoveButton>
+            </Member>
+          ))}
         </WithMembers>
         <InviteOtherMember length={members.length}>
           함께 패킹할 멤버를 초대해보세요
