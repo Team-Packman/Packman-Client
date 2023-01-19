@@ -69,6 +69,10 @@ export const GlobalStyle = createGlobalStyle`
     input[type="checkbox"]:checked::after {
         display: block;
     }
+    a{
+        color:inherit;
+        text-decoration:none;
+    }
 `;
 
 function createTransitionQuery() {
