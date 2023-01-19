@@ -32,7 +32,7 @@ function DropBox(props: DropBoxProps) {
   };
 
   return (
-    <Dropdown isOpen={isOpen} toggleDropdown={toggleDropdown} dropdownStyle={dropdownStyle}>
+    <Dropdown isOpen={isOpen} toggle={toggleDropdown} dropdownStyle={dropdownStyle}>
       <Dropdown.Trigger
         as={
           <StyledToggleImage toggle={isOpen} onClick={toggleDropdown}>

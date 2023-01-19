@@ -5,7 +5,7 @@ import { packmanColors } from '../../styles/color';
 
 interface DropdownProps {
   isOpen: boolean;
-  toggleDropdown: VoidFunction;
+  toggle: VoidFunction;
   dropdownStyle?: CSSProp;
 }
 
@@ -20,7 +20,7 @@ interface ItemProps {
 }
 
 interface BackgroundProps {
-  onClick: VoidFunction;
+  onClick?: VoidFunction;
 }
 interface TriggerProps {
   as: ReactElement;
@@ -28,14 +28,14 @@ interface TriggerProps {
 
 export const DropdownContext = createContext({
   isOpen: false,
-  toggleDropdown: () => {},
+  toggle: () => {},
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
-  const { children, isOpen, toggleDropdown, dropdownStyle } = props;
+  const { children, isOpen, toggle, dropdownStyle } = props;
 
   return (
-    <DropdownContext.Provider value={{ isOpen, toggleDropdown }}>
+    <DropdownContext.Provider value={{ isOpen, toggle }}>
       <StyledDropdown dropdownStyle={dropdownStyle}>{children}</StyledDropdown>
     </DropdownContext.Provider>
   );
@@ -48,13 +48,13 @@ Dropdown.Background = function Background(props: BackgroundProps) {
 
 Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
   const { children, dropdownMenuStyle } = props;
-  const { isOpen, toggleDropdown } = useContext(DropdownContext);
+  const { isOpen, toggle } = useContext(DropdownContext);
 
   return (
     <>
       {isOpen && (
         <StyledMenu dropdownMenuStyle={dropdownMenuStyle}>
-          <Dropdown.Background onClick={toggleDropdown} />
+          <Dropdown.Background onClick={toggle} />
           {children}
         </StyledMenu>
       )}
