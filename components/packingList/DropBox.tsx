@@ -3,45 +3,73 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import Dropdown from '../common/Dropdown';
-import { ReactElement } from 'react';
+import { useState } from 'react';
+import iShowMore from '../../public/assets/svg/iShowMore.svg';
+import Image from 'next/image';
 
 interface DropBoxProps {
-  trigger: ReactElement;
   folders: Array<{ id: string; name: string }>;
   link: string;
-  current: string;
-  onReset: VoidFunction;
-  isOpen: boolean;
+  currentFolder: {
+    id: string;
+    name: string;
+  };
+  onClick: VoidFunction;
 }
 
 function DropBox(props: DropBoxProps) {
-  const { trigger, folders, link, current, onReset, isOpen } = props;
+  const {
+    folders,
+    link,
+    currentFolder: { id: currentId },
+    onClick,
+  } = props;
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+    onClick();
+  };
 
   return (
-    <>
-      <Dropdown.Trigger as={trigger} />
-      <StyledRoot>
-        <Dropdown>
-          {isOpen && (
-            <Dropdown.Menu>
-              {folders.map(({ id, name }) => (
-                <Link key={id} href={`${link}${id}`}>
-                  <StyledItem onClick={onReset} currentId={id === current}>
-                    <Dropdown.Item>{name}</Dropdown.Item>
+    <StyledRoot>
+      <Dropdown isOpen={isOpen} toggleDropdown={toggleDropdown}>
+        <Dropdown.Trigger
+          as={
+            <StyledToggleImage toggle={isOpen} onClick={toggleDropdown}>
+              <Image src={iShowMore} alt="상세보기" layout="fill" />
+            </StyledToggleImage>
+          }
+        />
+        <StyledMenu>
+          <Dropdown.Menu>
+            {folders.map(({ id, name }) => (
+              <Dropdown.Item key={id}>
+                <Link href={`${link}${id}`}>
+                  <StyledItem currentId={id === currentId} onClick={toggleDropdown}>
+                    {name}
                   </StyledItem>
                 </Link>
-              ))}
-            </Dropdown.Menu>
-          )}
-        </Dropdown>
-      </StyledRoot>
-    </>
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </StyledMenu>
+      </Dropdown>
+    </StyledRoot>
   );
 }
 
 export default DropBox;
 
 const StyledRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 0.8rem;
+`;
+
+const StyledMenu = styled.div`
   position: absolute;
   top: 4.2rem;
 
@@ -74,4 +102,12 @@ const StyledItem = styled.div<{ currentId: boolean }>`
   &:not(:last-child) {
     border-bottom: 1px solid ${packmanColors.pmGrey};
   }
+`;
+
+const StyledToggleImage = styled.div<{ toggle: boolean }>`
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+  transition: 0.2s ease-in-out;
+  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
