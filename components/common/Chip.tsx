@@ -2,20 +2,20 @@ import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 
-interface ChipButtonProps {
+interface ChipProps {
   text: string;
 }
 
-function ChipButton(props: ChipButtonProps) {
+function Chip(props: ChipProps) {
   const { text } = props;
-  return <StyledChipButton>{text}</StyledChipButton>;
+  return <StyledChip>{text}</StyledChip>;
 }
 
-export default ChipButton;
+export default Chip;
 
-const StyledChipButton = styled.p`
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+const StyledChip = styled.p`
   width: fit-content;
+  font-style: ${FONT_STYLES.BODY1_REGULAR};
   padding: 0.1rem 1rem;
   color: ${packmanColors.pmBlack};
   border-radius: 1.2rem;

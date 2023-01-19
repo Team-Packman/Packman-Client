@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
-import ChipButton from './ChipButton';
+import Chip from './Chip';
 
 interface HeaderBannerProps {
   title: string;
@@ -28,7 +28,7 @@ const showSubTitle = (subTitle: string) => {
     return trimSubTitle;
   } else {
     const trimChipText = `총 ${subTitle}개의 짐`;
-    return <ChipButton text={trimChipText} />;
+    return <Chip text={trimChipText} />;
   }
 };
 
@@ -75,15 +75,17 @@ function HeaderBanner(props: HeaderBannerProps) {
 export default HeaderBanner;
 
 const StyledHeaderBanner = styled.section`
-  height: 8.4rem;
-  margin: 1rem 0 4.5rem 0;
-  background-color: ${packmanColors.pmBlueGrey};
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  width: 100%;
+  height: 8.4rem;
+
+  margin: 1rem 0 4.5rem 0;
   padding: 0 2rem;
   border-radius: 1rem;
-  width: 100%;
+  background-color: ${packmanColors.pmBlueGrey};
 `;
 
 const StyledLeft = styled.div`
@@ -93,10 +95,11 @@ const StyledLeft = styled.div`
 `;
 
 const StyledRight = styled.div`
-  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   display: flex;
   flex-direction: column;
   align-items: end;
+
+  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
 `;
 
 const StyledTitle = styled.h2`
