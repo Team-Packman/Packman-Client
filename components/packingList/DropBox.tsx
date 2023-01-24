@@ -5,6 +5,7 @@ import Dropdown from '../common/Dropdown';
 import { useState } from 'react';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import Image from 'next/image';
+import { FONT_STYLES } from '../../styles/font';
 
 interface DropBoxProps {
   folders: Array<{ id: string; name: string }>;
@@ -32,7 +33,7 @@ function DropBox(props: DropBoxProps) {
   };
 
   return (
-    <Dropdown isOpen={isOpen} toggle={toggleDropdown} dropdownStyle={dropdownStyle}>
+    <Dropdown isOpen={isOpen} styles={dropdownStyle} onChange={toggleDropdown}>
       <Dropdown.Trigger
         as={
           <StyledToggleImage toggle={isOpen} onClick={toggleDropdown}>
@@ -40,15 +41,12 @@ function DropBox(props: DropBoxProps) {
           </StyledToggleImage>
         }
       />
-      <Dropdown.Menu dropdownMenuStyle={dropdownMenuStyle}>
+      <Dropdown.Menu styles={dropdownMenuStyle}>
         {folders.map(({ id, name }) => (
-          <Dropdown.Item
-            key={id}
-            isCurrentFolder={id === currentId}
-            dropdownItemStyle={dropdownItemStyle}
-            onClick={toggleDropdown}
-          >
-            <Link href={`${link}${id}`}>{name}</Link>
+          <Dropdown.Item key={id} onClick={toggleDropdown} styles={dropdownItemStyle}>
+            <Link href={`${link}${id}`}>
+              <StyledItem isCurrentFolder={id === currentId}>{name}</StyledItem>
+            </Link>
           </Dropdown.Item>
         ))}
       </Dropdown.Menu>
@@ -96,6 +94,24 @@ const dropdownItemStyle = css`
   &:not(:last-child) {
     border-bottom: 1px solid ${packmanColors.pmGrey};
   }
+`;
+
+const StyledItem = styled.div<{ isCurrentFolder: boolean }>`
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+
+  ${({ isCurrentFolder }) =>
+    isCurrentFolder
+      ? css`
+          ${FONT_STYLES.BODY4_SEMIBOLD};
+          color: ${packmanColors.pmBlack};
+        `
+      : css`
+          ${FONT_STYLES.BODY3_REGULAR};
+          color: ${packmanColors.pmDarkGrey};
+        `}
 `;
 
 const StyledToggleImage = styled.div<{ toggle: boolean }>`
