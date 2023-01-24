@@ -311,10 +311,3 @@ const StyledEmpty = styled.div`
   color: ${packmanColors.pmGrey};
   ${FONT_STYLES.HEADLINE1_MEDIUM};
 `;
-
-const StyledToggleImage = styled.div<{ toggle: boolean }>`
-  width: 2.4rem;
-  height: 2.4rem;
-  transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
-`;

@@ -3,7 +3,7 @@ import styled, { CSSProp } from 'styled-components';
 
 interface DropdownProps {
   isOpen: boolean;
-  styles?: CSSProp;
+  style?: CSSProp;
   onChange: VoidFunction;
 }
 
@@ -11,12 +11,12 @@ interface BackgroundProps {
   onClick?: VoidFunction;
 }
 interface MenuProps {
-  styles?: CSSProp;
+  style?: CSSProp;
 }
 
 interface ItemProps {
   onClick?: VoidFunction;
-  styles?: CSSProp;
+  style?: CSSProp;
 }
 
 interface TriggerProps {
@@ -29,11 +29,11 @@ export const DropdownContext = createContext({
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
-  const { children, isOpen, styles, onChange } = props;
+  const { children, isOpen, style, onChange } = props;
 
   return (
     <DropdownContext.Provider value={{ isOpen, onChange }}>
-      <StyledDropdown styles={styles} onChange={onChange}>
+      <StyledDropdown css={style} onChange={onChange}>
         {children}
       </StyledDropdown>
     </DropdownContext.Provider>
@@ -46,13 +46,13 @@ Dropdown.Background = function Background(props: BackgroundProps) {
 };
 
 Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
-  const { children, styles } = props;
+  const { children, style } = props;
   const { isOpen, onChange } = useContext(DropdownContext);
 
   return (
     <>
       {isOpen && (
-        <StyledMenu styles={styles}>
+        <StyledMenu css={style}>
           <Dropdown.Background onClick={onChange} />
           {children}
         </StyledMenu>
@@ -62,9 +62,9 @@ Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
 };
 
 Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
-  const { children, onClick, styles } = props;
+  const { children, onClick, style } = props;
   return (
-    <StyledItem styles={styles} onClick={onClick}>
+    <StyledItem css={style} onClick={onClick}>
       {children}
     </StyledItem>
   );
@@ -78,12 +78,12 @@ Dropdown.Trigger = function Trigger(props: TriggerProps) {
 
 export default Dropdown;
 
-const StyledDropdown = styled.div<{ styles?: CSSProp }>`
-  ${({ styles }) => styles}
+const StyledDropdown = styled.div<{ css?: CSSProp }>`
+  ${({ css }) => css}
 `;
 
-const StyledMenu = styled.div<{ styles?: CSSProp }>`
-  ${({ styles }) => styles}
+const StyledMenu = styled.div<{ css?: CSSProp }>`
+  ${({ css }) => css}
 `;
 
 const StyledBackground = styled.div`
@@ -96,6 +96,6 @@ const StyledBackground = styled.div`
   height: 100%;
 `;
 
-const StyledItem = styled.div<{ styles?: CSSProp }>`
-  ${({ styles }) => styles};
+const StyledItem = styled.div<{ css?: CSSProp }>`
+  ${({ css }) => css};
 `;
