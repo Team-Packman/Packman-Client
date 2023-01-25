@@ -12,10 +12,10 @@ import { packmanColors } from '../../styles/color';
 import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
-import useDynamic from '../../utils/hooks/useDynamic';
 import InventoryDeleteButton from './InventoryDeleteButton';
 import useBoolean from '../../utils/hooks/common/useBoolean';
 import DeleteInventoryListModal from './DeleteInventoryListModal';
+import FolderDropBox from './FolderDropBox';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
@@ -78,11 +78,9 @@ function PackingListLanding() {
     ).fill(false),
   );
 
-  const DropBox = useDynamic(() => import('./DropBox'));
-
   if (!inventory || !isInventory(inventory)) return null;
 
-  const { togetherPackingList, alonePackingList, folder, currentFolder } = inventory.data;
+  const { togetherPackingList, alonePackingList, currentFolder } = inventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
     setIsDragged(tmpArr);
@@ -205,12 +203,7 @@ function PackingListLanding() {
         <StyledFolderInfo onClick={onClickFolderInfo}>
           <h1>{currentFolder.name}</h1>
 
-          <DropBox
-            folders={folder}
-            link={`/packing-list?type=${type}&id=`}
-            currentFolder={currentFolder}
-            onClick={() => setIsDeleting(false)}
-          />
+          <FolderDropBox onChange={() => setIsDeleting(false)} />
         </StyledFolderInfo>
 
         {!(togetherPackingList ?? alonePackingList).length ? (
