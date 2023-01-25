@@ -5,85 +5,87 @@ import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 
 interface CardProps {
-  style?: CSSProp;
+  overlay?: CSSProp;
   onClick?: VoidFunction;
 }
 
 interface LeftContainerProps {
-  style?: CSSProp;
+  overlay?: CSSProp;
 }
 
 interface RightContainerProps {
-  style?: CSSProp;
+  overlay?: CSSProp;
 }
 
 interface IconProps {
   icon: string;
   width?: number;
   height?: number;
-  style?: CSSProp;
+  overlay?: CSSProp;
 }
 
 interface RenderTextItemProps {
-  value: string;
-  customStyle?: CSSProp;
-  style?: CSSProp;
+  value?: string;
+  defaultStyle?: CSSProp;
+  overlay?: CSSProp;
 }
 
-function RenderTextItem(props: RenderTextItemProps) {
-  const { value, customStyle, style } = props;
+function RenderTextItem(props: PropsWithChildren<RenderTextItemProps>) {
+  const { children, value, defaultStyle, overlay } = props;
 
   return (
-    <StyledRenderTextItem css={style} customStyle={customStyle}>
-      {value}
+    <StyledRenderTextItem overlay={overlay} defaultStyle={defaultStyle}>
+      {children ? children : value}
     </StyledRenderTextItem>
   );
 }
 
 function Card(props: PropsWithChildren<CardProps>) {
-  const { children, style, onClick } = props;
+  const { children, overlay, onClick } = props;
 
   return (
-    <StyledCard css={style} onClick={onClick}>
+    <StyledCard overlay={overlay} onClick={onClick}>
       {children}
     </StyledCard>
   );
 }
 
 Card.LeftContainer = function LeftContainer(props: PropsWithChildren<LeftContainerProps>) {
-  const { children, style } = props;
+  const { children, overlay } = props;
 
-  return <StyledLeftContainer css={style}>{children}</StyledLeftContainer>;
+  return <StyledLeftContainer overlay={overlay}>{children}</StyledLeftContainer>;
 };
 
 Card.RightContainer = function RightContainer(props: PropsWithChildren<RightContainerProps>) {
-  const { children, style } = props;
+  const { children, overlay } = props;
 
-  return <StyledRightContainer css={style}>{children}</StyledRightContainer>;
+  return <StyledRightContainer overlay={overlay}>{children}</StyledRightContainer>;
 };
 
-Card.Title = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} style={StyledDefaultTitle} />
+Card.Title = (props: PropsWithChildren<RenderTextItemProps>) => (
+  <RenderTextItem {...props} defaultStyle={StyledDefaultTitle} />
 );
 
-Card.SubTitle = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} style={StyledDefaultSubTitle} />
+Card.SubTitle = (props: PropsWithChildren<RenderTextItemProps>) => (
+  <RenderTextItem {...props} defaultStyle={StyledDefaultSubTitle} />
 );
 
-Card.Label = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} style={StyledDefaultLabel} />
+Card.Label = (props: PropsWithChildren<RenderTextItemProps>) => (
+  <RenderTextItem {...props} defaultStyle={StyledDefaultLabel} />
 );
 
-Card.DDay = (props: RenderTextItemProps) => <RenderTextItem {...props} style={StyledDefaultDDay} />;
+Card.DDay = (props: PropsWithChildren<RenderTextItemProps>) => (
+  <RenderTextItem {...props} defaultStyle={StyledDefaultDDay} />
+);
 
-Card.Description = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} style={StyledDefaultDescription} />
+Card.Description = (props: PropsWithChildren<RenderTextItemProps>) => (
+  <RenderTextItem {...props} defaultStyle={StyledDefaultDescription} />
 );
 
 Card.Icon = function Icon(props: IconProps) {
-  const { icon, width = 2.4, height = 2.4, style } = props;
+  const { icon, width = 2.4, height = 2.4, overlay } = props;
   return (
-    <StyledIcon css={style}>
+    <StyledIcon overlay={overlay}>
       <Image src={icon} width={width} height={height} alt="right-arrow" layout="responsive" />
     </StyledIcon>
   );
@@ -91,7 +93,7 @@ Card.Icon = function Icon(props: IconProps) {
 
 export default Card;
 
-const StyledCard = styled.section<{ css?: CSSProp }>`
+const StyledCard = styled.section<{ overlay?: CSSProp }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -104,23 +106,23 @@ const StyledCard = styled.section<{ css?: CSSProp }>`
   border-radius: 1rem;
   background-color: ${packmanColors.pmBlueGrey};
 
-  ${({ css }) => css}
+  ${({ overlay }) => overlay}
 `;
 
-const StyledLeftContainer = styled.div<{ css?: CSSProp }>`
+const StyledLeftContainer = styled.div<{ overlay?: CSSProp }>`
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 
-  ${({ css }) => css}
+  ${({ overlay }) => overlay}
 `;
 
-const StyledRightContainer = styled.div<{ css?: CSSProp }>`
+const StyledRightContainer = styled.div<{ overlay?: CSSProp }>`
   display: flex;
   flex-direction: column;
   align-items: end;
 
-  ${({ css }) => css}
+  ${({ overlay }) => overlay}
 `;
 
 const StyledDefaultTitle = css`
@@ -149,15 +151,15 @@ const StyledDefaultDescription = css`
   color: ${packmanColors.pmBlack};
 `;
 
-const StyledIcon = styled.div<{ css?: CSSProp }>`
+const StyledIcon = styled.div<{ overlay?: CSSProp }>`
   display: 'flex';
   width: 2.4rem;
   height: 2.4rem;
 
-  ${({ css }) => css}
+  ${({ overlay }) => overlay}
 `;
 
-const StyledRenderTextItem = styled.p<{ css?: CSSProp; customStyle?: CSSProp }>`
-  ${({ css }) => css}
-  ${({ customStyle }) => customStyle}
+const StyledRenderTextItem = styled.p<{ overlay?: CSSProp; defaultStyle?: CSSProp }>`
+  ${({ overlay }) => overlay}
+  ${({ defaultStyle }) => defaultStyle}
 `;
