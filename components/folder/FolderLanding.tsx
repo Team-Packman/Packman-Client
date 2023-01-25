@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { AddFolderInput, GetFoldersOutput } from '../../service/folder';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
@@ -10,7 +10,9 @@ import FolderList from './FolderList';
 import SwiperContainer from '../Swiper';
 import FloatActionButton from './FloatActionButton';
 import Layout from '../common/Layout';
-import HeaderBanner from '../common/HeaderBanner';
+import Card from '../common/Card';
+import Chip from '../common/Chip';
+import { Utility } from '../../utils/Utility';
 
 export interface ModalDataProps {
   id: string;
@@ -83,7 +85,7 @@ function FolderLanding() {
     }
   }, [folderList?.data]);
 
-  if (!folderListData || !folderList) {
+  if (!folderListData || !folderList || !recentPackingData) {
     return null;
   }
 
@@ -237,14 +239,24 @@ function FolderLanding() {
     <>
       <Layout title="logo" icon="profile">
         <StyledBody>
-          {isRecentListExist && recentPackingData && (
-            <HeaderBanner
-              title={recentPackingData.data.title}
-              subTitle={recentPackingData.data.packTotalNum}
-              remainDay={recentPackingData.data.remainDay}
-              remainPack={recentPackingData.data.packRemainNum}
-              onClick={handleRecentBannerClick}
-            />
+          {isRecentListExist && (
+            <Card onClick={handleRecentBannerClick}>
+              <Card.LeftContainer overlay={leftContainerStyle}>
+                <Card.Title value={recentPackingData.data.title} />
+                <Card.SubTitle>
+                  <Chip text={`총 ${recentPackingData.data.packTotalNum}개의 짐`} />
+                </Card.SubTitle>
+              </Card.LeftContainer>
+              <Card.RightContainer>
+                <Card.DDay value={Utility.getDDay(recentPackingData.data.remainDay)} />
+                <Card.Description overlay={descriptionStyle}>
+                  {Utility.getRemainPackDesc(
+                    recentPackingData.data.packRemainNum,
+                    recentPackingData.data.remainDay,
+                  )}
+                </Card.Description>
+              </Card.RightContainer>
+            </Card>
           )}
           <SwiperContainer
             isRecentListExist={isRecentListExist}
@@ -318,4 +330,16 @@ export const StyledBody = styled.article`
   height: 100%;
   background-color: ${packmanColors.pmWhite};
   padding: 0 2rem;
+`;
+
+const leftContainerStyle = css`
+  gap: 0.8rem;
+`;
+
+const descriptionStyle = css`
+  & > span {
+    & > em {
+      color: ${packmanColors.pmPink};
+    }
+  }
 `;

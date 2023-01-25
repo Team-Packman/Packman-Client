@@ -14,7 +14,8 @@ import { authUserAtom } from '../../utils/recoil/atom/atom';
 import produce from 'immer';
 import { GetGroupMemberOutput } from '../../service/member';
 import { ProfileList } from '../../utils/profileImages';
-import HeaderBanner from '../common/HeaderBanner';
+import Card from '../common/Card';
+import { Utility } from '../../utils/Utility';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -129,11 +130,15 @@ function ManagingMemberLanding() {
   return (
     <Layout back title="멤버 관리">
       <StyledRoot>
-        <HeaderBanner
-          title={packingList.title}
-          subTitle={packingList.departureDate}
-          remainDay={packingList.remainDay}
-        />
+        <Card>
+          <Card.LeftContainer overlay={leftContainerStyle}>
+            <Card.Title value={packingList.title} />
+            <Card.SubTitle value={Utility.convertDateFormatToDot(packingList.departureDate)} />
+          </Card.LeftContainer>
+          <Card.RightContainer>
+            <Card.DDay value={Utility.getDDay(packingList.remainDay)} />
+          </Card.RightContainer>
+        </Card>
         <WithMembersLabelAndEdit>
           <WithMembersLabel>함께하는 멤버</WithMembersLabel>
           {userId === members[0].id ? (
@@ -337,4 +342,8 @@ const InvitingButton = styled.div<{ hasCopied: boolean }>`
         content: '링크가 복사되었습니다';
       }
     `}
+`;
+
+const leftContainerStyle = css`
+  gap: 0.8rem;
 `;
