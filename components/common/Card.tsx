@@ -5,93 +5,85 @@ import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 
 interface CardProps {
-  cardStyle?: CSSProp;
+  style?: CSSProp;
   onClick?: VoidFunction;
 }
 
 interface LeftContainerProps {
-  leftContainerStyle?: CSSProp;
+  style?: CSSProp;
 }
 
 interface RightContainerProps {
-  rightContainerStyle?: CSSProp;
+  style?: CSSProp;
 }
 
 interface IconProps {
   icon: string;
   width?: number;
   height?: number;
-  iconStyle?: CSSProp;
+  style?: CSSProp;
 }
 
 interface RenderTextItemProps {
   value: string;
   customStyle?: CSSProp;
-  defaultStyle?: CSSProp;
+  style?: CSSProp;
 }
 
 function RenderTextItem(props: RenderTextItemProps) {
-  const { value, customStyle, defaultStyle } = props;
+  const { value, customStyle, style } = props;
 
   return (
-    <StyledRenderTextItem defaultStyle={defaultStyle} customStyle={customStyle}>
+    <StyledRenderTextItem css={style} customStyle={customStyle}>
       {value}
     </StyledRenderTextItem>
   );
 }
 
 function Card(props: PropsWithChildren<CardProps>) {
-  const { children, cardStyle, onClick } = props;
+  const { children, style, onClick } = props;
 
   return (
-    <StyledCard cardStyle={cardStyle} onClick={onClick}>
+    <StyledCard css={style} onClick={onClick}>
       {children}
     </StyledCard>
   );
 }
 
 Card.LeftContainer = function LeftContainer(props: PropsWithChildren<LeftContainerProps>) {
-  const { children, leftContainerStyle } = props;
+  const { children, style } = props;
 
-  return (
-    <StyledLeftContainer leftContainerStyle={leftContainerStyle}>{children}</StyledLeftContainer>
-  );
+  return <StyledLeftContainer css={style}>{children}</StyledLeftContainer>;
 };
 
 Card.RightContainer = function RightContainer(props: PropsWithChildren<RightContainerProps>) {
-  const { children, rightContainerStyle } = props;
+  const { children, style } = props;
 
-  return (
-    <StyledRightContainer rightContainerStyle={rightContainerStyle}>
-      {children}
-    </StyledRightContainer>
-  );
+  return <StyledRightContainer css={style}>{children}</StyledRightContainer>;
 };
 
 Card.Title = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} defaultStyle={StyledDefaultTitle} />
+  <RenderTextItem {...props} style={StyledDefaultTitle} />
 );
 
 Card.SubTitle = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} defaultStyle={StyledDefaultSubTitle} />
+  <RenderTextItem {...props} style={StyledDefaultSubTitle} />
 );
 
 Card.Label = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} defaultStyle={StyledDefaultLabel} />
+  <RenderTextItem {...props} style={StyledDefaultLabel} />
 );
 
-Card.DDay = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} defaultStyle={StyledDefaultDDay} />
-);
+Card.DDay = (props: RenderTextItemProps) => <RenderTextItem {...props} style={StyledDefaultDDay} />;
 
 Card.Description = (props: RenderTextItemProps) => (
-  <RenderTextItem {...props} defaultStyle={StyledDefaultDescription} />
+  <RenderTextItem {...props} style={StyledDefaultDescription} />
 );
 
 Card.Icon = function Icon(props: IconProps) {
-  const { icon, width = 2.4, height = 2.4, iconStyle } = props;
+  const { icon, width = 2.4, height = 2.4, style } = props;
   return (
-    <StyledIcon iconStyle={iconStyle}>
+    <StyledIcon css={style}>
       <Image src={icon} width={width} height={height} alt="right-arrow" layout="responsive" />
     </StyledIcon>
   );
@@ -99,7 +91,7 @@ Card.Icon = function Icon(props: IconProps) {
 
 export default Card;
 
-const StyledCard = styled.section<{ cardStyle?: CSSProp }>`
+const StyledCard = styled.section<{ css?: CSSProp }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -112,23 +104,23 @@ const StyledCard = styled.section<{ cardStyle?: CSSProp }>`
   border-radius: 1rem;
   background-color: ${packmanColors.pmBlueGrey};
 
-  ${({ cardStyle }) => cardStyle}
+  ${({ css }) => css}
 `;
 
-const StyledLeftContainer = styled.div<{ leftContainerStyle?: CSSProp }>`
+const StyledLeftContainer = styled.div<{ css?: CSSProp }>`
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 
-  ${({ leftContainerStyle }) => leftContainerStyle}
+  ${({ css }) => css}
 `;
 
-const StyledRightContainer = styled.div<{ rightContainerStyle?: CSSProp }>`
+const StyledRightContainer = styled.div<{ css?: CSSProp }>`
   display: flex;
   flex-direction: column;
   align-items: end;
 
-  ${({ rightContainerStyle }) => rightContainerStyle}
+  ${({ css }) => css}
 `;
 
 const StyledDefaultTitle = css`
@@ -157,15 +149,15 @@ const StyledDefaultDescription = css`
   color: ${packmanColors.pmBlack};
 `;
 
-const StyledIcon = styled.div<{ iconStyle?: CSSProp }>`
+const StyledIcon = styled.div<{ css?: CSSProp }>`
   display: 'flex';
   width: 2.4rem;
   height: 2.4rem;
 
-  ${({ iconStyle }) => iconStyle}
+  ${({ css }) => css}
 `;
 
-const StyledRenderTextItem = styled.p<{ defaultStyle?: CSSProp; customStyle?: CSSProp }>`
-  ${({ defaultStyle }) => defaultStyle}
+const StyledRenderTextItem = styled.p<{ css?: CSSProp; customStyle?: CSSProp }>`
+  ${({ css }) => css}
   ${({ customStyle }) => customStyle}
 `;
