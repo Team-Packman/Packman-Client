@@ -3,6 +3,10 @@
 ### 서비스 이름 : Packman
 서비스 소개 : 우리의 일상 속에서  혼자, 때로는 함께 챙겨야 하는 짐의 목록을 편리하게 작성하고, 놓치지 않게 도와주고, 챙김이 여정 속 즐겁고 손쉬운 행위가 될 수 있도록 도와주는 서비스 Packman 입니다.
 
+### 서비스 바로가기    
+[🧳 Packman 바로가기](https://www.packman.kr/)
+
+
 ## 팀원 소개
 
 <div align="center">
@@ -43,10 +47,14 @@
 
 ## 기술 스택
 
-- typescript
-- next.js
-- react-query
-- msw
+[![My Skills](https://skillicons.dev/icons?i=js,ts,react,nextjs)](https://skillicons.dev)
+<div style="display:flex;"> 
+	<img width="40" src="https://user-images.githubusercontent.com/73516688/215024583-ae171acf-cdbc-4804-9785-a2c74077f4cc.png" />
+	<img width="50" src="https://user-images.githubusercontent.com/73516688/215024749-d093d461-eac1-4ab6-8495-2f36ecfdc01f.png" />
+</div>
+
+
+(JavaScript / TypeScript / React.js / Next.js / React Query / MSW)
 
 </div>
 
