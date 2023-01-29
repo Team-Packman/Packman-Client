@@ -8,21 +8,18 @@ import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import { useQuery } from 'react-query';
 import apiService from '../../service';
+import iShowMore from '../../public/assets/svg/iShowMore.svg';
+import Image from 'next/image';
 
 interface FolderDropBoxProps {
-  onChange: VoidFunction;
+  onClick: VoidFunction;
 }
 
 function FolderDropBox(props: FolderDropBoxProps) {
-  const { onChange } = props;
-
-  return <DropBox data={<FolderDropBoxItem />} onChange={onChange} />;
-}
-
-function FolderDropBoxItem() {
+  const { onClick } = props;
   const router = useRouter();
-  const id = router.query.id as string;
   const type = router.query.type as string;
+  const id = router.query.id as string;
 
   const getAloneInventory = apiService.inventory.alone.getAloneInventory;
   const getTogetherInventory = apiService.inventory.together.getTogetherInventory;
@@ -47,19 +44,37 @@ function FolderDropBoxItem() {
 
   const {
     folder,
-    currentFolder: { id: currentFolderId },
+    currentFolder: { id: currentFolderId, name: currentFolderName },
   } = inventory.data;
 
+  const cancelDeleteMode = () => {
+    onClick();
+  };
+
   return (
-    <>
-      {folder.map(({ id, name }) => (
-        <Dropdown.Item key={id} overlay={dropdownItemStyle}>
-          <Link href={`/packing-list?type=${type}&id=${id}`}>
-            <StyledItem isCurrentFolder={id === currentFolderId}>{name}</StyledItem>
-          </Link>
-        </Dropdown.Item>
-      ))}
-    </>
+    <DropBox
+      data={
+        <>
+          {folder.map(({ id, name }) => (
+            <Dropdown.Item key={id} overlay={dropdownItemStyle}>
+              <Link href={`/packing-list?type=${type}&id=${id}`}>
+                <StyledItem isCurrentFolder={id === currentFolderId}>{name}</StyledItem>
+              </Link>
+            </Dropdown.Item>
+          ))}
+        </>
+      }
+      onChange={cancelDeleteMode}
+      trigger={
+        <StyledTrigger>
+          <h1>{currentFolderName}</h1>
+
+          <StyledToggleImage>
+            <Image src={iShowMore} alt="상세보기" layout="fill" />
+          </StyledToggleImage>
+        </StyledTrigger>
+      }
+    />
   );
 }
 
@@ -96,4 +111,21 @@ const StyledItem = styled.div<{ isCurrentFolder: boolean }>`
           ${FONT_STYLES.BODY3_REGULAR};
           color: ${packmanColors.pmDarkGrey};
         `}
+`;
+
+const StyledTrigger = styled.div`
+  display: flex;
+
+  & > h1 {
+    ${FONT_STYLES.HEADLINE2_SEMIBOLD};
+  }
+`;
+
+const StyledToggleImage = styled.div<{ isOpen?: boolean }>`
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+  transition: 0.2s ease-in-out;
+  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  cursor: pointer;
 `;

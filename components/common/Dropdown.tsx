@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, ReactElement, useContext } from 'react';
+import { cloneElement, createContext, PropsWithChildren, ReactElement, useContext } from 'react';
 import styled, { CSSProp } from 'styled-components';
 
 interface DropdownProps {
@@ -21,6 +21,7 @@ interface ItemProps {
 
 interface TriggerProps {
   as: ReactElement;
+  onClick: VoidFunction;
 }
 
 export const DropdownContext = createContext({
@@ -63,19 +64,15 @@ Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
 
 Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
   const { children, overlay } = props;
-  const { onChange } = useContext(DropdownContext);
 
-  return (
-    <StyledItem overlay={overlay} onClick={onChange}>
-      {children}
-    </StyledItem>
-  );
+  return <StyledItem overlay={overlay}>{children}</StyledItem>;
 };
 
 Dropdown.Trigger = function Trigger(props: TriggerProps) {
-  const { as } = props;
+  const { as, onClick } = props;
+  const { isOpen } = useContext(DropdownContext);
 
-  return as;
+  return cloneElement(as, { isOpen, onClick });
 };
 
 export default Dropdown;
