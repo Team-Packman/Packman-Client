@@ -3,8 +3,8 @@ import styled, { CSSProp } from 'styled-components';
 
 interface DropdownProps {
   isOpen: boolean;
-  overlay?: CSSProp;
   onChange: VoidFunction;
+  overlay?: CSSProp;
 }
 
 interface BackgroundProps {
@@ -72,7 +72,11 @@ Dropdown.Trigger = function Trigger(props: TriggerProps) {
   const { as, onClick } = props;
   const { isOpen } = useContext(DropdownContext);
 
-  return cloneElement(as, { isOpen, onClick });
+  return (
+    <StyledTrigger isOpen={isOpen} onClick={onClick}>
+      {as}
+    </StyledTrigger>
+  );
 };
 
 export default Dropdown;
@@ -97,4 +101,10 @@ const StyledBackground = styled.div`
 
 const StyledItem = styled.div<{ overlay?: CSSProp }>`
   ${({ overlay }) => overlay};
+`;
+
+const StyledTrigger = styled.div<{ isOpen?: boolean }>`
+  & .rotate {
+    transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  }
 `;
