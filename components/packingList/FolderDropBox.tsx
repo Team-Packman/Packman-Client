@@ -1,7 +1,7 @@
-import Link from 'next/link';
+import { useContext } from 'react';
 import { useRouter } from 'next/router';
 import React from 'react';
-import Dropdown from '../common/Dropdown';
+import { DropdownContext, DropdownItemContext } from '../common/Dropdown';
 import DropBox from './DropBox';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
@@ -17,6 +17,10 @@ interface FolderDropBoxProps {
 
 interface FolderDropBoxTriggerProps {
   currentFolderName: string;
+}
+interface FolderDropBoxItemProps {
+  currentFolderId: string;
+  onChange: (arg?: string) => void;
 }
 
 function FolderDropBox(props: FolderDropBoxProps) {
@@ -46,6 +50,12 @@ function FolderDropBox(props: FolderDropBoxProps) {
   const inventory = aloneInventory ?? togetherInventory;
   if (!inventory) return null;
 
+  const onChange = (selectedFolderId?: string) => {
+    if (!selectedFolderId) selectedFolderId = id;
+    router.push(`/packing-list?type=${type}&id=${selectedFolderId}`);
+    cancelDeleteMode();
+  };
+
   const {
     folder,
     currentFolder: { id: currentFolderId, name: currentFolderName },
@@ -53,40 +63,46 @@ function FolderDropBox(props: FolderDropBoxProps) {
 
   return (
     <DropBox
-      data={
-        <>
-          {folder.map(({ id, name }) => (
-            <Dropdown.Item key={id} overlay={dropdownItemStyle}>
-              <Link href={`/packing-list?type=${type}&id=${id}`}>
-                <StyledItem isCurrentFolder={id === currentFolderId}>{name}</StyledItem>
-              </Link>
-            </Dropdown.Item>
-          ))}
-        </>
-      }
-      onChange={cancelDeleteMode}
+      data={folder}
+      onChange={onChange}
       trigger={<FolderDropBoxTrigger currentFolderName={currentFolderName} />}
+      items={<FolderDropBoxItem currentFolderId={currentFolderId} onChange={onChange} />}
     />
   );
 }
 
 function FolderDropBoxTrigger(props: FolderDropBoxTriggerProps) {
   const { currentFolderName } = props;
+  const { isOpen, onChange } = useContext(DropdownContext);
 
   return (
-    <StyledTrigger>
+    <StyledTrigger onClick={onChange}>
       <h1>{currentFolderName}</h1>
 
-      <StyledToggleImage className="rotate">
+      <StyledToggleImage isOpen={isOpen}>
         <Image src={iShowMore} alt="상세보기" layout="fill" />
       </StyledToggleImage>
     </StyledTrigger>
   );
 }
 
+function FolderDropBoxItem(props: FolderDropBoxItemProps) {
+  const { currentFolderId, onChange } = props;
+
+  const {
+    value: { id, name },
+  } = useContext(DropdownItemContext);
+
+  return (
+    <StyledItem isCurrentFolder={id === currentFolderId} onClick={() => onChange(id)}>
+      {name}
+    </StyledItem>
+  );
+}
+
 export default FolderDropBox;
 
-const dropdownItemStyle = css`
+const StyledItem = styled.div<{ isCurrentFolder: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -99,13 +115,6 @@ const dropdownItemStyle = css`
   &:not(:last-child) {
     border-bottom: 1px solid ${packmanColors.pmGrey};
   }
-`;
-
-const StyledItem = styled.div<{ isCurrentFolder: boolean }>`
-  display: flex;
-  justify-content: center;
-
-  width: 100%;
 
   ${({ isCurrentFolder }) =>
     isCurrentFolder
@@ -127,10 +136,11 @@ const StyledTrigger = styled.div`
   }
 `;
 
-const StyledToggleImage = styled.div`
+const StyledToggleImage = styled.div<{ isOpen?: boolean }>`
   position: relative;
   width: 2.4rem;
   height: 2.4rem;
   transition: 0.2s ease-in-out;
   cursor: pointer;
+  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
