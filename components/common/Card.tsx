@@ -159,7 +159,7 @@ const StyledIcon = styled.div<{ overlay?: CSSProp }>`
   ${({ overlay }) => overlay}
 `;
 
-const StyledRenderTextItem = styled.p<{ overlay?: CSSProp; defaultStyle?: CSSProp }>`
+const StyledRenderTextItem = styled.div<{ overlay?: CSSProp; defaultStyle?: CSSProp }>`
   ${({ overlay }) => overlay}
   ${({ defaultStyle }) => defaultStyle}
 `;

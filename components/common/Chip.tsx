@@ -13,7 +13,7 @@ function Chip(props: ChipProps) {
 
 export default Chip;
 
-const StyledChip = styled.p`
+const StyledChip = styled.div`
   width: fit-content;
   font-style: ${FONT_STYLES.BODY1_REGULAR};
   padding: 0.1rem 1rem;
