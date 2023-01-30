@@ -102,7 +102,7 @@ const StyledCard = styled.section<{ overlay?: CSSProp }>`
   height: 8.4rem;
 
   margin: 1rem 0 4.5rem 0;
-  padding: 0 2rem;
+  padding: 1.4rem 2rem;
   border-radius: 1rem;
   background-color: ${packmanColors.pmBlueGrey};
 
@@ -112,6 +112,7 @@ const StyledCard = styled.section<{ overlay?: CSSProp }>`
 const StyledLeftContainer = styled.div<{ overlay?: CSSProp }>`
   display: flex;
   flex-direction: column;
+  height: 100%;
   gap: 0.3rem;
 
   ${({ overlay }) => overlay}
@@ -120,7 +121,8 @@ const StyledLeftContainer = styled.div<{ overlay?: CSSProp }>`
 const StyledRightContainer = styled.div<{ overlay?: CSSProp }>`
   display: flex;
   flex-direction: column;
-  align-items: end;
+  justify-content: center;
+  height: 100%;
 
   ${({ overlay }) => overlay}
 `;
@@ -152,9 +154,12 @@ const StyledDefaultDescription = css`
 `;
 
 const StyledIcon = styled.div<{ overlay?: CSSProp }>`
-  display: 'flex';
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 5rem;
+  height: inherit;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   ${({ overlay }) => overlay}
 `;

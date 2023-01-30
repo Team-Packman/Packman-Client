@@ -248,7 +248,10 @@ function FolderLanding() {
                 </Card.SubTitle>
               </Card.LeftContainer>
               <Card.RightContainer>
-                <Card.DDay value={Utility.getDDay(recentPackingData.data.remainDay)} />
+                <Card.DDay
+                  value={Utility.getDDay(recentPackingData.data.remainDay)}
+                  overlay={dayStyle}
+                />
                 <Card.Description overlay={descriptionStyle}>
                   {Utility.getRemainPackDesc(
                     recentPackingData.data.packRemainNum,
@@ -334,6 +337,12 @@ export const StyledBody = styled.article`
 
 const leftContainerStyle = css`
   gap: 0.8rem;
+`;
+
+const dayStyle = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const descriptionStyle = css`
