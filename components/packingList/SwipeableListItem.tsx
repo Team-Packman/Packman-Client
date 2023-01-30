@@ -4,10 +4,12 @@ import iCheckPink from '/public/assets/svg/iCheckPink.svg';
 import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import Image from 'next/image';
 import { packmanColors } from '../../styles/color';
-import { FONT_STYLES } from '../../styles/font';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Chip from '../common/Chip';
+import Card from '../common/Card';
+import { Utility } from '../../utils/Utility';
+
 interface PackingList {
   id: string;
   departureDate: string;
@@ -28,7 +30,7 @@ interface ItemProps {
   handleIsScrolled: (isScrolled: boolean) => void;
 }
 
-export default function SwipeablelistItem(props: ItemProps) {
+export default function SwipeableListItem(props: ItemProps) {
   const {
     idx,
     handleIsDragged,
@@ -118,34 +120,21 @@ export default function SwipeablelistItem(props: ItemProps) {
               handleIsDragged(Array(packingList?.length).fill(false));
           }}
         >
-          <StyledItemInfo>
-            <p>{departureDate}</p>
-            <p>{title}</p>
-            <StyledPackInfo>
-              <Chip text={`총 ${packTotalNum}개의 짐`} />
-              {packRemainNum !== '0' ? (
-                <StyledPackRemainText>
-                  아직 <span>{packRemainNum}</span>개의 짐이 남았어요!
-                </StyledPackRemainText>
-              ) : (
-                packTotalNum !== '0' &&
-                packRemainNum === '0' && (
-                  <StyledPackRemainText>
-                    <span>패킹</span>이 완료되었어요!
-                  </StyledPackRemainText>
-                )
-              )}
-            </StyledPackInfo>
-          </StyledItemInfo>
-          <StyledArrowImage>
-            <Image
-              src={iRightArrow}
-              width={2.4}
-              height={2.4}
-              alt="right-arrow"
-              layout="responsive"
-            />
-          </StyledArrowImage>
+          <Card overlay={cardContainerStyle}>
+            <Card.LeftContainer overlay={leftContainerStyle}>
+              <Card.Label value={departureDate} />
+              <Card.Title value={title} />
+              <Card.SubTitle>
+                <Chip text={`총 ${packTotalNum}개의 짐`} />
+              </Card.SubTitle>
+            </Card.LeftContainer>
+            <Card.RightContainer overlay={rightContianerStyle}>
+              <Card.Description overlay={descriptionStyle}>
+                {Utility.getRemainPackDesc(packRemainNum, departureDate)}
+              </Card.Description>
+            </Card.RightContainer>
+            <Card.Icon icon={iRightArrow} />
+          </Card>
         </StyledItemWrapper>
       </Link>
 
@@ -190,10 +179,8 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: calc(100vw - 4rem);
+  width: 100%;
   overflow-x: hidden;
-  height: inherit;
-  padding: 1.41rem 0.4rem 1.9rem 1.832rem;
   border-radius: 1.5rem;
   background-color: ${packmanColors.pmBlueGrey};
   transition: ease-in-out;
@@ -227,45 +214,6 @@ const StyledItemWrapper = styled.article<{ isDragged: boolean; isDeleting: boole
     }
   }};
 `;
-const StyledArrowImage = styled.div`
-  width: 2.4rem;
-  height: 2.4rem;
-`;
-const StyledItemInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  & > p {
-    &:not(:last-child) {
-      padding-bottom: 0.6rem;
-    }
-  }
-
-  & > p:first-child {
-    ${FONT_STYLES.BODY1_REGULAR};
-    color: ${packmanColors.pmDeepGrey};
-  }
-  & > p:nth-child(2) {
-    ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
-  }
-`;
-const StyledPackInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 28.1rem;
-`;
-const StyledPackRemainText = styled.p`
-  position: absolute;
-  right: 3.557rem;
-  ${FONT_STYLES.BODY1_REGULAR};
-  color: ${packmanColors.pmBlack};
-  & > span {
-    font-weight: bold;
-    color: ${packmanColors.pmPink};
-  }
-`;
 
 const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
   position: absolute;
@@ -288,5 +236,39 @@ const StyledDeleteButton = styled.div<{ isDragged: boolean }>`
     font-size: 1.6rem;
     font-weight: 600;
     flex-shrink: 0;
+  }
+`;
+
+const cardContainerStyle = css`
+  height: 10.4rem;
+  margin: 0;
+  padding: 1.4rem 0 1.4rem 2rem;
+`;
+
+const leftContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+
+  & > p {
+    &:not(:last-child) {
+      padding-bottom: 0.6rem;
+    }
+  }
+`;
+
+const rightContianerStyle = css`
+  display: flex;
+  justify-content: flex-end;
+
+  width: 100%;
+`;
+
+const descriptionStyle = css`
+  & > span {
+    & > em {
+      color: ${packmanColors.pmPink};
+    }
   }
 `;
