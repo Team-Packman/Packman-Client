@@ -35,10 +35,8 @@ function PackingListLanding() {
   const [isSwiped, setIsSwiped] = useState(false);
 
   // api 호출
-  const getAloneInventory = apiService.inventory.alone.getAloneInventory;
-  const getTogetherInventory = apiService.inventory.together.getTogetherInventory;
-  const deleteAloneInventory = apiService.inventory.alone.deleteAloneInventory;
-  const deleteTogetherInventory = apiService.inventory.together.deleteTogetherInventory;
+  const { getAloneInventory, deleteAloneInventory } = apiService.inventory.alone;
+  const { getTogetherInventory, deleteTogetherInventory } = apiService.inventory.together;
   const { data: togetherInventory } = useQuery(
     ['getTogetherInventory', id],
     () => getTogetherInventory(id),
