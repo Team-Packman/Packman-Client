@@ -14,20 +14,22 @@ interface MenuProps {
   overlay?: CSSProp;
 }
 
-interface ItemProps {
+interface ItemProps<T extends { id: string; name: string }> {
   onClick?: VoidFunction;
-  overlay?: CSSProp;
+  value: T;
 }
 
 interface TriggerProps {
   as: ReactElement;
-  onClick: VoidFunction;
-  overlay?: CSSProp;
 }
 
 export const DropdownContext = createContext({
   isOpen: false,
   onChange: () => {},
+});
+
+export const DropdownItemContext = createContext({
+  value: { id: '', name: '' },
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
@@ -63,21 +65,18 @@ Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
   );
 };
 
-Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
-  const { children, overlay } = props;
+Dropdown.Item = function Item<T extends { id: string; name: string }>(
+  props: PropsWithChildren<ItemProps<T>>,
+) {
+  const { children, value } = props;
 
-  return <StyledItem overlay={overlay}>{children}</StyledItem>;
+  return <DropdownItemContext.Provider value={{ value }}>{children}</DropdownItemContext.Provider>;
 };
 
 Dropdown.Trigger = function Trigger(props: TriggerProps) {
-  const { as, onClick, overlay } = props;
-  const { isOpen } = useContext(DropdownContext);
+  const { as } = props;
 
-  return (
-    <StyledTrigger isOpen={isOpen} onClick={onClick} overlay={overlay}>
-      {as}
-    </StyledTrigger>
-  );
+  return <>{as}</>;
 };
 
 export default Dropdown;
@@ -98,12 +97,4 @@ const StyledBackground = styled.div`
 
   width: 100%;
   height: 100%;
-`;
-
-const StyledItem = styled.div<{ overlay?: CSSProp }>`
-  ${({ overlay }) => overlay};
-`;
-
-const StyledTrigger = styled.div<{ overlay?: CSSProp; isOpen?: boolean }>`
-  ${({ overlay }) => overlay};
 `;
