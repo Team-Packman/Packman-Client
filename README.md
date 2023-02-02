@@ -1,10 +1,8 @@
-## 서비스
-
-### 서비스 이름 : Packman
-서비스 소개 : 우리의 일상 속에서  혼자, 때로는 함께 챙겨야 하는 짐의 목록을 편리하게 작성하고, 놓치지 않게 도와주고, 챙김이 여정 속 즐겁고 손쉬운 행위가 될 수 있도록 도와주는 서비스 Packman 입니다.
+##  Packman : 내 손안의 짐 챙김 도우미
+ > 우리의 일상 속에서  혼자, 때로는 함께 챙겨야 하는 짐의 목록을 편리하게 작성하고, 놓치지 않게 도와주고, 챙김이 여정 속 즐겁고 손쉬운 행위가 될 수 있도록 도와주는 서비스 Packman 입니다.
 
 ### 서비스 바로가기    
-[🧳 Packman 바로가기](https://www.packman.kr/)
+[🧳 Packman 서비스 바로가기](https://www.packman.kr/)
 
 
 ## 팀원 소개
@@ -84,6 +82,8 @@
 
 <br>
 
+------  
+
 ## 서비스의 핵심 기능
 
 ### 1. 회원가입, 로그인 뷰
@@ -111,9 +111,13 @@
 - 폴더 안 패킹 리스트 목록을 확인할 수 있는 화면입니다.
 - 해당 화면은 함께, 혼자에 따라 구분된 폴더에 알맞게 리스트가 소속되게 하며, 폴더 우측 초록색 토글을 통해 폴더간 이동을 가능하게 합니다.
 <div style="display:flex;">
-<img width="200" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458654-234ef057-97c4-45c7-8335-df0e39e52fbc.png">
-<img width="200" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458669-73d5cb81-a3c2-4a3f-82a8-96a8fc049762.png">
-<img width="200" alt="스크린샷 2022-07-22 오후 9 50 03" src="https://user-images.githubusercontent.com/73516688/180458688-2f44f86e-30c5-432b-ad61-38f68bea05ba.png">
+
+<img width="200" alt="스크린샷 2023-02-02 오후 4 28 39" src="https://user-images.githubusercontent.com/73516688/216259494-94388b45-5757-40f2-b7ab-6023b6a1e37d.png">
+<img width="200" alt="스크린샷 2023-02-02 오후 4 28 50" src="https://user-images.githubusercontent.com/73516688/216259501-5d868ad6-3472-4d12-aca1-4f31a821e8ac.png">
+<img width="200" alt="스크린샷 2023-02-02 오후 4 29 01" src="https://user-images.githubusercontent.com/73516688/216259505-fb0b7d1e-c2a7-4854-ac2d-2e0a8b1e7a33.png">
+
+	
+	
 </div>
 
 
@@ -128,10 +132,19 @@
 - 초대 링크를 통해 일행에서 리스트를 공유할 수 있습니다. 초대된 일행이 들어오면, 일행도 리스트를 작성, 수정할 수 있습니다.
 - 해당 뷰에서 사용자는 새로운 짐 추가 및 수정, 카테고리 및 리스트 수정, 짐 챙길 사람(담당자) 배정 등의 기능을 이용할 수 있습니다.
 
-<img width="280" alt="스크린샷 2022-07-22 오후 10 10 30" src="https://user-images.githubusercontent.com/73516688/180460652-ca67d099-d0c1-4303-8e8f-1d40809d0543.png">
+<div style="display:flex;">
+<img width="280" alt="스크린샷 2022-07-22 오후 10 10 30" src="https://user-images.githubusercontent.com/73516688/216257623-59e97a55-59a1-4fa9-a6b0-48656bd19570.png">
+
+<img width="280" alt="스크린샷 2022-07-22 오후 10 10 30" src="https://user-images.githubusercontent.com/73516688/216258169-41430944-3974-4cd2-9e96-7d182cc0aecb.png">
+
+</div>
+
 
 <br>
 
+-------   
+
+## 코딩 컨벤션 & 브랜치 전략
 <details>
 <summary>코딩 컨벤션 : Airbnb React Style guide</summary>
 
