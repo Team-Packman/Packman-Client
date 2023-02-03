@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { DropdownContext, DropdownItemContext } from '../common/Dropdown';
+import { DropdownContext } from '../common/Dropdown';
 import DropBox from './DropBox';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
@@ -19,8 +19,9 @@ interface FolderDropBoxTriggerProps {
   currentFolderName: string;
 }
 interface FolderDropBoxItemProps {
-  currentFolderId: string;
+  value: { id: string; name: string };
   onChange: (arg?: string) => void;
+  folderId?: string;
 }
 
 function FolderDropBox(props: FolderDropBoxProps) {
@@ -66,7 +67,9 @@ function FolderDropBox(props: FolderDropBoxProps) {
       data={folder}
       onChange={onChange}
       trigger={<FolderDropBoxTrigger currentFolderName={currentFolderName} />}
-      items={<FolderDropBoxItem currentFolderId={currentFolderId} onChange={onChange} />}
+      items={({ value, onChange, folderId = currentFolderId }: FolderDropBoxItemProps) => (
+        <FolderDropBoxItem value={value} onChange={onChange} folderId={folderId} />
+      )}
     />
   );
 }
@@ -87,11 +90,11 @@ function FolderDropBoxTrigger(props: FolderDropBoxTriggerProps) {
 }
 
 function FolderDropBoxItem(props: FolderDropBoxItemProps) {
-  const { currentFolderId, onChange } = props;
-
   const {
     value: { id, name },
-  } = useContext(DropdownItemContext);
+    onChange,
+    folderId: currentFolderId,
+  } = props;
 
   return (
     <StyledItem isCurrentFolder={id === currentFolderId} onClick={() => onChange(id)}>

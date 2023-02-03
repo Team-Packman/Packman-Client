@@ -1,16 +1,19 @@
 import { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import Dropdown from '../common/Dropdown';
-import { ReactElement, useState } from 'react';
+import { ReactElement, ReactNode, useState } from 'react';
 
-interface DropBoxProps<T> {
+interface DropBoxProps<T, U> {
   data: T[];
   onChange: VoidFunction;
   trigger: ReactElement;
-  items: ReactElement;
+  items: (args: U) => ReactNode;
 }
 
-function DropBox<T extends { id: string; name: string }>(props: DropBoxProps<T>) {
+function DropBox<
+  T extends { id: string; name: string },
+  U extends { value: { id: string; name: string }; onChange: VoidFunction },
+>(props: DropBoxProps<T, U>) {
   const { data, onChange, trigger, items } = props;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,8 +26,11 @@ function DropBox<T extends { id: string; name: string }>(props: DropBoxProps<T>)
       <Dropdown.Trigger as={trigger} />
       <Dropdown.Menu overlay={dropdownMenuStyle}>
         {data.map(({ id, name }) => (
-          <Dropdown.Item key={id} value={{ id, name }}>
-            {items}
+          <Dropdown.Item key={id}>
+            {items({
+              value: { id, name },
+              onChange,
+            })}
           </Dropdown.Item>
         ))}
       </Dropdown.Menu>
