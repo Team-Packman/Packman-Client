@@ -14,9 +14,8 @@ interface MenuProps {
   overlay?: CSSProp;
 }
 
-interface ItemProps<T extends { id: string; name: string }> {
+interface ItemProps {
   onClick?: VoidFunction;
-  value: T;
 }
 
 interface TriggerProps {
@@ -26,10 +25,6 @@ interface TriggerProps {
 export const DropdownContext = createContext({
   isOpen: false,
   onChange: () => {},
-});
-
-export const DropdownItemContext = createContext({
-  value: { id: '', name: '' },
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
@@ -65,12 +60,10 @@ Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
   );
 };
 
-Dropdown.Item = function Item<T extends { id: string; name: string }>(
-  props: PropsWithChildren<ItemProps<T>>,
-) {
-  const { children, value } = props;
+Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
+  const { children } = props;
 
-  return <DropdownItemContext.Provider value={{ value }}>{children}</DropdownItemContext.Provider>;
+  return <>{children}</>;
 };
 
 Dropdown.Trigger = function Trigger(props: TriggerProps) {
