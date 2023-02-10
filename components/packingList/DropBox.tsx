@@ -5,16 +5,16 @@ import { ReactElement } from 'react';
 
 interface DropBoxProps<T> {
   data: T[];
-  onChange: VoidFunction;
+  onChange: (id: string) => void;
   trigger: ReactElement;
   item: ReactElement<T>;
 }
 
 function DropBox<T extends { id: string; name: string }>(props: DropBoxProps<T>) {
-  const { data, trigger, item } = props;
+  const { data, trigger, item, onChange } = props;
 
   return (
-    <Dropdown overlay={dropdownStyle}>
+    <Dropdown overlay={dropdownStyle} onChange={onChange}>
       <Dropdown.Trigger as={trigger} />
       <Dropdown.Menu overlay={dropdownMenuStyle}>
         {data.map((option) => (

@@ -1,4 +1,4 @@
-import React, { createElement } from 'react';
+import React, { createElement, ReactNode } from 'react';
 import {
   cloneElement,
   createContext,
@@ -12,7 +12,7 @@ import useBoolean from '../../utils/hooks/common/useBoolean';
 
 interface DropdownProps {
   isOpen?: boolean;
-  onChange?: VoidFunction;
+  onChange: (args: string) => void;
   overlay?: CSSProp;
 }
 
@@ -20,6 +20,7 @@ interface BackgroundProps {
   onClick?: VoidFunction;
 }
 interface MenuProps {
+  children: ((...args: unknown[]) => JSX.Element) | ReactNode | undefined;
   overlay?: CSSProp;
 }
 
@@ -35,18 +36,18 @@ interface TriggerProps {
 
 export const DropdownContext = createContext({
   isOpen: false,
-  onChange: () => {},
+  onChange: (id: string) => {},
+  open: () => {},
+  close: () => {},
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
   const { children, overlay, onChange } = props;
-  const [isOpen, open, close, toogle] = useBoolean(false);
+  const [isOpen, open, close] = useBoolean(false);
 
   return (
-    <DropdownContext.Provider value={{ isOpen, onChange: toogle }}>
-      <StyledDropdown overlay={overlay} onChange={onChange}>
-        {children}
-      </StyledDropdown>
+    <DropdownContext.Provider value={{ isOpen, open, onChange, close }}>
+      <StyledDropdown overlay={overlay}>{children}</StyledDropdown>
     </DropdownContext.Provider>
   );
 }
@@ -58,29 +59,38 @@ Dropdown.Background = function Background(props: BackgroundProps) {
 
 Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
   const { children, overlay } = props;
-  const { isOpen, onChange } = useContext(DropdownContext);
+  const { isOpen, close } = useContext(DropdownContext);
 
   return (
     <>
-      {isOpen && (
-        <StyledMenu overlay={overlay}>
-          <Dropdown.Background onClick={onChange} />
-          {children}
-        </StyledMenu>
-      )}
+      {typeof children === 'function'
+        ? children(close)
+        : isOpen && (
+            <StyledMenu overlay={overlay}>
+              <Dropdown.Background onClick={close} />
+              {children}
+            </StyledMenu>
+          )}
     </>
   );
 };
 
-Dropdown.Item = function Item<T>(props: PropsWithChildren<ItemProps<T>>) {
+Dropdown.Item = function Item<T extends { id: string; name: string }>(
+  props: PropsWithChildren<ItemProps<T>>,
+) {
   const { children, as = 'li', value } = props;
-  const { onChange } = useContext(DropdownContext);
+  const { onChange: route, close } = useContext(DropdownContext);
+
+  const onChange = () => {
+    route(value.id);
+    close();
+  };
 
   return (
     <>
       {typeof as === 'string'
         ? createElement(as, { onChange }, children)
-        : cloneElement(as as ReactElement, { value, onChange }, children)}
+        : cloneElement(as as ReactElement, { ...value, onChange }, children)}
     </>
   );
 };
