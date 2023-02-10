@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import Layout from '../common/Layout';
 import SwipeableList from './SwipeableList';
@@ -8,21 +7,15 @@ import SwipeablelistItem from './SwipeableListItem';
 import FloatActionButton from '../folder/FloatActionButton';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
-import { GetAloneInventoryOutput } from '../../service/inventory/alone';
-import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
 import InventoryDeleteButton from './InventoryDeleteButton';
 import useBoolean from '../../utils/hooks/common/useBoolean';
 import DeleteInventoryListModal from './DeleteInventoryListModal';
 import FolderDropBox from './FolderDropBox';
-import apiService from '../../service';
-
-type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
+import { useInventory, useInventoryMutation } from '../../utils/hooks/queries/inventory';
 
 function PackingListLanding() {
-  const queryClient = useQueryClient();
   const router = useRouter();
-  const id = router.query.id as string;
   const type = router.query.type as string;
 
   const [isDropBoxOpen, toggle, setDropBoxClose] = useBoolean(false);
@@ -34,50 +27,16 @@ function PackingListLanding() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isSwiped, setIsSwiped] = useState(false);
 
-  // api 호출
-  const { getAloneInventory, deleteAloneInventory } = apiService.inventory.alone;
-  const { getTogetherInventory, deleteTogetherInventory } = apiService.inventory.together;
-  const { data: togetherInventory } = useQuery(
-    ['getTogetherInventory', id],
-    () => getTogetherInventory(id),
-    {
-      enabled: type === 'together' && !!id,
-    },
-  );
-  const { data: aloneInventory } = useQuery(
-    ['getAloneInventory', id],
-    () => getAloneInventory(id),
-    {
-      enabled: type === 'alone' && !!id,
-    },
-  );
-
-  const { mutate: deleteTogetherInventoryMutate } = useMutation(deleteTogetherInventory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('getTogetherInventory');
-    },
-  });
-  const { mutate: deleteAloneInventoryMutate } = useMutation(deleteAloneInventory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('getAloneInventory');
-    },
-  });
-
-  const isInventory = (inventory: unknown): inventory is GetInventoryOutput => {
-    if (inventory === undefined || inventory === null) return false;
-    return inventory !== undefined;
-  };
-  const inventory = aloneInventory ?? togetherInventory;
+  const inventory = useInventory();
+  const { deleteTogetherInventoryMutate, deleteAloneInventoryMutate } = useInventoryMutation();
 
   const [isDragged, setIsDragged] = useState<boolean[]>(
     Array(
-      aloneInventory?.data.alonePackingList.length ??
-        togetherInventory?.data.togetherPackingList.length,
+      inventory?.data.alonePackingList.length ?? inventory?.data.togetherPackingList.length,
     ).fill(false),
   );
 
-  if (!isInventory(inventory)) return null;
-
+  if (!inventory) return;
   const { togetherPackingList, alonePackingList, currentFolder } = inventory.data;
 
   const handleIsDragged = (tmpArr: boolean[]) => {
