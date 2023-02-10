@@ -10,6 +10,7 @@ import { useQuery } from 'react-query';
 import apiService from '../../service';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import Image from 'next/image';
+import { useInventory } from '../../utils/hooks/queries/inventory';
 
 interface FolderDropBoxProps {
   onClick: VoidFunction;
@@ -30,27 +31,8 @@ function FolderDropBox(props: FolderDropBoxProps) {
   const { onClick: cancelDeleteMode } = props;
   const router = useRouter();
   const type = router.query.type as string;
-  const id = router.query.id as string;
 
-  const getAloneInventory = apiService.inventory.alone.getAloneInventory;
-  const getTogetherInventory = apiService.inventory.together.getTogetherInventory;
-
-  const { data: togetherInventory } = useQuery(
-    ['getTogetherInventory', id],
-    () => getTogetherInventory(id),
-    {
-      enabled: type === 'together' && !!id,
-    },
-  );
-  const { data: aloneInventory } = useQuery(
-    ['getAloneInventory', id],
-    () => getAloneInventory(id),
-    {
-      enabled: type === 'alone' && !!id,
-    },
-  );
-
-  const inventory = aloneInventory ?? togetherInventory;
+  const inventory = useInventory();
   if (!inventory) return null;
 
   const onChange = (selectedFolderId: string) => {
