@@ -16,10 +16,12 @@ interface FolderDropBoxProps {
 }
 
 interface FolderDropBoxTriggerProps {
+  onClick: VoidFunction;
   currentFolderName: string;
 }
 interface FolderDropBoxItemProps {
-  value?: { id: string; name: string };
+  id?: string;
+  name?: string;
   currentFolderId?: string;
   onChange?: () => void;
 }
@@ -51,8 +53,7 @@ function FolderDropBox(props: FolderDropBoxProps) {
   const inventory = aloneInventory ?? togetherInventory;
   if (!inventory) return null;
 
-  const onChange = (selectedFolderId?: string) => {
-    if (!selectedFolderId) selectedFolderId = id;
+  const onChange = (selectedFolderId: string) => {
     router.push(`/packing-list?type=${type}&id=${selectedFolderId}`);
     cancelDeleteMode();
   };
@@ -66,18 +67,25 @@ function FolderDropBox(props: FolderDropBoxProps) {
     <DropBox
       data={folder}
       onChange={onChange}
-      trigger={<FolderDropBoxTrigger currentFolderName={currentFolderName} />}
+      trigger={
+        <FolderDropBoxTrigger currentFolderName={currentFolderName} onClick={cancelDeleteMode} />
+      }
       item={<FolderDropBoxItem currentFolderId={currentFolderId} />}
     />
   );
 }
 
 function FolderDropBoxTrigger(props: FolderDropBoxTriggerProps) {
-  const { currentFolderName } = props;
-  const { isOpen, onChange } = useContext(DropdownContext);
+  const { onClick: cancelDeleteMode, currentFolderName } = props;
+  const { isOpen, open } = useContext(DropdownContext);
+
+  const onClick = () => {
+    cancelDeleteMode();
+    open();
+  };
 
   return (
-    <StyledTrigger onClick={onChange}>
+    <StyledTrigger onClick={onClick}>
       <label>{currentFolderName}</label>
 
       <StyledToggleImage isOpen={isOpen}>
@@ -88,20 +96,10 @@ function FolderDropBoxTrigger(props: FolderDropBoxTriggerProps) {
 }
 
 function FolderDropBoxItem(props: PropsWithChildren<FolderDropBoxItemProps>) {
-  const { children, value, currentFolderId, onChange } = props;
-  const router = useRouter();
-  const type = router.query.type as string;
-
-  const changeFolder = (id: string | undefined) => {
-    onChange && onChange();
-    router.push(`/packing-list?type=${type}&id=${id || currentFolderId}`);
-  };
+  const { children, id, name, currentFolderId, onChange } = props;
 
   return (
-    <StyledItem
-      onClick={() => changeFolder(value?.id)}
-      isCurrentFolder={value?.id === currentFolderId}
-    >
+    <StyledItem onClick={onChange} isCurrentFolder={id === currentFolderId}>
       {children}
     </StyledItem>
   );
