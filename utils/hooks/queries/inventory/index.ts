@@ -19,6 +19,7 @@ export const useInventory = () => {
     () => getTogetherInventory(id),
     {
       enabled: type === 'together' && !!id,
+      refetchOnWindowFocus: false,
     },
   );
   const { data: aloneInventory } = useQuery(
@@ -26,6 +27,7 @@ export const useInventory = () => {
     () => getAloneInventory(id),
     {
       enabled: type === 'alone' && !!id,
+      refetchOnWindowFocus: false,
     },
   );
 

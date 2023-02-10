@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           queries: {
             suspense: true,
             retry: 0,
+            notifyOnChangeProps: 'tracked',
           },
         },
       }),
