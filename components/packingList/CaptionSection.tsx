@@ -5,44 +5,30 @@ import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
 
 interface CaptionSectionProps {
-  packingList: any[];
-  isDeleting: boolean;
+  listLength: number;
+  isDeletingMode: boolean;
   onClickCaptionButton: () => void;
-  handleIsDragged: (arr: boolean[]) => void;
-  resetDeleteList: (arr: string[]) => void;
-  resetSwipableListItem: () => void;
+  reset: VoidFunction;
 }
 function CaptionSection(props: CaptionSectionProps) {
-  const {
-    packingList,
-    isDeleting,
-    onClickCaptionButton,
-    handleIsDragged,
-    resetDeleteList,
-    resetSwipableListItem,
-  } = props;
+  const { listLength, isDeletingMode, onClickCaptionButton, reset } = props;
 
   return (
-    <StyledRoot onClick={resetSwipableListItem}>
-      {!isDeleting && (
+    <StyledRoot onClick={() => !isDeletingMode && reset()}>
+      {!isDeletingMode && (
         <StyledCaptionText>
-          <span>{packingList.length}</span>
+          <span>{listLength}</span>
           개의 패킹 리스트
         </StyledCaptionText>
       )}
-      {isDeleting && <span onClick={() => resetDeleteList([])}>선택해제</span>}
+      {isDeletingMode && <span onClick={reset}>선택해제</span>}
 
       <StyledCaptionButtonWrapper onClick={onClickCaptionButton}>
-        {isDeleting ? (
-          <p onClick={() => handleIsDragged(Array(packingList.length).fill(false))}>취소</p>
+        {isDeletingMode ? (
+          <p onClick={reset}>취소</p>
         ) : (
           <StyledTrashImage>
-            <Image
-              src={iTrash}
-              alt="삭제"
-              layout="fill"
-              onClick={() => handleIsDragged(Array(packingList.length).fill(false))}
-            />
+            <Image src={iTrash} alt="삭제" layout="fill" onClick={reset} />
           </StyledTrashImage>
         )}
       </StyledCaptionButtonWrapper>

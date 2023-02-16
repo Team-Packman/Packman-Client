@@ -22,33 +22,48 @@ function PackingListLanding() {
   const [isDropBoxOpen, toggle, setDropBoxClose] = useBoolean(false);
   const [isModalOpen, setModalOpen, setModalClose] = useBoolean(false);
 
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteList, setDeleteList] = useState<string[]>([]);
+  const [isDeletingMode, setIsDeletingMode] = useState(false);
+  const [deleteList, setDeleteList] = useState<Set<string>>(new Set());
 
   const inventory = useInventory({ id, type });
   const { deleteTogetherInventoryMutate, deleteAloneInventoryMutate } = useInventoryMutation();
 
-  const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(
-      inventory?.data.alonePackingList.length ?? inventory?.data.togetherPackingList.length,
-    ).fill(false),
-  );
+  const [isSwiped, setIsSwiped] = useState<Set<string>>(new Set());
 
   if (!inventory) return;
   const { togetherPackingList, alonePackingList, currentFolder } = inventory.data;
 
-  const handleIsDragged = (tmpArr: boolean[]) => {
-    setIsDragged(tmpArr);
+  const swipe = (item?: string) => {
+    if (!item) {
+      resetListItem();
+      return;
+    }
+    const updatedListItem = new Set(isSwiped);
+    if (isSwiped.size) {
+      setIsSwiped(new Set());
+      return;
+    }
+    if (isSwiped.has(item)) {
+      updatedListItem.delete(item);
+    } else {
+      updatedListItem.add(item);
+    }
+    setIsSwiped(updatedListItem);
   };
 
-  const resetIsDragged = () => {
-    setIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
+  const resetListItem = () => {
+    isSwiped.size && setIsSwiped(new Set());
+    deleteList.size && setDeleteList(new Set());
   };
 
-  const checkDeleteList = (id: string) => {
-    deleteList.includes(id)
-      ? setDeleteList((prev) => prev.filter((idx) => idx !== id))
-      : setDeleteList([...deleteList, id]);
+  const modifyDeleteList = (id: string) => {
+    const updatedListItem = new Set([...deleteList]);
+    if (updatedListItem.has(id)) {
+      updatedListItem.delete(id);
+    } else {
+      updatedListItem.add(id);
+    }
+    setDeleteList(updatedListItem);
   };
 
   const openModal = () => {
@@ -57,90 +72,83 @@ function PackingListLanding() {
   };
 
   const closeModal = () => {
-    resetIsDragged();
     document.body.style.overflow = 'unset';
     setModalClose();
   };
 
-  const deleteListItem = () => {
-    setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-    // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
-    if (isDeleting) {
-      type === 'together'
-        ? deleteTogetherInventoryMutate({
-            folderId: currentFolder.id,
-            listId: deleteList.join(','),
-          })
-        : deleteAloneInventoryMutate({
-            folderId: currentFolder.id,
-            listId: deleteList.join(','),
-          });
-      setIsDeleting(false);
-      setDeleteList([]);
-    }
-    // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
-    else {
-      type === 'together'
-        ? deleteTogetherInventoryMutate({
-            folderId: currentFolder.id,
-            listId: togetherPackingList[selectedIndex].id,
-          })
-        : deleteAloneInventoryMutate({
-            folderId: currentFolder.id,
-            listId: alonePackingList[selectedIndex].id,
-          });
-    }
-    closeModal();
-  };
-
   const onClickFolderInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    // 스와이프 아이템 하나라도 열려있다면 초기화
-    resetSwipableListItem();
+    !isDeletingMode && resetListItem();
 
     // 폴더 이름과 삼각형 아이콘을 클릭했을 때만 toggle되도록 함
     if (e.target instanceof HTMLDivElement) return;
     toggle();
   };
 
-  const handleFloatClick = (index: number) => {
+  const onClickFloatingButton = (index: number) => {
     if (index === 0) {
       router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
     } else if (index === 1) {
       router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
     }
-    resetSwipableListItem();
+    resetListItem();
   };
 
   const onClickCaptionButton = () => {
-    resetIsDragged();
-    setIsDeleting((prev) => !prev);
-    if (!isDeleting) {
-      setDeleteList([]);
+    resetListItem();
+    setIsDeletingMode((prev) => !prev);
+    if (!isDeletingMode) {
+      setDeleteList(new Set());
     }
+  };
+
+  const onDelete = () => {
+    if (isDeletingMode) {
+      type === 'together'
+        ? deleteTogetherInventoryMutate({
+            folderId: currentFolder.id,
+            listId: [...deleteList].join(','),
+          })
+        : deleteAloneInventoryMutate({
+            folderId: currentFolder.id,
+            listId: [...deleteList].join(','),
+          });
+      setIsDeletingMode(false);
+      setDeleteList(new Set());
+    }
+    // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
+    else {
+      type === 'together'
+        ? deleteTogetherInventoryMutate({
+            folderId: currentFolder.id,
+            listId: [...deleteList][0],
+          })
+        : deleteAloneInventoryMutate({
+            folderId: currentFolder.id,
+            listId: [...deleteList][0],
+          });
+    }
+    closeModal();
   };
 
   // 전체 삭제
-  const onClickDeleteButton = () => {
-    const payload = (togetherPackingList ?? alonePackingList).map(({ id }) => id);
-    setDeleteList(payload);
+  const deleteSelectedListItems = () => {
+    if (!deleteList.size) {
+      const updatedListItem = new Set(
+        (togetherPackingList ?? alonePackingList).map((item) => item.id),
+      );
+      setDeleteList(updatedListItem);
+    } else {
+      setDeleteList(new Set());
+    }
   };
 
   // 개별 삭제
-  const onClickDeleteListItem = (idx: number) => {
+  const deleteSingleListItem = (id: string) => {
     openModal();
-    setSelectedIndex(idx);
-  };
 
-  // SwipableListItem 스와이프 여부 변경
-  const handleIsScrolled = (isSwiped: boolean) => {
-    setIsSwiped(isSwiped);
-  };
-
-  const resetSwipableListItem = () => {
-    const checkIsDragged = isDragged.every((item) => !item);
-    if (!checkIsDragged && !isModalOpen) {
-      resetIsDragged();
-    }
+    const updatedListItem = new Set<string>();
+    updatedListItem.add(id);
+    setDeleteList(updatedListItem);
   };
 
   return (
@@ -150,12 +158,12 @@ function PackingListLanding() {
           title="정말 삭제하시겠어요?"
           onClick={closeModal}
           onCancel={closeModal}
-          onDelete={deleteListItem}
+          onDelete={onDelete}
         />
       )}
       <StyledRoot onClick={() => isDropBoxOpen && setDropBoxClose()}>
         <StyledFolderInfo onClick={onClickFolderInfo}>
-          <FolderDropBox onClick={() => setIsDeleting(false)} />
+          <FolderDropBox onClick={() => setIsDeletingMode(false)} />
         </StyledFolderInfo>
 
         {!(togetherPackingList ?? alonePackingList).length ? (
@@ -168,45 +176,45 @@ function PackingListLanding() {
         ) : (
           <>
             <CaptionSection
-              resetSwipableListItem={resetSwipableListItem}
-              packingList={togetherPackingList ?? alonePackingList}
-              isDeleting={isDeleting}
+              listLength={(togetherPackingList ?? alonePackingList).length}
+              isDeletingMode={isDeletingMode}
               onClickCaptionButton={onClickCaptionButton}
-              handleIsDragged={handleIsDragged}
-              resetDeleteList={() => deleteList.length && setDeleteList([])}
+              reset={resetListItem}
             />
 
             <SwipeableList
-              isSwiped={isSwiped}
+              isSwiped={isSwiped.size > 0}
               swipeableListItem={(togetherPackingList ?? alonePackingList).map((item, idx) => (
                 <SwipeablelistItem
                   key={item.id}
-                  idx={idx}
-                  isDragged={isDragged}
-                  handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-                  isDeleting={isDeleting}
+                  swipe={(item?: string) => swipe(item)}
+                  isSwiped={isSwiped}
+                  isDeletingMode={isDeletingMode}
                   deleteList={deleteList}
-                  checkDeleteList={(id: string) => checkDeleteList(id)}
-                  onClickDeleteButton={() => onClickDeleteListItem(idx)}
-                  packingList={togetherPackingList ?? alonePackingList}
-                  handleIsScrolled={(isSwiped: boolean) => handleIsScrolled(isSwiped)}
+                  modifyDeleteList={(id: string) => modifyDeleteList(id)}
+                  packingList={(togetherPackingList ?? alonePackingList)[idx]}
+                  deleteSingleListItem={deleteSingleListItem}
                 />
               ))}
             />
           </>
         )}
-        {isDeleting && (
-          <InventoryDeleteButton onClick={!deleteList.length ? onClickDeleteButton : openModal}>
-            {!deleteList.length
+        {isDeletingMode && (
+          <InventoryDeleteButton onClick={!deleteList.size ? deleteSelectedListItems : openModal}>
+            {!deleteList.size
               ? ' 전체 선택'
-              : deleteList.length === (togetherPackingList ?? alonePackingList).length
+              : deleteList.size === (togetherPackingList ?? alonePackingList).length
               ? '전체 삭제'
               : '선택 삭제'}
           </InventoryDeleteButton>
         )}
 
-        {!isDeleting && (
-          <FloatActionButton onClick={handleFloatClick} pageName="packingList" isAloned={type} />
+        {!isDeletingMode && (
+          <FloatActionButton
+            onClick={onClickFloatingButton}
+            pageName="packingList"
+            isAloned={type}
+          />
         )}
       </StyledRoot>
     </Layout>
