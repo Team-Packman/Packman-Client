@@ -6,8 +6,6 @@ import DropBox from './DropBox';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
-import { useQuery } from 'react-query';
-import apiService from '../../service';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import Image from 'next/image';
 import { useInventory } from '../../utils/hooks/queries/inventory';
@@ -31,8 +29,9 @@ function FolderDropBox(props: FolderDropBoxProps) {
   const { onClick: cancelDeleteMode } = props;
   const router = useRouter();
   const type = router.query.type as string;
+  const id = router.query.id as string;
 
-  const inventory = useInventory();
+  const inventory = useInventory({ id, type });
   if (!inventory) return null;
 
   const onChange = (selectedFolderId: string) => {
