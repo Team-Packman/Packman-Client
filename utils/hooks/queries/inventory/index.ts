@@ -6,10 +6,13 @@ import { GetTogetherInventoryOutput } from '../../../../service/inventory/togeth
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
-export const useInventory = () => {
-  const router = useRouter();
-  const type = router.query.type as string;
-  const id = router.query.id as string;
+interface UseInventoryProps {
+  id: string;
+  type: string;
+}
+
+export const useInventory = (props: UseInventoryProps) => {
+  const { id, type } = props;
 
   const { getAloneInventory } = apiService.inventory.alone;
   const { getTogetherInventory } = apiService.inventory.together;
@@ -33,14 +36,11 @@ export const useInventory = () => {
 
   const inventory = aloneInventory ?? togetherInventory;
 
-  const isInventory = (inventory: unknown): inventory is GetInventoryOutput => {
-    if (inventory === undefined || inventory === null) return false;
-    return inventory !== undefined;
+  const isInventoryData = (data: unknown): data is GetInventoryOutput => {
+    return data ? true : false;
   };
 
-  if (!isInventory(inventory)) return null;
-
-  return inventory;
+  return isInventoryData(inventory) ? inventory : null;
 };
 
 export const useInventoryMutation = () => {
