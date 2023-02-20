@@ -7,7 +7,6 @@ import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import { RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
-import SEO from '../next-seo.config';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';

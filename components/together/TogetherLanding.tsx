@@ -23,10 +23,9 @@ import Loading from '../common/Loading';
 import 'swiper/css';
 import 'swiper/css/bundle';
 import useHide from '../../utils/hooks/useHide';
-import { GetTogetherPackingListDetailOutput } from '../../service/packingList/together';
+import { GetTogetherPackingListBodyOutput } from '../../service/packingList/together';
 import { AxiosError } from 'axios';
 import useDynamic from '../../utils/hooks/useDynamic';
-import useBoolean from '../../utils/hooks/common/useBoolean';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -55,10 +54,10 @@ function TogetherLanding() {
   const PackerModal = useDynamic(() => import('./PackerModal'));
   const ModalForInvitation = useDynamic(() => import('../common/ModalForInvitation'));
   const PackingListBottomModal = useDynamic(() => import('../common/PackingListBottomModal'));
-  const AddToTemplateModal = useDynamic(() => import('./AddToTemplateModal'));
+  // const ModalForAddToTemplate = useDynamic(() => import('../common/ModalForAddToTemplate'));
 
-  const [bottomModalOpen, openBottomModal, closeBottomModal] = useBoolean(false);
-  const [packerModalOpen, openPackerModal, closePackerModal] = useBoolean(false);
+  const [bottomModalOpen, setBottomModalOpen] = useState(false);
+  const [packerModalOpen, setPackerModalOpen] = useState(false);
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState(0);
 
@@ -70,7 +69,9 @@ function TogetherLanding() {
   const [{ sectionArr }, _, scrollEvent] = useHide(activeMode);
 
   /////////////////// api /////////////////////
-  const getPackingListDetail = useAPI((api) => api.packingList.together.getPackingListDetail);
+  const getPackingListBody = useAPI((api) => api.packingList.together.getPackingListBody);
+  const getPackingListHeader = useAPI((api) => api.packingList.together.getPackingListHeader);
+  const getMembers = useAPI((api) => api.packingList.together.getMembers);
   const addPackingListCategory = useAPI((api) => api.packingList.together.addPackingListCategory);
   const addAlonePackingListCategory = useAPI(
     (api) => api.packingList.alone.addAlonePackingListCategory,
@@ -103,9 +104,28 @@ function TogetherLanding() {
   const deleteAlonePackingListItem = useAPI(
     (api) => api.packingList.alone.deleteAlonePackingListItem,
   );
-  const { data: packingListData } = useQuery(
-    ['getPackingListDetail', id],
-    () => getPackingListDetail(id as string),
+
+  const { data: packingListHeader } = useQuery(
+    ['getPackingListHeader', id],
+    () => getPackingListHeader(id as string, false),
+    {
+      refetchInterval: 3000,
+      enabled: !!id,
+    },
+  );
+
+  const { data: packingListBody } = useQuery(
+    ['getPackingListBody', id],
+    () => getPackingListBody(id as string),
+    {
+      refetchInterval: 3000,
+      enabled: !!id,
+    },
+  );
+
+  const { data: packingListMembers } = useQuery(
+    ['getMembers', id],
+    () => getMembers(id as string),
     {
       refetchInterval: 3000,
       enabled: !!id,
@@ -114,8 +134,8 @@ function TogetherLanding() {
 
   const { mutate: addCategory } = useMutation('addPackingListCategory', addPackingListCategory, {
     onMutate: async (newCategory) => {
-      const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
-        'getPackingListDetail',
+      const prev = client.getQueryData<GetTogetherPackingListBodyOutput>([
+        'getPackingListBody',
         id,
       ]);
       const newPrev = produce(prev, (draft) => {
@@ -126,7 +146,7 @@ function TogetherLanding() {
           return category;
         });
       });
-      client.setQueryData(['getPackingListDetail', id], newPrev);
+      client.setQueryData(['getPackingListBody', id], newPrev);
       return { prev };
     },
   });
@@ -135,8 +155,8 @@ function TogetherLanding() {
     addAlonePackingListCategory,
     {
       onMutate: async (newCategory) => {
-        const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
-          'getPackingListDetail',
+        const prev = client.getQueryData<GetTogetherPackingListBodyOutput>([
+          'getPackingListBody',
           id,
         ]);
         const newPrev = produce(prev, (draft) => {
@@ -147,7 +167,7 @@ function TogetherLanding() {
             return category;
           });
         });
-        client.setQueryData(['getPackingListDetail', id], newPrev);
+        client.setQueryData(['getPackingListBody', id], newPrev);
         return { prev };
       },
     },
@@ -159,8 +179,8 @@ function TogetherLanding() {
     updatePackingListCategory,
     {
       onMutate: async (newCategory) => {
-        const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
-          'getPackingListDetail',
+        const prev = client.getQueryData<GetTogetherPackingListBodyOutput>([
+          'getPackingListBody',
           id,
         ]);
 
@@ -174,7 +194,7 @@ function TogetherLanding() {
           });
         });
 
-        client.setQueryData(['getPackingListDetail', id], newPrev);
+        client.setQueryData(['getPackingListBody', id], newPrev);
 
         return { prev };
       },
@@ -185,8 +205,8 @@ function TogetherLanding() {
     updateAlonePackingListCategory,
     {
       onMutate: async (newCategory) => {
-        const prev = client.getQueryData<GetTogetherPackingListDetailOutput>([
-          'getPackingListDetail',
+        const prev = client.getQueryData<GetTogetherPackingListBodyOutput>([
+          'getPackingListBody',
           id,
         ]);
 
@@ -200,7 +220,7 @@ function TogetherLanding() {
           });
         });
 
-        client.setQueryData(['getPackingListDetail', id], newPrev);
+        client.setQueryData(['getPackingListBody', id], newPrev);
 
         return { prev };
       },
@@ -233,8 +253,11 @@ function TogetherLanding() {
   );
   ////////////////////////////////////////////
 
-  if (!packingListData) return <Loading />;
-  const { data: info } = packingListData;
+  if (!packingListBody || !packingListHeader || !packingListMembers) return <Loading />;
+  const { data: info } = packingListBody;
+  const { data: header } = packingListHeader;
+  const { data: members } = packingListMembers;
+
   const packingRole = [info.togetherPackingList, info.myPackingList];
   const modeHandler = (idx: number) => setActiveMode(idx);
   const creatingItemHandler = (categoryId: string) => setCurrentCreating(categoryId);
@@ -244,20 +267,20 @@ function TogetherLanding() {
   const bottomModalOpenHandler = (payload: FocusInfo) => {
     if (!currentEditing) {
       setCurrentFocus(payload);
-      openBottomModal();
+      setBottomModalOpen(true);
     }
   };
   const bottomModalCloseHandler = () => {
     setCurrentFocus(initialFocus);
-    closeBottomModal();
+    setBottomModalOpen(false);
   };
   const packerModalOpenHandler = (packId: string) => {
     setCurrentFocus({ ...initialFocus, type: 'item', packId });
-    openPackerModal();
+    setPackerModalOpen(true);
   };
   const packerModalCloseHandler = () => {
     setCurrentFocus(initialFocus);
-    closePackerModal();
+    setPackerModalOpen(false);
   };
 
   const addTemplateModalOpenHandler = () => setAddTemplateModalOpen(true);
@@ -276,14 +299,14 @@ function TogetherLanding() {
           {
             onError: (err, variable, context) => {
               if (context?.prev) {
-                client.setQueryData(['getPackingListDetail', id], context.prev);
+                client.setQueryData(['getPackingListBody', id], context.prev);
                 if (err instanceof AxiosError) {
                   alert(err.response?.data.message);
                 }
               }
             },
             onSettled: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -297,14 +320,14 @@ function TogetherLanding() {
           {
             onError: (err, variable, context) => {
               if (context?.prev) {
-                client.setQueryData(['getPackingListDetail', id], context.prev);
+                client.setQueryData(['getPackingListBody', id], context.prev);
                 if (err instanceof AxiosError) {
                   alert(err.response?.data.message);
                 }
               }
             },
             onSettled: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -320,14 +343,14 @@ function TogetherLanding() {
           {
             onError: (err, variable, context) => {
               if (context?.prev) {
-                client.setQueryData(['getPackingListDetail', id], context.prev);
+                client.setQueryData(['getPackingListBody', id], context.prev);
                 if (err instanceof AxiosError) {
                   alert(err.response?.data.message);
                 }
               }
             },
             onSettled: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -341,14 +364,14 @@ function TogetherLanding() {
           {
             onError: (err, variable, context) => {
               if (context?.prev) {
-                client.setQueryData(['getPackingListDetail', id], context.prev);
+                client.setQueryData(['getPackingListBody', id], context.prev);
                 if (err instanceof AxiosError) {
                   alert(err.response?.data.message);
                 }
               }
             },
             onSettled: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -373,7 +396,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -388,7 +411,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -404,7 +427,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries(['getPackingListDetail', id]);
+                client.invalidateQueries(['getPackingListBody', id]);
               },
             },
           );
@@ -417,7 +440,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries(['getPackingListDetail', id]);
+                client.invalidateQueries(['getPackingListBody', id]);
               },
             },
           );
@@ -435,7 +458,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -450,7 +473,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -463,7 +486,7 @@ function TogetherLanding() {
   const updatePacker = (payload: PackerInfoPayload) => {
     patchPacker(payload, {
       onSuccess: () => {
-        client.invalidateQueries(['getPackingListDetail', id]);
+        client.invalidateQueries(['getPackingListBody', id]);
       },
     });
   };
@@ -480,7 +503,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -494,7 +517,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
             },
           },
         );
@@ -508,7 +531,7 @@ function TogetherLanding() {
           },
           {
             onSuccess: () => {
-              client.invalidateQueries(['getPackingListDetail', id]);
+              client.invalidateQueries(['getPackingListBody', id]);
               addTemplateModalOpenHandler();
             },
           },
@@ -539,7 +562,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries(['getPackingListDetail', id]);
+                client.invalidateQueries(['getPackingListBody', id]);
               },
             },
           );
@@ -551,7 +574,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries(['getPackingListDetail', id]);
+                client.invalidateQueries(['getPackingListBody', id]);
               },
             },
           );
@@ -569,7 +592,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries(['getPackingListDetail', id]);
+                client.invalidateQueries(['getPackingListBody', id]);
               },
             },
           );
@@ -582,7 +605,7 @@ function TogetherLanding() {
             },
             {
               onSuccess: () => {
-                client.invalidateQueries(['getPackingListDetail', id]);
+                client.invalidateQueries(['getPackingListBody', id]);
               },
             },
           );
@@ -598,14 +621,14 @@ function TogetherLanding() {
       back
       title="패킹리스트"
       icon="member"
-      groupId={info.group.id}
+      listId={info.id}
       folderId={info.folderId}
       option={
         <CheckListHeader
           together
           listId={info.id}
-          departureDate={info.departureDate}
-          title={info.title}
+          departureDate={header.departureDate}
+          title={header.title}
           activeMode={activeMode}
           updateRemainingInfo={updateRemainingInfo}
         />
@@ -729,7 +752,7 @@ function TogetherLanding() {
 
       {packerModalOpen && (
         <PackerModal
-          member={info.group.member}
+          members={members.member}
           modalHandler={packerModalCloseHandler}
           packId={currentFocus.packId}
           listId={info.togetherPackingList.id}
@@ -746,9 +769,9 @@ function TogetherLanding() {
           content={currentFocus.title}
         />
       )}
-      {addTemplateModalOpen && (
-        <AddToTemplateModal title={info.title} onClick={addTemplateModalCloseHandler} />
-      )}
+      {/* {addTemplateModalOpen && (
+        <ModalForAddToTemplate title={header.title} onClick={addTemplateModalCloseHandler} />
+      )} */}
     </Layout>
   );
 }

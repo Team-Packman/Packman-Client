@@ -1,5 +1,5 @@
 import {
-  GetTogetherPackingListDetailOutput,
+  GetTogetherPackingListBodyOutput,
   AddTogetherPackingListCategoryInput,
   AddTogetherPackingListCategoryOutput,
   UpdateTogetherPackingListCategoryInput,
@@ -26,8 +26,11 @@ import {
   GetInvitedOutput,
   AddMemberInput,
   AddMemberOutput,
+  GetTogetherPackingListHeaderOutput,
+  GetMembersOutput,
+  DeleteGroupMemberInput,
+  DeleteGroupMemberOutput,
 } from './../../../../service/packingList/together/index';
-import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
 import { client } from '../..';
 
 export const fetchUpdatePackingListTitle = async (
@@ -58,14 +61,17 @@ export const fetchUpdatePackingListPacker = async (
   return data;
 };
 
-export const fetchGroupMember = async (groupId: string): Promise<GetGroupMembersOutput> => {
-  const { data } = await client(`/together/member/${groupId}`);
+export const fetchPackingListHeader = async (
+  listId: string,
+  isAloned: boolean,
+): Promise<GetTogetherPackingListHeaderOutput> => {
+  const { data } = await client(`/list/${listId}/title-date?isAloned=${isAloned}`);
   return data;
 };
 
-export const fetchPackingListDetail = async (
+export const fetchPackingListBody = async (
   listId: string,
-): Promise<GetTogetherPackingListDetailOutput> => {
+): Promise<GetTogetherPackingListBodyOutput> => {
   const { data } = await client(`/list/together/${listId}`);
   return data;
 };
@@ -132,7 +138,20 @@ export const fetchInvited = async (inviteCode: string): Promise<GetInvitedOutput
   return data;
 };
 
+export const fetchMembers = async (listId: string): Promise<GetMembersOutput> => {
+  const { data } = await client(`/member/${listId}`);
+  return data;
+};
+
 export const fetchAddMember = async (payload: AddMemberInput): Promise<AddMemberOutput> => {
   const { data } = await client.post(`/list/together/add-member`, payload);
+  return data;
+};
+
+export const fetchDeleteMember = async ({
+  listId,
+  memberId,
+}: DeleteGroupMemberInput): Promise<DeleteGroupMemberOutput> => {
+  const { data } = await client.delete(`/member/${listId}/${memberId}`);
   return data;
 };
