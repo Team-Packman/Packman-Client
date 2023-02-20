@@ -1,5 +1,5 @@
 import {
-  fetchPackingListDetail,
+  fetchPackingListBody,
   fetchAddPackingListCategory,
   fetchAddPackingListItem,
   fetchUpdatePackingListItem,
@@ -14,10 +14,12 @@ import {
   fetchAddTogetherPackingFolder,
   fetchInvited,
   fetchAddMember,
+  fetchPackingListHeader,
+  fetchMembers,
+  fetchDeleteMember,
 } from '../../../utils/axios/packingList/together/index';
+import { AxiosInstance } from 'axios';
 import {
-  GetGroupMembersOutput,
-  GetTogetherPackingListDetailOutput,
   AddTogetherPackingListCategoryInput,
   AddTogetherPackingListCategoryOutput,
   UpdateTogetherPackingListCategoryInput,
@@ -44,8 +46,12 @@ import {
   GetInvitedOutput,
   AddMemberInput,
   AddMemberOutput,
+  GetTogetherPackingListBodyOutput,
+  GetTogetherPackingListHeaderOutput,
+  GetMembersOutput,
+  DeleteGroupMemberInput,
+  DeleteGroupMemberOutput,
 } from './index';
-import { fetchGroupMember } from '../../../utils/axios/packingList/together';
 
 export interface TogetherAPI {
   together: {
@@ -61,11 +67,14 @@ export interface TogetherAPI {
     updatePackingListPacker: (
       payload: UpdatePackingListPackerInput,
     ) => Promise<UpdatePackingListPackerOutput>;
-    getGroupMembers: (groupId: string) => Promise<GetGroupMembersOutput>;
-    getPackingListDetail: (
+    getPackingListHeader: (
+      pacingListId: string,
+      isAloned: boolean,
+    ) => Promise<GetTogetherPackingListHeaderOutput>;
+    getPackingListBody: (
       pacingListId: string,
       inviteCode?: string,
-    ) => Promise<GetTogetherPackingListDetailOutput>;
+    ) => Promise<GetTogetherPackingListBodyOutput>;
     addPackingListCategory: (
       payload: AddTogetherPackingListCategoryInput,
     ) => Promise<AddTogetherPackingListCategoryOutput>;
@@ -89,7 +98,9 @@ export interface TogetherAPI {
       payload: AddTogetherPackingListIntroInput,
     ) => Promise<AddTogetherPackingListIntroOutput>;
     getInvited: (inviteCode: string) => Promise<GetInvitedOutput>;
+    getMembers: (packingListId: string) => Promise<GetMembersOutput>;
     addMember: (payload: AddMemberInput) => Promise<AddMemberOutput>;
+    deleteMember: (payload: DeleteGroupMemberInput) => Promise<DeleteGroupMemberOutput>;
   };
 }
 
@@ -104,8 +115,9 @@ const createTogetherAPI = (): TogetherAPI => {
         fetchUpdatePackingListIsSaved(payload),
       updatePackingListPacker: (payload: UpdatePackingListPackerInput) =>
         fetchUpdatePackingListPacker(payload),
-      getGroupMembers: (groupId: string) => fetchGroupMember(groupId),
-      getPackingListDetail: (pacingListId: string) => fetchPackingListDetail(pacingListId),
+      getPackingListHeader: (pacingListId: string, isAloned: boolean) =>
+        fetchPackingListHeader(pacingListId, isAloned),
+      getPackingListBody: (pacingListId: string) => fetchPackingListBody(pacingListId),
       addPackingListCategory: (payload: AddTogetherPackingListCategoryInput) =>
         fetchAddPackingListCategory(payload),
       updatePackingListCategory: (payload: UpdateTogetherPackingListCategoryInput) =>
@@ -122,7 +134,9 @@ const createTogetherAPI = (): TogetherAPI => {
       addTogetherPackingListFolder: (payload: AddTogetherPackingListIntroInput) =>
         fetchAddTogetherPackingFolder(payload),
       getInvited: (inviteCode: string) => fetchInvited(inviteCode),
+      getMembers: (packingListId: string) => fetchMembers(packingListId),
       addMember: (payload: AddMemberInput) => fetchAddMember(payload),
+      deleteMember: (payload: DeleteGroupMemberInput) => fetchDeleteMember(payload),
     },
   };
 };

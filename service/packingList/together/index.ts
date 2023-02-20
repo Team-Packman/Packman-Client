@@ -74,20 +74,6 @@ export interface UpdatePackingListPackerOutput {
   };
 }
 
-export interface GetGroupMembersOutput {
-  status: number;
-  success: boolean;
-  message: string;
-  data: {
-    members: {
-      // 그룹에 속한 멤버 배열
-      _id: string; //  멤버 id
-      nickname: string; // 멤버 닉네임
-      profileImageId: string; // 멤버 프로필 사진 id
-    }[];
-  };
-}
-
 /**
  * 수정 필요
  */
@@ -117,15 +103,24 @@ export interface TogetherPackingListOutput {
   };
 }
 
-export interface GetTogetherPackingListDetailOutput {
+export interface GetTogetherPackingListHeaderOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    id: string; // 혼자패킹일 때 → 혼자 패킹리스트id  함깨패킹일 때 → 혼자-함께 패킹리스트 id
+    title: string; // 함께 패킹리스트 제목
+    departureDate: string; // 출발 날
+  };
+}
+
+export interface GetTogetherPackingListBodyOutput {
   status: number;
   success: boolean;
   message: string;
   data: {
     id: string; //함께패킹리스트-나의 패킹리스트 연결 키(본 키로 함께 패킹리스트 구분)
-    title: string; // 패킹리스트 제목
     folderId: string; //해당 패킹리스트가 속한 폴더 id
-    departureDate: string; // 출발 날짜
     togetherPackingList: {
       id: string; // 함께 패킹리스트 id
       groupId: string; //그룹 id
@@ -162,16 +157,6 @@ export interface GetTogetherPackingListDetailOutput {
         }[];
       }[];
     };
-    group: {
-      id: string;
-      member: {
-        // 그룹에 속한 멤버 배열
-        id: string; //  멤버 id
-        nickname: string; // 멤버 닉네임
-        profileImage: string; // 멤버 프로필 사진 id
-      }[];
-    };
-    isMember: boolean;
   };
 }
 export interface AddTogetherPackingListCategoryInput {
@@ -419,6 +404,24 @@ export interface GetInvitedOutput {
   };
 }
 
+export interface GetMembersOutput {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    title: string; // 함께 패킹리스트 제목
+    departureDate: string; // 함께 패킹리스트 출발 날짜
+    remainDay: string; // 함께 패킹리스트 남은 출발 날짜
+    member: {
+      // 그룹에 속한 멤버 배열
+      id: string; //  멤버 id
+      nickname: string; // 멤버 닉네임
+      profileImage: string; // 멤버 프로필 사진 id
+    }[];
+    inviteCode: string; // 함께 패킹리스트 초대코드
+  };
+}
+
 export interface AddMemberInput {
   listId: string;
 }
@@ -430,4 +433,15 @@ export interface AddMemberOutput {
   data: {
     listId: string; // 함께-혼자 패킹리스트 연결 id
   };
+}
+
+export interface DeleteGroupMemberInput {
+  listId: string;
+  memberId: string;
+}
+
+export interface DeleteGroupMemberOutput {
+  status: number;
+  success: boolean;
+  message: string;
 }
