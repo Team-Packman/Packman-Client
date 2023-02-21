@@ -332,12 +332,10 @@ export interface GetTogetherFolderOutput {
   success: boolean;
   message: string;
   data: {
-    togetherFolder: {
-      // 함께 패킹 폴더 배열
-      id: string; // 폴더 id
-      name: string; // 폴더 이름
-    }[];
-  };
+    // 함께 패킹 폴더 배열
+    id: string; // 폴더 id
+    name: string; // 폴더 이름
+  }[];
 }
 
 export interface AddTogetherPackingListIntroInput {
