@@ -128,7 +128,7 @@ export default function SwipeableListItem(props: ItemProps) {
                 <Chip text={`총 ${packTotalNum}개의 짐`} />
               </Card.SubTitle>
             </Card.LeftContainer>
-            <Card.RightContainer overlay={rightContianerStyle}>
+            <Card.RightContainer overlay={rightContainerStyle}>
               <Card.Description overlay={descriptionStyle}>
                 {Utility.getRemainPackDesc(packRemainNum, departureDate)}
               </Card.Description>
@@ -258,7 +258,7 @@ const leftContainerStyle = css`
   }
 `;
 
-const rightContianerStyle = css`
+const rightContainerStyle = css`
   display: flex;
   justify-content: flex-end;
 
