@@ -43,7 +43,7 @@ function AxiosInterceptor({ children }: PropsWithChildren) {
   const requestIntercept = client.interceptors.request.use(
     (config: AxiosRequestConfig) => {
       if (config.headers && !config.headers['Authorization']) {
-        config.headers['Authorization'] = `${accessToken}`;
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
 
         return config;
       }
@@ -66,7 +66,7 @@ function AxiosInterceptor({ children }: PropsWithChildren) {
           const tokens = await refresh();
 
           if (tokens) {
-            config.headers['Authorization'] = `${tokens.accessToken}`;
+            config.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
 
             return client(config);
           }

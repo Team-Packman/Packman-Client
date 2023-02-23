@@ -16,7 +16,7 @@ export const fetchGoogleLogin = async (payload: GoogleLoginInput): Promise<Googl
 export const fetchKakaoAuth = async (code: string): Promise<KakaoAuthOutput> => {
   const url = encodeURI(process.env.NEXT_PUBLIC_REDIRECT ?? '');
   const { data } = await client.post(
-    `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${code}&redirect_uri=${url}`,
+    `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&code=${code}&redirect_uri=${url}&client_secret=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET}`,
     {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
