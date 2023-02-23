@@ -7,6 +7,7 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
+import Script from 'next/script';
 import HeadMeta from '../components/HeadMeta';
 import { googleTagManagerId } from '../utils/constant/index';
 
@@ -39,6 +40,8 @@ class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
+          {/* Google Optimize Snippet */}
+          <Script src="https://www.googleoptimize.com/optimize.js?id=OPT-KC3RPLW"></Script>
           {/* 검색엔진이 대부분 무시하는 추세 */}
           {/* <meta name="keywords" content="짐,짐 챙기기,여행 짐,여행 체크리스트" /> */}
           {/* <HeadMeta /> */}
@@ -55,7 +58,7 @@ class MyDocument extends Document {
           <meta property="og:type" content="website" />
           <meta
             property="og:title"
-            content={'팩맨 Packman - 내손안 짐챙김 도우미'}
+            content={'팩맨 Packman - 내 손안 짐 챙김 도우미'}
             key="og:title"
           />
           <meta

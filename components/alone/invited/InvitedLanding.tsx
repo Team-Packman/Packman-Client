@@ -27,7 +27,7 @@ function InvitedLanding() {
       enabled: !!inviteCode && !!user.isAlreadyUser,
       onSuccess: ({ data: { id, isOwner } }) => {
         if (isOwner) {
-          router.replace(`/alone?id=${id}&folderId=${folderId}`);
+          router.replace(`/alone?id=${id}`);
         } else {
           router.replace(`/alone/shared?id=${id}`);
         }

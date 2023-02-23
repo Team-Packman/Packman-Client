@@ -6,7 +6,6 @@
 
 
 ## 팀원 소개
-
 <div align="center">
 	<table>
 	<th>정세연 @n0eyes</th>
@@ -165,6 +164,7 @@
     }
     
     ```
+    
     
 1. 오브젝트, 함수, 그리고 인스턴스에는 `camelCase`를 사용한다.
 - ex)
