@@ -19,8 +19,8 @@ function DropBox(props: DropBoxProps) {
   };
 
   return (
-    <Dropdown isOpen={isOpen} overlay={dropdownStyle} onChange={toggleDropdown}>
-      <Dropdown.Trigger as={trigger} onClick={toggleDropdown} />
+    <Dropdown isOpen={isOpen} onChange={toggleDropdown} overlay={dropdownStyle}>
+      <Dropdown.Trigger as={trigger} onClick={toggleDropdown} overlay={dropdownTriggerStyle} />
       <Dropdown.Menu overlay={dropdownMenuStyle}>{data}</Dropdown.Menu>
     </Dropdown>
   );
@@ -51,4 +51,10 @@ const dropdownMenuStyle = css`
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 100;
+`;
+
+const dropdownTriggerStyle = css<{ isOpen?: boolean }>`
+  & .rotate {
+    transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  }
 `;

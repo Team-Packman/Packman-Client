@@ -1,4 +1,4 @@
-import { cloneElement, createContext, PropsWithChildren, ReactElement, useContext } from 'react';
+import { createContext, PropsWithChildren, ReactElement, useContext } from 'react';
 import styled, { CSSProp } from 'styled-components';
 
 interface DropdownProps {
@@ -22,6 +22,7 @@ interface ItemProps {
 interface TriggerProps {
   as: ReactElement;
   onClick: VoidFunction;
+  overlay?: CSSProp;
 }
 
 export const DropdownContext = createContext({
@@ -69,11 +70,11 @@ Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
 };
 
 Dropdown.Trigger = function Trigger(props: TriggerProps) {
-  const { as, onClick } = props;
+  const { as, onClick, overlay } = props;
   const { isOpen } = useContext(DropdownContext);
 
   return (
-    <StyledTrigger isOpen={isOpen} onClick={onClick}>
+    <StyledTrigger isOpen={isOpen} onClick={onClick} overlay={overlay}>
       {as}
     </StyledTrigger>
   );
@@ -103,8 +104,6 @@ const StyledItem = styled.div<{ overlay?: CSSProp }>`
   ${({ overlay }) => overlay};
 `;
 
-const StyledTrigger = styled.div<{ isOpen?: boolean }>`
-  & .rotate {
-    transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
-  }
+const StyledTrigger = styled.div<{ overlay?: CSSProp; isOpen?: boolean }>`
+  ${({ overlay }) => overlay};
 `;
