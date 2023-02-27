@@ -17,6 +17,7 @@ import { useInventory, useInventoryMutation } from '../../utils/hooks/queries/in
 function PackingListLanding() {
   const router = useRouter();
   const type = router.query.type as string;
+  const id = router.query.id as string;
 
   const [isDropBoxOpen, toggle, setDropBoxClose] = useBoolean(false);
   const [isModalOpen, setModalOpen, setModalClose] = useBoolean(false);
@@ -27,7 +28,7 @@ function PackingListLanding() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isSwiped, setIsSwiped] = useState(false);
 
-  const inventory = useInventory();
+  const inventory = useInventory({ id, type });
   const { deleteTogetherInventoryMutate, deleteAloneInventoryMutate } = useInventoryMutation();
 
   const [isDragged, setIsDragged] = useState<boolean[]>(

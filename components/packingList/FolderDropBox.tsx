@@ -29,8 +29,9 @@ function FolderDropBox(props: FolderDropBoxProps) {
   const { onClick: cancelDeleteMode } = props;
   const router = useRouter();
   const type = router.query.type as string;
+  const id = router.query.id as string;
 
-  const inventory = useInventory();
+  const inventory = useInventory({ id, type });
   if (!inventory) return null;
 
   const onChange = (selectedFolderId: string) => {
