@@ -56,9 +56,20 @@ function AloneLanding() {
 
   const [{ sectionArr }, _, scrollEvent] = useHide(0);
 
+  const getPackingListHeader = useAPI((api) => api.packingList.together.getPackingListHeader);
   const getAlonePackingListDetail = useAPI(
     (api) => api.packingList.alone.getAlonePackingListDetail,
   );
+
+  const { data: packingListHeader } = useQuery(
+    ['getPackingListHeader', id],
+    () => getPackingListHeader(id as string, true),
+    {
+      refetchInterval: 3000,
+      enabled: !!id,
+    },
+  );
+
   const { data } = useQuery(
     ['getAlonePackingListDetail', id],
     () => getAlonePackingListDetail(id as string),
@@ -165,8 +176,9 @@ function AloneLanding() {
     'deleteAlonePackingListItem',
     deleteAlonePackingListItem,
   );
-  if (!data) return <Loading />;
+  if (!data || !packingListHeader) return <Loading />;
   const { data: list } = data;
+  const { data: header } = packingListHeader;
   const addTemplateModalOpenHandler = () => setAddTemplateModalOpen(true);
   const addTemplateModalCloseHandler = () => setAddTemplateModalOpen(false);
   const shareTemplateModalOpenHandler = () => setShareTemplateModalOpen(true);
@@ -392,8 +404,8 @@ function AloneLanding() {
       option={
         <CheckListHeader
           listId={list.id}
-          departureDate={list.departureDate}
-          title={list.title}
+          departureDate={header.departureDate}
+          title={header.title}
           updateRemainingInfo={updateRemainingInfo}
         />
       }
