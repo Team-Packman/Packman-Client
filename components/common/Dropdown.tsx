@@ -1,42 +1,41 @@
 import { createContext, PropsWithChildren, ReactElement, useContext } from 'react';
 import styled, { CSSProp } from 'styled-components';
-import { FONT_STYLES } from '../../styles/font';
-import { packmanColors } from '../../styles/color';
 
 interface DropdownProps {
   isOpen: boolean;
-  toggle: VoidFunction;
-  dropdownStyle?: CSSProp;
-}
-
-interface MenuProps {
-  dropdownMenuStyle?: CSSProp;
-}
-
-interface ItemProps {
-  dropdownItemStyle?: CSSProp;
-  isCurrentFolder?: boolean;
-  onClick: VoidFunction;
+  styles?: CSSProp;
+  onChange: VoidFunction;
 }
 
 interface BackgroundProps {
   onClick?: VoidFunction;
 }
+interface MenuProps {
+  styles?: CSSProp;
+}
+
+interface ItemProps {
+  onClick?: VoidFunction;
+  styles?: CSSProp;
+}
+
 interface TriggerProps {
   as: ReactElement;
 }
 
 export const DropdownContext = createContext({
   isOpen: false,
-  toggle: () => {},
+  onChange: () => {},
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
-  const { children, isOpen, toggle, dropdownStyle } = props;
+  const { children, isOpen, styles, onChange } = props;
 
   return (
-    <DropdownContext.Provider value={{ isOpen, toggle }}>
-      <StyledDropdown dropdownStyle={dropdownStyle}>{children}</StyledDropdown>
+    <DropdownContext.Provider value={{ isOpen, onChange }}>
+      <StyledDropdown styles={styles} onChange={onChange}>
+        {children}
+      </StyledDropdown>
     </DropdownContext.Provider>
   );
 }
@@ -47,14 +46,14 @@ Dropdown.Background = function Background(props: BackgroundProps) {
 };
 
 Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
-  const { children, dropdownMenuStyle } = props;
-  const { isOpen, toggle } = useContext(DropdownContext);
+  const { children, styles } = props;
+  const { isOpen, onChange } = useContext(DropdownContext);
 
   return (
     <>
       {isOpen && (
-        <StyledMenu dropdownMenuStyle={dropdownMenuStyle}>
-          <Dropdown.Background onClick={toggle} />
+        <StyledMenu styles={styles}>
+          <Dropdown.Background onClick={onChange} />
           {children}
         </StyledMenu>
       )}
@@ -63,13 +62,9 @@ Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
 };
 
 Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
-  const { children, dropdownItemStyle, isCurrentFolder, onClick } = props;
+  const { children, onClick, styles } = props;
   return (
-    <StyledItem
-      isCurrentFolder={isCurrentFolder}
-      dropdownItemStyle={dropdownItemStyle}
-      onClick={onClick}
-    >
+    <StyledItem styles={styles} onClick={onClick}>
       {children}
     </StyledItem>
   );
@@ -83,20 +78,12 @@ Dropdown.Trigger = function Trigger(props: TriggerProps) {
 
 export default Dropdown;
 
-const StyledDropdown = styled.div<{ dropdownStyle?: CSSProp }>`
-  ${({ dropdownStyle }) => dropdownStyle}
+const StyledDropdown = styled.div<{ styles?: CSSProp }>`
+  ${({ styles }) => styles}
 `;
 
-const StyledMenu = styled.div<{ dropdownMenuStyle?: CSSProp }>`
-  ${({ dropdownMenuStyle }) => dropdownMenuStyle}
-`;
-
-const StyledItem = styled.div<{ isCurrentFolder?: boolean; dropdownItemStyle?: CSSProp }>`
-  ${({ dropdownItemStyle }) => dropdownItemStyle};
-  ${({ isCurrentFolder }) =>
-    isCurrentFolder ? FONT_STYLES.BODY4_SEMIBOLD : FONT_STYLES.BODY3_REGULAR};
-  color: ${({ isCurrentFolder }) =>
-    isCurrentFolder ? packmanColors.pmBlack : packmanColors.pmDarkGrey};
+const StyledMenu = styled.div<{ styles?: CSSProp }>`
+  ${({ styles }) => styles}
 `;
 
 const StyledBackground = styled.div`
@@ -106,4 +93,8 @@ const StyledBackground = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+`;
+
+const StyledItem = styled.div<{ styles?: CSSProp }>`
+  ${({ styles }) => styles};
 `;
