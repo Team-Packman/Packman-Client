@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import useAPI from '../../utils/hooks/useAPI';
 import Layout from '../common/Layout';
 import SwipeableList from './SwipeableList';
 import SwipeablelistItem from './SwipeableListItem';
@@ -139,7 +138,6 @@ function PackingListLanding() {
     closeModal();
   };
 
-  // StyledFolderInfo 클릭한 경우
   const onClickFolderInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // 스와이프 아이템 하나라도 열려있다면 초기화
     resetSwipableListItem();
@@ -202,9 +200,7 @@ function PackingListLanding() {
       )}
       <StyledRoot onClick={() => isDropBoxOpen && setDropBoxClose()}>
         <StyledFolderInfo onClick={onClickFolderInfo}>
-          <h1>{currentFolder.name}</h1>
-
-          <FolderDropBox onChange={() => setIsDeleting(false)} />
+          <FolderDropBox onClick={() => setIsDeleting(false)} />
         </StyledFolderInfo>
 
         {!(togetherPackingList ?? alonePackingList).length ? (
@@ -268,6 +264,7 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   height: 100%;
 `;
 const StyledFolderInfo = styled.div`
@@ -275,14 +272,13 @@ const StyledFolderInfo = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
+
   width: 100%;
   height: 5.4rem;
+
   padding-left: 2.4rem;
   margin-top: 0.842rem;
   flex-shrink: 0;
-  & > h1 {
-    ${FONT_STYLES.HEADLINE2_SEMIBOLD};
-  }
 `;
 
 const StyledMain = styled.div<{ isEmpty: boolean }>`
