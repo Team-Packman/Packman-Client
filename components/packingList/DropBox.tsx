@@ -1,39 +1,27 @@
-import Link from 'next/link';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import Dropdown from '../common/Dropdown';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import Image from 'next/image';
-import { FONT_STYLES } from '../../styles/font';
 
 interface DropBoxProps {
-  folders: Array<{ id: string; name: string }>;
-  link: string;
-  currentFolder: {
-    id: string;
-    name: string;
-  };
-  onClick: VoidFunction;
+  data: ReactNode;
+  onChange: VoidFunction;
 }
 
 function DropBox(props: DropBoxProps) {
-  const {
-    folders,
-    link,
-    currentFolder: { id: currentId },
-    onClick,
-  } = props;
-
+  const { data, onChange } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
-    onClick();
+    // 스와이프 리스트 삭제 모드 해제
+    onChange();
   };
 
   return (
-    <Dropdown isOpen={isOpen} style={dropdownStyle} onChange={toggleDropdown}>
+    <Dropdown isOpen={isOpen} overlay={dropdownStyle} onChange={toggleDropdown}>
       <Dropdown.Trigger
         as={
           <StyledToggleImage toggle={isOpen} onClick={toggleDropdown}>
@@ -41,15 +29,7 @@ function DropBox(props: DropBoxProps) {
           </StyledToggleImage>
         }
       />
-      <Dropdown.Menu style={dropdownMenuStyle}>
-        {folders.map(({ id, name }) => (
-          <Dropdown.Item key={id} onClick={toggleDropdown} style={dropdownItemStyle}>
-            <Link href={`${link}${id}`}>
-              <StyledItem isCurrentFolder={id === currentId}>{name}</StyledItem>
-            </Link>
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
+      <Dropdown.Menu overlay={dropdownMenuStyle}>{data}</Dropdown.Menu>
     </Dropdown>
   );
 }
@@ -76,34 +56,6 @@ const dropdownMenuStyle = css`
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 100;
-`;
-
-const dropdownItemStyle = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 4.8rem;
-  font-size: 1.5rem;
-  &:not(:last-child) {
-    border-bottom: 1px solid ${packmanColors.pmGrey};
-  }
-`;
-
-const StyledItem = styled.div<{ isCurrentFolder: boolean }>`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  ${({ isCurrentFolder }) =>
-    isCurrentFolder
-      ? css`
-          ${FONT_STYLES.BODY4_SEMIBOLD};
-          color: ${packmanColors.pmBlack};
-        `
-      : css`
-          ${FONT_STYLES.BODY3_REGULAR};
-          color: ${packmanColors.pmDarkGrey};
-        `}
 `;
 
 const StyledToggleImage = styled.div<{ toggle: boolean }>`

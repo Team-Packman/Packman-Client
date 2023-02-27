@@ -3,7 +3,7 @@ import styled, { CSSProp } from 'styled-components';
 
 interface DropdownProps {
   isOpen: boolean;
-  style?: CSSProp;
+  overlay?: CSSProp;
   onChange: VoidFunction;
 }
 
@@ -11,12 +11,12 @@ interface BackgroundProps {
   onClick?: VoidFunction;
 }
 interface MenuProps {
-  style?: CSSProp;
+  overlay?: CSSProp;
 }
 
 interface ItemProps {
   onClick?: VoidFunction;
-  style?: CSSProp;
+  overlay?: CSSProp;
 }
 
 interface TriggerProps {
@@ -29,11 +29,11 @@ export const DropdownContext = createContext({
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
-  const { children, isOpen, style, onChange } = props;
+  const { children, isOpen, overlay, onChange } = props;
 
   return (
     <DropdownContext.Provider value={{ isOpen, onChange }}>
-      <StyledDropdown css={style} onChange={onChange}>
+      <StyledDropdown overlay={overlay} onChange={onChange}>
         {children}
       </StyledDropdown>
     </DropdownContext.Provider>
@@ -46,13 +46,13 @@ Dropdown.Background = function Background(props: BackgroundProps) {
 };
 
 Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
-  const { children, style } = props;
+  const { children, overlay } = props;
   const { isOpen, onChange } = useContext(DropdownContext);
 
   return (
     <>
       {isOpen && (
-        <StyledMenu css={style}>
+        <StyledMenu overlay={overlay}>
           <Dropdown.Background onClick={onChange} />
           {children}
         </StyledMenu>
@@ -62,9 +62,11 @@ Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
 };
 
 Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
-  const { children, onClick, style } = props;
+  const { children, overlay } = props;
+  const { onChange } = useContext(DropdownContext);
+
   return (
-    <StyledItem css={style} onClick={onClick}>
+    <StyledItem overlay={overlay} onClick={onChange}>
       {children}
     </StyledItem>
   );
@@ -78,12 +80,12 @@ Dropdown.Trigger = function Trigger(props: TriggerProps) {
 
 export default Dropdown;
 
-const StyledDropdown = styled.div<{ css?: CSSProp }>`
-  ${({ css }) => css}
+const StyledDropdown = styled.div<{ overlay?: CSSProp }>`
+  ${({ overlay }) => overlay}
 `;
 
-const StyledMenu = styled.div<{ css?: CSSProp }>`
-  ${({ css }) => css}
+const StyledMenu = styled.div<{ overlay?: CSSProp }>`
+  ${({ overlay }) => overlay}
 `;
 
 const StyledBackground = styled.div`
@@ -95,6 +97,6 @@ const StyledBackground = styled.div`
   height: 100%;
 `;
 
-const StyledItem = styled.div<{ css?: CSSProp }>`
-  ${({ css }) => css};
+const StyledItem = styled.div<{ overlay?: CSSProp }>`
+  ${({ overlay }) => overlay};
 `;
