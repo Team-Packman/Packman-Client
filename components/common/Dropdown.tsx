@@ -1,53 +1,42 @@
-import React, { createElement, ReactNode } from 'react';
-import {
-  cloneElement,
-  createContext,
-  PropsWithChildren,
-  ReactElement,
-  useContext,
-  ElementType,
-} from 'react';
+import { createContext, PropsWithChildren, ReactElement, useContext } from 'react';
 import styled, { CSSProp } from 'styled-components';
-import useBoolean from '../../utils/hooks/common/useBoolean';
+import { FONT_STYLES } from '../../styles/font';
+import { packmanColors } from '../../styles/color';
 
 interface DropdownProps {
-  isOpen?: boolean;
-  onChange: (args: string) => void;
-  overlay?: CSSProp;
+  isOpen: boolean;
+  toggle: VoidFunction;
+  dropdownStyle?: CSSProp;
+}
+
+interface MenuProps {
+  dropdownMenuStyle?: CSSProp;
+}
+
+interface ItemProps {
+  dropdownItemStyle?: CSSProp;
+  isCurrentFolder?: boolean;
+  onClick: VoidFunction;
 }
 
 interface BackgroundProps {
   onClick?: VoidFunction;
 }
-interface MenuProps {
-  children: ((...args: unknown[]) => JSX.Element) | ReactNode | undefined;
-  overlay?: CSSProp;
-}
-
-interface ItemProps<T> {
-  onClick?: VoidFunction;
-  as?: ReactElement<T> | ElementType;
-  value: T;
-}
-
 interface TriggerProps {
   as: ReactElement;
 }
 
 export const DropdownContext = createContext({
   isOpen: false,
-  onChange: (id: string) => {},
-  open: () => {},
-  close: () => {},
+  toggle: () => {},
 });
 
 function Dropdown(props: PropsWithChildren<DropdownProps>) {
-  const { children, overlay, onChange } = props;
-  const [isOpen, open, close] = useBoolean(false);
+  const { children, isOpen, toggle, dropdownStyle } = props;
 
   return (
-    <DropdownContext.Provider value={{ isOpen, open, onChange, close }}>
-      <StyledDropdown overlay={overlay}>{children}</StyledDropdown>
+    <DropdownContext.Provider value={{ isOpen, toggle }}>
+      <StyledDropdown dropdownStyle={dropdownStyle}>{children}</StyledDropdown>
     </DropdownContext.Provider>
   );
 }
@@ -58,57 +47,56 @@ Dropdown.Background = function Background(props: BackgroundProps) {
 };
 
 Dropdown.Menu = function Menu(props: PropsWithChildren<MenuProps>) {
-  const { children, overlay } = props;
-  const { isOpen, close } = useContext(DropdownContext);
+  const { children, dropdownMenuStyle } = props;
+  const { isOpen, toggle } = useContext(DropdownContext);
 
   return (
     <>
-      {typeof children === 'function'
-        ? children(close)
-        : isOpen && (
-            <StyledMenu overlay={overlay}>
-              <Dropdown.Background onClick={close} />
-              {children}
-            </StyledMenu>
-          )}
+      {isOpen && (
+        <StyledMenu dropdownMenuStyle={dropdownMenuStyle}>
+          <Dropdown.Background onClick={toggle} />
+          {children}
+        </StyledMenu>
+      )}
     </>
   );
 };
 
-Dropdown.Item = function Item<T extends { id: string; name: string }>(
-  props: PropsWithChildren<ItemProps<T>>,
-) {
-  const { children, as = 'li', value } = props;
-  const { onChange: route, close } = useContext(DropdownContext);
-
-  const onChange = () => {
-    route(value.id);
-    close();
-  };
-
+Dropdown.Item = function Item(props: PropsWithChildren<ItemProps>) {
+  const { children, dropdownItemStyle, isCurrentFolder, onClick } = props;
   return (
-    <>
-      {typeof as === 'string'
-        ? createElement(as, { onChange }, children)
-        : cloneElement(as as ReactElement, { ...value, onChange }, children)}
-    </>
+    <StyledItem
+      isCurrentFolder={isCurrentFolder}
+      dropdownItemStyle={dropdownItemStyle}
+      onClick={onClick}
+    >
+      {children}
+    </StyledItem>
   );
 };
 
 Dropdown.Trigger = function Trigger(props: TriggerProps) {
   const { as } = props;
 
-  return <>{as}</>;
+  return as;
 };
 
 export default Dropdown;
 
-const StyledDropdown = styled.div<{ overlay?: CSSProp }>`
-  ${({ overlay }) => overlay}
+const StyledDropdown = styled.div<{ dropdownStyle?: CSSProp }>`
+  ${({ dropdownStyle }) => dropdownStyle}
 `;
 
-const StyledMenu = styled.div<{ overlay?: CSSProp }>`
-  ${({ overlay }) => overlay}
+const StyledMenu = styled.div<{ dropdownMenuStyle?: CSSProp }>`
+  ${({ dropdownMenuStyle }) => dropdownMenuStyle}
+`;
+
+const StyledItem = styled.div<{ isCurrentFolder?: boolean; dropdownItemStyle?: CSSProp }>`
+  ${({ dropdownItemStyle }) => dropdownItemStyle};
+  ${({ isCurrentFolder }) =>
+    isCurrentFolder ? FONT_STYLES.BODY4_SEMIBOLD : FONT_STYLES.BODY3_REGULAR};
+  color: ${({ isCurrentFolder }) =>
+    isCurrentFolder ? packmanColors.pmBlack : packmanColors.pmDarkGrey};
 `;
 
 const StyledBackground = styled.div`
@@ -116,7 +104,6 @@ const StyledBackground = styled.div`
   z-index: -1;
   top: 0;
   left: 0;
-
   width: 100%;
   height: 100%;
 `;
