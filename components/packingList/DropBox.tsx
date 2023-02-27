@@ -1,27 +1,33 @@
 import { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import Dropdown from '../common/Dropdown';
-import { ReactElement, ReactNode, useState } from 'react';
+import { ReactElement, useState } from 'react';
 
-interface DropBoxProps {
-  data: ReactNode;
+interface DropBoxProps<T> {
+  data: T[];
   onChange: VoidFunction;
   trigger: ReactElement;
+  items: ReactElement;
 }
 
-function DropBox(props: DropBoxProps) {
-  const { data, onChange, trigger } = props;
+function DropBox<T extends { id: string; name: string }>(props: DropBoxProps<T>) {
+  const { data, onChange, trigger, items } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
-    onChange();
   };
 
   return (
     <Dropdown isOpen={isOpen} onChange={toggleDropdown} overlay={dropdownStyle}>
-      <Dropdown.Trigger as={trigger} onClick={toggleDropdown} overlay={dropdownTriggerStyle} />
-      <Dropdown.Menu overlay={dropdownMenuStyle}>{data}</Dropdown.Menu>
+      <Dropdown.Trigger as={trigger} />
+      <Dropdown.Menu overlay={dropdownMenuStyle}>
+        {data.map(({ id, name }) => (
+          <Dropdown.Item key={id} value={{ id, name }}>
+            {items}
+          </Dropdown.Item>
+        ))}
+      </Dropdown.Menu>
     </Dropdown>
   );
 }
@@ -51,10 +57,4 @@ const dropdownMenuStyle = css`
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 100;
-`;
-
-const dropdownTriggerStyle = css<{ isOpen?: boolean }>`
-  & .rotate {
-    transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
-  }
 `;
