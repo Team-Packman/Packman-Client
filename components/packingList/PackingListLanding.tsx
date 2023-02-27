@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
-import iShowMore from '../../public/assets/svg/iShowMore.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
@@ -206,17 +204,12 @@ function PackingListLanding() {
       <StyledRoot onClick={() => isDropBoxOpen && setDropBoxClose()}>
         <StyledFolderInfo onClick={onClickFolderInfo}>
           <h1>{currentFolder.name}</h1>
+
           <DropBox
-            trigger={
-              <StyledToggleImage toggle={isDropBoxOpen} onClick={toggle}>
-                <Image src={iShowMore} alt="상세보기" layout="fill" />
-              </StyledToggleImage>
-            }
             folders={folder}
             link={`/packing-list?type=${type}&id=`}
-            current={currentFolder.id}
-            onReset={() => setIsDeleting(false)}
-            isOpen={isDropBoxOpen}
+            currentFolder={currentFolder}
+            onClick={() => setIsDeleting(false)}
           />
         </StyledFolderInfo>
 
@@ -313,11 +306,4 @@ const StyledEmpty = styled.div`
   text-align: center;
   color: ${packmanColors.pmGrey};
   ${FONT_STYLES.HEADLINE1_MEDIUM};
-`;
-
-const StyledToggleImage = styled.div<{ toggle: boolean }>`
-  width: 2.4rem;
-  height: 2.4rem;
-  transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
