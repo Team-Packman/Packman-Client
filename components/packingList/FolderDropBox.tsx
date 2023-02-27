@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { PropsWithChildren, useContext } from 'react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { DropdownContext } from '../common/Dropdown';
@@ -19,9 +19,9 @@ interface FolderDropBoxTriggerProps {
   currentFolderName: string;
 }
 interface FolderDropBoxItemProps {
-  value: { id: string; name: string };
-  onChange: (arg?: string) => void;
-  folderId?: string;
+  value?: { id: string; name: string };
+  currentFolderId?: string;
+  onChange?: () => void;
 }
 
 function FolderDropBox(props: FolderDropBoxProps) {
@@ -67,9 +67,7 @@ function FolderDropBox(props: FolderDropBoxProps) {
       data={folder}
       onChange={onChange}
       trigger={<FolderDropBoxTrigger currentFolderName={currentFolderName} />}
-      items={({ value, onChange, folderId = currentFolderId }: FolderDropBoxItemProps) => (
-        <FolderDropBoxItem value={value} onChange={onChange} folderId={folderId} />
-      )}
+      item={<FolderDropBoxItem currentFolderId={currentFolderId} />}
     />
   );
 }
@@ -80,7 +78,7 @@ function FolderDropBoxTrigger(props: FolderDropBoxTriggerProps) {
 
   return (
     <StyledTrigger onClick={onChange}>
-      <h1>{currentFolderName}</h1>
+      <label>{currentFolderName}</label>
 
       <StyledToggleImage isOpen={isOpen}>
         <Image src={iShowMore} alt="상세보기" layout="fill" />
@@ -89,16 +87,22 @@ function FolderDropBoxTrigger(props: FolderDropBoxTriggerProps) {
   );
 }
 
-function FolderDropBoxItem(props: FolderDropBoxItemProps) {
-  const {
-    value: { id, name },
-    onChange,
-    folderId: currentFolderId,
-  } = props;
+function FolderDropBoxItem(props: PropsWithChildren<FolderDropBoxItemProps>) {
+  const { children, value, currentFolderId, onChange } = props;
+  const router = useRouter();
+  const type = router.query.type as string;
+
+  const changeFolder = (id: string | undefined) => {
+    onChange && onChange();
+    router.push(`/packing-list?type=${type}&id=${id || currentFolderId}`);
+  };
 
   return (
-    <StyledItem isCurrentFolder={id === currentFolderId} onClick={() => onChange(id)}>
-      {name}
+    <StyledItem
+      onClick={() => changeFolder(value?.id)}
+      isCurrentFolder={value?.id === currentFolderId}
+    >
+      {children}
     </StyledItem>
   );
 }
@@ -134,7 +138,7 @@ const StyledItem = styled.div<{ isCurrentFolder: boolean }>`
 const StyledTrigger = styled.div`
   display: flex;
 
-  & > h1 {
+  & > label {
     ${FONT_STYLES.HEADLINE2_SEMIBOLD};
   }
 `;
