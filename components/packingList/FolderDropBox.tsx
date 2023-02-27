@@ -15,8 +15,12 @@ interface FolderDropBoxProps {
   onClick: VoidFunction;
 }
 
+interface FolderDropBoxTriggerProps {
+  currentFolderName: string;
+}
+
 function FolderDropBox(props: FolderDropBoxProps) {
-  const { onClick } = props;
+  const { onClick: cancelDeleteMode } = props;
   const router = useRouter();
   const type = router.query.type as string;
   const id = router.query.id as string;
@@ -47,10 +51,6 @@ function FolderDropBox(props: FolderDropBoxProps) {
     currentFolder: { id: currentFolderId, name: currentFolderName },
   } = inventory.data;
 
-  const cancelDeleteMode = () => {
-    onClick();
-  };
-
   return (
     <DropBox
       data={
@@ -65,16 +65,22 @@ function FolderDropBox(props: FolderDropBoxProps) {
         </>
       }
       onChange={cancelDeleteMode}
-      trigger={
-        <StyledTrigger>
-          <h1>{currentFolderName}</h1>
-
-          <StyledToggleImage>
-            <Image src={iShowMore} alt="상세보기" layout="fill" />
-          </StyledToggleImage>
-        </StyledTrigger>
-      }
+      trigger={<FolderDropBoxTrigger currentFolderName={currentFolderName} />}
     />
+  );
+}
+
+function FolderDropBoxTrigger(props: FolderDropBoxTriggerProps) {
+  const { currentFolderName } = props;
+
+  return (
+    <StyledTrigger>
+      <h1>{currentFolderName}</h1>
+
+      <StyledToggleImage className="rotate">
+        <Image src={iShowMore} alt="상세보기" layout="fill" />
+      </StyledToggleImage>
+    </StyledTrigger>
   );
 }
 
@@ -121,11 +127,10 @@ const StyledTrigger = styled.div`
   }
 `;
 
-const StyledToggleImage = styled.div<{ isOpen?: boolean }>`
+const StyledToggleImage = styled.div`
   position: relative;
   width: 2.4rem;
   height: 2.4rem;
   transition: 0.2s ease-in-out;
-  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
   cursor: pointer;
 `;
