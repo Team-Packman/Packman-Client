@@ -31,7 +31,7 @@ export const fetchDeleteUserInfo = async (accessToken: string): Promise<DeleteUs
   const { data } = await client.delete('/user', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: accessToken,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return data;
