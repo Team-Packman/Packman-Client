@@ -14,7 +14,6 @@ import { packmanColors } from '../../styles/color';
 import { GetAloneInventoryOutput } from '../../service/inventory/alone';
 import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
-import Link from 'next/link';
 import useDynamic from '../../utils/hooks/useDynamic';
 import InventoryDeleteButton from './InventoryDeleteButton';
 import useBoolean from '../../utils/hooks/common/useBoolean';
@@ -207,25 +206,18 @@ function PackingListLanding() {
       <StyledRoot onClick={() => isDropBoxOpen && setDropBoxClose()}>
         <StyledFolderInfo onClick={onClickFolderInfo}>
           <h1>{currentFolder.name}</h1>
-          <div>
-            <StyledToggleImage toggle={isDropBoxOpen}>
-              <Image src={iShowMore} alt="상세보기" layout="fill" />
-            </StyledToggleImage>
-            {isDropBoxOpen && (
-              <DropBox>
-                {folder.map(({ id, name }) => (
-                  <Link key={id} href={`/packing-list?type=${type}&id=${id}`}>
-                    <StyledItem
-                      currentId={id === currentFolder.id}
-                      onClick={() => setIsDeleting(false)}
-                    >
-                      {name}
-                    </StyledItem>
-                  </Link>
-                ))}
-              </DropBox>
-            )}
-          </div>
+          <DropBox
+            trigger={
+              <StyledToggleImage toggle={isDropBoxOpen} onClick={toggle}>
+                <Image src={iShowMore} alt="상세보기" layout="fill" />
+              </StyledToggleImage>
+            }
+            folders={folder}
+            link={`/packing-list?type=${type}&id=`}
+            current={currentFolder.id}
+            onReset={() => setIsDeleting(false)}
+            isOpen={isDropBoxOpen}
+          />
         </StyledFolderInfo>
 
         {!(togetherPackingList ?? alonePackingList).length ? (
@@ -289,7 +281,6 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   height: 100%;
 `;
 const StyledFolderInfo = styled.div`
@@ -297,42 +288,16 @@ const StyledFolderInfo = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  padding-left: 2.4rem;
   width: 100%;
   height: 5.4rem;
+  padding-left: 2.4rem;
   margin-top: 0.842rem;
   flex-shrink: 0;
-
   & > h1 {
     ${FONT_STYLES.HEADLINE2_SEMIBOLD};
   }
-  & > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 0.8rem;
-  }
 `;
 
-const StyledItem = styled.div<{ currentId: boolean }>`
-  ${({ currentId }) => (currentId ? FONT_STYLES.BODY4_SEMIBOLD : FONT_STYLES.BODY3_REGULAR)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 4.8rem;
-  font-size: 1.5rem;
-  color: ${({ currentId }) => (currentId ? packmanColors.pmBlack : packmanColors.pmDarkGrey)};
-  &:not(:last-child) {
-    border-bottom: 1px solid ${packmanColors.pmGrey};
-  }
-`;
-const StyledToggleImage = styled.div<{ toggle: boolean }>`
-  width: 2.4rem;
-  height: 2.4rem;
-  transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
-`;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;
   flex-direction: column;
@@ -348,4 +313,11 @@ const StyledEmpty = styled.div`
   text-align: center;
   color: ${packmanColors.pmGrey};
   ${FONT_STYLES.HEADLINE1_MEDIUM};
+`;
+
+const StyledToggleImage = styled.div<{ toggle: boolean }>`
+  width: 2.4rem;
+  height: 2.4rem;
+  transition: 0.2s ease-in-out;
+  transform: ${({ toggle }) => (toggle ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
