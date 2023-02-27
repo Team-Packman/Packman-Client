@@ -16,6 +16,7 @@ import InventoryDeleteButton from './InventoryDeleteButton';
 import useBoolean from '../../utils/hooks/common/useBoolean';
 import DeleteInventoryListModal from './DeleteInventoryListModal';
 import FolderDropBox from './FolderDropBox';
+import apiService from '../../service';
 
 type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
 
@@ -35,10 +36,10 @@ function PackingListLanding() {
   const [isSwiped, setIsSwiped] = useState(false);
 
   // api 호출
-  const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-  const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  const deleteAloneInventory = useAPI((api) => api.inventory.alone.deleteAloneInventory);
-  const deleteTogetherInventory = useAPI((api) => api.inventory.together.deleteTogetherInventory);
+  const getAloneInventory = apiService.inventory.alone.getAloneInventory;
+  const getTogetherInventory = apiService.inventory.together.getTogetherInventory;
+  const deleteAloneInventory = apiService.inventory.alone.deleteAloneInventory;
+  const deleteTogetherInventory = apiService.inventory.together.deleteTogetherInventory;
   const { data: togetherInventory } = useQuery(
     ['getTogetherInventory', id],
     () => getTogetherInventory(id),
@@ -78,7 +79,7 @@ function PackingListLanding() {
     ).fill(false),
   );
 
-  if (!inventory || !isInventory(inventory)) return null;
+  if (!isInventory(inventory)) return null;
 
   const { togetherPackingList, alonePackingList, currentFolder } = inventory.data;
 
