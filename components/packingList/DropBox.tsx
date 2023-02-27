@@ -33,7 +33,7 @@ function DropBox(props: DropBoxProps) {
   };
 
   return (
-    <Dropdown isOpen={isOpen} styles={dropdownStyle} onChange={toggleDropdown}>
+    <Dropdown isOpen={isOpen} style={dropdownStyle} onChange={toggleDropdown}>
       <Dropdown.Trigger
         as={
           <StyledToggleImage toggle={isOpen} onClick={toggleDropdown}>
@@ -41,9 +41,9 @@ function DropBox(props: DropBoxProps) {
           </StyledToggleImage>
         }
       />
-      <Dropdown.Menu styles={dropdownMenuStyle}>
+      <Dropdown.Menu style={dropdownMenuStyle}>
         {folders.map(({ id, name }) => (
-          <Dropdown.Item key={id} onClick={toggleDropdown} styles={dropdownItemStyle}>
+          <Dropdown.Item key={id} onClick={toggleDropdown} style={dropdownItemStyle}>
             <Link href={`${link}${id}`}>
               <StyledItem isCurrentFolder={id === currentId}>{name}</StyledItem>
             </Link>
