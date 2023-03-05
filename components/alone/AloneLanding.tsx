@@ -19,6 +19,7 @@ import useHide from '../../utils/hooks/useHide';
 import { GetAlonePackingListDetailOutput } from '../../service/packingList/alone';
 import { AxiosError } from 'axios';
 import useDynamic from '../../utils/hooks/useDynamic';
+import HeadMeta from '../HeadMeta';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -397,119 +398,128 @@ function AloneLanding() {
   };
 
   return (
-    <Layout
-      back
-      title="패킹리스트"
-      folderId={list.folderId}
-      option={
-        <CheckListHeader
-          listId={list.id}
-          departureDate={header.departureDate}
-          title={header.title}
-          updateRemainingInfo={updateRemainingInfo}
-        />
-      }
-    >
-      <StyledAloneLanding>
-        <CheckListSubHeader categoryHandler={creatingCategoryHandler} />
-        <StyledBody onScroll={scrollEvent} ref={sectionArr.current[0]}>
-          {list.category.map(({ id: categoryId, name, pack }) => (
-            <PackagesWithCategory
-              key={categoryId}
-              packages={
-                <>
-                  {pack.map(({ id: packId, name, isChecked }) => (
-                    <PackingItem
-                      key={packId}
-                      listId={list.id}
-                      categoryId={categoryId}
-                      packId={packId}
-                      name={name}
-                      isChecked={isChecked}
-                      modalHandler={() =>
-                        bottomModalOpenHandler({
-                          ...initialFocus,
-                          type: 'item',
-                          packId,
-                          categoryId,
-                          title: name,
-                        })
-                      }
-                      isEditing={currentEditing === packId}
-                      updateItem={updateItem}
-                    />
-                  ))}
-                </>
-              }
-              isCreating={currentCreating === categoryId}
-              createHandler={() => creatingHandler(categoryId)}
-              creating={
-                <PackingItem
-                  listId={list.id}
+    <>
+      <HeadMeta
+        title={header.title}
+        description={`[${header.title}] 패킹리스트가 공유되었어요!`}
+        url={window.location.href}
+      />
+      <Layout
+        back
+        title="패킹리스트"
+        folderId={list.folderId}
+        option={
+          <CheckListHeader
+            listId={list.id}
+            departureDate={header.departureDate}
+            title={header.title}
+            updateRemainingInfo={updateRemainingInfo}
+          />
+        }
+      >
+        <StyledAloneLanding>
+          <CheckListSubHeader categoryHandler={creatingCategoryHandler} />
+          <StyledBody onScroll={scrollEvent} ref={sectionArr.current[0]}>
+            {list.category.map(({ id: categoryId, name, pack }) => (
+              <PackagesWithCategory
+                key={categoryId}
+                packages={
+                  <>
+                    {pack.map(({ id: packId, name, isChecked }) => (
+                      <PackingItem
+                        key={packId}
+                        listId={list.id}
+                        categoryId={categoryId}
+                        packId={packId}
+                        name={name}
+                        isChecked={isChecked}
+                        modalHandler={() =>
+                          bottomModalOpenHandler({
+                            ...initialFocus,
+                            type: 'item',
+                            packId,
+                            categoryId,
+                            title: name,
+                          })
+                        }
+                        isEditing={currentEditing === packId}
+                        updateItem={updateItem}
+                      />
+                    ))}
+                  </>
+                }
+                isCreating={currentCreating === categoryId}
+                createHandler={() => creatingHandler(categoryId)}
+                creating={
+                  <PackingItem
+                    listId={list.id}
+                    categoryId={categoryId}
+                    packId={'creating'}
+                    name={''}
+                    isChecked={false}
+                    isEditing={true}
+                    updateItem={updateItem}
+                  />
+                }
+              >
+                <PackingCategory
                   categoryId={categoryId}
-                  packId={'creating'}
-                  name={''}
-                  isChecked={false}
-                  isEditing={true}
-                  updateItem={updateItem}
+                  listId={list.id}
+                  name={name}
+                  updateCategory={updateCategory}
+                  modalHandler={() =>
+                    bottomModalOpenHandler({
+                      ...initialFocus,
+                      type: 'category',
+                      categoryId,
+                      title: name,
+                    })
+                  }
+                  isEditing={currentEditing === categoryId}
                 />
+              </PackagesWithCategory>
+            ))}
+            {currentCreatingCategory === list.id && (
+              <PackagesWithCategory>
+                <PackingCategory
+                  categoryId={'creating'}
+                  listId={list.id}
+                  name={''}
+                  updateCategory={updateCategory}
+                  isEditing={true}
+                />
+              </PackagesWithCategory>
+            )}
+          </StyledBody>
+          <FunctionSection>
+            <AddTemplateButton
+              onClick={() =>
+                updateRemainingInfo({ listId: list.id, isSaved: list.isSaved }, 'save')
               }
             >
-              <PackingCategory
-                categoryId={categoryId}
-                listId={list.id}
-                name={name}
-                updateCategory={updateCategory}
-                modalHandler={() =>
-                  bottomModalOpenHandler({
-                    ...initialFocus,
-                    type: 'category',
-                    categoryId,
-                    title: name,
-                  })
-                }
-                isEditing={currentEditing === categoryId}
-              />
-            </PackagesWithCategory>
-          ))}
-          {currentCreatingCategory === list.id && (
-            <PackagesWithCategory>
-              <PackingCategory
-                categoryId={'creating'}
-                listId={list.id}
-                name={''}
-                updateCategory={updateCategory}
-                isEditing={true}
-              />
-            </PackagesWithCategory>
-          )}
-        </StyledBody>
-        <FunctionSection>
-          <AddTemplateButton
-            onClick={() => updateRemainingInfo({ listId: list.id, isSaved: list.isSaved }, 'save')}
-          >
-            {list.isSaved ? '나만의 템플릿 업데이트' : '나만의 템플릿으로 추가'}
-          </AddTemplateButton>
-          <SharePackingListButton icon onClick={shareTemplateModalOpenHandler}>
-            패킹 리스트 공유
-          </SharePackingListButton>
-        </FunctionSection>
-      </StyledAloneLanding>
-      {bottomModalOpen && (
-        <PackingListBottomModal
-          onEdit={onEdit}
-          onDelete={onDelete}
-          closeModal={bottomModalCloseHandler}
-          content={currentFocus.title}
-        />
-      )}
-      {addTemplateModalOpen && (
-        <AddToTemplateModal title={list.title} onClick={addTemplateModalCloseHandler} />
-      )}
-      {shareTemplateModalOpen && (
-        <ModalForShare onClick={shareTemplateModalCloseHandler} inviteCode={list.inviteCode} />
-      )}
-    </Layout>
+              {list.isSaved ? '나만의 템플릿 업데이트' : '나만의 템플릿으로 추가'}
+            </AddTemplateButton>
+            <SharePackingListButton icon onClick={shareTemplateModalOpenHandler}>
+              패킹 리스트 공유
+            </SharePackingListButton>
+          </FunctionSection>
+        </StyledAloneLanding>
+        {bottomModalOpen && (
+          <PackingListBottomModal
+            onEdit={onEdit}
+            onDelete={onDelete}
+            closeModal={bottomModalCloseHandler}
+            content={currentFocus.title}
+          />
+        )}
+        {addTemplateModalOpen && (
+          <AddToTemplateModal title={list.title} onClick={addTemplateModalCloseHandler} />
+        )}
+        {shareTemplateModalOpen && (
+          <ModalForShare onClick={shareTemplateModalCloseHandler} inviteCode={list.inviteCode} />
+        )}
+      </Layout>
+    </>
   );
 }
 

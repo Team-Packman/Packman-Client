@@ -26,6 +26,7 @@ import useHide from '../../utils/hooks/useHide';
 import { GetTogetherPackingListBodyOutput } from '../../service/packingList/together';
 import { AxiosError } from 'axios';
 import useDynamic from '../../utils/hooks/useDynamic';
+import HeadMeta from '../HeadMeta';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -617,162 +618,169 @@ function TogetherLanding() {
   };
 
   return (
-    <Layout
-      back
-      title="패킹리스트"
-      icon="member"
-      listId={info.id}
-      folderId={info.folderId}
-      option={
-        <CheckListHeader
-          together
-          listId={info.id}
-          departureDate={header.departureDate}
-          title={header.title}
-          activeMode={activeMode}
-          updateRemainingInfo={updateRemainingInfo}
-        />
-      }
-    >
-      <StyledTogetherLanding>
-        <Swiper
-          modules={[Pagination, Virtual]}
-          style={{ height: '100%' }}
-          onSlideChange={(s) => setActiveMode(s.activeIndex)}
-          virtual
-        >
-          <CheckListSubHeader
+    <>
+      <HeadMeta
+        title={header.title}
+        description={`[${header.title}] 패킹리스트가 공유되었어요!`}
+        url={window.location.href}
+      />
+      <Layout
+        back
+        title="패킹리스트"
+        icon="member"
+        listId={info.id}
+        folderId={info.folderId}
+        option={
+          <CheckListHeader
             together
-            slot="container-start"
+            listId={info.id}
+            departureDate={header.departureDate}
+            title={header.title}
             activeMode={activeMode}
-            modeHandler={modeHandler}
-            categoryHandler={creatingCategoryHandler}
+            updateRemainingInfo={updateRemainingInfo}
           />
-          {packingRole.map((list, i) => {
-            return (
-              <SwiperSlide key={list.id} virtualIndex={i}>
-                <StyledBody onScroll={scrollEvent} ref={sectionArr.current[i]}>
-                  {list.category.map(({ id: categoryId, name, pack }) => (
-                    <PackagesWithCategory
-                      key={categoryId}
-                      packages={
-                        <>
-                          {pack.map(({ id: packId, name, isChecked, packer }) => (
-                            <PackingItem
-                              key={packId}
-                              listId={list.id}
-                              categoryId={categoryId}
-                              packId={packId}
-                              name={name}
-                              isChecked={isChecked}
-                              mode={activeMode}
-                              modalHandler={() =>
-                                bottomModalOpenHandler({
-                                  ...initialFocus,
-                                  type: 'item',
-                                  categoryId,
-                                  packId,
-                                  title: name,
-                                })
-                              }
-                              isEditing={currentEditing === packId}
-                              updateItem={updateItem}
-                              assignee={
-                                <Packer
-                                  packer={packer}
-                                  modalHandler={() => packerModalOpenHandler(packId)}
-                                />
-                              }
-                            />
-                          ))}
-                        </>
-                      }
-                      isCreating={currentCreating === categoryId}
-                      createHandler={() => creatingItemHandler(categoryId)}
-                      creating={
-                        <PackingItem
-                          listId={list.id}
-                          categoryId={categoryId}
-                          packId={'creating'}
-                          name={''}
-                          isChecked={false}
-                          isEditing={true}
-                          updateItem={updateItem}
-                          mode={activeMode}
-                        />
-                      }
-                    >
-                      <PackingCategory
-                        categoryId={categoryId}
-                        listId={list.id}
-                        name={name}
-                        updateCategory={updateCategory}
-                        modalHandler={() =>
-                          bottomModalOpenHandler({
-                            ...initialFocus,
-                            type: 'category',
-                            categoryId,
-                            title: name,
-                          })
-                        }
-                        isEditing={currentEditing === categoryId}
-                      />
-                    </PackagesWithCategory>
-                  ))}
-                  {currentCreatingCategory === list.id && (
-                    <PackagesWithCategory>
-                      <PackingCategory
-                        categoryId={'creating'}
-                        listId={list.id}
-                        name={''}
-                        updateCategory={updateCategory}
-                        isEditing={true}
-                      />
-                    </PackagesWithCategory>
-                  )}
-                  <StyledScrollBlock />
-                </StyledBody>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-        <FunctionSection>
-          <AddTemplateButton
-            onClick={() =>
-              updateRemainingInfo(
-                { listId: info.id, isSaved: info.togetherPackingList.isSaved },
-                'save',
-              )
-            }
+        }
+      >
+        <StyledTogetherLanding>
+          <Swiper
+            modules={[Pagination, Virtual]}
+            style={{ height: '100%' }}
+            onSlideChange={(s) => setActiveMode(s.activeIndex)}
+            virtual
           >
-            {info.togetherPackingList.isSaved ? '템플릿 업데이트' : '나만의 템플릿으로 추가'}
-          </AddTemplateButton>
-        </FunctionSection>
-      </StyledTogetherLanding>
+            <CheckListSubHeader
+              together
+              slot="container-start"
+              activeMode={activeMode}
+              modeHandler={modeHandler}
+              categoryHandler={creatingCategoryHandler}
+            />
+            {packingRole.map((list, i) => {
+              return (
+                <SwiperSlide key={list.id} virtualIndex={i}>
+                  <StyledBody onScroll={scrollEvent} ref={sectionArr.current[i]}>
+                    {list.category.map(({ id: categoryId, name, pack }) => (
+                      <PackagesWithCategory
+                        key={categoryId}
+                        packages={
+                          <>
+                            {pack.map(({ id: packId, name, isChecked, packer }) => (
+                              <PackingItem
+                                key={packId}
+                                listId={list.id}
+                                categoryId={categoryId}
+                                packId={packId}
+                                name={name}
+                                isChecked={isChecked}
+                                mode={activeMode}
+                                modalHandler={() =>
+                                  bottomModalOpenHandler({
+                                    ...initialFocus,
+                                    type: 'item',
+                                    categoryId,
+                                    packId,
+                                    title: name,
+                                  })
+                                }
+                                isEditing={currentEditing === packId}
+                                updateItem={updateItem}
+                                assignee={
+                                  <Packer
+                                    packer={packer}
+                                    modalHandler={() => packerModalOpenHandler(packId)}
+                                  />
+                                }
+                              />
+                            ))}
+                          </>
+                        }
+                        isCreating={currentCreating === categoryId}
+                        createHandler={() => creatingItemHandler(categoryId)}
+                        creating={
+                          <PackingItem
+                            listId={list.id}
+                            categoryId={categoryId}
+                            packId={'creating'}
+                            name={''}
+                            isChecked={false}
+                            isEditing={true}
+                            updateItem={updateItem}
+                            mode={activeMode}
+                          />
+                        }
+                      >
+                        <PackingCategory
+                          categoryId={categoryId}
+                          listId={list.id}
+                          name={name}
+                          updateCategory={updateCategory}
+                          modalHandler={() =>
+                            bottomModalOpenHandler({
+                              ...initialFocus,
+                              type: 'category',
+                              categoryId,
+                              title: name,
+                            })
+                          }
+                          isEditing={currentEditing === categoryId}
+                        />
+                      </PackagesWithCategory>
+                    ))}
+                    {currentCreatingCategory === list.id && (
+                      <PackagesWithCategory>
+                        <PackingCategory
+                          categoryId={'creating'}
+                          listId={list.id}
+                          name={''}
+                          updateCategory={updateCategory}
+                          isEditing={true}
+                        />
+                      </PackagesWithCategory>
+                    )}
+                    <StyledScrollBlock />
+                  </StyledBody>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+          <FunctionSection>
+            <AddTemplateButton
+              onClick={() =>
+                updateRemainingInfo(
+                  { listId: info.id, isSaved: info.togetherPackingList.isSaved },
+                  'save',
+                )
+              }
+            >
+              {info.togetherPackingList.isSaved ? '템플릿 업데이트' : '나만의 템플릿으로 추가'}
+            </AddTemplateButton>
+          </FunctionSection>
+        </StyledTogetherLanding>
 
-      {packerModalOpen && (
-        <PackerModal
-          members={members.member}
-          modalHandler={packerModalCloseHandler}
-          packId={currentFocus.packId}
-          listId={info.togetherPackingList.id}
-          updatePacker={updatePacker}
-        />
-      )}
-      {isFresh && <ModalForInvitation inviteCode={info.togetherPackingList.inviteCode} />}
+        {packerModalOpen && (
+          <PackerModal
+            members={members.member}
+            modalHandler={packerModalCloseHandler}
+            packId={currentFocus.packId}
+            listId={info.togetherPackingList.id}
+            updatePacker={updatePacker}
+          />
+        )}
+        {isFresh && <ModalForInvitation inviteCode={info.togetherPackingList.inviteCode} />}
 
-      {bottomModalOpen && (
-        <PackingListBottomModal
-          onEdit={onEdit}
-          onDelete={onDelete}
-          closeModal={bottomModalCloseHandler}
-          content={currentFocus.title}
-        />
-      )}
-      {/* {addTemplateModalOpen && (
+        {bottomModalOpen && (
+          <PackingListBottomModal
+            onEdit={onEdit}
+            onDelete={onDelete}
+            closeModal={bottomModalCloseHandler}
+            content={currentFocus.title}
+          />
+        )}
+        {/* {addTemplateModalOpen && (
         <ModalForAddToTemplate title={header.title} onClick={addTemplateModalCloseHandler} />
       )} */}
-    </Layout>
+      </Layout>
+    </>
   );
 }
 
