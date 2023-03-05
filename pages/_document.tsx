@@ -44,30 +44,10 @@ class MyDocument extends Document {
           <Script src="https://www.googleoptimize.com/optimize.js?id=OPT-KC3RPLW"></Script>
           {/* 검색엔진이 대부분 무시하는 추세 */}
           {/* <meta name="keywords" content="짐,짐 챙기기,여행 짐,여행 체크리스트" /> */}
-          {/* <HeadMeta /> */}
           <meta
             name="viewport"
             content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
           />
-          <meta
-            name="description"
-            content={'내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
-          />
-          <meta property="og:locale" content="ko" />
-          <meta property="og:site_name" content="Packman" />
-          <meta property="og:type" content="website" />
-          <meta
-            property="og:title"
-            content={'팩맨 Packman - 내 손안 짐 챙김 도우미'}
-            key="og:title"
-          />
-          <meta
-            property="og:description"
-            content={'내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
-            key="og:description"
-          />
-          <meta property="og:image" content="/og.jpg" />
-          <meta property="og:url" content="https://www.packman.kr" key="og:url" />
           {/* pwa */}
           <meta name="theme-color" content="#fff" />
 

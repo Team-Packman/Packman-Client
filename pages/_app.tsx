@@ -11,6 +11,7 @@ import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';
 import { AxiosInterceptor } from '../utils/axios';
+import HeadMeta from '../components/HeadMeta';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -51,6 +52,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Hydrate state={pageProps?.dehydratedState}>
                 <AsyncBoundary>
                   <GlobalStyle />
+                  <HeadMeta />
                   <Component {...pageProps} />
                   <InstallGuide />
                 </AsyncBoundary>
