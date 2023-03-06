@@ -23,7 +23,7 @@ export const useKaKaoLogin = () => {
           },
           {
             onSuccess: ({ data }) => {
-              cookie.save('accessToken', data.accessToken + '', {});
+              cookie.save('accessToken', data.accessToken, {});
 
               if (data.isAlreadyUser) {
                 setUser(data);
