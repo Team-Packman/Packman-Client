@@ -22,6 +22,7 @@ function HeadMeta(props: HeadMetaProps) {
         title,
         description,
         siteName: 'Packman',
+        type: 'website',
         images: [
           {
             url: '/assets/pwa/apple-splash-1136-640.jpg',
