@@ -27,15 +27,15 @@ function ManagingMemberLanding() {
   const router = useRouter();
   const { id } = router.query;
 
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const getMembers = useAPI((api) => api.packingList.together.getMembers);
   const { data } = useQuery(['getMembers', id], () => getMembers(id as string), {
-    enabled: !!id,
+    enabled: !!id && !isEditing,
     refetchInterval: 3000,
   });
 
   const user = useRecoilValue(authUserAtom);
   const userId = user.id;
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [oldMembers, setOldMembers] = useState<Imember[]>([]);
   const [willBeDeleted, setWillBeDeleted] = useState<string[]>([]);
@@ -90,7 +90,7 @@ function ManagingMemberLanding() {
     });
 
     client.setQueryData(['getMembers', id], newPrev);
-    setWillBeDeleted((prev) => [...prev, memberId]);
+    setWillBeDeleted((prev) => [...new Set([...prev, memberId])]);
   };
 
   const clickInvitingButton = () => {
