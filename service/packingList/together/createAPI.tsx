@@ -68,11 +68,11 @@ export interface TogetherAPI {
       payload: UpdatePackingListPackerInput,
     ) => Promise<UpdatePackingListPackerOutput>;
     getPackingListHeader: (
-      pacingListId: string,
+      packingListId: string,
       isAloned: boolean,
     ) => Promise<GetTogetherPackingListHeaderOutput>;
     getPackingListBody: (
-      pacingListId: string,
+      packingListId: string,
       inviteCode?: string,
     ) => Promise<GetTogetherPackingListBodyOutput>;
     addPackingListCategory: (
@@ -115,9 +115,9 @@ const createTogetherAPI = (): TogetherAPI => {
         fetchUpdatePackingListIsSaved(payload),
       updatePackingListPacker: (payload: UpdatePackingListPackerInput) =>
         fetchUpdatePackingListPacker(payload),
-      getPackingListHeader: (pacingListId: string, isAloned: boolean) =>
-        fetchPackingListHeader(pacingListId, isAloned),
-      getPackingListBody: (pacingListId: string) => fetchPackingListBody(pacingListId),
+      getPackingListHeader: (packingListId: string, isAloned: boolean) =>
+        fetchPackingListHeader(packingListId, isAloned),
+      getPackingListBody: (packingListId: string) => fetchPackingListBody(packingListId),
       addPackingListCategory: (payload: AddTogetherPackingListCategoryInput) =>
         fetchAddPackingListCategory(payload),
       updatePackingListCategory: (payload: UpdateTogetherPackingListCategoryInput) =>
