@@ -8,13 +8,11 @@ import { AsyncBoundary } from '../../utils/AsyncBoundary';
 import { client } from '../../utils/axios';
 
 interface TogetherProps {
-  props: { title: string };
+  title: string;
 }
 
 function Together(props: TogetherProps) {
-  const {
-    props: { title: headerTitle },
-  } = props;
+  const { title: headerTitle } = props;
   const router = useRouter();
 
   return (
