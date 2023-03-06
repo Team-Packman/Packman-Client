@@ -14,8 +14,6 @@ import { AxiosInterceptor } from '../utils/axios';
 import HeadMeta from '../components/HeadMeta';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [show, setShow] = useState(false);
-
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -33,12 +31,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     window.addEventListener('resize', () => setScreenSize());
     return () => window.removeEventListener('resize', setScreenSize);
   });
-
-  useEffect(() => {
-    setShow(true);
-  }, []);
-
-  if (!show) return null;
 
   return (
     <>
