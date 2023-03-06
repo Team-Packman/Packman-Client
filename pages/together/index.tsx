@@ -16,14 +16,16 @@ function Together(props: TogetherProps) {
   const router = useRouter();
 
   return (
-    <AsyncBoundary>
+    <>
       <HeadMeta
         title={headerTitle}
         description={`[${headerTitle}] 패킹리스트가 공유되었어요!`}
         url={`${process.env.NEXT_PUBLIC_DOMAIN}/${router.asPath}`}
       />
-      <TogetherLanding />
-    </AsyncBoundary>
+      <AsyncBoundary>
+        <TogetherLanding />
+      </AsyncBoundary>
+    </>
   );
 }
 

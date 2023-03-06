@@ -8,7 +8,6 @@ import Document, {
   DocumentInitialProps,
 } from 'next/document';
 import Script from 'next/script';
-import HeadMeta from '../components/HeadMeta';
 import { googleTagManagerId } from '../utils/constant/index';
 
 class MyDocument extends Document {
