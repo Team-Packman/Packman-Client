@@ -12,6 +12,7 @@ import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';
 import { AxiosInterceptor } from '../utils/axios';
 import HeadMeta from '../components/HeadMeta';
+import { DefaultSeo } from 'next-seo';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -42,9 +43,22 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <HeadMeta />
+      <DefaultSeo
+        openGraph={{
+          type: 'website',
+          locale: 'en_IE',
+          url: 'https://www.packman.kr',
+          siteName: 'Packman',
+        }}
+        twitter={{
+          handle: '@packman',
+          site: '@Packman',
+          cardType: 'summary_large_image',
+        }}
+      />
       <GoogleTagManager />
       <CssBaseline />
-      <GlobalStyle />
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
           <AxiosInterceptor>
@@ -52,7 +66,6 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Hydrate state={pageProps?.dehydratedState}>
                 <AsyncBoundary>
                   <GlobalStyle />
-                  <HeadMeta />
                   <Component {...pageProps} />
                   <InstallGuide />
                 </AsyncBoundary>
