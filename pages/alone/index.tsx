@@ -37,7 +37,7 @@ Alone.getInitialProps = async function ({ req, query }: NextPageContext) {
 
   client.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-  const { data: header } = await getPackingListHeader(query.id as string, false);
+  const { data: header } = await getPackingListHeader(query.id as string, true);
   const { title } = header;
   return {
     title,
