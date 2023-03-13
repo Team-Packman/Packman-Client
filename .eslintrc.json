@@ -33,6 +33,7 @@
     "react/display-name": "off",
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "@typescript-eslint/no-empty-function": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }, { "usePrettierrc": true }],
     "@next/next/no-html-link-for-pages": "error",
     "@next/next/no-img-element": "error",
