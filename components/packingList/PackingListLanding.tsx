@@ -30,7 +30,7 @@ function PackingListLanding() {
 
   const [isSwiped, setIsSwiped] = useState<Set<string>>(new Set());
 
-  if (!inventory) return;
+  if (!inventory) return null;
   const { togetherPackingList, alonePackingList, currentFolder } = inventory.data;
 
   const swipe = (item?: string) => {
