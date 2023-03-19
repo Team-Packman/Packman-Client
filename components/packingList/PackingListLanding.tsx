@@ -35,7 +35,7 @@ function PackingListLanding() {
 
   const swipe = (item?: string) => {
     if (!item) {
-      resetListItem();
+      !isDeletingMode && resetListItem();
       return;
     }
     const updatedListItem = new Set(isSwiped);
