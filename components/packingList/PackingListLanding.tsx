@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import Layout from '../common/Layout';
 import SwipeableList from './SwipeableList';
-import SwipeablelistItem from './SwipeableListItem';
+import SwipeableListItem from './SwipeableListItem';
 import FloatActionButton from '../folder/FloatActionButton';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
@@ -185,7 +185,7 @@ function PackingListLanding() {
             <SwipeableList
               isSwiped={isSwiped.size > 0}
               swipeableListItem={(togetherPackingList ?? alonePackingList).map((item, idx) => (
-                <SwipeablelistItem
+                <SwipeableListItem
                   key={item.id}
                   swipe={(item?: string) => swipe(item)}
                   isSwiped={isSwiped}

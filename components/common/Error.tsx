@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import ErrorImage from '/public/assets/png/ErrorImage.webp';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
-import HomeIC from '/public/assets/svg/refresh_ic.svg';
+import HomeIC from '/public/assets/svg/home_ic.svg';
 import { useRouter } from 'next/router';
 
 interface ErrorProps {
@@ -16,7 +16,7 @@ function Error({ reset }: ErrorProps) {
 
   const handleClick = () => {
     reset?.();
-    router.reload();
+    router.replace('/folder');
   };
 
   return (
@@ -26,7 +26,7 @@ function Error({ reset }: ErrorProps) {
       <ErrorSubTitle>오류가 났어요</ErrorSubTitle>
       <ErrorSubTitle>다시 시도해 주세요</ErrorSubTitle>
       <ErrorReset onClick={handleClick}>
-        <Image src={HomeIC} alt="refresh_ic" /> <em>새로고침</em>
+        <Image src={HomeIC} alt="home_ic" width="30" height="30" /> <span>홈으로 돌아가기</span>
       </ErrorReset>
     </StyledRoot>
   );
@@ -73,7 +73,7 @@ const ErrorReset = styled.button`
 
   margin-top: 13rem;
 
-  & > em {
+  & > span {
     margin-left: 1rem;
   }
 `;
