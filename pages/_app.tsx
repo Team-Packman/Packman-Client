@@ -7,10 +7,12 @@ import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
 import { RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
-import SEO from '../next-seo.config';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';
+import { AxiosInterceptor } from '../utils/axios';
+import HeadMeta from '../components/HeadMeta';
+import { DefaultSeo } from 'next-seo';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [show, setShow] = useState(false);
@@ -22,6 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           queries: {
             suspense: true,
             retry: 0,
+            notifyOnChangeProps: 'tracked',
           },
         },
       }),
@@ -41,20 +44,35 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <HeadMeta />
+      <DefaultSeo
+        openGraph={{
+          type: 'website',
+          locale: 'en_IE',
+          url: 'https://www.packman.kr',
+          siteName: 'Packman',
+        }}
+        twitter={{
+          handle: '@packman',
+          site: '@Packman',
+          cardType: 'summary_large_image',
+        }}
+      />
       <GoogleTagManager />
       <CssBaseline />
-      <GlobalStyle />
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
-          <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
-            <Hydrate state={pageProps?.dehydratedState}>
-              <AsyncBoundary>
-                <GlobalStyle />
-                <Component {...pageProps} />
-                <InstallGuide />
-              </AsyncBoundary>
-            </Hydrate>
-          </APIProvider>
+          <AxiosInterceptor>
+            <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
+              <Hydrate state={pageProps?.dehydratedState}>
+                <AsyncBoundary>
+                  <GlobalStyle />
+                  <Component {...pageProps} />
+                  <InstallGuide />
+                </AsyncBoundary>
+              </Hydrate>
+            </APIProvider>
+          </AxiosInterceptor>
         </QueryClientProvider>
       </RecoilRoot>
     </>

@@ -1,5 +1,5 @@
 import {
-  GetTogetherPackingListDetailOutput,
+  GetTogetherPackingListBodyOutput,
   AddTogetherPackingListCategoryInput,
   AddTogetherPackingListCategoryOutput,
   UpdateTogetherPackingListCategoryInput,
@@ -26,133 +26,132 @@ import {
   GetInvitedOutput,
   AddMemberInput,
   AddMemberOutput,
+  GetTogetherPackingListHeaderOutput,
+  GetMembersOutput,
+  DeleteGroupMemberInput,
+  DeleteGroupMemberOutput,
 } from './../../../../service/packingList/together/index';
-import { GetGroupMembersOutput } from '../../../../service/packingList/together/index';
-import { AxiosInstance } from 'axios';
+import { client } from '../..';
 
 export const fetchUpdatePackingListTitle = async (
-  request: AxiosInstance,
   payload: UpdatePackingListTitleInput,
 ): Promise<UpdatePackingListTitleOutput> => {
-  const { data } = await request.patch(`/list/title`, payload);
+  const { data } = await client.patch(`/list/title`, payload);
   return data;
 };
 
 export const fetchUpdatePackingListDate = async (
-  request: AxiosInstance,
   payload: UpdatePackingListDateInput,
 ): Promise<UpdatePackingListDateOutput> => {
-  const { data } = await request.patch(`/list/departureDate`, payload);
+  const { data } = await client.patch(`/list/departureDate`, payload);
   return data;
 };
 
 export const fetchUpdatePackingListIsSaved = async (
-  request: AxiosInstance,
   payload: UpdatePackingListIsSavedInput,
 ): Promise<UpdatePackingListIsSavedOutput> => {
-  const { data } = await request.patch(`/list/myTemplate`, payload);
+  const { data } = await client.patch(`/list/myTemplate`, payload);
   return data;
 };
 
 export const fetchUpdatePackingListPacker = async (
-  request: AxiosInstance,
   payload: UpdatePackingListPackerInput,
 ): Promise<UpdatePackingListPackerOutput> => {
-  const { data } = await request.patch(`/list/together/packer`, payload);
+  const { data } = await client.patch(`/list/together/packer`, payload);
   return data;
 };
 
-export const fetchGroupMember = async (
-  request: AxiosInstance,
-  groupId: string,
-): Promise<GetGroupMembersOutput> => {
-  const { data } = await request(`/together/member/${groupId}`);
-  return data;
-};
-
-export const fetchPackingListDetail = async (
-  request: AxiosInstance,
+export const fetchPackingListHeader = async (
   listId: string,
-): Promise<GetTogetherPackingListDetailOutput> => {
-  const { data } = await request(`/list/together/${listId}`);
+  isAloned: boolean,
+): Promise<GetTogetherPackingListHeaderOutput> => {
+  const { data } = await client(`/list/${listId}/title-date?isAloned=${isAloned}`);
+  return data;
+};
+
+export const fetchPackingListBody = async (
+  listId: string,
+): Promise<GetTogetherPackingListBodyOutput> => {
+  const { data } = await client(`/list/together/${listId}`);
   return data;
 };
 
 export const fetchAddPackingListCategory = async (
-  request: AxiosInstance,
   payload: AddTogetherPackingListCategoryInput,
 ): Promise<AddTogetherPackingListCategoryOutput> => {
-  const { data } = await request.post(`/list/together/category`, payload);
+  const { data } = await client.post(`/list/together/category`, payload);
   return data;
 };
 
 export const fetchUpdatePackingListCategory = async (
-  request: AxiosInstance,
   payload: UpdateTogetherPackingListCategoryInput,
 ): Promise<UpdateTogetherPackingListCategoryOutput> => {
-  const { data } = await request.patch(`/list/together/category`, payload);
+  const { data } = await client.patch(`/list/together/category`, payload);
   return data;
 };
 
-export const fetchDeletePackingListCategory = async (
-  request: AxiosInstance,
-  { listId, categoryId }: DeleteTogetherPackingListCategoryInput,
-): Promise<DeleteTogetherPackingListCategoryOutput> => {
-  const { data } = await request.delete(`/list/together/category/${listId}/${categoryId}`);
+export const fetchDeletePackingListCategory = async ({
+  listId,
+  categoryId,
+}: DeleteTogetherPackingListCategoryInput): Promise<DeleteTogetherPackingListCategoryOutput> => {
+  const { data } = await client.delete(`/list/together/category/${listId}/${categoryId}`);
   return data;
 };
 
 export const fetchAddPackingListItem = async (
-  request: AxiosInstance,
   payload: AddTogetherPackingListItemInput,
 ): Promise<AddTogetherPackingListItemOutput> => {
-  const { data } = await request.post(`/list/together/pack`, payload);
+  const { data } = await client.post(`/list/together/pack`, payload);
   return data;
 };
 
 export const fetchUpdatePackingListItem = async (
-  request: AxiosInstance,
   payload: UpdateTogetherPackingListItemInput,
 ): Promise<UpdateTogetherPackingListItemOutput> => {
-  const { data } = await request.patch(`/list/together/pack`, payload);
+  const { data } = await client.patch(`/list/together/pack`, payload);
   return data;
 };
 
-export const fetchDeletePackingListItem = async (
-  request: AxiosInstance,
-  { listId, categoryId, packId }: DeleteTogetherPackingListItemInput,
-): Promise<DeleteTogetherPackingListItemOutput> => {
-  const { data } = await request.delete(`/list/together/pack/${listId}/${categoryId}/${packId}`);
+export const fetchDeletePackingListItem = async ({
+  listId,
+  categoryId,
+  packId,
+}: DeleteTogetherPackingListItemInput): Promise<DeleteTogetherPackingListItemOutput> => {
+  const { data } = await client.delete(`/list/together/pack/${listId}/${categoryId}/${packId}`);
   return data;
 };
 
-export const fetchTogetherFolder = async (
-  request: AxiosInstance,
-): Promise<GetTogetherFolderOutput> => {
-  const { data } = await request(`/folder/together`);
+export const fetchTogetherFolder = async (): Promise<GetTogetherFolderOutput> => {
+  const { data } = await client(`/folder/together`);
   return data;
 };
 
 export const fetchAddTogetherPackingFolder = async (
-  request: AxiosInstance,
   payload: AddTogetherPackingListIntroInput,
 ): Promise<AddTogetherPackingListIntroOutput> => {
-  const { data } = await request.post(`/list/together`, payload);
+  const { data } = await client.post(`/list/together`, payload);
   return data;
 };
 
-export const fetchInvited = async (
-  request: AxiosInstance,
-  inviteCode: string,
-): Promise<GetInvitedOutput> => {
-  const { data } = await request(`/list/together/invite/${inviteCode}`);
+export const fetchInvited = async (inviteCode: string): Promise<GetInvitedOutput> => {
+  const { data } = await client(`/list/together/invite/${inviteCode}`);
   return data;
 };
 
-export const fetchAddMember = async (
-  request: AxiosInstance,
-  payload: AddMemberInput,
-): Promise<AddMemberOutput> => {
-  const { data } = await request.post(`/list/together/add-member`, payload);
+export const fetchMembers = async (listId: string): Promise<GetMembersOutput> => {
+  const { data } = await client(`/member/${listId}`);
+  return data;
+};
+
+export const fetchAddMember = async (payload: AddMemberInput): Promise<AddMemberOutput> => {
+  const { data } = await client.post(`/list/together/add-member`, payload);
+  return data;
+};
+
+export const fetchDeleteMember = async ({
+  listId,
+  memberId,
+}: DeleteGroupMemberInput): Promise<DeleteGroupMemberOutput> => {
+  const { data } = await client.delete(`/member/${listId}/${memberId}`);
   return data;
 };

@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios';
+import { client } from '..';
 import {
   AddUserProfileInput,
   AddUserProfileOutput,
@@ -8,35 +8,30 @@ import {
   UpdateUserProfileOutput,
 } from '../../../service/user';
 
-export const fetchUserInfo = async (request: AxiosInstance): Promise<GetUserInfoOutput> => {
-  const { data } = await request(`/user`);
+export const fetchUserInfo = async (): Promise<GetUserInfoOutput> => {
+  const { data } = await client(`/user`);
   return data;
 };
 
 export const fetchUpdateUserProfile = async (
-  request: AxiosInstance,
   payload: UpdateUserProfileInput,
 ): Promise<UpdateUserProfileOutput> => {
-  const { data } = await request.patch(`/user/profile`, payload);
+  const { data } = await client.patch(`/user/profile`, payload);
   return data;
 };
 
 export const fetchAddUserProfile = async (
-  request: AxiosInstance,
   payload: AddUserProfileInput,
 ): Promise<AddUserProfileOutput> => {
-  const { data } = await request.post(`/user/profile`, payload);
+  const { data } = await client.post(`/user/profile`, payload);
   return data;
 };
 
-export const fetchDeleteUserInfo = async (
-  request: AxiosInstance,
-  accessToken: string,
-): Promise<DeleteUserInfoOutput> => {
-  const { data } = await request.delete('/user', {
+export const fetchDeleteUserInfo = async (accessToken: string): Promise<DeleteUserInfoOutput> => {
+  const { data } = await client.delete('/user', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: accessToken,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   return data;

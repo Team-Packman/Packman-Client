@@ -72,8 +72,7 @@ function ListIntroLanding() {
   // 폴더 내에서, 리스트 생성하기를 한 경우 자동으로 해당 폴더를 기본으로 선택하게 하는 함수
   const initSelectedFolder = useCallback(
     (data: folderType, category: string) => {
-      const currentFolder =
-        category === 'together' ? data?.data?.togetherFolder : data?.data?.aloneFolder;
+      const currentFolder = category === 'together' ? data?.data : data?.data;
       const findSelectedFolder = currentFolder?.find((v) => v?.id === folderId);
 
       if (findSelectedFolder) {
@@ -126,8 +125,8 @@ function ListIntroLanding() {
 
   if (!aloneFolderData || !togetherFolderData) return null;
 
-  const { aloneFolder } = aloneFolderData.data;
-  const { togetherFolder } = togetherFolderData.data;
+  const aloneFolder = aloneFolderData.data;
+  const togetherFolder = togetherFolderData.data;
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);
@@ -154,17 +153,13 @@ function ListIntroLanding() {
               ? queryClient.setQueryData('aloneFolder', (oldData: any) => {
                   return {
                     ...oldData,
-                    data: {
-                      aloneFolder: data.data.aloneFolder,
-                    },
+                    data: data.data.aloneFolder,
                   };
                 })
               : queryClient.setQueryData('togetherFolder', (oldData: any) => {
                   return {
                     ...oldData,
-                    data: {
-                      togetherFolder: data.data.togetherFolder,
-                    },
+                    data: data.data.togetherFolder,
                   };
                 });
           }

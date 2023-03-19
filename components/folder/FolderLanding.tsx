@@ -53,7 +53,7 @@ function FolderLanding() {
     return updateFolderName(editedFolderData);
   });
 
-  const { mutate: deletFolderMutate } = useMutation((id: string) => {
+  const { mutate: deleteFolderMutate } = useMutation((id: string) => {
     return deleteFolder(id);
   });
 
@@ -108,7 +108,7 @@ function FolderLanding() {
     setShowBottomModal(false);
     setNewFolderData({ name: '', isAloned: false });
 
-    deletFolderMutate(id, {
+    deleteFolderMutate(id, {
       onSuccess: () => {
         queryClient.invalidateQueries('recentPacking');
         queryClient.setQueryData('folderListKey', (oldData: any) => {

@@ -12,10 +12,10 @@ import Loading from '../common/Loading';
 import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
 import produce from 'immer';
-import { GetGroupMemberOutput } from '../../service/member';
 import { ProfileList } from '../../utils/profileImages';
 import Card from '../common/Card';
 import { Utility } from '../../utils/Utility';
+import { GetMembersOutput } from '../../service/packingList/together';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -29,19 +29,15 @@ function ManagingMemberLanding() {
   const router = useRouter();
   const { id } = router.query;
 
-  const getGroupMember = useAPI((api) => api.member.getGroupMember);
-  const { data } = useQuery(
-    ['getGroupMember', id],
-    () => getGroupMember({ listId: id as string }),
-    {
-      enabled: !!id,
-      refetchInterval: 3000,
-    },
-  );
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const getMembers = useAPI((api) => api.packingList.together.getMembers);
+  const { data } = useQuery(['getMembers', id], () => getMembers(id as string), {
+    enabled: !!id && !isEditing,
+    refetchInterval: 3000,
+  });
 
   const user = useRecoilValue(authUserAtom);
   const userId = user.id;
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const [oldMembers, setOldMembers] = useState<Imember[]>([]);
   const [willBeDeleted, setWillBeDeleted] = useState<string[]>([]);
@@ -57,7 +53,7 @@ function ManagingMemberLanding() {
   }, []);
 
   const editMembers = () => {
-    const prev = client.getQueryData<GetGroupMemberOutput>(['getGroupMember', id]);
+    const prev = client.getQueryData<GetMembersOutput>(['getMembers', id]);
 
     // 취소 버튼 누를 시
     if (prev) {
@@ -66,7 +62,7 @@ function ManagingMemberLanding() {
           draft.data.member = oldMembers;
         });
 
-        client.setQueryData(['getGroupMember', id], newPrev);
+        client.setQueryData(['getMembers', id], newPrev);
       }
       // 편집 버튼 누를 시
       else {
@@ -76,14 +72,14 @@ function ManagingMemberLanding() {
     setIsEditing((prev) => !prev);
   };
 
-  const deletePackingListMember = useAPI((api) => api.member.deleteGroupMember);
+  const deletePackingListMember = useAPI((api) => api.packingList.together.deleteMember);
   const { mutate: deleteListMember } = useMutation(
     'deletePackingListMember',
     deletePackingListMember,
   );
 
   const deleteMember = (memberId: string) => {
-    const prev = client.getQueryData<GetGroupMemberOutput>(['getGroupMember', id]);
+    const prev = client.getQueryData<GetMembersOutput>(['getMembers', id]);
 
     const newPrev = produce(prev, (draft) => {
       let index;
@@ -95,20 +91,20 @@ function ManagingMemberLanding() {
       index && draft?.data.member.splice(index, 1);
     });
 
-    client.setQueryData(['getGroupMember', id], newPrev);
-    setWillBeDeleted((prev) => [...prev, memberId]);
+    client.setQueryData(['getMembers', id], newPrev);
+    setWillBeDeleted((prev) => [...new Set([...prev, memberId])]);
   };
 
   const clickInvitingButton = () => {
     if (isEditing) {
       deleteListMember(
         {
-          groupId: id as string,
-          userId: willBeDeleted.join(),
+          listId: id as string,
+          memberId: willBeDeleted.join(),
         },
         {
           onSuccess: () => {
-            client.invalidateQueries(['getGroupMember', id]);
+            client.invalidateQueries(['getMembers', id]);
           },
         },
       );

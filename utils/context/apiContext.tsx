@@ -1,7 +1,5 @@
 import { createContext, ReactNode } from 'react';
 import { APIService, createAPIService } from '../../service';
-import createAxios from '../axios/axios';
-import withAuth from '../axios/withAuth';
 
 interface APIProviderProps {
   baseURL: string;
@@ -13,14 +11,13 @@ interface APIContext {
 }
 
 export const APIContext = createContext<APIContext>({
-  api: createAPIService(createAxios('')),
+  api: createAPIService(),
 });
 
 export const APIProvider = (props: APIProviderProps) => {
-  const { children, baseURL } = props;
-  const { axiosBasic, axiosWithAuth } = createAxios(baseURL);
+  const { children } = props;
 
-  const api = createAPIService({ axiosBasic, axiosWithAuth: withAuth(axiosWithAuth) });
+  const api = createAPIService();
 
   return <APIContext.Provider value={{ api }}>{children}</APIContext.Provider>;
 };

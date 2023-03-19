@@ -29,12 +29,10 @@ export interface GetAloneFolderOutput {
   success: boolean;
   message: string;
   data: {
-    aloneFolder: {
-      // 혼자 패킹 폴더 배열
-      id: string; // 폴더 id
-      name: string; // 폴더 이름
-    }[];
-  };
+    // 혼자 패킹 폴더 배열
+    id: string; // 폴더 id
+    name: string; // 폴더 이름
+  }[];
 }
 export interface AddAlonePackingListIntroInput {
   departureDate: string; //출발 날짜

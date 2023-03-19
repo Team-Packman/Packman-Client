@@ -18,12 +18,12 @@ interface HeaderProps {
   back?: boolean;
   title?: string;
   icon?: Icon;
-  groupId?: string;
+  listId?: string;
   folderId?: string;
 }
 
 function Header(props: HeaderProps) {
-  const { back, title, icon, groupId, folderId } = props;
+  const { back, title, icon, folderId, listId } = props;
 
   const [scroll] = useGlobalState<boolean>('scroll');
   const [route] = useHeaderRouter({
@@ -57,7 +57,7 @@ function Header(props: HeaderProps) {
               </StyledIcon>
             </Link>
           ) : (
-            <Link href={`/manage?id=${groupId}&folderId=${folderId}`}>
+            <Link href={`/manage?id=${listId}&folderId=${folderId}`}>
               <StyledIcon width={6} height={2.4}>
                 <Image src={MemberIC} layout="fill" alt="member_icon" />
               </StyledIcon>

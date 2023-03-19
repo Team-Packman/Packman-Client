@@ -23,10 +23,10 @@ export const useKaKaoLogin = () => {
           },
           {
             onSuccess: ({ data }) => {
-              cookie.save('accessToken', data.accessToken + '', {});
+              cookie.save('accessToken', data.accessToken, {});
 
               if (data.isAlreadyUser) {
-                setUser(data as typeof user);
+                setUser(data);
               } else {
                 setCreatingUser(data);
                 router.replace('/profile');
@@ -35,9 +35,7 @@ export const useKaKaoLogin = () => {
             onError: () => router.replace('/login'),
           },
         );
-        setKakaoInfo({
-          accessToken,
-        });
+        setKakaoInfo({ accessToken });
       },
       onError: () => router.replace('/login'),
     });
