@@ -13,6 +13,8 @@ import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
 import produce from 'immer';
 import { ProfileList } from '../../utils/profileImages';
+import Card from '../common/Card';
+import { Utility } from '../../utils/Utility';
 import { GetMembersOutput } from '../../service/packingList/together';
 
 interface Imember {
@@ -121,27 +123,18 @@ function ManagingMemberLanding() {
   const { data: packingList } = data;
   const members = packingList.member;
 
-  const getRemainDayToString = () => {
-    const remainDayToInt = parseInt(packingList.remainDay);
-    if (!remainDayToInt) {
-      return 'D-day 🎉';
-    } else if (remainDayToInt < 0) {
-      return 'Done!';
-    } else {
-      return `D-${packingList.remainDay}`;
-    }
-  };
-
   return (
     <Layout back title="멤버 관리">
       <StyledRoot>
-        <StyledHeader>
-          <StyledHeaderLeft>
-            <StyledListName>{packingList.title}</StyledListName>
-            <StyledListDate>{packingList.departureDate.replaceAll('-', '. ')}</StyledListDate>
-          </StyledHeaderLeft>
-          <StyledDday>{getRemainDayToString()}</StyledDday>
-        </StyledHeader>
+        <Card>
+          <Card.LeftContainer overlay={leftContainerStyle}>
+            <Card.Title value={packingList.title} />
+            <Card.SubTitle value={Utility.convertDateFormatToDot(packingList.departureDate)} />
+          </Card.LeftContainer>
+          <Card.RightContainer>
+            <Card.DDay value={Utility.getDDay(packingList.remainDay)} />
+          </Card.RightContainer>
+        </Card>
         <WithMembersLabelAndEdit>
           <WithMembersLabel>함께하는 멤버</WithMembersLabel>
           {userId === members[0].id ? (
@@ -238,37 +231,6 @@ const StyledRoot = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-`;
-
-const StyledHeader = styled.section`
-  height: 8.4rem;
-  margin: 1rem 0 4.5rem 0;
-  background-color: ${packmanColors.pmBlueGrey};
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  border-radius: 1rem;
-`;
-
-const StyledHeaderLeft = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-`;
-
-const StyledListName = styled.h2`
-  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
-`;
-
-const StyledListDate = styled.div`
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
-  color: ${packmanColors.pmDeepGrey};
-`;
-
-const StyledDday = styled.div`
-  font-style: ${FONT_STYLES.DISPLAY3_EXTRABOLD};
-  color: ${packmanColors.pmGreen};
 `;
 
 const WithMembersLabelAndEdit = styled.div`
@@ -376,4 +338,8 @@ const InvitingButton = styled.div<{ hasCopied: boolean }>`
         content: '링크가 복사되었습니다';
       }
     `}
+`;
+
+const leftContainerStyle = css`
+  gap: 0.8rem;
 `;

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { AddFolderInput, GetFoldersOutput } from '../../service/folder';
 import { packmanColors } from '../../styles/color';
 import useAPI from '../../utils/hooks/useAPI';
@@ -10,7 +10,9 @@ import FolderList from './FolderList';
 import SwiperContainer from '../Swiper';
 import FloatActionButton from './FloatActionButton';
 import Layout from '../common/Layout';
-import { FONT, FONT_STYLES } from '../../styles/font';
+import Card from '../common/Card';
+import Chip from '../common/Chip';
+import { Utility } from '../../utils/Utility';
 
 export interface ModalDataProps {
   id: string;
@@ -44,12 +46,6 @@ function FolderLanding() {
   const { data: folderListData } = useQuery('folderListKey', () => getFolders());
 
   const { data: recentPackingData } = useQuery('recentPacking', () => getRecentPackingList(), {
-    onSuccess: (data) => {
-      if (data.data) {
-        const { remainDay } = data.data;
-        setIsOutDated(Number(remainDay) < 0);
-      }
-    },
     refetchOnMount: true,
   });
 
@@ -68,18 +64,13 @@ function FolderLanding() {
   const folderList: GetFoldersOutput | undefined = queryClient.getQueryData('folderListKey');
 
   useEffect(() => {
-    const updateOutdated = () => {
-      const currentRecentPackingData = recentPackingData?.data ?? {};
+    const currentRecentPackingData = recentPackingData?.data ?? {};
 
-      if (Object.keys(currentRecentPackingData).length !== 0) {
-        const remainDay = Number(recentPackingData?.data.remainDay);
-        setIsOutDated(remainDay < 0);
-        setIsRecentListExist(true);
-      } else {
-        setIsRecentListExist(false);
-      }
-    };
-    updateOutdated();
+    if (Object.keys(currentRecentPackingData).length !== 0) {
+      setIsRecentListExist(true);
+    } else {
+      setIsRecentListExist(false);
+    }
   }, [recentPackingData]);
 
   useEffect(() => {
@@ -94,7 +85,7 @@ function FolderLanding() {
     }
   }, [folderList?.data]);
 
-  if (!folderListData || !folderList) {
+  if (!folderListData || !folderList || !recentPackingData) {
     return null;
   }
 
@@ -248,41 +239,28 @@ function FolderLanding() {
     <>
       <Layout title="logo" icon="profile">
         <StyledBody>
-          <StyledRecentBanner
-            isRecentListExist={isRecentListExist}
-            onClick={handleRecentBannerClick}
-          >
-            <>
-              <StyledLabel>
-                <StyledTitle>{recentPackingData?.data?.title}</StyledTitle>
-                <StyledPackTotalNum>
-                  총 {recentPackingData?.data?.packTotalNum}개의 짐
-                </StyledPackTotalNum>
-              </StyledLabel>
-              <StyledDday>
-                <StyledRemainDay>
-                  {isOutDated
-                    ? 'Done!'
-                    : recentPackingData?.data?.remainDay === '0'
-                    ? 'D-day 🎉'
-                    : `D-${recentPackingData?.data?.remainDay}`}
-                </StyledRemainDay>
-                <StyledLeftMessage>
-                  {!isOutDated && recentPackingData?.data?.packRemainNum === '0' ? (
-                    <span>
-                      <em> {'패킹'}</em>이 완료되었어요!
-                    </span>
-                  ) : (
-                    !isOutDated && (
-                      <span>
-                        아직<em> {recentPackingData?.data?.packRemainNum}</em> 개의 짐이 남았어요!
-                      </span>
-                    )
+          {isRecentListExist && (
+            <Card onClick={handleRecentBannerClick}>
+              <Card.LeftContainer overlay={leftContainerStyle}>
+                <Card.Title value={recentPackingData.data.title} />
+                <Card.SubTitle>
+                  <Chip text={`총 ${recentPackingData.data.packTotalNum}개의 짐`} />
+                </Card.SubTitle>
+              </Card.LeftContainer>
+              <Card.RightContainer>
+                <Card.DDay
+                  value={Utility.getDDay(recentPackingData.data.remainDay)}
+                  overlay={dayStyle}
+                />
+                <Card.Description overlay={descriptionStyle}>
+                  {Utility.getRemainPackDesc(
+                    recentPackingData.data.packRemainNum,
+                    recentPackingData.data.remainDay,
                   )}
-                </StyledLeftMessage>
-              </StyledDday>
-            </>
-          </StyledRecentBanner>
+                </Card.Description>
+              </Card.RightContainer>
+            </Card>
+          )}
           <SwiperContainer
             isRecentListExist={isRecentListExist}
             getSwiperIndex={getSwiperIndex}
@@ -354,56 +332,20 @@ export const StyledBody = styled.article`
   width: 100%;
   height: 100%;
   background-color: ${packmanColors.pmWhite};
+  padding: 0 2rem;
 `;
 
-// 최근 생성 리스트
-export const StyledRecentBanner = styled.article<{ isRecentListExist: boolean }>`
-  display: ${({ isRecentListExist }) => (isRecentListExist ? 'flex' : 'none')};
-  align-items: center;
-  justify-content: space-between;
-  border: 0;
-  border-radius: 1rem;
-  margin: 1.4rem 0 2.9rem 0;
-  padding: 2rem 2.8rem;
-  background-color: ${packmanColors.pmBlueGrey};
-  width: calc(100% - 4rem);
+const leftContainerStyle = css`
+  gap: 0.8rem;
 `;
 
-export const StyledLabel = styled.div`
+const dayStyle = css`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
-export const StyledTitle = styled.p`
-  ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
-  margin-bottom: 0.9rem;
-`;
-
-export const StyledPackTotalNum = styled.p`
-  ${FONT_STYLES.BODY1_REGULAR};
-  width: fit-content;
-  padding: 0.1rem 1rem;
-  color: ${packmanColors.pmBlack};
-  border-radius: 1.2rem;
-  border: 1px solid ${packmanColors.pmPink};
-`;
-
-export const StyledDday = styled.div`
-  ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-`;
-
-export const StyledRemainDay = styled.p`
-  ${FONT_STYLES.DISPLAY3_EXTRABOLD};
-  color: ${packmanColors.pmGreen};
-`;
-
-export const StyledLeftMessage = styled.p`
-  font-size: 1.2rem;
-  color: ${packmanColors.pmBlack};
-
+const descriptionStyle = css`
   & > span {
     & > em {
       color: ${packmanColors.pmPink};
