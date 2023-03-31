@@ -44,6 +44,7 @@ function ListIntroLanding() {
   const [isAloned, setIsAloned] = useState<boolean>(false);
   const [templateId, setTemplateId] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(false);
+  const [isKeyboardFocused, setIsKeyboardFocused] = useState<boolean>(false);
 
   useEffect(() => {
     if (router.isReady) {
@@ -133,13 +134,19 @@ function ListIntroLanding() {
   };
 
   const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
     setFolderName(e.target.value);
   };
 
   const handleListNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
     setListName(e.target.value);
+  };
+
+  const handleKeyboardFocus = () => {
+    setIsKeyboardFocused(true);
+  };
+
+  const handleKeyboardBlur = () => {
+    setIsKeyboardFocused(false);
   };
 
   // 폴더 생성 버튼 클릭
@@ -229,6 +236,8 @@ function ListIntroLanding() {
             <input
               type="text"
               onChange={(e) => handleFolderNameChange(e)}
+              onFocus={handleKeyboardFocus}
+              onBlur={handleKeyboardBlur}
               value={folderName}
               placeholder="폴더 이름을 입력하세요"
               maxLength={10}
@@ -265,10 +274,12 @@ function ListIntroLanding() {
               placeholder="예시) 혼자 캐나다 여행"
               maxLength={12}
               onChange={handleListNameChange}
+              onFocus={handleKeyboardFocus}
+              onBlur={handleKeyboardBlur}
             />
           </div>
         </StyledListNameContainer>
-        <StyledButtonContainer>
+        <StyledButtonContainer isKeyboardFocused={isKeyboardFocused}>
           <StyledNextButton onClick={handleNextButtonClick} disabled={!isValid}>
             다음 단계
           </StyledNextButton>
@@ -422,8 +433,9 @@ export const StyledListNameContainer = styled.section`
   }
 `;
 
-export const StyledButtonContainer = styled.section`
+export const StyledButtonContainer = styled.section<{ isKeyboardFocused: boolean }>`
   position: fixed;
+  ${(props) => props.isKeyboardFocused && 'display: none;'}
   bottom: 3.3rem;
   left: 2rem;
   width: calc(100% - 4rem);
