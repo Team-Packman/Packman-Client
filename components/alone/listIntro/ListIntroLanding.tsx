@@ -45,6 +45,7 @@ function ListIntroLanding() {
   const [templateId, setTemplateId] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isKeyboardFocused, setIsKeyboardFocused] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     if (router.isReady) {
@@ -143,6 +144,7 @@ function ListIntroLanding() {
 
   const handleKeyboardFocus = () => {
     setIsKeyboardFocused(true);
+    setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
   };
 
   const handleKeyboardBlur = () => {
@@ -279,7 +281,7 @@ function ListIntroLanding() {
             />
           </div>
         </StyledListNameContainer>
-        <StyledButtonContainer isKeyboardFocused={isKeyboardFocused}>
+        <StyledButtonContainer isKeyboardFocused={isKeyboardFocused} isMobile={isMobile}>
           <StyledNextButton onClick={handleNextButtonClick} disabled={!isValid}>
             다음 단계
           </StyledNextButton>
@@ -433,9 +435,12 @@ export const StyledListNameContainer = styled.section`
   }
 `;
 
-export const StyledButtonContainer = styled.section<{ isKeyboardFocused: boolean }>`
+export const StyledButtonContainer = styled.section<{
+  isKeyboardFocused: boolean;
+  isMobile: boolean;
+}>`
   position: fixed;
-  ${(props) => props.isKeyboardFocused && 'display: none;'}
+  ${(props) => props.isKeyboardFocused && props.isMobile && 'display: none;'}
   bottom: 3.3rem;
   left: 2rem;
   width: calc(100% - 4rem);
