@@ -37,7 +37,8 @@ function LoginLanding() {
         </LogoWrapper>
         <Title>내 손안 짐 챙김 도우미</Title>
       </LogoAndTitle>
-      <ButtonsContainer>
+
+      <LoginContainer>
         <Link href={KAKAO_HREF}>
           <LoginButton id="custom-login-btn">
             <Image src={KakaoLogin} alt="카카오 로그인 버튼" layout="fill" />
@@ -47,7 +48,7 @@ function LoginLanding() {
           로그인 시 <Link href={TEMRS_OF_SERVICE}>이용약관</Link>과{' '}
           <Link href={PRIVACY_POLICY}>개인정보 처리 방침</Link>에 동의하게 됩니다.
         </p>
-      </ButtonsContainer>
+      </LoginContainer>
     </StyledRoot>
   );
 }
@@ -111,7 +112,7 @@ const Title = styled.div`
   }
 `;
 
-const ButtonsContainer = styled.div`
+const LoginContainer = styled.div`
   width: 100%;
   position: absolute;
   top: 75%;
