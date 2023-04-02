@@ -5,17 +5,16 @@ import { packmanColors } from '../../styles/color';
 import { FONT_STYLES } from '../../styles/font';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Loading from '../common/Loading';
 import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
-import produce from 'immer';
 import { ProfileList } from '../../utils/profileImages';
 import Card from '../common/Card';
 import { Utility } from '../../utils/Utility';
 import { GetMembersOutput } from '../../service/packingList/together';
+import useQueryString from '../../utils/hooks/common/useQueryString';
 
 interface Imember {
   // 그룹에 속한 멤버 배열
@@ -26,23 +25,29 @@ interface Imember {
 
 function ManagingMemberLanding() {
   const client = useQueryClient();
-  const router = useRouter();
-  const { id } = router.query;
-
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const listId = useQueryString('id');
+  const { id: userId } = useRecoilValue(authUserAtom);
   const getMembers = useAPI((api) => api.packingList.together.getMembers);
-  const { data } = useQuery(['getMembers', id], () => getMembers(id as string), {
-    enabled: !!id && !isEditing,
+  const { data } = useQuery(['getMembers', listId], () => getMembers(listId as string), {
+    enabled: !!listId,
     refetchInterval: 3000,
   });
 
-  const user = useRecoilValue(authUserAtom);
-  const userId = user.id;
-  const [hasCopied, setHasCopied] = useState<boolean>(false);
-  const [oldMembers, setOldMembers] = useState<Imember[]>([]);
+  const [localMembers, setLocalMembers] = useState<Imember[]>([]);
   const [willBeDeleted, setWillBeDeleted] = useState<string[]>([]);
-
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [hasCopied, setHasCopied] = useState<boolean>(false);
   const hasCopiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const deletePackingListMember = useAPI((api) => api.packingList.together.deleteMember);
+  const { mutate: deleteListMember } = useMutation(
+    'deletePackingListMember',
+    deletePackingListMember,
+  );
+
+  useEffect(() => {
+    data?.data.member && setLocalMembers(data?.data.member);
+  }, [data?.data.member]);
 
   useEffect(() => {
     return () => {
@@ -52,59 +57,39 @@ function ManagingMemberLanding() {
     };
   }, []);
 
-  const editMembers = () => {
-    const prev = client.getQueryData<GetMembersOutput>(['getMembers', id]);
+  if (!data || !listId) return <Loading />;
 
-    // 취소 버튼 누를 시
-    if (prev) {
-      if (isEditing) {
-        const newPrev = produce(prev, (draft) => {
-          draft.data.member = oldMembers;
-        });
+  const toggleEditingMode = () => {
+    const originMembers = client.getQueryData<GetMembersOutput>(['getMembers', listId]);
 
-        client.setQueryData(['getMembers', id], newPrev);
-      }
-      // 편집 버튼 누를 시
-      else {
-        setOldMembers(prev.data.member);
-      }
+    if (isEditing) {
+      originMembers && setLocalMembers(originMembers.data.member);
+      setWillBeDeleted([]);
     }
+
     setIsEditing((prev) => !prev);
   };
 
-  const deletePackingListMember = useAPI((api) => api.packingList.together.deleteMember);
-  const { mutate: deleteListMember } = useMutation(
-    'deletePackingListMember',
-    deletePackingListMember,
-  );
-
   const deleteMember = (memberId: string) => {
-    const prev = client.getQueryData<GetMembersOutput>(['getMembers', id]);
+    const filteredMembers = localMembers.filter((member) => member.id !== memberId);
 
-    const newPrev = produce(prev, (draft) => {
-      let index;
-      draft?.data.member.forEach((member, i) => {
-        if (member.id === memberId) {
-          index = i;
-        }
-      });
-      index && draft?.data.member.splice(index, 1);
-    });
-
-    client.setQueryData(['getMembers', id], newPrev);
+    setLocalMembers(filteredMembers);
     setWillBeDeleted((prev) => [...new Set([...prev, memberId])]);
   };
 
-  const clickInvitingButton = () => {
+  const clickEditConfirmButton = () => {
     if (isEditing) {
       deleteListMember(
         {
-          listId: id as string,
+          listId,
           memberId: willBeDeleted.join(),
         },
         {
-          onSuccess: () => {
-            client.invalidateQueries(['getMembers', id]);
+          onSuccess() {
+            client.invalidateQueries(['getMembers', listId]);
+          },
+          onSettled() {
+            setWillBeDeleted([]);
           },
         },
       );
@@ -119,9 +104,7 @@ function ManagingMemberLanding() {
     }, 3000);
   };
 
-  if (!data) return <Loading />;
   const { data: packingList } = data;
-  const members = packingList.member;
 
   return (
     <Layout back title="멤버 관리">
@@ -137,8 +120,8 @@ function ManagingMemberLanding() {
         </Card>
         <WithMembersLabelAndEdit>
           <WithMembersLabel>함께하는 멤버</WithMembersLabel>
-          {userId === members[0].id ? (
-            <WithMembersEditButton onClick={editMembers}>
+          {userId === localMembers[0].id ? (
+            <WithMembersEditButton onClick={toggleEditingMode}>
               {isEditing ? '취소' : '편집'}
             </WithMembersEditButton>
           ) : (
@@ -146,7 +129,7 @@ function ManagingMemberLanding() {
           )}
         </WithMembersLabelAndEdit>
         <WithMembers>
-          {members.map((member, index: number) => {
+          {localMembers.map((member, index: number) => {
             if (index === 0) {
               return (
                 <Member key={index}>
@@ -197,12 +180,12 @@ function ManagingMemberLanding() {
             );
           })}
         </WithMembers>
-        <InviteOtherMember length={members.length}>
+        <InviteOtherMember length={localMembers.length}>
           함께 패킹할 멤버를 초대해보세요
         </InviteOtherMember>
         <InvitingButtonWrapper>
           {isEditing ? (
-            <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
+            <InvitingButton onClick={clickEditConfirmButton} hasCopied={hasCopied}>
               완료
             </InvitingButton>
           ) : (
@@ -210,9 +193,7 @@ function ManagingMemberLanding() {
               text={`${process.env.NEXT_PUBLIC_DOMAIN}/together/invited?inviteCode=${packingList.inviteCode}`}
               onCopy={copyToClipboard}
             >
-              <InvitingButton onClick={clickInvitingButton} hasCopied={hasCopied}>
-                멤버 초대하기
-              </InvitingButton>
+              <InvitingButton hasCopied={hasCopied}>멤버 초대하기</InvitingButton>
             </CopyToClipboard>
           )}
         </InvitingButtonWrapper>
