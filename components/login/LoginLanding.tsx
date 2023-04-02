@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { useInvitation, useKaKaoLogin } from '../../utils/hooks/auth';
 import { useRecoilValue } from 'recoil';
 import { authUserAtom } from '../../utils/recoil/atom/atom';
-import { KAKAO_HREF } from '../../utils/constant';
+import { KAKAO_HREF, PRIVACY_POLICY, TEMRS_OF_SERVICE } from '../../utils/constant';
 
 function LoginLanding() {
   const router = useRouter();
@@ -37,13 +37,18 @@ function LoginLanding() {
         </LogoWrapper>
         <Title>내 손안 짐 챙김 도우미</Title>
       </LogoAndTitle>
-      <ButtonsContainer>
+
+      <LoginContainer>
         <Link href={KAKAO_HREF}>
           <LoginButton id="custom-login-btn">
             <Image src={KakaoLogin} alt="카카오 로그인 버튼" layout="fill" />
           </LoginButton>
         </Link>
-      </ButtonsContainer>
+        <p>
+          로그인 시 <Link href={TEMRS_OF_SERVICE}>이용약관</Link>과{' '}
+          <Link href={PRIVACY_POLICY}>개인정보 처리 방침</Link>에 동의하게 됩니다.
+        </p>
+      </LoginContainer>
     </StyledRoot>
   );
 }
@@ -107,7 +112,7 @@ const Title = styled.div`
   }
 `;
 
-const ButtonsContainer = styled.div`
+const LoginContainer = styled.div`
   width: 100%;
   position: absolute;
   top: 75%;
@@ -115,6 +120,19 @@ const ButtonsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.8em;
+
+  & > p {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: ${packmanColors.pmDeepGrey};
+
+    position: absolute;
+    top: calc(100% + 1.2rem);
+    left: 50%;
+    width: 200%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
 
   @media screen and (min-width: 700px) {
     font-size: 1.5rem;
@@ -139,19 +157,5 @@ const LoginButton = styled.div`
     bottom: calc(100% + 1.2rem);
     left: 50%;
     transform: translateX(-50%);
-  }
-
-  &::after {
-    content: '로그인 시 이용약관과 개인정보 처리 방침에 동의하게 됩니다.';
-    font-size: 1.2rem;
-    font-weight: 400;
-    color: ${packmanColors.pmDeepGrey};
-
-    position: absolute;
-    top: calc(100% + 1.2rem);
-    left: 50%;
-    width: 200%;
-    transform: translateX(-50%);
-    text-align: center;
   }
 `;
