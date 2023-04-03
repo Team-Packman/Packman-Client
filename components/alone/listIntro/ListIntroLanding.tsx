@@ -15,6 +15,7 @@ import {
 import { packmanColors } from '../../../styles/color';
 import useAPI from '../../../utils/hooks/useAPI';
 import { listState } from '../../../utils/recoil/atom/atom';
+import { Utility } from '../../../utils/Utility';
 import Layout from '../../common/Layout';
 
 type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
@@ -45,7 +46,9 @@ function ListIntroLanding() {
   const [templateId, setTemplateId] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isKeyboardFocused, setIsKeyboardFocused] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  const checkIsMobile = Utility.isMobile();
+  const [isMobile] = useState<boolean>(checkIsMobile);
 
   useEffect(() => {
     if (router.isReady) {
@@ -144,7 +147,6 @@ function ListIntroLanding() {
 
   const handleKeyboardFocus = () => {
     setIsKeyboardFocused(true);
-    setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
   };
 
   const handleKeyboardBlur = () => {

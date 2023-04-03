@@ -46,4 +46,9 @@ export const Utility = {
   convertDateFormatToDot(date: string) {
     return date.includes('-') ? date.replaceAll('-', '.') : date;
   },
+
+  isMobile() {
+    const userAgent = window.navigator.userAgent;
+    return /iPhone|iPad|iPod|Android/i.test(userAgent);
+  },
 };
