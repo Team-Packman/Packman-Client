@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Utility } from '../Utility';
 
 interface InstallGuide {
   standAlone: boolean;
@@ -23,11 +24,6 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
     open: false,
   });
 
-  const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod|mac/.test(userAgent);
-  };
-
   const isRunningStandalone = () => {
     return window.matchMedia('(display-mode: standalone)').matches;
   };
@@ -51,7 +47,7 @@ function useInstallGuide(): [InstallGuide, () => void, () => void] {
 
   useEffect(() => {
     if (!isRunningStandalone()) {
-      if (isIos()) {
+      if (Utility.isIos()) {
         setInstallGuide((prev) => ({ ...prev, agent: 'ios', open: true }));
       } else {
         window.addEventListener('beforeinstallprompt', (e) => {

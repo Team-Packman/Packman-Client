@@ -51,4 +51,9 @@ export const Utility = {
     const userAgent = window.navigator.userAgent;
     return /iPhone|iPad|iPod|Android/i.test(userAgent);
   },
+
+  isIos() {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod|mac/.test(userAgent);
+  },
 };
