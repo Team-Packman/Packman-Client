@@ -26,9 +26,6 @@ import useHide from '../../utils/hooks/useHide';
 import { GetTogetherPackingListBodyOutput } from '../../service/packingList/together';
 import { AxiosError } from 'axios';
 import useDynamic from '../../utils/hooks/useDynamic';
-import HeadMeta from '../HeadMeta';
-import apiService from '../../service';
-import { NextPageContext } from 'next';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -63,6 +60,9 @@ function TogetherLanding() {
   const [packerModalOpen, setPackerModalOpen] = useState(false);
   const [addTemplateModalOpen, setAddTemplateModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState(0);
+  const [selectedPacker, setSelectedPacker] = useState<{ id: string; nickname: string } | null>(
+    null,
+  );
 
   const [currentCreatingCategory, setCurrentCreatingCategory] = useState('');
   const [currentCreating, setCurrentCreating] = useState('');
@@ -277,7 +277,14 @@ function TogetherLanding() {
     setCurrentFocus(initialFocus);
     setBottomModalOpen(false);
   };
-  const packerModalOpenHandler = (packId: string) => {
+  const packerModalOpenHandler = (
+    packId: string,
+    packer: {
+      id: string;
+      nickname: string;
+    } | null,
+  ) => {
+    setSelectedPacker(packer);
     setCurrentFocus({ ...initialFocus, type: 'item', packId });
     setPackerModalOpen(true);
   };
@@ -683,7 +690,7 @@ function TogetherLanding() {
                               assignee={
                                 <Packer
                                   packer={packer}
-                                  modalHandler={() => packerModalOpenHandler(packId)}
+                                  modalHandler={() => packerModalOpenHandler(packId, packer)}
                                 />
                               }
                             />
@@ -760,6 +767,7 @@ function TogetherLanding() {
           packId={currentFocus.packId}
           listId={info.togetherPackingList.id}
           updatePacker={updatePacker}
+          selectedPacker={selectedPacker}
         />
       )}
       {isFresh && <ModalForInvitation inviteCode={info.togetherPackingList.inviteCode} />}
