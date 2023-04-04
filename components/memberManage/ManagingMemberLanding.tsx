@@ -240,11 +240,11 @@ const WithMembersLabelAndEdit = styled.div`
 `;
 
 const WithMembersLabel = styled.h1`
-  font-style: ${FONT_STYLES.HEADLINE2_SEMIBOLD};
+  ${FONT_STYLES.HEADLINE2_SEMIBOLD};
 `;
 
 const WithMembersEditButton = styled.div`
-  font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+  ${FONT_STYLES.BODY2_SEMIBOLD};
   color: ${packmanColors.pmDarkGrey};
 `;
 
@@ -290,7 +290,7 @@ const MemberImage = styled.div<{ index: number }>`
 `;
 
 const MemberName = styled.div`
-  font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+  ${FONT_STYLES.BODY2_SEMIBOLD};
   color: ${packmanColors.pmDarkGrey};
 `;
 
@@ -300,7 +300,7 @@ const InviteOtherMember = styled.div<{ length: number }>`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+  ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   color: ${packmanColors.pmGrey};
   white-space: nowrap;
 `;
@@ -318,7 +318,7 @@ const InvitingButton = styled.div<{ hasCopied: boolean }>`
   color: white;
   background-color: ${packmanColors.pmPink};
   border-radius: 0.8rem;
-  font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+  ${FONT_STYLES.BODY4_SEMIBOLD};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -327,7 +327,7 @@ const InvitingButton = styled.div<{ hasCopied: boolean }>`
     hasCopied &&
     css`
       &::after {
-        font-style: ${FONT_STYLES.BODY1_REGULAR};
+        ${FONT_STYLES.BODY1_REGULAR};
         color: ${packmanColors.pmDarkGrey};
         position: absolute;
         bottom: 12.5rem;

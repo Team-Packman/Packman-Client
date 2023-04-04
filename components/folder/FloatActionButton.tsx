@@ -172,7 +172,7 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
 
   span:last-child {
     /* '폴더 추가' 중앙 정렬을 위한 코드 */
-    font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
+    ${FONT_STYLES.BODY4_SEMIBOLD};
     padding-left: ${({ index }) => (index === 2 ? '3.2rem' : '1.4rem')};
     flex-shrink: 0;
   }

@@ -44,13 +44,13 @@ const StyledRoot = styled.div`
 `;
 
 const ErrorTitle = styled.div`
-  font-style: ${FONT_STYLES.DISPLAY2_SEMIBOLD};
+  ${FONT_STYLES.DISPLAY2_SEMIBOLD};
   color: ${packmanColors.pmBlack};
   margin: 3rem 0 1rem 0;
 `;
 
 const ErrorSubTitle = styled.div`
-  font-style: ${FONT_STYLES.BODY3_REGULAR};
+  ${FONT_STYLES.BODY3_REGULAR};
   color: ${packmanColors.pmBlack};
 `;
 
