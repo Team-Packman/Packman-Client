@@ -15,7 +15,7 @@ export default Chip;
 
 const StyledChip = styled.div`
   width: fit-content;
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   padding: 0.1rem 1rem;
   color: ${packmanColors.pmBlack};
   border-radius: 1.2rem;

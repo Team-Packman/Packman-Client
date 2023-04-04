@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Chip from '../common/Chip';
 import Card from '../common/Card';
-import { Utility } from '../../utils/Utility';
+import { FONT_STYLES } from '../../styles/font';
 
 interface PackingList {
   id: string;
@@ -93,6 +93,24 @@ export default function SwipeableListItem(props: ItemProps) {
     }
   };
 
+  const getRemainDesc = () => {
+    const remainNum = parseInt(packRemainNum);
+    const totalNum = parseInt(packTotalNum);
+    if (remainNum) {
+      return (
+        <span>
+          아직 <em>{packRemainNum}</em>개의 짐이 남았어요!
+        </span>
+      );
+    } else if (totalNum !== 0) {
+      return (
+        <span>
+          <em>패킹</em>이 완료되었어요!
+        </span>
+      );
+    }
+  };
+
   return (
     <StyledRoot isDeletingMode={isDeletingMode}>
       {isDeletingMode && (
@@ -124,9 +142,7 @@ export default function SwipeableListItem(props: ItemProps) {
               </Card.SubTitle>
             </Card.LeftContainer>
             <Card.RightContainer overlay={rightContainerStyle}>
-              <Card.Description overlay={descriptionStyle}>
-                {Utility.getRemainPackDesc(packRemainNum, departureDate)}
-              </Card.Description>
+              <Card.Description overlay={descriptionStyle}>{getRemainDesc()}</Card.Description>
             </Card.RightContainer>
             <Card.Icon icon={iRightArrow} />
           </Card>
@@ -262,7 +278,9 @@ const rightContainerStyle = css`
 
 const descriptionStyle = css`
   & > span {
+    ${FONT_STYLES.BODY1_REGULAR}
     & > em {
+      font-weight: 600;
       color: ${packmanColors.pmPink};
     }
   }

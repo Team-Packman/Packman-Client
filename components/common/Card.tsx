@@ -128,23 +128,23 @@ const StyledRightContainer = styled.div<{ overlay?: CSSProp }>`
 `;
 
 const StyledDefaultTitle = css`
-  font-style: ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
+  ${FONT_STYLES.SUBHEAD2_SEMIBOLD};
   color: ${packmanColors.black};
 `;
 
 const StyledDefaultSubTitle = css`
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmDeepGrey};
 `;
 
 const StyledDefaultLabel = css`
-  font-style: ${FONT_STYLES.BODY1_REGULAR};
+  ${FONT_STYLES.BODY1_REGULAR};
   color: ${packmanColors.pmDeepGrey};
   margin-bottom: 0.3rem;
 `;
 
 const StyledDefaultDDay = css`
-  font-style: ${FONT_STYLES.DISPLAY3_EXTRABOLD};
+  ${FONT_STYLES.DISPLAY3_EXTRABOLD};
   color: ${packmanColors.pmGreen};
 `;
 
