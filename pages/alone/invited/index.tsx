@@ -1,10 +1,9 @@
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import HeadMeta from '../../../components/HeadMeta';
-import InvitedLanding from '../../../components/together/invited/InvitedLanding';
+import InvitedLanding from '../../../components/alone/invited/InvitedLanding';
 import apiService from '../../../service';
 import { AsyncBoundary } from '../../../utils/AsyncBoundary';
-import { client } from '../../../utils/axios';
 
 interface InvitedProps {
   title: string;
@@ -31,20 +30,9 @@ export default Invited;
 
 Invited.getInitialProps = async function ({ req, query }: NextPageContext) {
   const getSharedPackingListDetail = apiService.packingList.common.getSharedPackingListDetail;
-  const cookie = req?.headers?.cookie?.split(';');
-  const arr = cookie ? cookie[1].split(';') : [];
-  const accessToken = arr.reduce((acc, curr) => {
-    const [key, value] = curr.trim().split('=');
-    if (key === 'accessToken') {
-      return value;
-    }
-    return acc;
-  }, '');
-
-  client.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
   const { data: info } = await getSharedPackingListDetail({
-    type: 'together',
+    type: 'alone',
     inviteCode: query.inviteCode as string,
   });
   const { title } = info;
