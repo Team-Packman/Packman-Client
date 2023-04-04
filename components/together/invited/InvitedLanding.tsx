@@ -5,7 +5,6 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authUserAtom, invitationAtom } from '../../../utils/recoil/atom/atom';
 import useAPI from '../../../utils/hooks/useAPI';
 import ModalForInvited from '../../../components/common/ModalForInvited';
-import HeadMeta from '../../HeadMeta';
 
 function InvitedLanding() {
   const router = useRouter();
@@ -48,16 +47,7 @@ function InvitedLanding() {
   });
 
   if (!info) return null;
-  return !user.isAlreadyUser ? (
-    <>
-      <HeadMeta
-        title={info.title}
-        description={`[${info.title}] 패킹리스트가 공유되었어요!`}
-        url={window.location.href}
-      />
-      <ModalForInvited title={info.title} />
-    </>
-  ) : null;
+  return !user.isAlreadyUser ? <ModalForInvited title={info.title} /> : null;
 }
 
 export default InvitedLanding;
