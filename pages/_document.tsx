@@ -1,23 +1,17 @@
-import { ServerStyleSheets } from '@mui/styles';
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  DocumentContext,
-  DocumentInitialProps,
-} from 'next/document';
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import Script from 'next/script';
 import { googleTagManagerId } from '../utils/constant/index';
+import { ServerStyleSheet } from 'styled-components';
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
-    const materialSheets = new ServerStyleSheets();
+  static async getInitialProps(ctx: DocumentContext) {
+    const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
+
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App) => (props) => materialSheets.collect(<App {...props} />),
+          enhanceApp: (App: any) => (props: any) => sheet.collectStyles(<App {...props} />),
         });
 
       const initialProps = await Document.getInitialProps(ctx);
@@ -26,12 +20,12 @@ class MyDocument extends Document {
         styles: (
           <>
             {initialProps.styles}
-            {materialSheets.getStyleElement()}
+            {sheet.getStyleElement()}
           </>
         ),
       };
     } finally {
-      //   materialSheets.seal();
+      sheet.seal();
     }
   }
 

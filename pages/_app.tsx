@@ -11,12 +11,9 @@ import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';
 import { AxiosInterceptor } from '../utils/axios';
-import HeadMeta from '../components/HeadMeta';
 import { DefaultSeo } from 'next-seo';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [show, setShow] = useState(false);
-
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -36,16 +33,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => window.removeEventListener('resize', setScreenSize);
   });
 
-  useEffect(() => {
-    setShow(true);
-  }, []);
-
-  if (!show) return null;
-
   return (
     <>
-      <HeadMeta />
       <DefaultSeo
+        title="팩맨 Packman - 내 손안 짐챙김 도우미"
+        description="내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!"
+        canonical="https:/www.packman.kr"
         openGraph={{
           type: 'website',
           locale: 'en_IE',
