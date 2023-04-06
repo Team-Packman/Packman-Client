@@ -57,7 +57,7 @@ function ManagingMemberLanding() {
     };
   }, []);
 
-  if (!data || !listId) return <Loading />;
+  if (!data || !listId || !localMembers.length) return <Loading />;
 
   const toggleEditingMode = () => {
     const originMembers = client.getQueryData<GetMembersOutput>(['getMembers', listId]);
@@ -105,7 +105,7 @@ function ManagingMemberLanding() {
   };
 
   const { data: packingList } = data;
-
+  console.log(localMembers);
   return (
     <Layout back title="멤버 관리">
       <StyledRoot>
