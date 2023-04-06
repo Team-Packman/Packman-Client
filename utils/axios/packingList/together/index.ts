@@ -64,8 +64,13 @@ export const fetchUpdatePackingListPacker = async (
 export const fetchPackingListHeader = async (
   listId: string,
   isAloned: boolean,
+  inviteCode?: string,
 ): Promise<GetTogetherPackingListHeaderOutput> => {
-  const { data } = await client(`/list/${listId}/title-date?isAloned=${isAloned}`);
+  const { data } = await client(
+    `/list/${listId}/title-date?isAloned=${isAloned}${
+      inviteCode ? `&inviteCode=${inviteCode}` : ''
+    }`,
+  );
   return data;
 };
 

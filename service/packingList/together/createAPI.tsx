@@ -70,6 +70,7 @@ export interface TogetherAPI {
     getPackingListHeader: (
       packingListId: string,
       isAloned: boolean,
+      inviteCode?: string,
     ) => Promise<GetTogetherPackingListHeaderOutput>;
     getPackingListBody: (
       packingListId: string,
@@ -115,8 +116,8 @@ const createTogetherAPI = (): TogetherAPI => {
         fetchUpdatePackingListIsSaved(payload),
       updatePackingListPacker: (payload: UpdatePackingListPackerInput) =>
         fetchUpdatePackingListPacker(payload),
-      getPackingListHeader: (packingListId: string, isAloned: boolean) =>
-        fetchPackingListHeader(packingListId, isAloned),
+      getPackingListHeader: (packingListId: string, isAloned: boolean, inviteCode?: string) =>
+        fetchPackingListHeader(packingListId, isAloned, inviteCode),
       getPackingListBody: (packingListId: string) => fetchPackingListBody(packingListId),
       addPackingListCategory: (payload: AddTogetherPackingListCategoryInput) =>
         fetchAddPackingListCategory(payload),

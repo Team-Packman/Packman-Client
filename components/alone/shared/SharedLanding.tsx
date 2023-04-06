@@ -11,33 +11,46 @@ import PackagesWithCategory from '../../../components/common/PackagesWithCategor
 import PackingItem from '../../../components/common/PackingItem';
 import PackingCategory from '../../../components/common/PackingCategory';
 import CheckListHeader from '../../../components/together/CheckListHeader';
+import { useRecoilValue } from 'recoil';
+import { invitationAtom } from '../../../utils/recoil/atom/atom';
 
 function SharedLanding() {
   const router = useRouter();
   const { id } = router.query;
+  const { inviteCode } = useRecoilValue(invitationAtom);
 
+  const getPackingListHeader = useAPI((api) => api.packingList.together.getPackingListHeader);
   const getAlonePackingListDetail = useAPI(
     (api) => api.packingList.alone.getAlonePackingListDetail,
   );
   const { data } = useQuery(
     ['getAlonePackingListDetail', id],
-    () => getAlonePackingListDetail(id as string),
+    () => getAlonePackingListDetail(id as string, inviteCode),
     {
       enabled: !!id,
     },
   );
 
-  if (!data) return <Loading />;
+  const { data: packingListHeader } = useQuery(
+    ['getPackingListHeader', id],
+    () => getPackingListHeader(id as string, true, inviteCode),
+    {
+      enabled: !!id,
+    },
+  );
+
+  if (!data || !packingListHeader) return <Loading />;
   const { data: info } = data;
+  const { data: header } = packingListHeader;
 
   return (
     <Layout
       title="logo"
       option={
         <CheckListHeader
-          listId={info.id}
-          departureDate={info.departureDate}
-          title={info.title}
+          listId={header.id}
+          departureDate={header.departureDate}
+          title={header.title}
           shared
         />
       }

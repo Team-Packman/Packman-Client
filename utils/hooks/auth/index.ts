@@ -1,7 +1,7 @@
 import { GetAloneInvitedOutput } from './../../../service/packingList/alone/index';
 import { useAddMemberMutation, useCheckInvitation, useKaKaoFlow } from './../queries/auth/auth';
 import { authUserAtom, invitationAtom, kakao, creatingUserAtom } from './../../recoil/atom/atom';
-import { useRecoilState, useResetRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import { GetInvitedOutput } from '../../../service/packingList/together';
 import cookie from 'react-cookies';
@@ -47,7 +47,6 @@ export const useKaKaoLogin = () => {
 export const useInvitation = () => {
   const router = useRouter();
   const { type, inviteCode, folderId } = useRecoilValue(invitationAtom);
-  const resetInvitation = useResetRecoilState(invitationAtom);
 
   const addMember = useAddMemberMutation();
   const checkInvitation = useCheckInvitation(inviteCode);
@@ -81,8 +80,6 @@ export const useInvitation = () => {
           );
         }
       }
-
-      resetInvitation();
     }
   };
 

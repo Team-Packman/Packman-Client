@@ -78,8 +78,11 @@ export const fetchDeleteAlonePackingItem = async ({
 
 export const fetchAlonePackingListDetail = async (
   listId: string,
+  inviteCode?: string,
 ): Promise<GetAlonePackingListDetailOutput> => {
-  const { data } = await client(`/list/alone/${listId}`);
+  const { data } = await client(
+    `/list/alone/${listId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
+  );
   return data;
 };
 

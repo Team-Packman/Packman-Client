@@ -34,7 +34,10 @@ import {
 export interface AloneAPI {
   alone: {
     getAloneFolder: () => Promise<GetAloneFolderOutput>;
-    getAlonePackingListDetail: (listId: string) => Promise<GetAlonePackingListDetailOutput>;
+    getAlonePackingListDetail: (
+      listId: string,
+      inviteCode?: string,
+    ) => Promise<GetAlonePackingListDetailOutput>;
     addAlonePackingListFolder: (
       payload: AddAlonePackingListIntroInput,
     ) => Promise<AddAlonePackingListIntroOutput>;
@@ -64,7 +67,8 @@ const createAloneAPI = (): AloneAPI => {
   return {
     alone: {
       getAloneFolder: () => fetchAloneFolder(),
-      getAlonePackingListDetail: (listId: string) => fetchAlonePackingListDetail(listId),
+      getAlonePackingListDetail: (listId: string, inviteCode?: string) =>
+        fetchAlonePackingListDetail(listId, inviteCode),
       addAlonePackingListFolder: (payload: AddAlonePackingListIntroInput) =>
         fetchAddAlonePackingFolder(payload),
       addAlonePackingListCategory: (payload: AddAlonePackingListCategoryInput) =>
