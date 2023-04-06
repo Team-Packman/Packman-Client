@@ -57,7 +57,7 @@ function ManagingMemberLanding() {
     };
   }, []);
 
-  if (!data || !listId) return <Loading />;
+  if (!data || !listId || !localMembers.length) return <Loading />;
 
   const toggleEditingMode = () => {
     const originMembers = client.getQueryData<GetMembersOutput>(['getMembers', listId]);
