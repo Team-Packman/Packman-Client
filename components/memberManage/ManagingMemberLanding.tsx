@@ -105,7 +105,7 @@ function ManagingMemberLanding() {
   };
 
   const { data: packingList } = data;
-  console.log(localMembers);
+
   return (
     <Layout back title="멤버 관리">
       <StyledRoot>
