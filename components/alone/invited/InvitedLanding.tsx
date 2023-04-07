@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import ModalForShared from '../../../components/common/ModalForShared';
 import useAPI from '../../../utils/hooks/useAPI';
+import useDynamic from '../../../utils/hooks/useDynamic';
 import { authUserAtom, invitationAtom } from '../../../utils/recoil/atom/atom';
 
 function InvitedLanding() {
@@ -13,6 +13,8 @@ function InvitedLanding() {
   const setInvitation = useSetRecoilState(invitationAtom);
 
   const getInvited = useAPI((api) => api.packingList.alone.getInvited);
+
+  const ModalForShared = useDynamic(() => import('../../../components/common/ModalForShared'));
 
   useEffect(() => {
     if (inviteCode && typeof inviteCode === 'string') {
