@@ -22,6 +22,7 @@ module.exports = withPWA({
     removeConsole: {
       exclude: ['error'],
     },
+    styledComponents: true,
   },
   webpack: (config, options) => {
     config.plugins.push();

@@ -4,7 +4,7 @@ import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authUserAtom, invitationAtom } from '../../../utils/recoil/atom/atom';
 import useAPI from '../../../utils/hooks/useAPI';
-import ModalForInvited from '../../../components/common/ModalForInvited';
+import useDynamic from '../../../utils/hooks/useDynamic';
 
 function InvitedLanding() {
   const router = useRouter();
@@ -16,6 +16,8 @@ function InvitedLanding() {
   const getSharedPackingListDetail = useAPI(
     (api) => api.packingList.common.getSharedPackingListDetail,
   );
+
+  const ModalForInvited = useDynamic(() => import('../../../components/common/ModalForInvited'));
 
   useEffect(() => {
     if (inviteCode && typeof inviteCode === 'string') {
