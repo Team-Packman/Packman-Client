@@ -5,6 +5,7 @@ import { AsyncBoundary } from '../../utils/AsyncBoundary';
 import { NextPageContext } from 'next';
 import apiService from '../../service';
 import { client } from '../../utils/axios';
+import { useEffect, useState } from 'react';
 
 interface TogetherProps {
   title: string;
@@ -12,6 +13,20 @@ interface TogetherProps {
 function Together(props: TogetherProps) {
   const { title: headerTitle } = props;
   const router = useRouter();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
+  if (!show)
+    return (
+      <HeadMeta
+        title={headerTitle}
+        description={`[${headerTitle}] 패킹리스트가 공유되었어요!`}
+        url={`${process.env.NEXT_PUBLIC_DOMAIN}/${router.asPath}`}
+      />
+    );
 
   return (
     <>
