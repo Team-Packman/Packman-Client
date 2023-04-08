@@ -28,7 +28,7 @@ function Invited(props: InvitedProps) {
 
 export default Invited;
 
-Invited.getInitialProps = async function ({ req, query }: NextPageContext) {
+export const getServerSideProps = async ({ req, query }: NextPageContext) => {
   const getSharedPackingListDetail = apiService.packingList.common.getSharedPackingListDetail;
 
   const { data: info } = await getSharedPackingListDetail({
@@ -37,6 +37,8 @@ Invited.getInitialProps = async function ({ req, query }: NextPageContext) {
   });
   const { title } = info;
   return {
-    title,
+    props: {
+      title,
+    },
   };
 };
