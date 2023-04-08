@@ -5,7 +5,7 @@ import { AsyncBoundary } from '../../utils/AsyncBoundary';
 import { NextPageContext } from 'next';
 import apiService from '../../service';
 import { client } from '../../utils/axios';
-import { useEffect, useState } from 'react';
+import cookies from 'next-cookies';
 
 interface TogetherProps {
   title: string;
@@ -13,20 +13,6 @@ interface TogetherProps {
 function Together(props: TogetherProps) {
   const { title: headerTitle } = props;
   const router = useRouter();
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    setShow(true);
-  }, []);
-
-  if (!show)
-    return (
-      <HeadMeta
-        title={headerTitle}
-        description={`[${headerTitle}] 패킹리스트가 공유되었어요!`}
-        url={`${process.env.NEXT_PUBLIC_DOMAIN}/${router.asPath}`}
-      />
-    );
 
   return (
     <>
@@ -44,23 +30,19 @@ function Together(props: TogetherProps) {
 
 export default Together;
 
-Together.getInitialProps = async function ({ req, query }: NextPageContext) {
+export const getServerSideProps = async ({ req, query }: NextPageContext) => {
   const getPackingListHeader = apiService.packingList.together.getPackingListHeader;
-  const cookie = req?.headers?.cookie?.split(';');
-  const arr = cookie ? cookie[1].split(';') : [];
-  const accessToken = arr.reduce((acc, curr) => {
-    const [key, value] = curr.trim().split('=');
-    if (key === 'accessToken') {
-      return value;
-    }
-    return acc;
-  }, '');
 
-  client.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  const allCookies = cookies({ req: { headers: { cookie: req?.headers.cookie } } });
+  const accessToken = allCookies['accessToken'];
+
+  Object.assign(client.defaults.headers, { Authorization: `Bearer ${accessToken}` });
 
   const { data: header } = await getPackingListHeader(query.id as string, false);
   const { title } = header;
   return {
-    title,
+    props: {
+      title,
+    },
   };
 };

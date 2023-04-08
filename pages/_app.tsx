@@ -1,19 +1,21 @@
-import type { AppProps } from 'next/app';
+import type { AppContext, AppProps } from 'next/app';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect, useState } from 'react';
 import { APIProvider } from '../utils/context/apiContext';
 import { GlobalStyle } from '../styles/globalStyle';
 import { CssBaseline } from '@mui/material';
 import { setScreenSize } from '../utils/setScreenSize';
-import { RecoilRoot } from 'recoil';
+import { MutableSnapshot, RecoilRoot } from 'recoil';
 import InstallGuide from '../components/common/InstallGuide';
 import { AsyncBoundary } from '../utils/AsyncBoundary';
 import React from 'react';
 import GoogleTagManager from '../components/GoogleTagManager';
 import { AxiosInterceptor } from '../utils/axios';
 import { DefaultSeo } from 'next-seo';
+import cookies from 'next-cookies';
+import { authUserAtom, authUserAtomDefault } from '../utils/recoil/atom/atom';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, accessToken }: AppProps & { accessToken: string }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -26,6 +28,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         },
       }),
   );
+
+  const initialRecoilState = ({ set }: MutableSnapshot) => {
+    set(authUserAtom, { ...authUserAtomDefault, accessToken });
+  };
 
   useEffect(() => {
     setScreenSize();
@@ -53,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
       <GoogleTagManager />
       <CssBaseline />
-      <RecoilRoot>
+      <RecoilRoot initializeState={initialRecoilState}>
         <QueryClientProvider client={queryClient}>
           <AxiosInterceptor>
             <APIProvider baseURL={process.env.NEXT_PUBLIC_END ?? ''}>
@@ -73,3 +79,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default MyApp;
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const { ctx, Component } = appContext;
+  const appProps = await Component.getInitialProps?.(ctx);
+
+  const allCookies = cookies(ctx);
+  const accessToken = allCookies['accessToken'];
+
+  return { ...appProps, accessToken };
+};

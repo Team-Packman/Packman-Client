@@ -1,4 +1,5 @@
 import { NextPageContext } from 'next';
+import cookies from 'next-cookies';
 import { useRouter } from 'next/router';
 import AloneLanding from '../../components/alone/AloneLanding';
 import HeadMeta from '../../components/HeadMeta';
@@ -29,23 +30,17 @@ function Alone(props: AloneProps) {
 
 export default Alone;
 
-Alone.getInitialProps = async function ({ req, query }: NextPageContext) {
+export const getServerSideProps = async ({ req, query }: NextPageContext) => {
   const getPackingListHeader = apiService.packingList.together.getPackingListHeader;
-  const cookie = req?.headers?.cookie?.split(';');
-  const arr = cookie ? cookie[1].split(';') : [];
-  const accessToken = arr.reduce((acc, curr) => {
-    const [key, value] = curr.trim().split('=');
-    if (key === 'accessToken') {
-      return value;
-    }
-    return acc;
-  }, '');
 
-  client.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  const allCookies = cookies({ req: { headers: { cookie: req?.headers.cookie } } });
+  const accessToken = allCookies['accessToken'];
+
+  Object.assign(client.defaults.headers, { Authorization: `Bearer ${accessToken}` });
 
   const { data: header } = await getPackingListHeader(query.id as string, true);
   const { title } = header;
   return {
-    title,
+    props: { title },
   };
 };

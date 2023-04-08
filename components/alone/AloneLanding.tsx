@@ -399,11 +399,6 @@ function AloneLanding() {
 
   return (
     <>
-      <HeadMeta
-        title={header.title}
-        description={`[${header.title}] 패킹리스트가 공유되었어요!`}
-        url={window.location.href}
-      />
       <Layout
         back
         title="패킹리스트"
