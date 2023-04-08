@@ -34,11 +34,11 @@ export const useRefresh = (tokens: RefreshInput) => {
             router.replace('/login');
             return;
           }
-          default:
-            reset();
-            reportError(error);
         }
       }
+
+      reset();
+      reportError(error);
     }
   };
 
