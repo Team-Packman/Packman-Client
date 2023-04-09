@@ -110,7 +110,7 @@ const StyledRoot = styled.div`
 
   & > h1 {
     color: #282828;
-    font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
   }
 
   @keyframes appear {
@@ -140,7 +140,7 @@ const StyledButtonWrapper = styled.div`
     padding: 0;
     border: none;
     border-radius: 0.8rem;
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     background: ${packmanColors.pmBlueGrey};
     -webkit-text-fill-color: ${packmanColors.pmDarkGrey};
   }
