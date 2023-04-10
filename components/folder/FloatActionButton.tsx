@@ -51,12 +51,12 @@ const FloatActionButton = (props: FloatModalProps) => {
       <StyledFABContainer pageName={pageName} isAloned={isAloned}>
         <li onClick={handleOpen}>
           {open ? (
-            <div>
+            <div style={{ position: 'relative' }}>
               <Image src={FABOPEN} alt="FAB" layout="fill" />
             </div>
           ) : (
-            <div>
-              <Image src={FAB} alt="FAB" layout="fill" />
+            <div style={{ position: 'relative' }}>
+              <Image src={FAB} alt="FAB" layout="fill" placeholder="blur" blurDataURL={FAB} />
             </div>
           )}
         </li>
@@ -172,8 +172,8 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
 
   span:last-child {
     /* '폴더 추가' 중앙 정렬을 위한 코드 */
-    ${FONT_STYLES.BODY4_SEMIBOLD};
     padding-left: ${({ index }) => (index === 2 ? '3.2rem' : '1.4rem')};
     flex-shrink: 0;
+    ${FONT_STYLES.BODY4_SEMIBOLD}
   }
 `;
