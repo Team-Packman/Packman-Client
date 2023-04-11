@@ -36,14 +36,6 @@ module.exports = withPlugins([
 
         return config;
       },
-      async rewrites() {
-        return [
-          {
-            source: '/:path*',
-            destination: `${process.env.NEXT_PUBLIC_END}/:path*`,
-          },
-        ];
-      },
     }),
   ],
   [withBundleAnalyzer],
