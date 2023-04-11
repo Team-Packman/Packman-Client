@@ -303,7 +303,7 @@ const StyledEtcWrapper = styled.div`
     ${FONT_STYLES.BODY3_REGULAR};
     letter-spacing: 4%;
     &:not(:last-child) {
-      padding-bottom: 0.8rem;
+      padding-bottom: 1.5rem;
     }
   }
 `;
