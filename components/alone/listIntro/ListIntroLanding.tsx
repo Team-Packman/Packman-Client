@@ -246,7 +246,9 @@ function ListIntroLanding() {
               placeholder="폴더 이름을 입력하세요"
               maxLength={10}
             />
-            <button onClick={handleAddFolder}>생성</button>
+            <button onClick={handleAddFolder} disabled={folderName === ''}>
+              생성
+            </button>
           </StyledFolderInputContent>
           <StyledTagContainer>
             {isAloned
