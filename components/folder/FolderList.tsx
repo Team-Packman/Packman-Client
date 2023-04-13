@@ -85,6 +85,6 @@ export const StyledWrapper = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
   grid-gap: 0.8rem;
   justify-items: stretch;
-  margin-top: 2.4rem;
+  margin-top: 1.5rem;
   padding-bottom: 5rem;
 `;
