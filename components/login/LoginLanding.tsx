@@ -142,6 +142,7 @@ const LoginContainer = styled.div`
 const LoginButton = styled.div`
   width: 33.6rem;
   max-width: calc(100% - 4rem);
+  height: 4.8rem;
 
   position: relative;
 

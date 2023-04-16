@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import useAPI from '../../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import useReset from '../../utils/hooks/recoil/useReset';
+import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 interface ProfileData {
   id: string;
   nickname: string;
@@ -90,7 +91,9 @@ function SettingProfile(props: SettingProfileProps) {
     <StyledRoot>
       <StyledSettingWrapper>
         <p onClick={onClickLogout}>로그아웃</p>
-        <p onClick={onClickEditText}>수정</p>
+        <StyledEditButton>
+          <Image src={iRightArrow} alt="edit" onClick={onClickEditText} />
+        </StyledEditButton>
 
         <StyledProfile>
           <Image
@@ -218,13 +221,13 @@ const StyledSettingWrapper = styled.main`
     color: ${packmanColors.pmDarkGrey};
     ${FONT_STYLES.BODY2_SEMIBOLD};
   }
-  & > p:nth-child(2) {
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    color: ${packmanColors.pmDeepGrey};
-    ${FONT_STYLES.CAPTION2_SEMIBOLD};
-  }
+`;
+const StyledEditButton = styled.div`
+  position: absolute;
+  top: 3.75rem;
+  right: 0.6rem;
+  color: ${packmanColors.pmDeepGrey};
+  ${FONT_STYLES.CAPTION2_SEMIBOLD};
 `;
 const StyledProfile = styled.div`
   display: flex;
@@ -303,7 +306,7 @@ const StyledEtcWrapper = styled.div`
     ${FONT_STYLES.BODY3_REGULAR};
     letter-spacing: 4%;
     &:not(:last-child) {
-      padding-bottom: 0.8rem;
+      padding-bottom: 1.5rem;
     }
   }
 `;
