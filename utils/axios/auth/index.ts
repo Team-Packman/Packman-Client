@@ -38,7 +38,7 @@ export const fetchRefresh = async ({
   const { data } = await axiosBasic(`/auth/token`, {
     baseURL: process.env.NEXT_PUBLIC_END,
     headers: {
-      Authorization: accessToken,
+      Authorization: `Bearer ${accessToken}`,
       Refresh: refreshToken,
     },
   });

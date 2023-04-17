@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import apiService from '../../../../service';
 import { GetAloneInventoryOutput } from '../../../../service/inventory/alone';
