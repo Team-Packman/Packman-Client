@@ -26,6 +26,7 @@ import useHide from '../../utils/hooks/useHide';
 import { GetTogetherPackingListBodyOutput } from '../../service/packingList/together';
 import { AxiosError } from 'axios';
 import useDynamic from '../../utils/hooks/useDynamic';
+import AddToTemplateModal from './AddToTemplateModal';
 
 interface FocusInfo {
   type: 'category' | 'item';
@@ -749,13 +750,10 @@ function TogetherLanding() {
         <FunctionSection>
           <AddTemplateButton
             onClick={() =>
-              updateRemainingInfo(
-                { listId: info.id, isSaved: info.togetherPackingList.isSaved },
-                'save',
-              )
+              updateRemainingInfo({ listId: info.id, isSaved: info.myPackingList.isSaved }, 'save')
             }
           >
-            {info.togetherPackingList.isSaved ? '템플릿 업데이트' : '나만의 템플릿으로 추가'}
+            {info.myPackingList.isSaved ? '나만의 템플릿 업데이트' : '나만의 템플릿으로 추가'}
           </AddTemplateButton>
         </FunctionSection>
       </StyledTogetherLanding>
@@ -780,9 +778,9 @@ function TogetherLanding() {
           content={currentFocus.title}
         />
       )}
-      {/* {addTemplateModalOpen && (
-        <ModalForAddToTemplate title={header.title} onClick={addTemplateModalCloseHandler} />
-      )} */}
+      {addTemplateModalOpen && (
+        <AddToTemplateModal title={header.title} onClick={addTemplateModalCloseHandler} />
+      )}
     </Layout>
   );
 }
