@@ -113,8 +113,8 @@ const CopyLinkButton = styled.div<{
     css`
       &::after {
         position: absolute;
-        content: '복사완료';
-        width: 12.5rem;
+        content: '링크가 복사되었습니다';
+        width: 100%;
         height: 1.7rem;
         top: -2.5rem;
         font-size: 1.4rem;
