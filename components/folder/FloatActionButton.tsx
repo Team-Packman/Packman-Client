@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useState } from 'react';
 import FAB from '/public/assets/svg/fab.svg';
-import FABOPEN from '/public/assets/svg/fab_rotate.svg';
+// import FABOPEN from '/public/assets/svg/fab_rotate.svg';
 import { Backdrop } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { packmanColors } from '../../styles/color';
@@ -52,11 +52,11 @@ const FloatActionButton = (props: FloatModalProps) => {
         <li onClick={handleOpen}>
           {open ? (
             <div style={{ position: 'relative' }}>
-              <Image src={FABOPEN} alt="FAB" layout="fill" />
+              {/* <Image src={FABOPEN} alt="FAB" layout="fill" /> */}
             </div>
           ) : (
             <div style={{ position: 'relative' }}>
-              <Image src={FAB} alt="FAB" layout="fill" placeholder="blur" blurDataURL={FAB} />
+              <Image src={FAB} alt="FAB" layout="fill" />
             </div>
           )}
         </li>
