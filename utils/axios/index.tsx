@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { PropsWithChildren, useEffect } from 'react';
+import cookie from 'react-cookies';
 
 enum AXIOS_KEY {
   axiosBasic = 'axiosBasic',
@@ -66,6 +67,7 @@ function AxiosInterceptor({ children }: PropsWithChildren) {
           const tokens = await refresh();
 
           if (tokens) {
+            cookie.save('accessToken', tokens.accessToken, {});
             config.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
 
             return client(config);

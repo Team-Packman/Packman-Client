@@ -140,7 +140,6 @@ export interface GetTogetherPackingListBodyOutput {
         }[];
       }[];
       inviteCode: string;
-      isSaved: boolean;
     };
     myPackingList: {
       id: string; // 혼자 패킹리스트 id
@@ -156,6 +155,7 @@ export interface GetTogetherPackingListBodyOutput {
           packer: null;
         }[];
       }[];
+      isSaved: boolean;
     };
   };
 }
