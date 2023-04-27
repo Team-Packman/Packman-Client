@@ -47,8 +47,11 @@ function ListIntroLanding() {
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isKeyboardFocused, setIsKeyboardFocused] = useState<boolean>(false);
 
-  const checkIsMobile = Utility.isMobile();
-  const [isMobile] = useState<boolean>(checkIsMobile);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsMobile(Utility.isMobile());
+  }, []);
 
   useEffect(() => {
     if (router.isReady) {
