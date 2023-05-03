@@ -15,7 +15,12 @@ import { DefaultSeo } from 'next-seo';
 import cookies from 'next-cookies';
 import { authUserAtom, authUserAtomDefault } from '../utils/recoil/atom/atom';
 
-function MyApp({ Component, pageProps, accessToken }: AppProps & { accessToken: string }) {
+function MyApp({
+  Component,
+  pageProps,
+  accessToken,
+  refreshToken,
+}: AppProps & { accessToken: string; refreshToken: string }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -30,7 +35,7 @@ function MyApp({ Component, pageProps, accessToken }: AppProps & { accessToken: 
   );
 
   const initialRecoilState = ({ set }: MutableSnapshot) => {
-    set(authUserAtom, { ...authUserAtomDefault, accessToken });
+    set(authUserAtom, { ...authUserAtomDefault, accessToken, refreshToken });
   };
 
   useEffect(() => {
@@ -86,6 +91,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
 
   const allCookies = cookies(ctx);
   const accessToken = allCookies['accessToken'];
+  const refreshToken = allCookies['refreshToken'];
 
-  return { ...appProps, accessToken };
+  return { ...appProps, accessToken, refreshToken };
 };
