@@ -24,6 +24,7 @@ export const useKaKaoLogin = () => {
           {
             onSuccess: ({ data }) => {
               cookie.save('accessToken', data.accessToken, {});
+              cookie.save('refreshToken', data.refreshToken, {});
 
               if (data.isAlreadyUser) {
                 setUser(data);

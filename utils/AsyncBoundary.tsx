@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { PropsWithChildren, ReactNode, Suspense, useEffect, useState } from 'react';
+import { ComponentProps, PropsWithChildren, ReactNode, Suspense, useEffect, useState } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { QueryErrorResetBoundary, useQueryErrorResetBoundary } from 'react-query';
 import { useResetRecoilState } from 'recoil';
@@ -8,7 +8,17 @@ import Loading from '../components/common/Loading';
 import { invitationAtom } from './recoil/atom/atom';
 
 interface AsyncBoundaryProps {
-  loadingFallback?: ReactNode;
+  loadingFallback?: JSX.Element;
+}
+
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return mounted;
 }
 
 const isExpectedError = (res: unknown): res is Error => {
@@ -57,6 +67,7 @@ export function AsyncBoundary({
   loadingFallback,
 }: PropsWithChildren<AsyncBoundaryProps>) {
   const { reset } = useQueryErrorResetBoundary();
+  const loading = loadingFallback === undefined ? <Loading /> : loadingFallback ?? <Loading />;
 
   return (
     <QueryErrorResetBoundary>
@@ -69,12 +80,18 @@ export function AsyncBoundary({
         }}
         onReset={reset}
       >
-        <Suspense
-          fallback={loadingFallback === undefined ? <Loading /> : loadingFallback ?? <Loading />}
-        >
-          {children}
-        </Suspense>
+        <SSRSafeSuspense loadingFallback={loading}>{children}</SSRSafeSuspense>
       </ErrorBoundary>
     </QueryErrorResetBoundary>
   );
+}
+
+export function SSRSafeSuspense({
+  children,
+  loadingFallback,
+}: PropsWithChildren<AsyncBoundaryProps>) {
+  const isMounted = useMounted();
+
+  if (isMounted) return <Suspense fallback={loadingFallback}>{children}</Suspense>;
+  return null;
 }
