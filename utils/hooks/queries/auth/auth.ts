@@ -8,6 +8,7 @@ import { authUserAtom } from '../../../recoil/atom/atom';
 import useReset from '../../recoil/useReset';
 import { useErrorBubbling } from '../../../AsyncBoundary';
 import apiService from '../../../../service';
+import cookie from 'react-cookies';
 
 export const useRefresh = (tokens: RefreshInput) => {
   const router = useRouter();
@@ -21,6 +22,8 @@ export const useRefresh = (tokens: RefreshInput) => {
       const { data } = await client.fetchQuery<RefreshOutput>('refresh', () =>
         apiService.auth.refresh(tokens),
       );
+      cookie.save('accessToken', data.accessToken, {});
+      cookie.save('refreshToken', data.refreshToken, {});
       setUser((prev) => ({ ...prev, ...data }));
 
       return data;
