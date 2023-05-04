@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { PropsWithChildren, useEffect } from 'react';
 import cookie from 'react-cookies';
+import { setTokens } from '../cookies';
 
 enum AXIOS_KEY {
   axiosBasic = 'axiosBasic',
@@ -59,7 +60,7 @@ function AxiosInterceptor({ children }: PropsWithChildren) {
     async (error) => {
       const config = error.config;
 
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         if (!config.headers['Authorization']) {
           alert('로그인 후 이용해 주세요');
           router.replace('/login');
@@ -67,7 +68,7 @@ function AxiosInterceptor({ children }: PropsWithChildren) {
           const tokens = await refresh();
 
           if (tokens) {
-            cookie.save('accessToken', tokens.accessToken, {});
+            setTokens({ accessToken: tokens.accessToken });
             config.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
 
             return client(config);

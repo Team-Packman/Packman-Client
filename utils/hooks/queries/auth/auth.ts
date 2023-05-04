@@ -1,3 +1,4 @@
+import { setTokens, removeTokens, getTokens } from './../../../cookies';
 import { invitationAtom } from './../../../recoil/atom/atom';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
@@ -19,20 +20,23 @@ export const useRefresh = (tokens: RefreshInput) => {
 
   const refresh = async () => {
     try {
+      const tokens = getTokens();
       const { data } = await client.fetchQuery<RefreshOutput>('refresh', () =>
         apiService.auth.refresh(tokens),
       );
-      cookie.save('accessToken', data.accessToken, {});
-      cookie.save('refreshToken', data.refreshToken, {});
+
+      setTokens({ accessToken: data.accessToken });
       setUser((prev) => ({ ...prev, ...data }));
 
       return data;
     } catch (error) {
+      removeTokens();
+      reset();
+
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
           case 400:
           case 401: {
-            reset();
             alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
             router.replace('/login');
             return;
@@ -40,7 +44,6 @@ export const useRefresh = (tokens: RefreshInput) => {
         }
       }
 
-      reset();
       reportError(error);
     }
   };

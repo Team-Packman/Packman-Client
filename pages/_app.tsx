@@ -13,7 +13,8 @@ import GoogleTagManager from '../components/GoogleTagManager';
 import { AxiosInterceptor } from '../utils/axios';
 import { DefaultSeo } from 'next-seo';
 import cookies from 'next-cookies';
-import { authUserAtom, authUserAtomDefault } from '../utils/recoil/atom/atom';
+import reactCookies from 'react-cookies';
+import { authUserAtom } from '../utils/recoil/atom/atom';
 
 function MyApp({
   Component,
@@ -27,7 +28,6 @@ function MyApp({
         defaultOptions: {
           queries: {
             suspense: true,
-            retry: 0,
             notifyOnChangeProps: 'tracked',
           },
         },
@@ -35,7 +35,7 @@ function MyApp({
   );
 
   const initialRecoilState = ({ set }: MutableSnapshot) => {
-    set(authUserAtom, { ...authUserAtomDefault, accessToken, refreshToken });
+    set(authUserAtom, (authUser) => ({ ...authUser, accessToken, refreshToken }));
   };
 
   useEffect(() => {
@@ -88,6 +88,8 @@ export default MyApp;
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const { ctx, Component } = appContext;
   const appProps = await Component.getInitialProps?.(ctx);
+
+  reactCookies.setRawCookie(ctx.req?.headers.cookie);
 
   const allCookies = cookies(ctx);
   const accessToken = allCookies['accessToken'];

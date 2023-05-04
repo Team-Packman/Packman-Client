@@ -51,7 +51,6 @@ function SharedLanding() {
     router.push('/folder');
   };
 
-  console.log(data, packingListHeader, inviteCode);
   if (!data || !packingListHeader || !inviteCode) return <Loading />;
   const { data: info } = data;
   const { data: header } = packingListHeader;
