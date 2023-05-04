@@ -80,7 +80,8 @@ export function AsyncBoundary({
         }}
         onReset={reset}
       >
-        <Suspense fallback={loading}>{children}</Suspense>
+        <SSRSafeSuspense loadingFallback={loading}>{children}</SSRSafeSuspense>
+        {/* <Suspense fallback={loading}>{children}</Suspense> */}
       </ErrorBoundary>
     </QueryErrorResetBoundary>
   );
