@@ -1,7 +1,7 @@
 import cookie from 'react-cookies';
 import { RefreshInput } from '../service/auth';
 
-export const getTokens = () => {
+export const getTokens = (): RefreshInput => {
   const accessToken = cookie.load('accessToken');
   const refreshToken = cookie.load('refreshToken');
 
