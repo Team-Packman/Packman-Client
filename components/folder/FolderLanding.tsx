@@ -240,7 +240,7 @@ function FolderLanding() {
       <Layout title="logo" icon="profile">
         <StyledBody>
           {isRecentListExist && (
-            <Card onClick={handleRecentBannerClick}>
+            <Card overlay={cardStyle} onClick={handleRecentBannerClick}>
               <Card.LeftContainer overlay={leftContainerStyle}>
                 <Card.Title value={recentPackingData.data.title} />
                 <Card.SubTitle>
@@ -333,6 +333,10 @@ export const StyledBody = styled.article`
   height: 100%;
   background-color: ${packmanColors.pmWhite};
   padding: 0 2rem;
+`;
+
+const cardStyle = css`
+  margin: 1rem 0 2rem 0;
 `;
 
 const leftContainerStyle = css`
