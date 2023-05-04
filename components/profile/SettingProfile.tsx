@@ -14,6 +14,7 @@ import useAPI from '../../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import useReset from '../../utils/hooks/recoil/useReset';
 import iRightArrow from '/public/assets/svg/iRightArrow.svg';
+import cookie from 'react-cookies';
 interface ProfileData {
   id: string;
   nickname: string;
@@ -75,6 +76,8 @@ function SettingProfile(props: SettingProfileProps) {
           },
         );
       } finally {
+        cookie.remove('accessToken');
+        cookie.remove('refreshToken');
         resetAllPersist();
         router.replace('/login');
       }
