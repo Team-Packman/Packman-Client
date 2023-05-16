@@ -38,7 +38,10 @@ export const useKaKaoLogin = () => {
         );
         setKakaoInfo({ accessToken });
       },
-      onError: () => router.replace('/login'),
+      onError: () => {
+        alert('카카오 서버에 문제가 발생했습니다.');
+        router.replace('/login');
+      },
     });
   };
 
