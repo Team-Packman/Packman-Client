@@ -1,6 +1,6 @@
 import { setTokens, removeTokens, getTokens } from './../../../cookies';
 import { invitationAtom } from './../../../recoil/atom/atom';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useQueryClient, useMutation } from 'react-query';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
@@ -9,7 +9,6 @@ import { authUserAtom } from '../../../recoil/atom/atom';
 import useReset from '../../recoil/useReset';
 import { useErrorBubbling } from '../../../AsyncBoundary';
 import apiService from '../../../../service';
-import cookie from 'react-cookies';
 
 export const useRefresh = (tokens: RefreshInput) => {
   const router = useRouter();
