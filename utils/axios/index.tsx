@@ -1,10 +1,7 @@
 import { useRefresh } from '../hooks/queries/auth/auth';
-import { authUserAtom } from '../recoil/atom/atom';
-import { useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { PropsWithChildren, useEffect } from 'react';
-import cookie from 'react-cookies';
 import { getTokens, setTokens } from '../cookies';
 
 enum AXIOS_KEY {
@@ -43,7 +40,7 @@ export default function createAxios(endpoint: string, config?: AxiosRequestConfi
 
 function AxiosInterceptor({ children }: PropsWithChildren) {
   const router = useRouter();
-  // const { accessToken, refreshToken } = useRecoilValue(authUserAtom);
+
   const { accessToken, refreshToken } = getTokens();
   const refresh = useRefresh({ accessToken, refreshToken });
 
