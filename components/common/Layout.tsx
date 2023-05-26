@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import useGlobalState from '../../utils/hooks/useGlobalState';
@@ -14,20 +14,24 @@ interface LayoutProps {
   icon?: Icon;
   option?: ReactNode;
   noHeader?: boolean;
-  groupId?: string;
+  listId?: string;
   folderId?: string;
 }
 
 function Layout(props: LayoutProps) {
-  const { children, back, title, icon, option, padding, noHeader, groupId, folderId } = props;
-
+  const { children, back, title, icon, option, padding, noHeader, listId, folderId } = props;
   const [scroll] = useGlobalState<boolean>('scroll');
-  const optionEl = document.querySelector('.layout_option');
+  const [optionEl, setOptionEl] = useState<Element | null>(null);
+
+  useEffect(() => {
+    const layoutOption = document.querySelector('.layout_option') || null;
+    setOptionEl(layoutOption);
+  }, []);
 
   return (
     <StyledRoot>
       {!noHeader && (
-        <Header back={back} title={title} icon={icon} groupId={groupId} folderId={folderId} />
+        <Header back={back} title={title} icon={icon} listId={listId} folderId={folderId} />
       )}
       {option}
       <StyledMain

@@ -79,12 +79,12 @@ export const StyledListRoot = styled.section`
 `;
 
 export const StyledWrapper = styled.div`
-  --auto-grid-min-size: 15.5rem;
+  --auto-grid-min-size: 14.5rem;
   display: grid;
   align-items: start;
   grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
   grid-gap: 0.8rem;
   justify-items: stretch;
-  margin-top: 2.4rem;
+  margin-top: 1.5rem;
   padding-bottom: 5rem;
 `;

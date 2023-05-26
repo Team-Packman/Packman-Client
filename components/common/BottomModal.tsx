@@ -101,7 +101,7 @@ const StyledRoot = styled.div`
 
   & > h1 {
     color: ${packmanColors.pmBlack};
-    font-style: ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
+    ${FONT_STYLES.SUBHEAD1_SEMIBOLD};
     padding-top: 0.8rem;
     padding-bottom: 1rem;
   }
@@ -132,7 +132,7 @@ const StyledButtonWrapper = styled.div`
     height: 8rem;
     border: none;
     border-radius: 0.8rem;
-    font-style: ${FONT_STYLES.BODY2_SEMIBOLD};
+    ${FONT_STYLES.BODY2_SEMIBOLD};
     background: ${packmanColors.pmBlueGrey};
     color: ${packmanColors.pmDarkGrey};
     /* Safari에서 font color 무시되는 경우를 위한 코드 */

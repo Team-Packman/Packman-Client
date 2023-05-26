@@ -1,3 +1,4 @@
+import { client } from '..';
 import {
   AddFolderInput,
   AddFolderOutput,
@@ -7,40 +8,30 @@ import {
   UpdateFolderNameInput,
   UpdateFolderNameOutput,
 } from './../../../service/folder/index';
-import { AxiosInstance } from 'axios';
 
-export const fetchFolders = async (request: AxiosInstance): Promise<GetFoldersOutput> => {
-  const { data } = await request(`/folder`);
+export const fetchFolders = async (): Promise<GetFoldersOutput> => {
+  const { data } = await client(`/folder`);
   return data;
 };
 
-export const fetchRecentPackingList = async (
-  request: AxiosInstance,
-): Promise<GetRecentPackingListOutput> => {
-  const { data } = await request(`/folder/recentCreatedList`);
+export const fetchRecentPackingList = async (): Promise<GetRecentPackingListOutput> => {
+  const { data } = await client(`/folder/recentCreatedList`);
   return data;
 };
 
 export const fetchUpdateFolderName = async (
-  request: AxiosInstance,
   payload: UpdateFolderNameInput,
 ): Promise<UpdateFolderNameOutput> => {
-  const { data } = await request.patch(`/folder`, payload);
+  const { data } = await client.patch(`/folder`, payload);
   return data;
 };
 
-export const fetchDeleteFolder = async (
-  request: AxiosInstance,
-  folderId: string,
-): Promise<DeleteFolderOutput> => {
-  const { data } = await request.delete(`/folder/${folderId}`);
+export const fetchDeleteFolder = async (folderId: string): Promise<DeleteFolderOutput> => {
+  const { data } = await client.delete(`/folder/${folderId}`);
   return data;
 };
 
-export const fetchAddFolder = async (
-  request: AxiosInstance,
-  payload: AddFolderInput,
-): Promise<AddFolderOutput> => {
-  const { data } = await request.post('/folder', payload);
+export const fetchAddFolder = async (payload: AddFolderInput): Promise<AddFolderOutput> => {
+  const { data } = await client.post('/folder', payload);
   return data;
 };

@@ -12,25 +12,27 @@ export interface PackerInfoPayload {
 }
 
 interface PackerModalProps {
-  member: {
+  members: {
     id: string;
     nickname: string;
     profileImage: string;
   }[];
   packId: string;
   listId: string;
+  selectedPacker: { id: string; nickname: string } | null;
+
   modalHandler: () => void;
   updatePacker: (payload: PackerInfoPayload) => void;
 }
 
 function PackerModal(props: PackerModalProps) {
-  const { member, modalHandler, packId, listId, updatePacker } = props;
+  const { members, modalHandler, packId, listId, updatePacker, selectedPacker } = props;
 
   const TICK = 30;
   const ITERATOR = Array(TICK).fill('').entries();
-  const ID_LIST = member.map(({ id }) => id);
-  const drawId = () => Math.floor(Math.random() * member.length);
-  const [selected, setSelected] = useState('');
+  const ID_LIST = members.map(({ id }) => id);
+  const drawId = () => Math.floor(Math.random() * members.length);
+  const [selected, setSelected] = useState(selectedPacker ? selectedPacker.id : '');
 
   /** @todo 랜덤 배정 로직 수정 */
   const draw = () => {
@@ -64,7 +66,7 @@ function PackerModal(props: PackerModalProps) {
         <StyledRandomButton onClick={StartDraw}>랜덤 배정</StyledRandomButton>
 
         <StyledPackerWrapper>
-          {member.map(({ id, nickname, profileImage }) => (
+          {members.map(({ id, nickname, profileImage }) => (
             <StyledPacker key={id} onClick={() => setSelected(id)}>
               <StyledPackerImg selected={selected === id}>
                 <StyledBackground selected={selected === id} />

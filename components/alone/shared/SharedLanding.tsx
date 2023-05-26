@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import useAPI from '../../../utils/hooks/useAPI';
@@ -11,33 +11,58 @@ import PackagesWithCategory from '../../../components/common/PackagesWithCategor
 import PackingItem from '../../../components/common/PackingItem';
 import PackingCategory from '../../../components/common/PackingCategory';
 import CheckListHeader from '../../../components/together/CheckListHeader';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { invitationAtom } from '../../../utils/recoil/atom/atom';
 
 function SharedLanding() {
   const router = useRouter();
   const { id } = router.query;
+  const { inviteCode } = useRecoilValue(invitationAtom);
+  const [localInviteCode, setLocalInviteCode] = useState('');
+  const resetInvitation = useResetRecoilState(invitationAtom);
 
+  useEffect(() => {
+    if (inviteCode) setLocalInviteCode(inviteCode);
+  }, [inviteCode]);
+
+  const getPackingListHeader = useAPI((api) => api.packingList.together.getPackingListHeader);
   const getAlonePackingListDetail = useAPI(
     (api) => api.packingList.alone.getAlonePackingListDetail,
   );
   const { data } = useQuery(
     ['getAlonePackingListDetail', id],
-    () => getAlonePackingListDetail(id as string),
+
+    () => getAlonePackingListDetail(id as string, inviteCode),
     {
-      enabled: !!id,
+      enabled: !!id && !!localInviteCode,
     },
   );
 
-  if (!data) return <Loading />;
+  const { data: packingListHeader } = useQuery(
+    ['getPackingListHeader', id],
+    () => getPackingListHeader(id as string, true, inviteCode),
+    {
+      enabled: !!id && !!localInviteCode,
+    },
+  );
+
+  const packButtonClickHandler = () => {
+    resetInvitation();
+    router.push('/folder');
+  };
+
+  if (!data || !packingListHeader || !inviteCode) return <Loading />;
   const { data: info } = data;
+  const { data: header } = packingListHeader;
 
   return (
     <Layout
       title="logo"
       option={
         <CheckListHeader
-          listId={info.id}
-          departureDate={info.departureDate}
-          title={info.title}
+          listId={header.id}
+          departureDate={header.departureDate}
+          title={header.title}
           shared
         />
       }
@@ -61,7 +86,7 @@ function SharedLanding() {
         <StyledScrollBlock />
       </StyledBody>
       <FunctionSection>
-        <SharePackingListButton onClick={() => router.push('/folder')}>
+        <SharePackingListButton onClick={packButtonClickHandler}>
           나도 팩맨으로 짐 싸보기
         </SharePackingListButton>
       </FunctionSection>

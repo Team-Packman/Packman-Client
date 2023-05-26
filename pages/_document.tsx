@@ -1,24 +1,17 @@
-import { ServerStyleSheets } from '@mui/styles';
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  DocumentContext,
-  DocumentInitialProps,
-} from 'next/document';
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import Script from 'next/script';
-import HeadMeta from '../components/HeadMeta';
-import { googleTagManagerId } from '../utils/constant/index';
+import { googleTagManagerId, optimizeId } from '../utils/constant/index';
+import { ServerStyleSheet } from 'styled-components';
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
-    const materialSheets = new ServerStyleSheets();
+  static async getInitialProps(ctx: DocumentContext) {
+    const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
+
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App) => (props) => materialSheets.collect(<App {...props} />),
+          enhanceApp: (App: any) => (props: any) => sheet.collectStyles(<App {...props} />),
         });
 
       const initialProps = await Document.getInitialProps(ctx);
@@ -27,12 +20,12 @@ class MyDocument extends Document {
         styles: (
           <>
             {initialProps.styles}
-            {materialSheets.getStyleElement()}
+            {sheet.getStyleElement()}
           </>
         ),
       };
     } finally {
-      //   materialSheets.seal();
+      sheet.seal();
     }
   }
 
@@ -41,33 +34,13 @@ class MyDocument extends Document {
       <Html lang="ko">
         <Head>
           {/* Google Optimize Snippet */}
-          <Script src="https://www.googleoptimize.com/optimize.js?id=OPT-KC3RPLW"></Script>
-          {/* 검색엔진이 대부분 무시하는 추세 */}
-          {/* <meta name="keywords" content="짐,짐 챙기기,여행 짐,여행 체크리스트" /> */}
-          {/* <HeadMeta /> */}
+          <Script src={`https://www.googleoptimize.com/optimize.js?id=${optimizeId}`}></Script>
+          {/* Safari TabBar Color */}
+          <meta name="theme-color" content="#fff" />
           <meta
             name="viewport"
             content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
           />
-          <meta
-            name="description"
-            content={'내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
-          />
-          <meta property="og:locale" content="ko" />
-          <meta property="og:site_name" content="Packman" />
-          <meta property="og:type" content="website" />
-          <meta
-            property="og:title"
-            content={'팩맨 Packman - 내 손안 짐 챙김 도우미'}
-            key="og:title"
-          />
-          <meta
-            property="og:description"
-            content={'내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!'}
-            key="og:description"
-          />
-          <meta property="og:image" content="/og.jpg" />
-          <meta property="og:url" content="https://www.packman.kr" key="og:url" />
           {/* pwa */}
           <meta name="theme-color" content="#fff" />
 

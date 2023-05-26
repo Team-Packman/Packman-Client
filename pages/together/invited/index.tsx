@@ -1,9 +1,24 @@
+import { NextPageContext } from 'next';
 import InvitedLanding from '../../../components/together/invited/InvitedLanding';
+import HeadMeta from '../../../components/HeadMeta';
 import { AsyncBoundary } from '../../../utils/AsyncBoundary';
+import apiService from '../../../service';
+import { useRouter } from 'next/router';
 
-function Invited() {
+interface InvitedProps {
+  title: string;
+}
+function Invited(props: InvitedProps) {
+  const { title } = props;
+  const router = useRouter();
+
   return (
     <>
+      <HeadMeta
+        title={title}
+        description={`[${title}] 패킹리스트가 공유되었어요!`}
+        url={`${process.env.NEXT_PUBLIC_DOMAIN}/${router.asPath}`}
+      />
       <AsyncBoundary>
         <InvitedLanding />;
       </AsyncBoundary>
@@ -13,20 +28,17 @@ function Invited() {
 
 export default Invited;
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const { inviteCode } = context.query;
+export const getServerSideProps = async ({ req, query }: NextPageContext) => {
+  const getSharedPackingListDetail = apiService.packingList.common.getSharedPackingListDetail;
 
-//   const { data }: AxiosResponse<GetSharedPackingListDetailOutput> = await axios.get(
-//     `${process.env.NEXT_PUBLIC_END}/list/together/share/${inviteCode}`,
-//   );
-//   const {
-//     data: { title },
-//   } = data;
-
-//   return {
-//     props: {
-//       title,
-//       description: '내 손안 짐 챙김 도우미, 팩맨. 지금 바로 팩맨을 사용해보세요!',
-//     },
-//   };
-// };
+  const { data: info } = await getSharedPackingListDetail({
+    type: 'together',
+    inviteCode: query.inviteCode as string,
+  });
+  const { title } = info;
+  return {
+    props: {
+      title,
+    },
+  };
+};

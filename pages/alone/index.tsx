@@ -3,11 +3,9 @@ import { AsyncBoundary } from '../../utils/AsyncBoundary';
 
 function Alone() {
   return (
-    <>
-      <AsyncBoundary>
-        <AloneLanding />
-      </AsyncBoundary>
-    </>
+    <AsyncBoundary>
+      <AloneLanding />
+    </AsyncBoundary>
   );
 }
 

@@ -16,6 +16,7 @@ export default function SwipeableList(props: SwipeableListProps) {
 }
 
 const StyledRoot = styled.div<{ isSwiped: boolean }>`
+  width: 100%;
   flex-grow: 1;
   background-color: #fff;
   overflow-y: ${({ isSwiped }) => (isSwiped ? 'hidden' : 'auto')};

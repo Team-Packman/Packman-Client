@@ -1,237 +1,169 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
-import iShowMore from '../../public/assets/svg/iShowMore.svg';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRouter } from 'next/router';
-import useAPI from '../../utils/hooks/useAPI';
-import Modal from '../common/Modal';
 import Layout from '../common/Layout';
 import SwipeableList from './SwipeableList';
-import SwipeablelistItem from './SwipeableListItem';
+import SwipeableListItem from './SwipeableListItem';
 import FloatActionButton from '../folder/FloatActionButton';
 import { FONT_STYLES } from '../../styles/font';
 import { packmanColors } from '../../styles/color';
-import { GetAloneInventoryOutput } from '../../service/inventory/alone';
-import { GetTogetherInventoryOutput } from '../../service/inventory/together';
 import CaptionSection from './CaptionSection';
-import Link from 'next/link';
-import useDynamic from '../../utils/hooks/useDynamic';
-
-type GetInventoryOutput = GetAloneInventoryOutput & GetTogetherInventoryOutput;
+import InventoryDeleteButton from './InventoryDeleteButton';
+import useBoolean from '../../utils/hooks/common/useBoolean';
+import DeleteInventoryListModal from './DeleteInventoryListModal';
+import FolderDropBox from './FolderDropBox';
+import { useInventory, useInventoryMutation } from '../../utils/hooks/queries/inventory';
 
 function PackingListLanding() {
-  const queryClient = useQueryClient();
   const router = useRouter();
-  const id = router.query.id as string;
   const type = router.query.type as string;
+  const id = router.query.id as string;
 
-  const [toggle, setToggle] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteList, setDeleteList] = useState<string[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isSwiped, setIsSwiped] = useState(false);
+  const [isDropBoxOpen, toggle, setDropBoxClose] = useBoolean(false);
+  const [isModalOpen, setModalOpen, setModalClose] = useBoolean(false);
 
-  // api 호출
-  const getAloneInventory = useAPI((api) => api.inventory.alone.getAloneInventory);
-  const getTogetherInventory = useAPI((api) => api.inventory.together.getTogetherInventory);
-  const deleteAloneInventory = useAPI((api) => api.inventory.alone.deleteAloneInventory);
-  const deleteTogetherInventory = useAPI((api) => api.inventory.together.deleteTogetherInventory);
-  const { data: togetherInventory } = useQuery(
-    ['getTogetherInventory', id],
-    () => getTogetherInventory(id),
-    {
-      enabled: type === 'together' && !!id,
-    },
-  );
-  const { data: aloneInventory } = useQuery(
-    ['getAloneInventory', id],
-    () => getAloneInventory(id),
-    {
-      enabled: type === 'alone' && !!id,
-    },
-  );
+  const [isDeletingMode, setIsDeletingMode] = useState(false);
+  const [deleteList, setDeleteList] = useState<Set<string>>(new Set());
 
-  const { mutate: deleteTogetherInventoryMutate } = useMutation(deleteTogetherInventory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('getTogetherInventory');
-    },
-  });
-  const { mutate: deleteAloneInventoryMutate } = useMutation(deleteAloneInventory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('getAloneInventory');
-    },
-  });
+  const inventory = useInventory({ id, type });
+  const { deleteTogetherInventoryMutate, deleteAloneInventoryMutate } = useInventoryMutation();
 
-  const isInventory = (inventory: unknown): inventory is GetInventoryOutput => {
-    if (inventory === undefined || inventory === null) return false;
-    return inventory !== undefined;
-  };
-  const inventory = aloneInventory ?? togetherInventory;
+  const [isSwiped, setIsSwiped] = useState<Set<string>>(new Set());
 
-  const [isDragged, setIsDragged] = useState<boolean[]>(
-    Array(
-      aloneInventory?.data.alonePackingList.length ??
-        togetherInventory?.data.togetherPackingList.length,
-    ).fill(false),
-  );
+  if (!inventory) return null;
+  const { togetherPackingList, alonePackingList, currentFolder } = inventory.data;
 
-  const DropBox = useDynamic(() => import('./DropBox'));
-
-  if (!inventory || !isInventory(inventory)) return null;
-
-  const { togetherPackingList, alonePackingList, folder, currentFolder } = inventory.data;
-
-  const handleIsDragged = (tmpArr: boolean[]) => {
-    setIsDragged(tmpArr);
+  const swipe = (item?: string) => {
+    if (!item) {
+      !isDeletingMode && resetListItem();
+      return;
+    }
+    const updatedListItem = new Set(isSwiped);
+    if (isSwiped.size) {
+      setIsSwiped(new Set());
+      return;
+    }
+    if (isSwiped.has(item)) {
+      updatedListItem.delete(item);
+    } else {
+      updatedListItem.add(item);
+    }
+    setIsSwiped(updatedListItem);
   };
 
-  const resetIsDragged = () => {
-    setIsDragged(Array((togetherPackingList ?? alonePackingList).length).fill(false));
+  const resetListItem = () => {
+    isSwiped.size && setIsSwiped(new Set());
+    deleteList.size && setDeleteList(new Set());
   };
 
-  const checkDeleteList = (id: string) => {
-    deleteList.includes(id)
-      ? setDeleteList((prev) => prev.filter((idx) => idx !== id))
-      : setDeleteList([...deleteList, id]);
+  const modifyDeleteList = (id: string) => {
+    const updatedListItem = new Set([...deleteList]);
+    if (updatedListItem.has(id)) {
+      updatedListItem.delete(id);
+    } else {
+      updatedListItem.add(id);
+    }
+    setDeleteList(updatedListItem);
   };
 
   const openModal = () => {
     document.body.style.overflow = 'hidden';
-    setShowModal((prev) => !prev);
+    setModalOpen();
   };
 
   const closeModal = () => {
-    resetIsDragged();
     document.body.style.overflow = 'unset';
-    setShowModal(false);
+    setModalClose();
   };
 
-  const deleteListItem = () => {
-    setIsDragged((prev) => prev.filter((_, i) => i !== selectedIndex));
-    // 휴지통을 눌러 리스트를 여러 개 삭제하는 경우
-    if (isDeleting) {
+  const onClickFolderInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    !isDeletingMode && resetListItem();
+
+    // 폴더 이름과 삼각형 아이콘을 클릭했을 때만 toggle되도록 함
+    if (e.target instanceof HTMLDivElement) return;
+    toggle();
+  };
+
+  const onClickFloatingButton = (index: number) => {
+    if (index === 0) {
+      router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
+    } else if (index === 1) {
+      router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
+    }
+    resetListItem();
+  };
+
+  const onClickCaptionButton = () => {
+    resetListItem();
+    setIsDeletingMode((prev) => !prev);
+    if (!isDeletingMode) {
+      setDeleteList(new Set());
+    }
+  };
+
+  const onDelete = () => {
+    if (isDeletingMode) {
       type === 'together'
         ? deleteTogetherInventoryMutate({
             folderId: currentFolder.id,
-            listId: deleteList.join(','),
+            listId: [...deleteList].join(','),
           })
         : deleteAloneInventoryMutate({
             folderId: currentFolder.id,
-            listId: deleteList.join(','),
+            listId: [...deleteList].join(','),
           });
-      setIsDeleting(false);
-      setDeleteList([]);
+      setIsDeletingMode(false);
+      setDeleteList(new Set());
     }
     // 스와이프 액션으로 리스트를 하나씩 삭제하는 경우
     else {
       type === 'together'
         ? deleteTogetherInventoryMutate({
             folderId: currentFolder.id,
-            listId: togetherPackingList[selectedIndex].id,
+            listId: [...deleteList][0],
           })
         : deleteAloneInventoryMutate({
             folderId: currentFolder.id,
-            listId: alonePackingList[selectedIndex].id,
+            listId: [...deleteList][0],
           });
     }
     closeModal();
   };
 
-  // StyledFolderInfo 클릭한 경우
-  const onClickFolderInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    // 스와이프 아이템 하나라도 열려있다면 초기화
-    resetSwipableListItem();
-
-    // 폴더 이름과 삼각형 아이콘을 클릭했을 때만 toggle되도록 함
-    if (e.target instanceof HTMLDivElement) return;
-    setToggle((prev) => !prev);
-  };
-
-  const handleFloatClick = (index: number) => {
-    if (index === 0) {
-      router.push(`/select-template?type=together&folderId=${currentFolder.id}`);
-    } else if (index === 1) {
-      router.push(`/select-template?type=alone&folderId=${currentFolder.id}`);
-    }
-    resetSwipableListItem();
-  };
-
-  const onClickCaptionButton = () => {
-    resetIsDragged();
-    setIsDeleting((prev) => !prev);
-    if (!isDeleting) {
-      setDeleteList([]);
-    }
-  };
-
   // 전체 삭제
-  const onClickDeleteButton = () => {
-    const payload = (togetherPackingList ?? alonePackingList).map(({ id }) => id);
-    setDeleteList(payload);
+  const deleteSelectedListItems = () => {
+    if (!deleteList.size) {
+      const updatedListItem = new Set(
+        (togetherPackingList ?? alonePackingList).map((item) => item.id),
+      );
+      setDeleteList(updatedListItem);
+    } else {
+      setDeleteList(new Set());
+    }
   };
 
   // 개별 삭제
-  const onClickDeleteListItem = (idx: number) => {
+  const deleteSingleListItem = (id: string) => {
     openModal();
-    setSelectedIndex(idx);
-  };
 
-  // SwipableListItem 스와이프 여부 변경
-  const handleIsScrolled = (isSwiped: boolean) => {
-    setIsSwiped(isSwiped);
-  };
-
-  const resetSwipableListItem = () => {
-    const checkIsDragged = isDragged.every((item) => !item);
-    if (!checkIsDragged && !showModal) {
-      resetIsDragged();
-    }
+    const updatedListItem = new Set<string>();
+    updatedListItem.add(id);
+    setDeleteList(updatedListItem);
   };
 
   return (
     <Layout back title="리스트 목록" icon="profile">
-      {showModal && (
-        <Modal
+      {isModalOpen && (
+        <DeleteInventoryListModal
           title="정말 삭제하시겠어요?"
-          closeModal={closeModal}
-          button={
-            <StyledModalButtonWrapper>
-              <StyledModalButton left onClick={closeModal}>
-                아니요
-              </StyledModalButton>
-              <StyledModalButton onClick={deleteListItem}>네</StyledModalButton>
-            </StyledModalButtonWrapper>
-          }
+          onClick={closeModal}
+          onCancel={closeModal}
+          onDelete={onDelete}
         />
       )}
-      <StyledRoot
-        onClick={() => {
-          toggle && setToggle(false);
-        }}
-      >
+      <StyledRoot onClick={() => isDropBoxOpen && setDropBoxClose()}>
         <StyledFolderInfo onClick={onClickFolderInfo}>
-          <h1>{currentFolder.name}</h1>
-          <div>
-            <StyledToggleImage toggle={toggle.toString()}>
-              <Image src={iShowMore} alt="상세보기" layout="fill" />
-            </StyledToggleImage>
-            {toggle && (
-              <DropBox>
-                {folder.map(({ id, name }) => (
-                  <Link key={id} href={`/packing-list?type=${type}&id=${id}`}>
-                    <StyledItem
-                      currentId={id === currentFolder.id}
-                      onClick={() => setIsDeleting(false)}
-                    >
-                      {name}
-                    </StyledItem>
-                  </Link>
-                ))}
-              </DropBox>
-            )}
-          </div>
+          <FolderDropBox onClick={() => setIsDeletingMode(false)} />
         </StyledFolderInfo>
 
         {!(togetherPackingList ?? alonePackingList).length ? (
@@ -244,49 +176,45 @@ function PackingListLanding() {
         ) : (
           <>
             <CaptionSection
-              resetSwipableListItem={resetSwipableListItem}
-              packingList={togetherPackingList ?? alonePackingList}
-              isDeleting={isDeleting}
+              listLength={(togetherPackingList ?? alonePackingList).length}
+              isDeletingMode={isDeletingMode}
               onClickCaptionButton={onClickCaptionButton}
-              handleIsDragged={handleIsDragged}
-              resetDeleteList={() => deleteList.length && setDeleteList([])}
+              reset={resetListItem}
             />
 
             <SwipeableList
-              isSwiped={isSwiped}
+              isSwiped={isSwiped.size > 0}
               swipeableListItem={(togetherPackingList ?? alonePackingList).map((item, idx) => (
-                <SwipeablelistItem
+                <SwipeableListItem
                   key={item.id}
-                  idx={idx}
-                  isDragged={isDragged}
-                  handleIsDragged={(tmpArr: boolean[]) => handleIsDragged(tmpArr)}
-                  isDeleting={isDeleting}
+                  swipe={(item?: string) => swipe(item)}
+                  isSwiped={isSwiped}
+                  isDeletingMode={isDeletingMode}
                   deleteList={deleteList}
-                  checkDeleteList={(id: string) => checkDeleteList(id)}
-                  onClickDeleteButton={() => onClickDeleteListItem(idx)}
-                  packingList={togetherPackingList ?? alonePackingList}
-                  handleIsScrolled={(isSwiped: boolean) => handleIsScrolled(isSwiped)}
+                  modifyDeleteList={(id: string) => modifyDeleteList(id)}
+                  packingList={(togetherPackingList ?? alonePackingList)[idx]}
+                  deleteSingleListItem={deleteSingleListItem}
                 />
               ))}
             />
           </>
         )}
-        {isDeleting && (
-          <StyledButtonWrapper>
-            <StyledDeleteButton>
-              <div onClick={!deleteList.length ? onClickDeleteButton : openModal}>
-                {!deleteList.length
-                  ? ' 전체 선택'
-                  : deleteList.length === (togetherPackingList ?? alonePackingList).length
-                  ? '전체 삭제'
-                  : '선택 삭제'}
-              </div>
-            </StyledDeleteButton>
-          </StyledButtonWrapper>
+        {isDeletingMode && (
+          <InventoryDeleteButton onClick={!deleteList.size ? deleteSelectedListItems : openModal}>
+            {!deleteList.size
+              ? ' 전체 선택'
+              : deleteList.size === (togetherPackingList ?? alonePackingList).length
+              ? '전체 삭제'
+              : '선택 삭제'}
+          </InventoryDeleteButton>
         )}
 
-        {!isDeleting && (
-          <FloatActionButton onClick={handleFloatClick} pageName="packingList" isAloned={type} />
+        {!isDeletingMode && (
+          <FloatActionButton
+            onClick={onClickFloatingButton}
+            pageName="packingList"
+            isAloned={type}
+          />
         )}
       </StyledRoot>
     </Layout>
@@ -307,42 +235,15 @@ const StyledFolderInfo = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  padding-left: 2.4rem;
+
   width: 100%;
   height: 5.4rem;
+
+  padding-left: 2.4rem;
   margin-top: 0.842rem;
   flex-shrink: 0;
-
-  & > h1 {
-    ${FONT_STYLES.HEADLINE2_SEMIBOLD};
-  }
-  & > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 0.8rem;
-  }
 `;
 
-const StyledItem = styled.div<{ currentId: boolean }>`
-  ${({ currentId }) => (currentId ? FONT_STYLES.BODY4_SEMIBOLD : FONT_STYLES.BODY3_REGULAR)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 4.8rem;
-  font-size: 1.5rem;
-  color: ${({ currentId }) => (currentId ? packmanColors.pmBlack : packmanColors.pmDarkGrey)};
-  &:not(:last-child) {
-    border-bottom: 1px solid ${packmanColors.pmGrey};
-  }
-`;
-const StyledToggleImage = styled.div<{ toggle: string }>`
-  width: 2.4rem;
-  height: 2.4rem;
-  transition: 0.2s ease-in-out;
-  transform: ${({ toggle }) => (toggle === 'true' ? 'rotate(180deg)' : 'rotate(0deg)')};
-`;
 const StyledMain = styled.div<{ isEmpty: boolean }>`
   display: flex;
   flex-direction: column;
@@ -358,36 +259,4 @@ const StyledEmpty = styled.div`
   text-align: center;
   color: ${packmanColors.pmGrey};
   ${FONT_STYLES.HEADLINE1_MEDIUM};
-`;
-
-const StyledModalButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 2.1rem;
-`;
-const StyledModalButton = styled.button<{ left?: boolean }>`
-  width: 13.5rem;
-  height: 3.4rem;
-  border: ${({ left }) => (left ? `1px solid ${packmanColors.pmDeepGrey}` : 'none')};
-  color: ${({ left }) => (left ? packmanColors.pmDeepGrey : packmanColors.pmWhite)};
-  background-color: ${({ left }) => (left ? packmanColors.pmWhite : packmanColors.pmPink)};
-  border-radius: 0.8rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
-`;
-const StyledButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const StyledDeleteButton = styled.button`
-  position: fixed;
-  bottom: 1.507rem;
-  width: calc(100vw - 4rem);
-  height: 4.7rem;
-  ${FONT_STYLES.BODY4_SEMIBOLD};
-  background-color: ${packmanColors.pmPink};
-  color: #fff;
-  border: none;
-  border-radius: 0.5rem;
 `;

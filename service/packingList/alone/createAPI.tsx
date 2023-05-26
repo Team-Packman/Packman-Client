@@ -34,7 +34,10 @@ import {
 export interface AloneAPI {
   alone: {
     getAloneFolder: () => Promise<GetAloneFolderOutput>;
-    getAlonePackingListDetail: (listId: string) => Promise<GetAlonePackingListDetailOutput>;
+    getAlonePackingListDetail: (
+      listId: string,
+      inviteCode?: string,
+    ) => Promise<GetAlonePackingListDetailOutput>;
     addAlonePackingListFolder: (
       payload: AddAlonePackingListIntroInput,
     ) => Promise<AddAlonePackingListIntroOutput>;
@@ -60,26 +63,27 @@ export interface AloneAPI {
   };
 }
 
-const createAloneAPI = (request: AxiosInstance): AloneAPI => {
+const createAloneAPI = (): AloneAPI => {
   return {
     alone: {
-      getAloneFolder: () => fetchAloneFolder(request),
-      getAlonePackingListDetail: (listId: string) => fetchAlonePackingListDetail(request, listId),
+      getAloneFolder: () => fetchAloneFolder(),
+      getAlonePackingListDetail: (listId: string, inviteCode?: string) =>
+        fetchAlonePackingListDetail(listId, inviteCode),
       addAlonePackingListFolder: (payload: AddAlonePackingListIntroInput) =>
-        fetchAddAlonePackingFolder(request, payload),
+        fetchAddAlonePackingFolder(payload),
       addAlonePackingListCategory: (payload: AddAlonePackingListCategoryInput) =>
-        fetchAddAlonePackingCategory(request, payload),
+        fetchAddAlonePackingCategory(payload),
       updateAlonePackingListCategory: (payload: UpdateAlonePackingListCategoryInput) =>
-        fetchUpdateAlonePackingCategory(request, payload),
+        fetchUpdateAlonePackingCategory(payload),
       deleteAlonePackingListCategory: (payload: DeleteAlonePackingListCategoryInput) =>
-        fetchDeleteAlonePackingCategory(request, payload),
+        fetchDeleteAlonePackingCategory(payload),
       addAlonePackingListItem: (payload: AddAlonePackingListItemInput) =>
-        fetchAddAlonePackingItem(request, payload),
+        fetchAddAlonePackingItem(payload),
       updateAlonePackingListItem: (payload: UpdateAlonePackingListItemInput) =>
-        fetchUpdateAlonePackingItem(request, payload),
+        fetchUpdateAlonePackingItem(payload),
       deleteAlonePackingListItem: (payload: DeleteAlonePackingListItemInput) =>
-        fetchDeleteAlonePackingItem(request, payload),
-      getInvited: (invitedCode: string) => fetchAloneInvited(request, invitedCode),
+        fetchDeleteAlonePackingItem(payload),
+      getInvited: (invitedCode: string) => fetchAloneInvited(invitedCode),
     },
   };
 };

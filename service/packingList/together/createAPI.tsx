@@ -1,5 +1,5 @@
 import {
-  fetchPackingListDetail,
+  fetchPackingListBody,
   fetchAddPackingListCategory,
   fetchAddPackingListItem,
   fetchUpdatePackingListItem,
@@ -14,11 +14,12 @@ import {
   fetchAddTogetherPackingFolder,
   fetchInvited,
   fetchAddMember,
+  fetchPackingListHeader,
+  fetchMembers,
+  fetchDeleteMember,
 } from '../../../utils/axios/packingList/together/index';
 import { AxiosInstance } from 'axios';
 import {
-  GetGroupMembersOutput,
-  GetTogetherPackingListDetailOutput,
   AddTogetherPackingListCategoryInput,
   AddTogetherPackingListCategoryOutput,
   UpdateTogetherPackingListCategoryInput,
@@ -45,8 +46,12 @@ import {
   GetInvitedOutput,
   AddMemberInput,
   AddMemberOutput,
+  GetTogetherPackingListBodyOutput,
+  GetTogetherPackingListHeaderOutput,
+  GetMembersOutput,
+  DeleteGroupMemberInput,
+  DeleteGroupMemberOutput,
 } from './index';
-import { fetchGroupMember } from '../../../utils/axios/packingList/together';
 
 export interface TogetherAPI {
   together: {
@@ -62,11 +67,15 @@ export interface TogetherAPI {
     updatePackingListPacker: (
       payload: UpdatePackingListPackerInput,
     ) => Promise<UpdatePackingListPackerOutput>;
-    getGroupMembers: (groupId: string) => Promise<GetGroupMembersOutput>;
-    getPackingListDetail: (
-      pacingListId: string,
+    getPackingListHeader: (
+      packingListId: string,
+      isAloned: boolean,
       inviteCode?: string,
-    ) => Promise<GetTogetherPackingListDetailOutput>;
+    ) => Promise<GetTogetherPackingListHeaderOutput>;
+    getPackingListBody: (
+      packingListId: string,
+      inviteCode?: string,
+    ) => Promise<GetTogetherPackingListBodyOutput>;
     addPackingListCategory: (
       payload: AddTogetherPackingListCategoryInput,
     ) => Promise<AddTogetherPackingListCategoryOutput>;
@@ -90,40 +99,45 @@ export interface TogetherAPI {
       payload: AddTogetherPackingListIntroInput,
     ) => Promise<AddTogetherPackingListIntroOutput>;
     getInvited: (inviteCode: string) => Promise<GetInvitedOutput>;
+    getMembers: (packingListId: string) => Promise<GetMembersOutput>;
     addMember: (payload: AddMemberInput) => Promise<AddMemberOutput>;
+    deleteMember: (payload: DeleteGroupMemberInput) => Promise<DeleteGroupMemberOutput>;
   };
 }
 
-const createTogetherAPI = (request: AxiosInstance): TogetherAPI => {
+const createTogetherAPI = (): TogetherAPI => {
   return {
     together: {
       updatePackingListTitle: (payload: UpdatePackingListTitleInput) =>
-        fetchUpdatePackingListTitle(request, payload),
+        fetchUpdatePackingListTitle(payload),
       updatePackingListDate: (payload: UpdatePackingListDateInput) =>
-        fetchUpdatePackingListDate(request, payload),
+        fetchUpdatePackingListDate(payload),
       updatePackingListIsSaved: (payload: UpdatePackingListIsSavedInput) =>
-        fetchUpdatePackingListIsSaved(request, payload),
+        fetchUpdatePackingListIsSaved(payload),
       updatePackingListPacker: (payload: UpdatePackingListPackerInput) =>
-        fetchUpdatePackingListPacker(request, payload),
-      getGroupMembers: (groupId: string) => fetchGroupMember(request, groupId),
-      getPackingListDetail: (pacingListId: string) => fetchPackingListDetail(request, pacingListId),
+        fetchUpdatePackingListPacker(payload),
+      getPackingListHeader: (packingListId: string, isAloned: boolean, inviteCode?: string) =>
+        fetchPackingListHeader(packingListId, isAloned, inviteCode),
+      getPackingListBody: (packingListId: string) => fetchPackingListBody(packingListId),
       addPackingListCategory: (payload: AddTogetherPackingListCategoryInput) =>
-        fetchAddPackingListCategory(request, payload),
+        fetchAddPackingListCategory(payload),
       updatePackingListCategory: (payload: UpdateTogetherPackingListCategoryInput) =>
-        fetchUpdatePackingListCategory(request, payload),
+        fetchUpdatePackingListCategory(payload),
       deletePackingListCategory: (payload: DeleteTogetherPackingListCategoryInput) =>
-        fetchDeletePackingListCategory(request, payload),
+        fetchDeletePackingListCategory(payload),
       addPackingListItem: (payload: AddTogetherPackingListItemInput) =>
-        fetchAddPackingListItem(request, payload),
+        fetchAddPackingListItem(payload),
       updatePackingListItem: (payload: UpdateTogetherPackingListItemInput) =>
-        fetchUpdatePackingListItem(request, payload),
+        fetchUpdatePackingListItem(payload),
       deletePackingListItem: (payload: DeleteTogetherPackingListItemInput) =>
-        fetchDeletePackingListItem(request, payload),
-      getTogetherFolder: () => fetchTogetherFolder(request),
+        fetchDeletePackingListItem(payload),
+      getTogetherFolder: () => fetchTogetherFolder(),
       addTogetherPackingListFolder: (payload: AddTogetherPackingListIntroInput) =>
-        fetchAddTogetherPackingFolder(request, payload),
-      getInvited: (inviteCode: string) => fetchInvited(request, inviteCode),
-      addMember: (payload: AddMemberInput) => fetchAddMember(request, payload),
+        fetchAddTogetherPackingFolder(payload),
+      getInvited: (inviteCode: string) => fetchInvited(inviteCode),
+      getMembers: (packingListId: string) => fetchMembers(packingListId),
+      addMember: (payload: AddMemberInput) => fetchAddMember(payload),
+      deleteMember: (payload: DeleteGroupMemberInput) => fetchDeleteMember(payload),
     },
   };
 };

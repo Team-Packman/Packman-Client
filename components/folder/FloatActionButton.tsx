@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useState } from 'react';
 import FAB from '/public/assets/svg/fab.svg';
-import FABOPEN from '/public/assets/svg/fab_rotate.svg';
+// import FABOPEN from '/public/assets/svg/fab_rotate.svg';
 import { Backdrop } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { packmanColors } from '../../styles/color';
@@ -51,11 +51,11 @@ const FloatActionButton = (props: FloatModalProps) => {
       <StyledFABContainer pageName={pageName} isAloned={isAloned}>
         <li onClick={handleOpen}>
           {open ? (
-            <div>
-              <Image src={FABOPEN} alt="FAB" layout="fill" />
+            <div style={{ position: 'relative' }}>
+              {/* <Image src={FABOPEN} alt="FAB" layout="fill" /> */}
             </div>
           ) : (
-            <div>
+            <div style={{ position: 'relative' }}>
               <Image src={FAB} alt="FAB" layout="fill" />
             </div>
           )}
@@ -172,8 +172,8 @@ export const StyledList = styled.li<{ open: boolean; index: number }>`
 
   span:last-child {
     /* '폴더 추가' 중앙 정렬을 위한 코드 */
-    font-style: ${FONT_STYLES.BODY4_SEMIBOLD};
     padding-left: ${({ index }) => (index === 2 ? '3.2rem' : '1.4rem')};
     flex-shrink: 0;
+    ${FONT_STYLES.BODY4_SEMIBOLD}
   }
 `;

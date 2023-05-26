@@ -16,12 +16,12 @@ export interface CommonListAPI {
   };
 }
 
-const createCommonListAPI = (request: AxiosInstance): CommonListAPI => {
+const createCommonListAPI = (): CommonListAPI => {
   return {
     common: {
       getSharedPackingListDetail: (payload: GetSharedPackingListDetailInput) =>
-        fetchSharedPackingListDetail(request, payload),
-      getHelp: () => fetchHelp(request),
+        fetchSharedPackingListDetail(payload),
+      getHelp: () => fetchHelp(),
     },
   };
 };

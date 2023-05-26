@@ -1,40 +1,37 @@
 import createPackingListAPI, { PackingListAPI } from './packingList/index';
-import { Config } from '../utils/axios/axios';
-import createFolderAPI, { FolderAPI } from './folder/mockAPI';
+import createFolderAPI, { FolderAPI } from './folder/createAPI';
 import createEctAPI, { EctAPI } from './ect/createAPI';
 import createInventoryAPI, { InventoryAPI } from './inventory';
 import createUserAPI, { UserAPI } from './user/createAPI';
 import createAuthAPI, { AuthAPI } from './auth/createAPI';
-import createMemberAPI, { MemberAPI } from './member/createAPI';
 
 export interface APIService {
   auth: AuthAPI;
   folder: FolderAPI;
   packingList: PackingListAPI;
-  member: MemberAPI;
   inventory: InventoryAPI;
   user: UserAPI;
   ect: EctAPI;
 }
 
-export function createAPIService(config: Config): APIService {
-  const { axiosWithAuth } = config;
-
-  const auth = createAuthAPI(config);
-  const folder = createFolderAPI(axiosWithAuth);
-  const packingList = createPackingListAPI(axiosWithAuth);
-  const member = createMemberAPI(axiosWithAuth);
-  const user = createUserAPI(axiosWithAuth);
-  const ect = createEctAPI(axiosWithAuth);
-  const inventory = createInventoryAPI(axiosWithAuth);
+export function createAPIService(): APIService {
+  const auth = createAuthAPI();
+  const folder = createFolderAPI();
+  const packingList = createPackingListAPI();
+  const user = createUserAPI();
+  const inventory = createInventoryAPI();
+  const ect = createEctAPI();
 
   return {
     auth,
     folder,
     packingList,
-    member,
     user,
     ect,
     inventory,
   };
 }
+
+const apiService = createAPIService();
+
+export default apiService;

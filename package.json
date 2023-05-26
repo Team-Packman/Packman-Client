@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "analyze": "ANALYZE=true next build",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.9.0",
     "@mui/styles": "^5.9.0",
+    "@next/bundle-analyzer": "^13.3.0",
     "@types/react-cookies": "^0.1.0",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/styled-components": "^5.1.25",
@@ -22,6 +24,7 @@
     "immer": "^9.0.15",
     "lottie-react": "^2.3.1",
     "next": "12.2.0",
+    "next-compose-plugins": "^2.2.1",
     "next-pwa": "^5.5.4",
     "react": "18.2.0",
     "react-cookies": "^0.1.1",
@@ -29,7 +32,6 @@
     "react-dom": "18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-query": "^3.39.1",
-    "react-swipeable-list": "^1.5.1",
     "recoil": "^0.7.4",
     "recoil-persist": "^4.2.0",
     "styled-components": "^5.3.5",
@@ -48,9 +50,11 @@
     "eslint-config-next": "12.2.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "husky": ">=6",
     "lint-staged": ">=10",
     "next-cookies": "^2.0.3",
+    "next-seo": "^5.15.0",
     "prettier": "^2.7.1",
     "typescript": "^4.8.2"
   },
