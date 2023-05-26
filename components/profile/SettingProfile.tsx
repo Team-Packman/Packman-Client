@@ -95,10 +95,10 @@ function SettingProfile(props: SettingProfileProps) {
       <StyledSettingWrapper>
         <p onClick={onClickLogout}>로그아웃</p>
         <StyledEditButton>
-          <Image src={iRightArrow} alt="edit" onClick={onClickEditText} />
+          <Image src={iRightArrow} alt="edit" />
         </StyledEditButton>
 
-        <StyledProfile>
+        <StyledProfile onClick={onClickEditText}>
           <Image
             src={profile[+profileImage].src}
             alt="my-profile-image"
