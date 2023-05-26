@@ -47,7 +47,8 @@ function AxiosInterceptor({ children }: PropsWithChildren) {
   useEffect(() => {
     const requestIntercept = client.interceptors.request.use(
       (config: AxiosRequestConfig) => {
-        const { accessToken, refreshToken } = getTokens();
+        const { accessToken } = getTokens();
+
         if (config.headers && !config.headers['Authorization']) {
           config.headers['Authorization'] = `Bearer ${accessToken}`;
 

@@ -8,6 +8,7 @@ import { ProfileList } from '../../utils/profileImages';
 import { FONT_STYLES } from '../../styles/font';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authUserAtom, creatingUserAtom, invitationAtom } from '../../utils/recoil/atom/atom';
+import cookie from 'react-cookies';
 
 interface SelectProfileSectionProps {
   isEditing?: boolean;
@@ -29,7 +30,12 @@ function SelectProfileSection(props: SelectProfileSectionProps) {
 
   //프로필 생성
   const addUserProfile = useAPI((api) => api.user.addUserProfile);
-  const { mutate: addUserProfileMutate } = useMutation(addUserProfile);
+  const { mutate: addUserProfileMutate } = useMutation(addUserProfile, {
+    onSuccess({ data }) {
+      cookie.save('accessToken', data.accessToken, {});
+      cookie.save('refreshToken', data.refreshToken, {});
+    },
+  });
 
   //프로필 수정
   const updateUserProfile = useAPI((api) => api.user.updateUserProfile);
