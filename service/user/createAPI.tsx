@@ -5,9 +5,11 @@ import {
   UpdateUserProfileInput,
   UpdateUserProfileOutput,
   DeleteUserInfoOutput,
+  GetAlarmOutput,
 } from '.';
 import {
   fetchAddUserProfile,
+  fetchAlarm,
   fetchDeleteUserInfo,
   fetchUpdateUserProfile,
   fetchUserInfo,
@@ -18,6 +20,7 @@ export interface UserAPI {
   updateUserProfile: (payload: UpdateUserProfileInput) => Promise<UpdateUserProfileOutput>;
   addUserProfile: (payload: AddUserProfileInput) => Promise<AddUserProfileOutput>;
   deleteUserInfo: (accessToken: string) => Promise<DeleteUserInfoOutput>;
+  getAlarm: (accessToken: string) => Promise<GetAlarmOutput>;
 }
 
 const createUserAPI = (): UserAPI => {
@@ -26,6 +29,7 @@ const createUserAPI = (): UserAPI => {
     updateUserProfile: (payload: UpdateUserProfileInput) => fetchUpdateUserProfile(payload),
     addUserProfile: (payload: AddUserProfileInput) => fetchAddUserProfile(payload),
     deleteUserInfo: (accessToken: string) => fetchDeleteUserInfo(accessToken),
+    getAlarm: (accessToken: string) => fetchAlarm(accessToken),
   };
 };
 
