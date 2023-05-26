@@ -16,6 +16,7 @@ import useReset from '../../utils/hooks/recoil/useReset';
 import iRightArrow from '/public/assets/svg/iRightArrow.svg';
 import cookie from 'react-cookies';
 import { removeTokens } from '../../utils/cookies';
+import Link from 'next/link';
 interface ProfileData {
   id: string;
   nickname: string;
@@ -131,39 +132,37 @@ function SettingProfile(props: SettingProfileProps) {
         <StyledEtc paddingTop={2.95} borderBottom={true}>
           <h1>고객센터</h1>
           <StyledEtcWrapper>
-            <p
-              onClick={() =>
-                router.push(
-                  'https://docs.google.com/forms/d/e/1FAIpQLSd1D1ptmYG5Ufu7y1SKDnSr-k8UIeRfSlTBFRQqX3bF-TwuQg/viewform',
-                )
-              }
+            <Link
+              href="https://docs.google.com/forms/d/e/1FAIpQLSd1D1ptmYG5Ufu7y1SKDnSr-k8UIeRfSlTBFRQqX3bF-TwuQg/viewform"
+              passHref
             >
-              문의하기
-            </p>
-            <p
-              onClick={() =>
-                router.push(
-                  'https://docs.google.com/forms/d/e/1FAIpQLSer7bKxKKcmRU5vrMT_187cERpbA5chkzM-sjrigBsmWH9a6Q/viewform',
-                )
-              }
+              <a target="_blank" rel="noopener noreferrer">
+                <p>문의하기</p>
+              </a>
+            </Link>
+            <Link
+              passHref
+              href="https://docs.google.com/forms/d/e/1FAIpQLSer7bKxKKcmRU5vrMT_187cERpbA5chkzM-sjrigBsmWH9a6Q/viewform"
             >
-              서비스 피드백
-            </p>
+              <a target="_blank" rel="noopener noreferrer">
+                <p>서비스 피드백</p>
+              </a>
+            </Link>
           </StyledEtcWrapper>
         </StyledEtc>
         <StyledEtc paddingTop={3.1} borderBottom={false}>
           <h1>About 팩맨</h1>
           <StyledEtcWrapper>
-            <p
-              onClick={() => router.push('https://www.notion.so/1003579b6fd34fb0861040bb04fe235d')}
-            >
-              함께하는 사람들
-            </p>
-            <p
-              onClick={() => router.push('https://www.notion.so/99197c3491fe477ea9d69ed131cf4087')}
-            >
-              약관 및 정책
-            </p>
+            <Link passHref href="https://www.notion.so/1003579b6fd34fb0861040bb04fe235d">
+              <a target="_blank" rel="noopener noreferrer">
+                <p>함께하는 사람들</p>
+              </a>
+            </Link>
+            <Link passHref href="https://www.notion.so/99197c3491fe477ea9d69ed131cf4087">
+              <a target="_blank" rel="noopener noreferrer">
+                <p>약관 및 정책</p>
+              </a>
+            </Link>
           </StyledEtcWrapper>
         </StyledEtc>
 
@@ -242,6 +241,8 @@ const StyledProfile = styled.div`
   border-radius: 0.8rem;
   margin-bottom: 0.8rem;
 
+  cursor: pointer;
+
   & > div {
     display: flex;
     flex-direction: column;
@@ -305,7 +306,7 @@ const StyledEtcWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-content: space-between;
-  & > p {
+  & a {
     ${FONT_STYLES.BODY3_REGULAR};
     letter-spacing: 4%;
     &:not(:last-child) {
