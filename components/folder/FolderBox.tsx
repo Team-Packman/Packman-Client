@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { packmanColors } from '../../styles/color';
 import { FolderListProps, FolderProps } from './FolderList';
 import Kebab from '/public/assets/svg/kebab_ic.svg';
@@ -101,7 +101,7 @@ function FolderBox(props: FolderBoxProps & AddNewFolderType) {
         <StyledKebab>
           <span onClick={() => onClickIcon(id, name)}>
             {isNew ? (
-              <Image src={Close} alt="Close icon" width={25} height={35} />
+              <Image src={Close} alt="Close icon" width={25} height={25} />
             ) : (
               <Image src={Kebab} alt="kebab icon" width={25} height={25} />
             )}
@@ -179,8 +179,16 @@ export const StyledInput = styled.input<{ isNew: boolean }>`
   /* Safari에서 font color 무시되는 경우를 위한 코드 */
   -webkit-text-fill-color: ${({ isNew }) =>
     isNew ? `${packmanColors.pmDeepGrey}` : `${packmanColors.pmBlack}`};
+
   opacity: 1;
   width: 100%;
+  ${({ isNew }) =>
+    isNew &&
+    css`
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+      padding: 0.2rem 0.5rem;
+    `};
 
   &:focus {
     outline: none;
