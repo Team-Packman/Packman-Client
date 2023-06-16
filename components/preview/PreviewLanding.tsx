@@ -15,12 +15,20 @@ import Loading from '../common/Loading';
 
 function PreviewLanding() {
   const router = useRouter();
-  const { id, type, folderId } = router.query;
+  const { id, type, folderId, template } = router.query;
 
   const getTemplate = useAPI((api) => api.ect.getTemplate);
-  const { data } = useQuery(['getTemplate', id], () => getTemplate(id as string), {
-    enabled: !!id,
-  });
+  const { data } = useQuery(
+    ['getTemplate', id],
+    () =>
+      getTemplate({
+        templateId: id as string,
+        isBasic: template === 'basic',
+      }),
+    {
+      enabled: !!id && !!template,
+    },
+  );
 
   if (!data) return <Loading />;
   const { data: info } = data;
