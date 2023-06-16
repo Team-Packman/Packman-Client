@@ -30,6 +30,11 @@ export interface GetTogetherTemplateListOutput {
   };
 }
 
+export interface GetTemplateInput {
+  templateId: string;
+  isBasic: boolean;
+}
+
 export interface GetTemplateOutput {
   status: number;
   success: boolean;
