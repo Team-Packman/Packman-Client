@@ -15,7 +15,7 @@ import Loading from '../common/Loading';
 
 function PreviewLanding() {
   const router = useRouter();
-  const { id, type, folderId, template } = router.query;
+  const { id, type, folderId, template, isBasic } = router.query;
 
   const getTemplate = useAPI((api) => api.ect.getTemplate);
   const { data } = useQuery(
@@ -34,7 +34,7 @@ function PreviewLanding() {
   const { data: info } = data;
 
   const importTemplate = () =>
-    router.push(`/list-intro?id=${id}&folderId=${folderId ?? ''}&type=${type}`);
+    router.push(`/list-intro?id=${id}&folderId=${folderId ?? ''}&type=${type}&isBasic=${isBasic}`);
 
   const addSelf = () => router.push(`/list-intro?id=&folderId=${folderId ?? ''}&type=${type}`);
 

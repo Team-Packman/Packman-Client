@@ -24,7 +24,7 @@ type folderType = DeepPartial<GetTogetherFolderOutput> & DeepPartial<GetAloneFol
 function ListIntroLanding() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { id, type, folderId } = router.query;
+  const { id, type, folderId, isBasic } = router.query;
 
   const setIsFresh = useSetRecoilState(listState);
 
@@ -206,6 +206,7 @@ function ListIntroLanding() {
               folderId: selectedTagIndex.id,
               title: listName,
               templateId: templateId,
+              isBasic: Boolean(isBasic),
             },
             {
               onSuccess: (data) => {
@@ -219,6 +220,7 @@ function ListIntroLanding() {
               folderId: selectedTagIndex.id,
               title: listName,
               templateId: templateId,
+              isBasic: Boolean(isBasic),
             },
             {
               onSuccess: (data) => {
