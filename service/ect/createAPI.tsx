@@ -1,4 +1,4 @@
-import { GetTemplateOutput } from './index';
+import { GetTemplateInput, GetTemplateOutput } from './index';
 import { GetAloneTemplateListOutput, GetTogetherTemplateListOutput } from '.';
 import {
   fetchAloneTemplateList,
@@ -7,14 +7,14 @@ import {
 } from '../../utils/axios/ect';
 
 export interface EctAPI {
-  getTemplate: (templateId: string) => Promise<GetTemplateOutput>;
+  getTemplate: (payload: GetTemplateInput) => Promise<GetTemplateOutput>;
   getAloneTemplateList: () => Promise<GetAloneTemplateListOutput>;
   getTogetherTemplateList: () => Promise<GetTogetherTemplateListOutput>;
 }
 
 const createEctAPI = (): EctAPI => {
   return {
-    getTemplate: (templateId: string) => fetchTemplate(templateId),
+    getTemplate: (payload) => fetchTemplate(payload),
     getAloneTemplateList: () => fetchAloneTemplateList(),
     getTogetherTemplateList: () => fetchTogetherTemplateList(),
   };

@@ -1,3 +1,4 @@
+import { GetTemplateInput } from './../../../service/ect/index';
 import { client } from '..';
 import {
   GetAloneTemplateListOutput,
@@ -5,8 +6,11 @@ import {
   GetTogetherTemplateListOutput,
 } from '../../../service/ect/index';
 
-export const fetchTemplate = async (templateId: string): Promise<GetTemplateOutput> => {
-  const { data } = await client(`/template/${templateId}`);
+export const fetchTemplate = async ({
+  templateId,
+  isBasic,
+}: GetTemplateInput): Promise<GetTemplateOutput> => {
+  const { data } = await client(`/template/${templateId}?isBasic=${isBasic}`);
   return data;
 };
 

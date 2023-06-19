@@ -63,3 +63,9 @@ export interface AddUserProfileOutput {
     path: string; // 사용자 가입 경로
   };
 }
+
+export interface GetAlarmOutput {
+  status: number;
+  success: boolean;
+  message: string;
+}

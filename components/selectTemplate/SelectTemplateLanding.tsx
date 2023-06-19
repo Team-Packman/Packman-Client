@@ -20,7 +20,7 @@ interface Itemplate {
 
 function SelectTemplateLanding() {
   const router = useRouter();
-  const { type, folderId } = router.query;
+  const { type } = router.query;
 
   const [isActive, seIsActiveTrue, setIsActiveFalse] = useBoolean(false);
   const [templateImageIndex, setTemplateImageIndex] = useState('');
@@ -91,13 +91,13 @@ function SelectTemplateLanding() {
         </StyledTemplateWrapper>
 
         <StyledButtonWrapper>
-          <Link href={`/list-intro?id=&type=${type}&folderId=${folderId}`}>
+          <Link href={`/list-intro?id=&type=${type}`}>
             <Button color={packmanColors.pmBlack} background={packmanColors.pmWhite}>
               건너뛰기
             </Button>
           </Link>
           <Link
-            href={`/preview?id=${templateId}&type=${type}&folderId=${folderId}&isBasic=${isBasic}`}
+            href={`/preview?id=${templateId}&type=${type}&template=${templateType}&isBasic=${isBasic}`}
           >
             <Button disabled={!isActive}>확인</Button>
           </Link>

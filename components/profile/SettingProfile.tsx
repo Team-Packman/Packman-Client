@@ -14,9 +14,9 @@ import useAPI from '../../utils/hooks/useAPI';
 import { useMutation } from 'react-query';
 import useReset from '../../utils/hooks/recoil/useReset';
 import iRightArrow from '/public/assets/svg/iRightArrow.svg';
-import cookie from 'react-cookies';
 import { removeTokens } from '../../utils/cookies';
 import Link from 'next/link';
+import apiService from '../../service';
 interface ProfileData {
   id: string;
   nickname: string;
@@ -42,6 +42,8 @@ function SettingProfile(props: SettingProfileProps) {
   const resetAllPersist = useReset();
 
   const router = useRouter();
+
+  const getAlarm = apiService.user.getAlarm;
 
   // 탈퇴하기
   const deleteUser = useAPI((api) => api.user.deleteUserInfo);
@@ -91,6 +93,12 @@ function SettingProfile(props: SettingProfileProps) {
     setIsLogoutClicked(false);
   };
 
+  const handleToggleAlarm = async () => {
+    await getAlarm(accessToken);
+    setToggle((prev) => !prev);
+    alert('준비중 입니다.\n조금만 기다려주세요🙏🏻');
+  };
+
   return (
     <StyledRoot>
       <StyledSettingWrapper>
@@ -118,13 +126,8 @@ function SettingProfile(props: SettingProfileProps) {
           <h1>설정</h1>
           <StyledToggleWrapper>
             <p>알림 설정</p>
-            <StyledToggle
-              isToggled={toggle}
-              onClick={() => {
-                setToggle((prev) => !prev);
-                alert('준비중 입니다.\n조금만 기다려주세요🙏🏻');
-              }}
-            >
+
+            <StyledToggle isToggled={false} onClick={handleToggleAlarm}>
               <StyledToggleCircle isToggled={toggle} />
             </StyledToggle>
           </StyledToggleWrapper>
@@ -277,6 +280,7 @@ const StyledToggle = styled.div<{ isToggled: boolean }>`
   background-color: ${({ isToggled }) =>
     isToggled ? packmanColors.pmPink : packmanColors.pmDeepGrey};
 `;
+
 const StyledToggleCircle = styled.div<{ isToggled: boolean }>`
   position: absolute;
   left: 0.225rem;
