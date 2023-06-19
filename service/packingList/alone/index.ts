@@ -39,6 +39,7 @@ export interface AddAlonePackingListIntroInput {
   folderId: string; // 폴더 id
   title: string; // 혼자 패킹리스트 이름
   templateId: string; // 템플릿 id
+  isBasic: boolean; // 템플릿 사용여부
 }
 
 export interface AddAlonePackingListIntroOutput {

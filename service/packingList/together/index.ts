@@ -343,6 +343,7 @@ export interface AddTogetherPackingListIntroInput {
   folderId: string; // 폴더 id
   title: string; // 함께 패킹리스트 제목
   templateId: string; // 템플릿 id
+  isBasic: boolean; // 템플릿 사용여부
 }
 
 export interface AddTogetherPackingListIntroOutput {
