@@ -26,6 +26,7 @@ function SelectTemplateLanding() {
   const [templateImageIndex, setTemplateImageIndex] = useState('');
   const [templateType, setTemplateType] = useState('');
   const [templateId, setTemplateId] = useState('');
+  const [isBasic, setIsBasic] = useState<boolean | null>(null);
 
   // api call
   const getTogetherTemplateList = useAPI((api) => api.ect.getTogetherTemplateList);
@@ -39,6 +40,7 @@ function SelectTemplateLanding() {
   const { basicTemplate, myTemplate } = templateList.data;
 
   const changeTemplateImage = (template: Itemplate[], templateId: string, templateType: string) => {
+    setIsBasic(templateType === 'myTemplate' ? false : true);
     template.forEach(({ id }, idx) => {
       if (id === templateId) {
         setTemplateImageIndex(idx + '');
@@ -94,7 +96,9 @@ function SelectTemplateLanding() {
               건너뛰기
             </Button>
           </Link>
-          <Link href={`/preview?id=${templateId}&type=${type}&folderId=${folderId}`}>
+          <Link
+            href={`/preview?id=${templateId}&type=${type}&folderId=${folderId}&isBasic=${isBasic}`}
+          >
             <Button disabled={!isActive}>확인</Button>
           </Link>
         </StyledButtonWrapper>
