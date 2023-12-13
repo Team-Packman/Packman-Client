@@ -3,7 +3,6 @@ import {
   AddUserProfileInput,
   AddUserProfileOutput,
   DeleteUserInfoOutput,
-  GetAlarmOutput,
   GetUserInfoOutput,
   UpdateUserProfileInput,
   UpdateUserProfileOutput,
@@ -30,16 +29,6 @@ export const fetchAddUserProfile = async (
 
 export const fetchDeleteUserInfo = async (accessToken: string): Promise<DeleteUserInfoOutput> => {
   const { data } = await client.delete('/user', {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  return data;
-};
-
-export const fetchAlarm = async (accessToken: string): Promise<GetAlarmOutput> => {
-  const { data } = await client.get('/alarm', {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
